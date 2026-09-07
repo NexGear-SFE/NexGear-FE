@@ -1,33 +1,166 @@
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    --brand-primary: #E30019;
-    --brand-hover: #B30014;
-    --brand-secondary: #040004;
-    --bg-main: #F4F5F7;
-    --bg-card: #FFFFFF;
-    --border-color: #E0E0E0;
-    --text-primary: #040004;
-    --text-secondary: #636363;
-    
-    font-family: 'Plus Jakarta Sans', sans-serif;
-  }
+/* ==========================================================================
+   GAMING GEAR DESIGN SYSTEM (SHARP, TECH-FORWARD)
+   Source of Truth for NexGear-SFE Design Tokens & Utilities
+   ========================================================================== */
 
+@theme {
+  --font-heading: 'Be Vietnam Pro', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+
+  /* Core Palette */
+  --color-brand-500: #E30019;
+  --color-brand-600: #B30014;
+  --color-btn-secondary: #040004;
+  --color-text-900: #040004;
+  --color-text-600: #636363;
+  --color-surface-400: #E0E0E0;
+  --color-surface-200: #F4F5F7;
+  --color-surface-50: #FFFFFF;
+
+  /* Semantic Colors */
+  --color-success-500: #00A859;
+  --color-warning-500: #FB8C00;
+  --color-info-500: #1E88E5;
+  --color-error-50: #FEECEE;
+  --color-error-700: #B70014;
+
+  /* Border Radius Tokens */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Shadow Tokens */
+  --shadow-clay-sm: 0px 2px 4px rgba(4, 0, 4, 0.05);
+  --shadow-clay-md: 0px 4px 12px rgba(4, 0, 4, 0.08);
+  --shadow-clay-lg: 0px 8px 24px rgba(4, 0, 4, 0.12);
+  --shadow-focus: 0 0 0 3px rgba(227, 0, 25, 0.25);
+}
+
+:root {
+  /* Core Palette Variables */
+  --brand-500: #E30019;
+  --brand-600: #B30014;
+  --btn-secondary: #040004;
+  --text-900: #040004;
+  --text-600: #636363;
+  --surface-400: #E0E0E0;
+  --surface-200: #F4F5F7;
+  --surface-50: #FFFFFF;
+
+  /* Semantic Variables */
+  --success-500: #00A859;
+  --warning-500: #FB8C00;
+  --info-500: #1E88E5;
+  --error-50: #FEECEE;
+  --error-700: #B70014;
+
+  /* Typography Families */
+  --font-heading: 'Be Vietnam Pro', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+
+  /* Shadows */
+  --shadow-clay-sm: 0px 2px 4px rgba(4, 0, 4, 0.05);
+  --shadow-clay-md: 0px 4px 12px rgba(4, 0, 4, 0.08);
+  --shadow-clay-lg: 0px 8px 24px rgba(4, 0, 4, 0.12);
+  --shadow-focus: 0 0 0 3px rgba(227, 0, 25, 0.25);
+
+  /* Border Radii */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  font-family: var(--font-body);
+}
+
+@layer base {
   body {
-    background-color: var(--bg-main);
-    color: var(--text-primary);
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--surface-200);
+    color: var(--text-900);
+    font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: var(--font-heading);
+    color: var(--text-900);
+    letter-spacing: -0.02em;
   }
 }
 
-/* Mechanical Transition Helper */
+/* ==========================================================================
+   TYPOGRAPHY SCALE UTILITIES
+   ========================================================================== */
+
+.text-display {
+  font-family: var(--font-heading);
+  font-size: 3rem; /* 48px */
+  line-height: 3.5rem; /* 56px */
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.text-h1 {
+  font-family: var(--font-heading);
+  font-size: 2.5rem; /* 40px */
+  line-height: 3rem; /* 48px */
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.text-h2 {
+  font-family: var(--font-heading);
+  font-size: 2rem; /* 32px */
+  line-height: 2.5rem; /* 40px */
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.text-h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem; /* 24px */
+  line-height: 2rem; /* 32px */
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.text-body-lg {
+  font-family: var(--font-body);
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.75rem; /* 28px */
+  font-weight: 400;
+}
+
+.text-body {
+  font-family: var(--font-body);
+  font-size: 1rem; /* 16px */
+  line-height: 1.5rem; /* 24px */
+  font-weight: 400;
+}
+
+.text-body-sm {
+  font-family: var(--font-body);
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25rem; /* 20px */
+  font-weight: 400;
+}
+
+.text-caption {
+  font-family: var(--font-body);
+  font-size: 0.75rem; /* 12px */
+  line-height: 1rem; /* 16px */
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   EFFECTS & MECHANICAL MOTION UTILITIES
+   ========================================================================== */
+
+/* Fast mechanical switch transition */
 .transition-mechanical {
   transition-property: color, background-color, border-color, transform, opacity, box-shadow;
   transition-duration: 100ms;
@@ -38,9 +171,140 @@
   transform: scale(0.98);
 }
 
+/* Standard transition for layout shifts & accordions */
+.transition-standard {
+  transition-property: all;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Accessibility: Honor reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .transition-mechanical {
-    transition-duration: 0ms !important;
+  .transition-mechanical,
+  .transition-standard {
+    transition-duration: 1ms !important;
     transform: none !important;
   }
+}
+
+/* ==========================================================================
+   REUSABLE COMPONENT-LEVEL CLASSES
+   ========================================================================== */
+
+/* Primary Button: Brand Red (#E30019), 4px radius, hover #B30014 */
+.btn-primary {
+  background-color: var(--brand-500);
+  color: #FFFFFF;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  transition: background-color 100ms ease-out, transform 100ms ease-out, box-shadow 100ms ease-out;
+  display: inline-flex;
+  items-center: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-primary:hover {
+  background-color: var(--brand-600);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-primary:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* Secondary Button: Dark (#040004), 4px radius */
+.btn-secondary {
+  background-color: var(--btn-secondary);
+  color: #FFFFFF;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  transition: background-color 100ms ease-out, transform 100ms ease-out;
+  display: inline-flex;
+  items-center: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-secondary:hover {
+  background-color: #1a171a;
+}
+
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Outlined Button: Transparent bg, #E0E0E0 border, #040004 text */
+.btn-outlined {
+  background-color: transparent;
+  color: var(--text-900);
+  border: 1px solid var(--surface-400);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  transition: border-color 100ms ease-out, color 100ms ease-out, transform 100ms ease-out;
+  display: inline-flex;
+  items-center: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-outlined:hover {
+  border-color: var(--brand-500);
+  color: var(--brand-500);
+}
+
+.btn-outlined:active {
+  transform: scale(0.98);
+}
+
+/* Product Card: #FFFFFF bg, --shadow-clay-md, 1px solid #E0E0E0 border, --radius-md (8px) */
+.card-gaming {
+  background-color: var(--surface-50);
+  border: 1px solid var(--surface-400);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-clay-md);
+  transition: border-color 100ms ease-out, box-shadow 100ms ease-out;
+}
+
+.card-gaming:hover {
+  border-color: var(--brand-500);
+  box-shadow: var(--shadow-clay-lg);
+}
+
+/* Input Gaming: #FFFFFF bg, #E0E0E0 border, --radius-sm (4px) */
+.input-gaming {
+  background-color: var(--surface-50);
+  border: 1px solid var(--surface-400);
+  border-radius: var(--radius-sm);
+  color: var(--text-900);
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+  transition: border-color 100ms ease-out, box-shadow 100ms ease-out;
+}
+
+.input-gaming:focus {
+  outline: none;
+  border-color: var(--brand-500);
+  box-shadow: var(--shadow-focus);
+}
+
+.input-gaming.input-error {
+  border-color: var(--error-700);
+  background-color: var(--error-50);
+  color: var(--error-700);
 }
