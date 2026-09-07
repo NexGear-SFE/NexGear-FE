@@ -1,4 +1,16 @@
-// Cấu hình routes cho NexGear-SFE
-// Sẽ bổ sung khi bắt đầu phát triển các pages
+import { createBrowserRouter } from 'react-router-dom'
+import { MainLayout } from '@/layouts/MainLayout'
+import { HomePage } from '@/pages/Home/HomePage'
 
-export const routes = [] as const
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+    ],
+  },
+])
