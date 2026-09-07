@@ -1,31 +1,31 @@
 import { useState } from 'react'
-import { Menu, Search, ShoppingCart } from 'lucide-react'
-import avatarImg from '@/assets/images/Avatar.jpg'
+import { Menu, Search, ShoppingCart, User } from 'lucide-react'
+import logoImg from '@/assets/images/Avatar.jpg'
 
 export const MainHeader = () => {
   const [searchQuery, setSearchQuery] = useState('')
+
+  const handleCategoryClick = () => {
+    const el = document.getElementById('category-section')
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    } else {
+      window.location.href = '/#category-section'
+    }
+  }
 
   return (
     <header className="bg-white border-b border-[#E0E0E0] py-3 sticky top-0 z-40 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 lg:gap-6">
         {/* Brand Logo */}
         <a href="/" className="flex items-center gap-2.5 shrink-0 group">
-          <div className="w-10 h-10 bg-[#E30019] rounded-[4px] flex items-center justify-center text-white font-bold text-xl tracking-tighter shadow-sm transition-mechanical group-hover:bg-[#B30014]">
-            GG
-          </div>
-          <div className="flex flex-col leading-none">
-            <span className="font-bold text-lg text-[#040004] tracking-tight font-heading">
-              GearGo
-            </span>
-            <span className="text-[10px] text-gray-500 font-semibold tracking-widest uppercase">
-              Gaming Store
-            </span>
-          </div>
+          <img src={logoImg} alt="NexGear Logo" className="h-12 sm:h-14 md:h-16 w-auto object-contain" />
         </a>
 
         {/* Category Button */}
         <button
           type="button"
+          onClick={handleCategoryClick}
           className="hidden sm:flex items-center gap-2 bg-[#040004] text-white px-3.5 py-2.5 rounded-[4px] font-medium text-sm transition-mechanical hover:bg-[#1f191f] cursor-pointer"
         >
           <Menu className="w-4 h-4 text-white" />
@@ -49,7 +49,7 @@ export const MainHeader = () => {
           </div>
         </div>
 
-        {/* Action Buttons: Cart & User Avatar */}
+        {/* Action Buttons: Cart & Login */}
         <div className="flex items-center gap-2.5 shrink-0">
           {/* Cart Button */}
           <button
@@ -65,17 +65,13 @@ export const MainHeader = () => {
             <span className="hidden md:inline text-[#040004]">Giỏ hàng</span>
           </button>
 
-          {/* User Avatar Button */}
+          {/* Login Button */}
           <button
             type="button"
-            className="flex items-center gap-2 border border-[#E0E0E0] text-[#040004] px-2.5 py-1.5 rounded-[4px] text-sm font-medium transition-mechanical hover:border-[#E30019] hover:text-[#E30019] cursor-pointer"
+            className="flex items-center gap-2 border border-[#E0E0E0] text-[#040004] px-3.5 py-2 rounded-[4px] text-sm font-medium transition-mechanical hover:border-[#E30019] hover:text-[#E30019] cursor-pointer"
           >
-            <img
-              src={avatarImg}
-              alt="User Avatar"
-              className="w-6 h-6 rounded-full object-cover border border-[#E0E0E0]"
-            />
-            <span className="hidden md:inline">Tài khoản</span>
+            <User className="w-4 h-4 text-gray-700" />
+            <span className="hidden md:inline">Đăng nhập</span>
           </button>
         </div>
       </div>
