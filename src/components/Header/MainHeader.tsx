@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Menu, Search, ShoppingCart, User } from 'lucide-react'
+import { Menu, Search, ShoppingCart } from 'lucide-react'
+import avatarImg from '@/assets/images/Avatar.jpg'
 
 export const MainHeader = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -48,7 +49,7 @@ export const MainHeader = () => {
           </div>
         </div>
 
-        {/* Action Buttons: Cart & Login */}
+        {/* Action Buttons: Cart & User Avatar */}
         <div className="flex items-center gap-2.5 shrink-0">
           {/* Cart Button */}
           <button
@@ -64,13 +65,17 @@ export const MainHeader = () => {
             <span className="hidden md:inline text-[#040004]">Giỏ hàng</span>
           </button>
 
-          {/* Login Button */}
+          {/* User Avatar Button */}
           <button
             type="button"
-            className="flex items-center gap-2 border border-[#E0E0E0] text-[#040004] px-3.5 py-2 rounded-[4px] text-sm font-medium transition-mechanical hover:border-[#E30019] hover:text-[#E30019] cursor-pointer"
+            className="flex items-center gap-2 border border-[#E0E0E0] text-[#040004] px-2.5 py-1.5 rounded-[4px] text-sm font-medium transition-mechanical hover:border-[#E30019] hover:text-[#E30019] cursor-pointer"
           >
-            <User className="w-4 h-4 text-gray-700" />
-            <span className="hidden md:inline">Đăng nhập</span>
+            <img
+              src={avatarImg}
+              alt="User Avatar"
+              className="w-6 h-6 rounded-full object-cover border border-[#E0E0E0]"
+            />
+            <span className="hidden md:inline">Tài khoản</span>
           </button>
         </div>
       </div>
