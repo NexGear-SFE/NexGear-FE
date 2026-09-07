@@ -107,7 +107,7 @@ Dự án kết hợp 2 font chữGoogle Fonts tối ưu cho tiếng Việt và t
 | `--text-body-lg` | Plus Jakarta Sans | 18px / 28px | Regular (400) | Đoạn giới thiệu, mô tả ngắn |
 | `--text-body` | Plus Jakarta Sans | 16px / 24px | Regular (400) | Văn bản nội dung chuẩn, mô tả sản phẩm |
 | `--text-body-sm` | Plus Jakarta Sans | 14px / 20px | Regular (400) | Metadata, thông số kỹ thuật, label |
-| `--text-caption` | Plus Jakarta Sans | 12px / 16px | Medium (500) | Tag khuyến mãi, nhãn trạng thái |
+| `--text-caption` | Plus Jakarta Sans | 12px / 16px | Medium (500) | Nhãn thông số, nhãn trạng thái |
 
 *Mẹo nâng cao cho Tiêu đề (Pro Heading Tip):* Thu hẹp `letter-spacing` từ **-2% đến -3%** và giảm `line-height` xuống **110% - 120%** đối với các heading lớn để tạo sự gắn kết sắc nét.
 

@@ -39,7 +39,7 @@ Lập trình viên khi viết unit/integration test MUST bảo đảm kiểm th�
   - **Empty State:** Kiểm tra hiển thị thông báo rỗng khi danh sách sản phẩm hoặc giỏ hàng trống.
   - **Error State:** Kiểm tra hiển thị thông báo lỗi khi API thất bại hoặc bị ngắt mạng.
 - **Trường hợp biên (Edge Cases):** Giá sản phẩm bằng 0, chuỗi nhập quá dài, mảng dữ liệu rỗng.
-- **Custom Hooks nghiệp vụ:** Custom hook tính toán tiền giỏ hàng, áp mã giảm giá MUST có Unit Test đầy đủ.
+- **Custom Hooks nghiệp vụ:** Custom hook tính toán tiền giỏ hàng, cập nhật số lượng item MUST có Unit Test đầy đủ.
 
 ---
 

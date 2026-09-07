@@ -8,7 +8,7 @@ export const HomePage = () => {
         <section className="bg-[#040004] text-white rounded-[8px] p-8 md:p-12 relative overflow-hidden border border-zinc-800 shadow-md">
           <div className="max-w-2xl relative z-10 space-y-4">
             <span className="inline-flex items-center gap-1.5 bg-[#E30019]/10 border border-[#E30019]/30 text-[#E30019] text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider">
-              <Zap className="w-3.5 h-3.5" /> Flash Sale Gear 2025
+              <Zap className="w-3.5 h-3.5" /> GAMING GEAR & COMPONENTS 2025
             </span>
             <h1 className="text-3xl md:text-5xl font-bold font-heading tracking-tight leading-tight">
               Thế Giới Gaming Gear & Linh Kiện Đỉnh Cao
@@ -28,7 +28,7 @@ export const HomePage = () => {
                 type="button"
                 className="border border-zinc-700 hover:border-white text-white px-6 py-3 rounded-[4px] font-medium text-sm transition-mechanical cursor-pointer"
               >
-                Xem khuyến mãi
+                Xem danh mục
               </button>
             </div>
           </div>
@@ -81,9 +81,6 @@ export const HomePage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Demo Product Card 1 */}
             <div className="bg-white rounded-[8px] border border-[#E0E0E0] p-4 flex flex-col justify-between space-y-3 relative group transition-mechanical hover:border-[#E30019]">
-              <div className="absolute top-3 left-3 bg-[#E30019] text-white text-[11px] font-bold px-2 py-0.5 rounded-[2px]">
-                -15%
-              </div>
               <div className="w-full aspect-square bg-[#F4F5F7] rounded-[4px] flex items-center justify-center">
                 <Cpu className="w-16 h-16 text-gray-400" />
               </div>
@@ -95,9 +92,6 @@ export const HomePage = () => {
                 <div className="flex items-baseline gap-2 pt-1">
                   <span className="text-base font-bold text-[#E30019]">
                     14.990.000 ₫
-                  </span>
-                  <span className="text-xs text-gray-400 line-through">
-                    17.500.000 ₫
                   </span>
                 </div>
               </div>
@@ -112,9 +106,6 @@ export const HomePage = () => {
 
             {/* Demo Product Card 2 */}
             <div className="bg-white rounded-[8px] border border-[#E0E0E0] p-4 flex flex-col justify-between space-y-3 relative group transition-mechanical hover:border-[#E30019]">
-              <div className="absolute top-3 left-3 bg-[#E30019] text-white text-[11px] font-bold px-2 py-0.5 rounded-[2px]">
-                HOT
-              </div>
               <div className="w-full aspect-square bg-[#F4F5F7] rounded-[4px] flex items-center justify-center">
                 <Cpu className="w-16 h-16 text-gray-400" />
               </div>
@@ -126,9 +117,6 @@ export const HomePage = () => {
                 <div className="flex items-baseline gap-2 pt-1">
                   <span className="text-base font-bold text-[#E30019]">
                     32.490.000 ₫
-                  </span>
-                  <span className="text-xs text-gray-400 line-through">
-                    34.990.000 ₫
                   </span>
                 </div>
               </div>
