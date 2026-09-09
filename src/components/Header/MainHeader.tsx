@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Menu, Search, ShoppingCart } from 'lucide-react'
-import avatarImg from '@/assets/images/Avatar.jpg'
+import { Menu, Search, ShoppingCart, User } from 'lucide-react'
 
 export const MainHeader = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -18,43 +17,44 @@ export const MainHeader = () => {
               GearGo
             </span>
             <span className="text-[10px] text-gray-500 font-semibold tracking-widest uppercase">
-              Gaming Store
+              Tech Store
             </span>
           </div>
         </a>
 
-        {/* Category Button */}
+        {/* Categories Menu Trigger Button */}
         <button
           type="button"
-          className="hidden sm:flex items-center gap-2 bg-[#040004] text-white px-3.5 py-2.5 rounded-[4px] font-medium text-sm transition-mechanical hover:bg-[#1f191f] cursor-pointer"
+          className="hidden sm:flex items-center gap-2 bg-[#040004] text-white px-3 py-2 rounded-[4px] text-sm font-semibold transition-mechanical hover:bg-[#1a171a] cursor-pointer"
         >
-          <Menu className="w-4 h-4 text-white" />
+          <Menu className="w-4 h-4 text-[#E30019]" />
           <span>Danh mục</span>
         </button>
 
-        {/* Search Bar */}
-        <div className="flex-1 max-w-2xl relative">
-          <div className="relative flex items-center">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3.5 pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm kiếm laptop, PC, linh kiện gaming..."
-              className="w-full bg-white border border-[#E0E0E0] rounded-[4px] pl-10 pr-10 py-2 text-sm text-[#040004] placeholder:text-gray-400 focus:outline-none focus:border-[#E30019] focus:ring-1 focus:ring-[#E30019]/20 transition-mechanical"
-            />
-            <kbd className="hidden md:inline-flex items-center absolute right-3 text-[11px] font-mono text-gray-500 bg-[#F4F5F7] border border-[#E0E0E0] rounded px-1.5 py-0.5 pointer-events-none">
-              /
-            </kbd>
-          </div>
-        </div>
-
-        {/* Action Buttons: Cart & User Avatar */}
-        <div className="flex items-center gap-2.5 shrink-0">
-          {/* Cart Button */}
+        {/* Global Search Bar */}
+        <div className="flex-1 max-w-xl relative">
+          <input
+            type="text"
+            placeholder="Tìm kiếm linh kiện, PC, Laptop, Gear..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="input-gaming w-full pl-3 pr-10 py-2 text-sm focus:outline-none"
+          />
           <button
             type="button"
-            className="flex items-center gap-2 border border-[#E0E0E0] text-[#E30019] px-3.5 py-2 rounded-[4px] text-sm font-semibold transition-mechanical hover:border-[#E30019] hover:bg-[#FEECEE]/30 relative cursor-pointer"
+            aria-label="Tìm kiếm"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 bg-[#E30019] text-white rounded-[2px] hover:bg-[#B30014] transition-mechanical cursor-pointer"
+          >
+            <Search className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Header Right Action Buttons */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Cart Drawer Trigger */}
+          <button
+            type="button"
+            className="flex items-center gap-2 border border-[#E0E0E0] text-[#040004] px-3 py-2 rounded-[4px] text-sm font-semibold transition-mechanical hover:border-[#E30019] hover:text-[#E30019] cursor-pointer"
           >
             <div className="relative">
               <ShoppingCart className="w-4 h-4 text-[#E30019]" />
@@ -62,7 +62,7 @@ export const MainHeader = () => {
                 1
               </span>
             </div>
-            <span className="hidden md:inline text-[#040004]">Giỏ hàng</span>
+            <span className="hidden md:inline">Giỏ hàng</span>
           </button>
 
           {/* User Avatar Button */}
@@ -70,11 +70,9 @@ export const MainHeader = () => {
             type="button"
             className="flex items-center gap-2 border border-[#E0E0E0] text-[#040004] px-2.5 py-1.5 rounded-[4px] text-sm font-medium transition-mechanical hover:border-[#E30019] hover:text-[#E30019] cursor-pointer"
           >
-            <img
-              src={avatarImg}
-              alt="User Avatar"
-              className="w-6 h-6 rounded-full object-cover border border-[#E0E0E0]"
-            />
+            <div className="w-6 h-6 rounded-full bg-[#E30019] text-white flex items-center justify-center text-[10px] font-bold">
+              <User className="w-3.5 h-3.5" />
+            </div>
             <span className="hidden md:inline">Tài khoản</span>
           </button>
         </div>
