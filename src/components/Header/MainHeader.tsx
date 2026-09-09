@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Menu, Search, ShoppingCart } from 'lucide-react'
-import avatarImg from '@/assets/images/Avatar.jpg'
+import { Menu, Search, ShoppingCart, UserRound } from 'lucide-react'
 
 export const MainHeader = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -70,11 +69,9 @@ export const MainHeader = () => {
             type="button"
             className="flex items-center gap-2 border border-[#E0E0E0] text-[#040004] px-2.5 py-1.5 rounded-[4px] text-sm font-medium transition-mechanical hover:border-[#E30019] hover:text-[#E30019] cursor-pointer"
           >
-            <img
-              src={avatarImg}
-              alt="User Avatar"
-              className="w-6 h-6 rounded-full object-cover border border-[#E0E0E0]"
-            />
+            <span className="flex h-6 w-6 items-center justify-center rounded-full border border-[#E0E0E0] bg-[#F4F5F7]" aria-hidden="true">
+              <UserRound className="h-3.5 w-3.5" />
+            </span>
             <span className="hidden md:inline">Tài khoản</span>
           </button>
         </div>
