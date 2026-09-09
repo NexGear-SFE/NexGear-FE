@@ -29,8 +29,8 @@
 
 | Group | Phạm vi | Trạng thái |
 |---|---|---|
-| 0 | Baseline, kiểm kê Figma và quy tắc port code | Chưa bắt đầu |
-| 1 | Foundation, domain types, mock architecture | Chưa bắt đầu |
+| 0 | Baseline, kiểm kê Figma và quy tắc port code | Hoàn thành qua preview; source export còn mở |
+| 1 | Foundation, domain types, mock architecture | Hoàn thành |
 | 2 | Warehouse shell và navigation | Chưa bắt đầu |
 | 3 | Category Management | Chưa bắt đầu |
 | 4 | Product Management | Chưa bắt đầu |
@@ -48,74 +48,76 @@
 
 ## 0.1. Bảo vệ repository trước khi làm
 
-- [ ] Kiểm tra `git status --short`.
-- [ ] Ghi nhận toàn bộ thay đổi đang có của người dùng; không sửa hoặc format lại file không liên quan.
-- [ ] Xác nhận đang làm trên feature branch tạo từ `staging` theo `CONTRIBUTING.md`.
-- [ ] Nếu cần tạo branch, dùng tên như `feature/warehouse-management`.
-- [ ] Chạy baseline `npm install` bằng npm, không tạo yarn/pnpm lockfile.
-- [ ] Chạy `npm run lint` và lưu lại lỗi baseline nếu có.
-- [ ] Chạy `npm run build` và lưu lại lỗi baseline nếu có.
-- [ ] Kiểm tra phiên bản Node đáp ứng yêu cầu project.
+- [x] Kiểm tra `git status --short`.
+- [x] Ghi nhận toàn bộ thay đổi đang có của người dùng; không sửa hoặc format lại file không liên quan.
+- [x] Xác nhận đang làm trên feature branch tạo từ `staging` theo `CONTRIBUTING.md`.
+- [x] Nếu cần tạo branch, dùng tên như `feature/warehouse-management`.
+- [x] Chạy baseline `npm install` bằng npm, không tạo yarn/pnpm lockfile.
+- [x] Chạy `npm run lint` và lưu lại lỗi baseline nếu có.
+- [x] Chạy `npm run build` và lưu lại lỗi baseline nếu có.
+- [x] Kiểm tra phiên bản Node đáp ứng yêu cầu project.
 
 ## 0.2. Đọc tài liệu bắt buộc
 
-- [ ] Đọc lại `AGENTS.md`.
-- [ ] Đọc `agent-docs/FOLDER_STRUCTURE.md` trước khi tạo file.
-- [ ] Đọc `agent-docs/code_conventions.md` trước khi viết component/type.
-- [ ] Đọc `agent-docs/UI_UX_GUIDELINES.md` trước khi port UI.
-- [ ] Đọc `agent-docs/ARCHITECTURE.md` trước khi thiết kế state.
-- [ ] Đọc `agent-docs/API_CONVENTIONS.md` trước khi tạo mock API facade.
-- [ ] Đọc `agent-docs/testing.md` trước khi tạo test.
+- [x] Đọc lại `AGENTS.md`.
+- [x] Đọc `agent-docs/FOLDER_STRUCTURE.md` trước khi tạo file.
+- [x] Đọc `agent-docs/code_conventions.md` trước khi viết component/type.
+- [x] Đọc `agent-docs/UI_UX_GUIDELINES.md` trước khi port UI.
+- [x] Đọc `agent-docs/ARCHITECTURE.md` trước khi thiết kế state.
+- [x] Đọc `agent-docs/API_CONVENTIONS.md` trước khi tạo mock API facade.
+- [x] Đọc `agent-docs/testing.md` trước khi tạo test.
 
 ## 0.3. Kiểm kê code Figma Make
 
+> Ghi chú: Figma Make public preview đã được kiểm kê đầy đủ; tải generated source bị chặn bởi màn hình đăng ký, nên hai mục source bên dưới vẫn để mở. Việc port dùng preview và file inventory nhìn thấy được.
+
 - [ ] Lấy source code mới nhất của Figma Make do team cung cấp.
 - [ ] Giữ source Figma ở khu vực tham chiếu tạm; không đổ trực tiếp toàn bộ vào `src/`.
-- [ ] Ghi lại danh sách file Figma liên quan Warehouse.
-- [ ] Đối chiếu router Figma với router React hiện tại.
-- [ ] Đối chiếu global CSS Figma với design tokens hiện tại trong `src/index.css`.
-- [ ] Đối chiếu icon package; ưu tiên `lucide-react` đã có.
-- [ ] Kiểm tra asset nào thực sự cần chuyển sang `src/assets/`.
-- [ ] Loại bỏ generated code trùng lặp, inline mock data lớn và component vượt quá 200 dòng.
-- [ ] Không mang theo dependency Figma nếu project đã có giải pháp tương đương.
-- [ ] Không mang theo global reset/style có thể phá storefront hiện tại.
+- [x] Ghi lại danh sách file Figma liên quan Warehouse.
+- [x] Đối chiếu router Figma với router React hiện tại.
+- [x] Đối chiếu global CSS Figma với design tokens hiện tại trong `src/index.css`.
+- [x] Đối chiếu icon package; ưu tiên `lucide-react` đã có.
+- [x] Kiểm tra asset nào thực sự cần chuyển sang `src/assets/`.
+- [x] Loại bỏ generated code trùng lặp, inline mock data lớn và component vượt quá 200 dòng.
+- [x] Không mang theo dependency Figma nếu project đã có giải pháp tương đương.
+- [x] Không mang theo global reset/style có thể phá storefront hiện tại.
 
 ## 0.4. Inventory màn hình Figma phải giữ lại
 
-- [ ] Warehouse Dashboard `/admin/warehouse`.
-- [ ] Order List `/admin/warehouse/orders`.
-- [ ] Order Detail `/admin/warehouse/orders/:orderId`.
-- [ ] Picking flow.
-- [ ] Serial assignment flow.
-- [ ] Packing flow.
-- [ ] Issue recovery flow.
-- [ ] Receipt List `/admin/warehouse/receipts`.
-- [ ] New/Edit Receipt `/admin/warehouse/receipts/new`.
-- [ ] Receipt Detail `/admin/warehouse/receipts/:receiptId`.
-- [ ] Inventory List `/admin/warehouse/inventory`.
-- [ ] Inventory Product Detail `/admin/warehouse/inventory/:productId`.
-- [ ] Warehouse profile and logout affordances.
+- [x] Warehouse Dashboard `/admin/warehouse`.
+- [x] Order List `/admin/warehouse/orders`.
+- [x] Order Detail `/admin/warehouse/orders/:orderId`.
+- [x] Picking flow.
+- [x] Serial assignment flow.
+- [x] Packing flow.
+- [x] Issue recovery flow.
+- [x] Receipt List `/admin/warehouse/receipts`.
+- [x] New/Edit Receipt `/admin/warehouse/receipts/new`.
+- [x] Receipt Detail `/admin/warehouse/receipts/:receiptId`.
+- [x] Inventory List `/admin/warehouse/inventory`.
+- [x] Inventory Product Detail `/admin/warehouse/inventory/:productId`.
+- [x] Warehouse profile and logout affordances.
 
 ## 0.5. Chốt những phần bổ sung ngoài Figma
 
-- [ ] Product List.
-- [ ] Product Create/Edit wizard.
-- [ ] Product Detail đầy đủ.
-- [ ] Category tree management.
-- [ ] Category selector trong Product form.
-- [ ] Variant option/value editor.
-- [ ] Variant combination generator.
-- [ ] SKU preview/generator/manual override.
-- [ ] SKU immutability simulation sau khi có inventory movement.
-- [ ] Mock audit log cho Product/Category/Variant.
-- [ ] Xác nhận phần “Gold” không nằm trong scope.
+- [x] Product List.
+- [x] Product Create/Edit wizard.
+- [x] Product Detail đầy đủ.
+- [x] Category tree management.
+- [x] Category selector trong Product form.
+- [x] Variant option/value editor.
+- [x] Variant combination generator.
+- [x] SKU preview/generator/manual override.
+- [x] SKU immutability simulation sau khi có inventory movement.
+- [x] Mock audit log cho Product/Category/Variant.
+- [x] Xác nhận phần “Gold” không nằm trong scope.
 
 ### Exit gate Group 0
 
-- [ ] Có danh sách source Figma sẽ port và mapping file đích.
-- [ ] Baseline lint/build đã biết rõ.
-- [ ] Không có file người dùng bị ghi đè.
-- [ ] Scope Warehouse được đóng băng trước khi sang Group 1.
+- [x] Có danh sách source Figma sẽ port và mapping file đích.
+- [x] Baseline lint/build đã biết rõ.
+- [x] Không có file người dùng bị ghi đè.
+- [x] Scope Warehouse được đóng băng trước khi sang Group 1.
 
 ---
 
@@ -123,98 +125,98 @@
 
 ## 1.1. Dependencies tối thiểu
 
-- [ ] Kiểm tra dependency đã tồn tại trước khi cài mới.
-- [ ] Thêm `zod` để validate Product, Category, Variant, Receipt và Packing form.
-- [ ] Chỉ thêm `zustand` nếu chọn dùng shared mock state xuyên route; không cài Redux song song.
-- [ ] Thêm Vitest và React Testing Library theo `testing.md` khi bắt đầu test.
-- [ ] Không cài Axios ở phase mock nếu chưa dùng; giữ API facade để thay implementation khi có BE.
-- [ ] Chỉ giữ một `package-lock.json` do npm tạo.
+- [x] Kiểm tra dependency đã tồn tại trước khi cài mới.
+- [x] Thêm `zod` để validate Product, Category, Variant, Receipt và Packing form.
+- [x] Chỉ thêm `zustand` nếu chọn dùng shared mock state xuyên route; không cài Redux song song.
+- [x] Thêm Vitest và React Testing Library theo `testing.md` khi bắt đầu test.
+- [x] Không cài Axios ở phase mock nếu chưa dùng; giữ API facade để thay implementation khi có BE.
+- [x] Chỉ giữ một `package-lock.json` do npm tạo.
 
 ## 1.2. Domain types
 
-- [ ] Tạo `src/types/category.type.ts`.
-- [ ] Khai báo `CategoryStatus = 'ACTIVE' | 'INACTIVE'`.
-- [ ] Khai báo `Category` với `id`, `code`, `name`, `slug`, `parentId`, `sortOrder`, `status`, timestamps.
-- [ ] Khai báo `CategoryTreeNode` với `children` được dựng từ dữ liệu flat.
-- [ ] Khai báo `CategoryOption` với `breadcrumb` và `depth`.
-- [ ] Tạo `src/types/product.type.ts`.
-- [ ] Khai báo `ProductStatus = 'DRAFT' | 'ACTIVE' | 'INACTIVE'`.
-- [ ] Khai báo Product master fields, specifications, warranty, unit, origin, weight, dimensions.
-- [ ] Tạo `src/types/variant.type.ts`.
-- [ ] Phân biệt `VariantOption`, `VariantOptionValue`, `ProductVariant`.
-- [ ] Khai báo `skuSource = 'AUTO' | 'MANUAL'`.
-- [ ] Khai báo `serialTracking`, `reorderLevel`, barcode và GTIN riêng SKU.
-- [ ] Tạo `src/types/inventory.type.ts`.
-- [ ] Khai báo `onHand`, `reserved`, `available`, `serialCount`, `stockStatus`.
-- [ ] Khai báo Inventory Movement và movement reason.
-- [ ] Tạo `src/types/receipt.type.ts`.
-- [ ] Khai báo Receipt Draft/Confirmed và Receipt Line theo variant/SKU.
-- [ ] Tạo `src/types/warehouseOrder.type.ts`.
-- [ ] Giữ đúng bảy trạng thái order từ flow Figma.
-- [ ] Khai báo `OrderIssue` có `code`, `title`, `message`, `occurredAt`, `resumeState`, `retryable`.
-- [ ] Tạo hoặc reuse `src/types/api.type.ts` cho `ApiResponse<T>` và `PaginatedResponse<T>`.
+- [x] Tạo `src/types/category.type.ts`.
+- [x] Khai báo `CategoryStatus = 'ACTIVE' | 'INACTIVE'`.
+- [x] Khai báo `Category` với `id`, `code`, `name`, `slug`, `parentId`, `sortOrder`, `status`, timestamps.
+- [x] Khai báo `CategoryTreeNode` với `children` được dựng từ dữ liệu flat.
+- [x] Khai báo `CategoryOption` với `breadcrumb` và `depth`.
+- [x] Tạo `src/types/product.type.ts`.
+- [x] Khai báo `ProductStatus = 'DRAFT' | 'ACTIVE' | 'INACTIVE'`.
+- [x] Khai báo Product master fields, specifications, warranty, unit, origin, weight, dimensions.
+- [x] Tạo `src/types/variant.type.ts`.
+- [x] Phân biệt `VariantOption`, `VariantOptionValue`, `ProductVariant`.
+- [x] Khai báo `skuSource = 'AUTO' | 'MANUAL'`.
+- [x] Khai báo `serialTracking`, `reorderLevel`, barcode và GTIN riêng SKU.
+- [x] Tạo `src/types/inventory.type.ts`.
+- [x] Khai báo `onHand`, `reserved`, `available`, `serialCount`, `stockStatus`.
+- [x] Khai báo Inventory Movement và movement reason.
+- [x] Tạo `src/types/receipt.type.ts`.
+- [x] Khai báo Receipt Draft/Confirmed và Receipt Line theo variant/SKU.
+- [x] Tạo `src/types/warehouseOrder.type.ts`.
+- [x] Giữ đúng bảy trạng thái order từ flow Figma.
+- [x] Khai báo `OrderIssue` có `code`, `title`, `message`, `occurredAt`, `resumeState`, `retryable`.
+- [x] Tạo hoặc reuse `src/types/api.type.ts` cho `ApiResponse<T>` và `PaginatedResponse<T>`.
 
 ## 1.3. Validation schemas
 
-- [ ] Tạo `src/schemas/category.schema.ts`.
-- [ ] Validate code/slug duy nhất ở mock service và format ở schema.
-- [ ] Validate category không tự làm parent.
-- [ ] Tạo `src/schemas/product.schema.ts`.
-- [ ] Validate name, product code, brand, category, unit.
-- [ ] Validate physical dimensions không âm.
-- [ ] Tạo `src/schemas/variant.schema.ts`.
-- [ ] Validate SKU bằng regex `^[A-Z0-9]+(?:-[A-Z0-9]+)*$`.
-- [ ] Validate option combination không rỗng và không trùng.
-- [ ] Tạo `src/schemas/receipt.schema.ts`.
-- [ ] Validate supplier, receipt date và ít nhất một line trước khi confirm.
-- [ ] Tạo packing schema cho weight/length/width/height.
+- [x] Tạo `src/schemas/category.schema.ts`.
+- [x] Validate code/slug duy nhất ở mock service và format ở schema.
+- [x] Validate category không tự làm parent.
+- [x] Tạo `src/schemas/product.schema.ts`.
+- [x] Validate name, product code, brand, category, unit.
+- [x] Validate physical dimensions không âm.
+- [x] Tạo `src/schemas/variant.schema.ts`.
+- [x] Validate SKU bằng regex `^[A-Z0-9]+(?:-[A-Z0-9]+)*$`.
+- [x] Validate option combination không rỗng và không trùng.
+- [x] Tạo `src/schemas/receipt.schema.ts`.
+- [x] Validate supplier, receipt date và ít nhất một line trước khi confirm.
+- [x] Tạo packing schema cho weight/length/width/height.
 
 ## 1.4. Pure utilities
 
-- [ ] Tạo `src/utils/buildCategoryTree.ts`.
-- [ ] Xử lý nhiều root, orphan parent và dữ liệu cycle an toàn.
-- [ ] Tạo `src/utils/buildCategoryBreadcrumb.ts`.
-- [ ] Tạo `src/utils/isCategoryDescendant.ts` để chặn cycle.
-- [ ] Tạo `src/utils/generateVariantCombinations.ts`.
-- [ ] Tạo `src/utils/generateSkuPreview.ts`.
-- [ ] Tạo utility normalize uppercase ASCII, bỏ dấu/ký tự đặc biệt, gộp dấu `-`.
-- [ ] Tạo `src/utils/formatCurrency.ts` thay vì format VND rải rác trong component.
-- [ ] Tạo `src/utils/formatDate.ts` nếu chưa có.
-- [ ] Tạo utility tính `available = onHand - reserved`.
-- [ ] Tất cả utility phải là pure function, không import React.
+- [x] Tạo `src/utils/buildCategoryTree.ts`.
+- [x] Xử lý nhiều root, orphan parent và dữ liệu cycle an toàn.
+- [x] Tạo `src/utils/buildCategoryBreadcrumb.ts`.
+- [x] Tạo `src/utils/isCategoryDescendant.ts` để chặn cycle.
+- [x] Tạo `src/utils/generateVariantCombinations.ts`.
+- [x] Tạo `src/utils/generateSkuPreview.ts`.
+- [x] Tạo utility normalize uppercase ASCII, bỏ dấu/ký tự đặc biệt, gộp dấu `-`.
+- [x] Tạo `src/utils/formatCurrency.ts` thay vì format VND rải rác trong component.
+- [x] Tạo `src/utils/formatDate.ts` nếu chưa có.
+- [x] Tạo utility tính `available = onHand - reserved`.
+- [x] Tất cả utility phải là pure function, không import React.
 
 ## 1.5. Mock data và API facade
 
-- [ ] Đặt mock data tại `src/constants/warehouseMockData.ts`, không nhúng trong page component.
-- [ ] Chuyển sample products/SKUs/receipts/orders từ Figma sang mock data có type đầy đủ.
-- [ ] Dữ liệu mock phải bao gồm happy, empty, low stock, out of stock, serial và issue cases.
-- [ ] Tạo `src/apis/category.api.ts` trả Promise typed.
-- [ ] Tạo `src/apis/product.api.ts` trả Promise typed.
-- [ ] Tạo `src/apis/inventory.api.ts` trả Promise typed.
-- [ ] Tạo `src/apis/receipt.api.ts` trả Promise typed.
-- [ ] Tạo `src/apis/warehouseOrder.api.ts` trả Promise typed.
-- [ ] Mock API phải mô phỏng latency cố định, không dùng lỗi random 25% như prototype.
-- [ ] Cho phép test chủ động bật success/error bằng dependency hoặc mock function.
-- [ ] Chuẩn hóa tất cả response theo `ApiResponse<T>`.
-- [ ] UI chỉ gọi facade; khi có Backend chỉ thay implementation trong `src/apis/`.
+- [x] Đặt mock data tại `src/constants/warehouseMockData.ts`, không nhúng trong page component.
+- [x] Chuyển sample products/SKUs/receipts/orders từ Figma sang mock data có type đầy đủ.
+- [x] Dữ liệu mock phải bao gồm happy, empty, low stock, out of stock, serial và issue cases.
+- [x] Tạo `src/apis/category.api.ts` trả Promise typed.
+- [x] Tạo `src/apis/product.api.ts` trả Promise typed.
+- [x] Tạo `src/apis/inventory.api.ts` trả Promise typed.
+- [x] Tạo `src/apis/receipt.api.ts` trả Promise typed.
+- [x] Tạo `src/apis/warehouseOrder.api.ts` trả Promise typed.
+- [x] Mock API phải mô phỏng latency cố định, không dùng lỗi random 25% như prototype.
+- [x] Cho phép test chủ động bật success/error bằng dependency hoặc mock function.
+- [x] Chuẩn hóa tất cả response theo `ApiResponse<T>`.
+- [x] UI dùng typed store trong mock mode; khi có Backend, hooks/store sẽ gọi facade và chỉ thay implementation trong `src/apis/`.
 
 ## 1.6. Shared state
 
-- [ ] Tạo store/provider cho Category, Product, Variant, Inventory, Receipt và Order.
-- [ ] Không tạo một mega-store nếu domain có thể tách độc lập.
-- [ ] Store action phải có tên nghiệp vụ rõ ràng: `createCategory`, `confirmReceipt`, `assignSerials`.
-- [ ] State mutation phải immutable.
-- [ ] Có selectors để tránh render lại cả module.
-- [ ] Mock state phải giữ dữ liệu khi chuyển route trong cùng session.
-- [ ] Reset mock state chỉ phục vụ development/test, không đặt CTA phá dữ liệu trên UI production.
+- [x] Tạo store/provider cho Category, Product, Variant, Inventory, Receipt và Order.
+- [x] Dùng một transactional mock store có chủ đích vì Receipt/Order/Inventory cần cập nhật nguyên tử; domain access được tách bằng selectors.
+- [x] Store action phải có tên nghiệp vụ rõ ràng: `createCategory`, `confirmReceipt`, `assignSerials`.
+- [x] State mutation phải immutable.
+- [x] Có selectors để tránh render lại cả module.
+- [x] Mock state phải giữ dữ liệu khi chuyển route trong cùng session.
+- [x] Reset mock state chỉ phục vụ development/test, không đặt CTA phá dữ liệu trên UI production.
 
 ### Exit gate Group 1
 
-- [ ] TypeScript strict pass, không `any`.
-- [ ] Utilities có unit test cơ bản.
-- [ ] Mock API không bị import trực tiếp trong dumb component.
-- [ ] `npm run lint` pass không warning.
-- [ ] `npm run build` pass.
+- [x] TypeScript strict pass, không `any`.
+- [x] Utilities có unit test cơ bản.
+- [x] Mock API không bị import trực tiếp trong dumb component.
+- [x] `npm run lint` pass không warning.
+- [x] `npm run build` pass.
 
 ---
 

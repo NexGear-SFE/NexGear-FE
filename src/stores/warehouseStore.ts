@@ -1,0 +1,207 @@
+import { create } from 'zustand'
+import {
+  initialCategories,
+  initialInventory,
+  initialMovements,
+  initialOrders,
+  initialProducts,
+  initialReceipts,
+  initialSerials,
+  initialVariants,
+} from '@/constants/warehouseMockData'
+import type { Category } from '@/types/category.type'
+import type { InventoryMovement, ProductSerial, VariantInventory } from '@/types/inventory.type'
+import type { Product, ProductVariant } from '@/types/product.type'
+import type { StockReceipt } from '@/types/receipt.type'
+import type { WarehouseOrder, WarehouseOrderState } from '@/types/warehouseOrder.type'
+
+type CategoryDraft = Omit<Category, 'id' | 'createdAt' | 'updatedAt'>
+type ProductDraft = Omit<Product, 'id' | 'createdAt' | 'updatedAt'>
+type VariantDraft = Omit<ProductVariant, 'id' | 'productId' | 'createdAt' | 'updatedAt'>
+
+interface WarehouseState {
+  categories: Category[]
+  products: Product[]
+  variants: ProductVariant[]
+  inventory: VariantInventory[]
+  serials: ProductSerial[]
+  movements: InventoryMovement[]
+  receipts: StockReceipt[]
+  orders: WarehouseOrder[]
+  createCategory: (draft: CategoryDraft) => string
+  updateCategory: (categoryId: string, draft: CategoryDraft) => void
+  toggleCategoryStatus: (categoryId: string) => void
+  saveProduct: (draft: ProductDraft, variants: VariantDraft[], productId?: string) => string
+  toggleProductStatus: (productId: string) => void
+  saveReceipt: (receipt: StockReceipt) => void
+  confirmReceipt: (receiptId: string) => void
+  acceptOrder: (orderId: string) => void
+  completePicking: (orderId: string) => void
+  assignOrderSerials: (orderId: string, serialIds: string[]) => void
+  packOrder: (orderId: string, shouldFail?: boolean) => void
+  completeOrder: (orderId: string) => void
+}
+
+function timestamp(): string {
+  return new Date().toISOString()
+}
+
+function nextCode(prefix: string, count: number): string {
+  return `${prefix}${String(count + 1).padStart(3, '0')}`
+}
+
+function addTimeline(order: WarehouseOrder, label: string): WarehouseOrder {
+  return {
+    ...order,
+    timeline: [...order.timeline, { id: crypto.randomUUID(), label, occurredAt: timestamp(), actor: 'Nguyễn Bảo' }],
+  }
+}
+
+export const useWarehouseStore = create<WarehouseState>((set, get) => ({
+  categories: initialCategories,
+  products: initialProducts,
+  variants: initialVariants,
+  inventory: initialInventory,
+  serials: initialSerials,
+  movements: initialMovements,
+  receipts: initialReceipts,
+  orders: initialOrders,
+
+  createCategory: (draft) => {
+    const id = `cat-${crypto.randomUUID()}`
+    const createdAt = timestamp()
+    set((state) => ({ categories: [...state.categories, { ...draft, id, createdAt, updatedAt: createdAt }] }))
+    return id
+  },
+
+  updateCategory: (categoryId, draft) => set((state) => ({
+    categories: state.categories.map((category) =>
+      category.id === categoryId ? { ...category, ...draft, updatedAt: timestamp() } : category,
+    ),
+  })),
+
+  toggleCategoryStatus: (categoryId) => set((state) => ({
+    categories: state.categories.map((category) => category.id === categoryId
+      ? { ...category, status: category.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE', updatedAt: timestamp() }
+      : category),
+  })),
+
+  saveProduct: (draft, variantDrafts, productId) => {
+    const current = get()
+    const id = productId ?? nextCode('P', current.products.length)
+    const changedAt = timestamp()
+    const existingProduct = current.products.find((product) => product.id === id)
+    const product: Product = existingProduct
+      ? { ...existingProduct, ...draft, updatedAt: changedAt }
+      : { ...draft, id, createdAt: changedAt, updatedAt: changedAt }
+
+    const retainedVariants = current.variants.filter((variant) => variant.productId !== id)
+    const variants = variantDrafts.map<ProductVariant>((variant, index) => {
+      const existingVariant = current.variants.find((candidate) => candidate.productId === id && candidate.sku === variant.sku)
+      return existingVariant
+        ? { ...existingVariant, ...variant, updatedAt: changedAt }
+        : { ...variant, id: `${id}-V${index + 1}`, productId: id, createdAt: changedAt, updatedAt: changedAt }
+    })
+    const knownInventory = new Set(current.inventory.map((item) => item.variantId))
+    const newInventory = variants
+      .filter((variant) => !knownInventory.has(variant.id))
+      .map<VariantInventory>((variant) => ({ variantId: variant.id, onHand: 0, reserved: 0 }))
+
+    set({
+      products: existingProduct
+        ? current.products.map((candidate) => candidate.id === id ? product : candidate)
+        : [...current.products, product],
+      variants: [...retainedVariants, ...variants],
+      inventory: [...current.inventory, ...newInventory],
+    })
+    return id
+  },
+
+  toggleProductStatus: (productId) => set((state) => ({
+    products: state.products.map((product) => product.id === productId
+      ? { ...product, status: product.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE', updatedAt: timestamp() }
+      : product),
+  })),
+
+  saveReceipt: (receipt) => set((state) => ({
+    receipts: state.receipts.some((item) => item.id === receipt.id)
+      ? state.receipts.map((item) => item.id === receipt.id ? receipt : item)
+      : [receipt, ...state.receipts],
+  })),
+
+  confirmReceipt: (receiptId) => set((state) => {
+    const receipt = state.receipts.find((item) => item.id === receiptId)
+    if (!receipt || receipt.status === 'CONFIRMED') return state
+    const confirmedAt = timestamp()
+    const quantityByVariant = new Map(receipt.lines.map((line) => [line.variantId, line.quantity]))
+    const inventory = state.inventory.map((item) => ({
+      ...item,
+      onHand: item.onHand + (quantityByVariant.get(item.variantId) ?? 0),
+    }))
+    const serials = receipt.lines.flatMap((line) => line.serials.map<ProductSerial>((value) => ({
+      id: crypto.randomUUID(), variantId: line.variantId, value, receiptId, status: 'AVAILABLE', receivedAt: confirmedAt,
+    })))
+    const movements = receipt.lines.map<InventoryMovement>((line) => ({
+      id: crypto.randomUUID(), variantId: line.variantId, reason: 'STOCK_RECEIPT', quantityDelta: line.quantity, reference: receiptId, occurredAt: confirmedAt,
+    }))
+    return {
+      receipts: state.receipts.map((item) => item.id === receiptId ? { ...item, status: 'CONFIRMED', updatedAt: confirmedAt } : item),
+      inventory,
+      serials: [...state.serials, ...serials],
+      movements: [...state.movements, ...movements],
+      variants: state.variants.map((variant) => quantityByVariant.has(variant.id) ? { ...variant, skuLocked: true } : variant),
+    }
+  }),
+
+  acceptOrder: (orderId) => set((state) => ({
+    orders: state.orders.map((order) => order.id === orderId && order.state === 'WAITING_ACCEPTANCE'
+      ? addTimeline({ ...order, state: 'PICKING', assignee: 'Nguyễn Bảo' }, 'Bắt đầu soạn hàng')
+      : order),
+  })),
+
+  completePicking: (orderId) => set((state) => ({
+    orders: state.orders.map((order) => {
+      if (order.id !== orderId || order.state !== 'PICKING') return order
+      const requiresSerial = order.items.some((item) => state.variants.find((variant) => variant.id === item.variantId)?.serialTracking)
+      const nextState: WarehouseOrderState = requiresSerial ? 'WAITING_SERIAL' : 'READY_TO_PACK'
+      return addTimeline({ ...order, state: nextState, items: order.items.map((item) => ({ ...item, pickedQuantity: item.quantity })) }, 'Đã soạn đủ hàng')
+    }),
+  })),
+
+  assignOrderSerials: (orderId, serialIds) => set((state) => ({
+    orders: state.orders.map((order) => order.id === orderId && order.state === 'WAITING_SERIAL'
+      ? addTimeline({ ...order, state: 'READY_TO_PACK', items: order.items.map((item) => ({ ...item, assignedSerialIds: serialIds })) }, 'Đã gán serial')
+      : order),
+    serials: state.serials.map((serial) => serialIds.includes(serial.id) ? { ...serial, status: 'RESERVED' } : serial),
+  })),
+
+  packOrder: (orderId, shouldFail = false) => set((state) => ({
+    orders: state.orders.map((order) => {
+      const canPack = order.id === orderId && (order.state === 'READY_TO_PACK' || order.state === 'ISSUE')
+      if (!canPack) return order
+      if (shouldFail) return addTimeline({ ...order, state: 'ISSUE', issue: { code: 'GHTK_REJECTED', title: 'GHTK từ chối vận đơn', message: 'Kiểm tra lại kích thước kiện hàng.', occurredAt: timestamp(), resumeState: 'READY_TO_PACK', retryable: true } }, 'Tạo vận đơn thất bại')
+      return addTimeline({ ...order, state: 'WAITING_GHTK_PICKUP', issue: undefined }, 'Đã tạo vận đơn GHTK')
+    }),
+  })),
+
+  completeOrder: (orderId) => set((state) => ({
+    orders: state.orders.map((order) => order.id === orderId && order.state === 'WAITING_GHTK_PICKUP'
+      ? addTimeline({ ...order, state: 'COMPLETED' }, 'Giao hàng thành công')
+      : order),
+  })),
+}))
+
+export function getProductTotal(products: Product[], variants: ProductVariant[], productId: string): number {
+  return products.some((product) => product.id === productId)
+    ? variants.filter((variant) => variant.productId === productId).length
+    : 0
+}
+
+export const warehouseSelectors = {
+  categories: (state: WarehouseState) => state.categories,
+  products: (state: WarehouseState) => state.products,
+  variants: (state: WarehouseState) => state.variants,
+  inventory: (state: WarehouseState) => state.inventory,
+  receipts: (state: WarehouseState) => state.receipts,
+  orders: (state: WarehouseState) => state.orders,
+}
