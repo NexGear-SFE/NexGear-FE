@@ -1,80 +1,107 @@
-import { useState } from 'react'
-import { Menu, Search, ShoppingCart, User } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Menu, Search, ShoppingCart, User, X } from 'lucide-react'
 import logoImg from '@/assets/images/Avatar.jpg'
 
 export const MainHeader = () => {
   const [searchQuery, setSearchQuery] = useState('')
+  const [isCategoryActive, setIsCategoryActive] = useState(false)
+
+  useEffect(() => {
+    const handleToggle = () => setIsCategoryActive((prev) => !prev)
+    const handleClose = () => setIsCategoryActive(false)
+
+    window.addEventListener('toggle-category-overlay', handleToggle)
+    window.addEventListener('close-category-overlay', handleClose)
+    return () => {
+      window.removeEventListener('toggle-category-overlay', handleToggle)
+      window.removeEventListener('close-category-overlay', handleClose)
+    }
+  }, [])
 
   const handleCategoryClick = () => {
     const el = document.getElementById('category-section')
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    } else {
-      window.location.href = '/#category-section'
     }
+    window.dispatchEvent(new CustomEvent('toggle-category-overlay'))
   }
 
   return (
-    <header className="bg-white border-b border-[#E0E0E0] py-3 sticky top-0 z-40 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 lg:gap-6">
-        {/* Brand Logo */}
-        <a href="/" className="flex items-center gap-2.5 shrink-0 group">
-          <img src={logoImg} alt="NexGear Logo" className="h-12 sm:h-14 md:h-16 w-auto object-contain" />
+    <div className="bg-white border-b border-gray-200 text-[#040004] py-3">
+      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-4">
+        {/* Left: Logo */}
+        <a href="/" className="flex items-center group shrink-0">
+          <img
+            src={logoImg}
+            alt="NexGear Logo"
+            className="h-11 sm:h-12 md:h-14 w-auto object-contain group-hover:scale-105 transition-transform"
+          />
         </a>
 
-        {/* Category Button */}
-        <button
-          type="button"
-          onClick={handleCategoryClick}
-          className="hidden sm:flex items-center gap-2 bg-[#040004] text-white px-3.5 py-2.5 rounded-[4px] font-medium text-sm transition-mechanical hover:bg-[#1f191f] cursor-pointer"
-        >
-          <Menu className="w-4 h-4 text-white" />
-          <span>Danh mục</span>
-        </button>
+        {/* Center: Category Trigger Button + Search Bar */}
+        <div className="flex-1 max-w-3xl mx-2 flex items-center gap-2.5">
+          {/* Category Trigger Button */}
+          <button
+            onClick={handleCategoryClick}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-[8px] text-sm font-bold transition-all shadow-sm cursor-pointer shrink-0 ${
+              isCategoryActive
+                ? 'bg-[#E30019] text-white ring-2 ring-red-400/50 z-40'
+                : 'bg-black text-white hover:bg-zinc-800'
+            }`}
+          >
+            {isCategoryActive ? (
+              <X className="w-4 h-4 animate-in spin-in-90 duration-200" />
+            ) : (
+              <Menu className="w-4 h-4" />
+            )}
+            <span>Danh mục</span>
+          </button>
 
-        {/* Search Bar */}
-        <div className="flex-1 max-w-2xl relative">
-          <div className="relative flex items-center">
+          {/* Search Input Bar */}
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="relative flex-1 flex items-center"
+          >
             <Search className="w-4 h-4 text-gray-400 absolute left-3.5 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Tìm kiếm laptop, PC, linh kiện gaming..."
-              className="w-full bg-white border border-[#E0E0E0] rounded-[4px] pl-10 pr-10 py-2 text-sm text-[#040004] placeholder:text-gray-400 focus:outline-none focus:border-[#E30019] focus:ring-1 focus:ring-[#E30019]/20 transition-mechanical"
+              className="w-full bg-white border border-gray-200 rounded-[8px] py-2.5 pl-10 pr-9 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#E30019] focus:ring-1 focus:ring-[#E30019] transition-all"
             />
-            <kbd className="hidden md:inline-flex items-center absolute right-3 text-[11px] font-mono text-gray-500 bg-[#F4F5F7] border border-[#E0E0E0] rounded px-1.5 py-0.5 pointer-events-none">
+            <kbd className="absolute right-3 px-1.5 py-0.5 text-xs text-gray-400 bg-gray-100 rounded border border-gray-200 font-mono">
               /
             </kbd>
-          </div>
+          </form>
         </div>
 
-        {/* Action Buttons: Cart & Login */}
-        <div className="flex items-center gap-2.5 shrink-0">
-          {/* Cart Button */}
-          <button
-            type="button"
-            className="flex items-center gap-2 border border-[#E0E0E0] text-[#E30019] px-3.5 py-2 rounded-[4px] text-sm font-semibold transition-mechanical hover:border-[#E30019] hover:bg-[#FEECEE]/30 relative cursor-pointer"
+        {/* Right: Actions (Cart & Account) */}
+        <div className="flex items-center gap-3 shrink-0">
+          {/* Cart Drawer Trigger */}
+          <a
+            href="#cart"
+            className="flex items-center gap-2.5 border border-gray-200 hover:border-[#E30019] bg-white text-[#E30019] px-5 py-2.5 rounded-[8px] text-sm font-bold transition-all shadow-sm group"
           >
             <div className="relative">
-              <ShoppingCart className="w-4 h-4 text-[#E30019]" />
-              <span className="absolute -top-2.5 -right-2.5 bg-[#E30019] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">
+              <ShoppingCart className="w-4 h-4 group-hover:scale-110 transition-transform" />
+              <span className="absolute -top-3 -right-3 bg-[#E30019] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
                 1
               </span>
             </div>
-            <span className="hidden md:inline text-[#040004]">Giỏ hàng</span>
-          </button>
+            <span>Giỏ hàng</span>
+          </a>
 
-          {/* Login Button */}
-          <button
-            type="button"
-            className="flex items-center gap-2 border border-[#E0E0E0] text-[#040004] px-3.5 py-2 rounded-[4px] text-sm font-medium transition-mechanical hover:border-[#E30019] hover:text-[#E30019] cursor-pointer"
+          {/* User Account */}
+          <a
+            href="#account"
+            className="flex items-center gap-2 border border-gray-200 hover:border-gray-400 bg-white text-gray-800 px-5 py-2.5 rounded-[8px] text-sm font-bold transition-all shadow-sm"
           >
-            <User className="w-4 h-4 text-gray-700" />
-            <span className="hidden md:inline">Đăng nhập</span>
-          </button>
+            <User className="w-4 h-4 text-gray-600" />
+            <span>Đăng nhập</span>
+          </a>
         </div>
       </div>
-    </header>
+    </div>
   )
 }
