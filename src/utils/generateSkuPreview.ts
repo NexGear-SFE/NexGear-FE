@@ -4,6 +4,11 @@ export const SKU_PATTERN = /^[A-Z0-9]+(?:-[A-Z0-9]+)*$/
 export const SKU_MAX_LENGTH = 32
 
 export function normalizeSkuSegment(value: string): string {
+  return normalizeSkuInput(value)
+    .replace(/^-+|-+$/g, '')
+}
+
+export function normalizeSkuInput(value: string): string {
   return value
     .replace(/đ/g, 'd')
     .replace(/Đ/g, 'D')
@@ -11,7 +16,6 @@ export function normalizeSkuSegment(value: string): string {
     .replace(/[\u0300-\u036f]/g, '')
     .toUpperCase()
     .replace(/[^A-Z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
 }
 
 export function generateSkuPreview(brandCode: string, modelCode: string, values: VariantOptionValue[]): string {

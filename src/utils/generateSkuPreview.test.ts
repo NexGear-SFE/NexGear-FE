@@ -13,6 +13,13 @@ describe('SKU utilities', () => {
     ])).toBe('ASU-G16-I9-4080')
   })
 
+  it('does not change SKU when only display names change', () => {
+    const first = generateSkuPreview('LOG', 'GPX2', [{ option: 'Màu', value: 'Đen', code: 'BLK' }])
+    const renamed = generateSkuPreview('LOG', 'GPX2', [{ option: 'Color', value: 'Black', code: 'BLK' }])
+    expect(first).toBe('LOG-GPX2-BLK')
+    expect(renamed).toBe(first)
+  })
+
   it('rejects spaces and lowercase characters', () => {
     expect(isValidSku('ASU-G16-I9')).toBe(true)
     expect(isValidSku('asu g16')).toBe(false)

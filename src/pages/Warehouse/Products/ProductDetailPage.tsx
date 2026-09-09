@@ -16,7 +16,7 @@ type Tab = typeof tabs[number]
 
 export function ProductDetailPage() {
   const { productId = '' } = useParams()
-  const { products, variants, inventory, serials, movements } = useWarehouseStore()
+  const { products, variants, inventory, serials, movements, skuAudit } = useWarehouseStore()
   const [tab, setTab] = useState<Tab>('Tổng quan')
   const product = products.find((item) => item.id === productId)
   if (!product) return <DataState type="empty" title="Không tìm thấy sản phẩm" description="Product ID không tồn tại hoặc đã bị ẩn khỏi dữ liệu mock." />
@@ -25,6 +25,7 @@ export function ProductDetailPage() {
   const productInventory = inventory.filter((item) => variantIds.has(item.variantId))
   const productSerials = serials.filter((serial) => variantIds.has(serial.variantId))
   const productMovements = movements.filter((movement) => variantIds.has(movement.variantId))
+  const productAudit = skuAudit.filter((entry) => (entry.variantId && variantIds.has(entry.variantId)) || productVariants.some((variant) => variant.sku === entry.sku))
   const onHand = productInventory.reduce((sum, item) => sum + item.onHand, 0)
   const reserved = productInventory.reduce((sum, item) => sum + item.reserved, 0)
 
@@ -37,7 +38,7 @@ export function ProductDetailPage() {
       {tab === 'Thông số kỹ thuật' && <dl className="divide-y divide-surface-400 rounded-md border border-surface-400">{product.specifications.map((spec) => <div key={spec.key} className="grid grid-cols-2 gap-3 p-3 text-sm"><dt className="font-semibold">{spec.key}</dt><dd>{spec.value}</dd></div>)}</dl>}
       {tab === 'Tồn kho & Serial' && <ProductInventoryPanel variants={productVariants} inventory={productInventory} serials={productSerials} />}
       {tab === 'Lịch sử nhập/xuất' && <div className="space-y-3">{productMovements.map((movement) => <article key={movement.id} className="flex items-center justify-between rounded-sm border border-surface-400 p-3 text-sm"><div><strong>{movement.reference}</strong><p className="text-xs text-text-600">{movement.reason} · {formatDateTime(movement.occurredAt)}</p></div><strong className={movement.quantityDelta > 0 ? 'text-success-500' : 'text-error-700'}>{movement.quantityDelta > 0 ? '+' : ''}{movement.quantityDelta}</strong></article>)}{!productMovements.length && <p className="text-sm text-text-600">Chưa có biến động kho.</p>}</div>}
-      {tab === 'Audit log' && <div className="space-y-3 text-sm"><p className="rounded-sm border border-surface-400 p-3"><strong>Tạo product master</strong><span className="ml-2 text-text-600">{formatDateTime(product.createdAt)}</span></p><p className="rounded-sm border border-surface-400 p-3"><strong>Cập nhật gần nhất</strong><span className="ml-2 text-text-600">{formatDateTime(product.updatedAt)}</span></p></div>}
+      {tab === 'Audit log' && <div className="space-y-3 text-sm"><p className="rounded-sm border border-surface-400 p-3"><strong>Tạo product master</strong><span className="ml-2 text-text-600">{formatDateTime(product.createdAt)}</span></p><p className="rounded-sm border border-surface-400 p-3"><strong>Cập nhật gần nhất</strong><span className="ml-2 text-text-600">{formatDateTime(product.updatedAt)}</span></p>{productAudit.map((entry) => <p key={entry.id} className="rounded-sm border border-surface-400 p-3"><strong>{entry.action}</strong><span className="ml-2 font-mono">{entry.sku}</span><span className="ml-2 text-text-600">{entry.actor} · {formatDateTime(entry.occurredAt)}</span></p>)}</div>}
     </div></section>
   </div>
 }

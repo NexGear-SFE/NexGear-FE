@@ -34,7 +34,7 @@
 | 2 | Warehouse shell và navigation | Hoàn thành |
 | 3 | Category Management | Hoàn thành |
 | 4 | Product Management | Đã triển khai; chờ tích hợp Group 5/7/8 |
-| 5 | Variant và SKU Generator | Chưa bắt đầu |
+| 5 | Variant và SKU Generator | Hoàn thành |
 | 6 | Inventory và Serial | Chưa bắt đầu |
 | 7 | Stock Receipt | Chưa bắt đầu |
 | 8 | Order Fulfillment | Chưa bắt đầu |
@@ -425,7 +425,7 @@ Progress bar cố định ở đầu form:
 
 ### Step 3 — Biến thể và SKU
 
-- [ ] Tích hợp toàn bộ Group 5.
+- [x] Tích hợp toàn bộ Group 5.
 - [x] Không cho hoàn tất Product nếu không có ít nhất một variant.
 - [x] Product không có variation vẫn tạo một `Default` variant có SKU.
 
@@ -492,80 +492,80 @@ Progress bar cố định ở đầu form:
 
 ## 5.1. Option editor
 
-- [ ] Tạo UI thêm option như CPU, GPU, RAM, Storage, Color, Switch.
-- [ ] Mỗi option có stable code và display name.
-- [ ] Mỗi option value có stable code và display value.
-- [ ] Không dùng display name làm nguồn duy nhất sinh SKU.
-- [ ] Chặn option name/code trùng trong cùng Product.
-- [ ] Chặn option value trùng trong cùng option.
-- [ ] Cho reorder option; thứ tự này quyết định thứ tự segment SKU.
-- [ ] Cảnh báo khi thay đổi option làm mất variant configuration đã nhập.
+- [x] Tạo UI thêm option như CPU, GPU, RAM, Storage, Color, Switch.
+- [x] Mỗi option có stable code và display name.
+- [x] Mỗi option value có stable code và display value.
+- [x] Không dùng display name làm nguồn duy nhất sinh SKU.
+- [x] Chặn option name/code trùng trong cùng Product.
+- [x] Chặn option value trùng trong cùng option.
+- [x] Cho reorder option; thứ tự này quyết định thứ tự segment SKU.
+- [x] Cảnh báo khi thay đổi option làm mất variant configuration đã nhập.
 
 ## 5.2. Variant matrix
 
-- [ ] Generate Cartesian product từ option values.
-- [ ] Hiển thị số combination trước khi generate.
-- [ ] Cảnh báo khi số combination vượt ngưỡng cấu hình.
-- [ ] Không generate duplicate combination.
-- [ ] Cho disable combination không bán/không nhập kho.
-- [ ] Mỗi row có option summary, SKU, serial tracking, reorder level và status.
-- [ ] Giữ dữ liệu row cũ khi thêm một option value nếu combination không đổi.
-- [ ] Xác nhận trước khi xóa option/value làm mất variants.
+- [x] Generate Cartesian product từ option values.
+- [x] Hiển thị số combination trước khi generate.
+- [x] Cảnh báo khi số combination vượt ngưỡng cấu hình.
+- [x] Không generate duplicate combination.
+- [x] Cho disable combination không bán/không nhập kho.
+- [x] Mỗi row có option summary, SKU, serial tracking, reorder level và status.
+- [x] Giữ dữ liệu row cũ khi thêm một option value nếu combination không đổi.
+- [x] Xác nhận trước khi xóa option/value làm mất variants.
 
 ## 5.3. SKU generation
 
-- [ ] Format mặc định `<BRAND>-<MODEL>-<KEY_VARIANTS>`.
-- [ ] Ví dụ `ASU-G16-I9-4080`, `LOG-GPX2-BLK`.
-- [ ] Normalize uppercase ASCII.
-- [ ] Xóa khoảng trắng/ký tự đặc biệt.
-- [ ] Dùng `-` làm separator.
-- [ ] Target ngắn và dễ đọc; validate max length theo constant.
-- [ ] Có preview khi Brand/Model/Option thay đổi.
-- [ ] Có nút Regenerate cho từng row.
-- [ ] Có Regenerate All với confirm nếu sẽ overwrite manual SKU.
-- [ ] Cho manual override trước khi có inventory movement.
-- [ ] Đánh dấu rõ AUTO hoặc MANUAL.
-- [ ] Check uniqueness toàn mock store.
-- [ ] Nếu collision: ưu tiên phát hiện duplicate combination; chỉ thêm suffix khi thực sự là variant khác.
-- [ ] Không tái sử dụng SKU của inactive/archived variant.
-- [ ] Không tự đổi SKU khi display name thay đổi.
+- [x] Format mặc định `<BRAND>-<MODEL>-<KEY_VARIANTS>`.
+- [x] Ví dụ `ASU-G16-I9-4080`, `LOG-GPX2-BLK`.
+- [x] Normalize uppercase ASCII.
+- [x] Xóa khoảng trắng/ký tự đặc biệt.
+- [x] Dùng `-` làm separator.
+- [x] Target ngắn và dễ đọc; validate max length theo constant.
+- [x] Có preview khi Brand/Model/Option thay đổi.
+- [x] Có nút Regenerate cho từng row.
+- [x] Có Regenerate All với confirm nếu sẽ overwrite manual SKU.
+- [x] Cho manual override trước khi có inventory movement.
+- [x] Đánh dấu rõ AUTO hoặc MANUAL.
+- [x] Check uniqueness toàn mock store.
+- [x] Nếu collision: ưu tiên phát hiện duplicate combination; chỉ thêm suffix khi thực sự là variant khác.
+- [x] Không tái sử dụng SKU của inactive/archived variant.
+- [x] Không tự đổi SKU khi display name thay đổi.
 
 ## 5.4. SKU lock và audit
 
-- [ ] SKU editable khi variant chưa có receipt/order/movement.
-- [ ] SKU locked sau inventory movement đầu tiên.
-- [ ] Tooltip giải thích vì sao bị khóa.
-- [ ] Khi cần sửa SKU locked: deactivate variant cũ và tạo variant mới.
-- [ ] Không rewrite movement history sang SKU mới.
-- [ ] Ghi mock audit entry cho create, manual override, regenerate và deactivate.
+- [x] SKU editable khi variant chưa có receipt/order/movement.
+- [x] SKU locked sau inventory movement đầu tiên.
+- [x] Tooltip giải thích vì sao bị khóa.
+- [x] Khi cần sửa SKU locked: deactivate variant cũ và tạo variant mới.
+- [x] Không rewrite movement history sang SKU mới.
+- [x] Ghi mock audit entry cho create, manual override, regenerate và deactivate.
 
 ## 5.5. Serial tracking
 
-- [ ] Phân biệt variant serial-tracked và quantity-only.
-- [ ] Variant serial-tracked yêu cầu số serial bằng quantity khi confirm receipt.
-- [ ] Variant quantity-only không hiển thị serial input.
-- [ ] Không cho trùng serial trong toàn mock inventory.
-- [ ] SKU không được dùng thay serial.
+- [x] Phân biệt variant serial-tracked và quantity-only.
+- [x] Variant serial-tracked yêu cầu số serial bằng quantity khi confirm receipt.
+- [x] Variant quantity-only không hiển thị serial input.
+- [x] Không cho trùng serial trong toàn mock inventory.
+- [x] SKU không được dùng thay serial.
 
 ## 5.6. Tests
 
-- [ ] Normalize SKU có dấu tiếng Việt.
-- [ ] Invalid characters.
-- [ ] Duplicate combination.
-- [ ] Collision SKU.
-- [ ] Manual override.
-- [ ] Regenerate all confirmation.
-- [ ] SKU lock after movement.
-- [ ] Serial uniqueness.
-- [ ] Matrix generation 0/1/n options.
+- [x] Normalize SKU có dấu tiếng Việt.
+- [x] Invalid characters.
+- [x] Duplicate combination.
+- [x] Collision SKU.
+- [x] Manual override.
+- [x] Regenerate all confirmation.
+- [x] SKU lock after movement.
+- [x] Serial uniqueness.
+- [x] Matrix generation 0/1/n options.
 
 ### Exit gate Group 5
 
-- [ ] Mọi Product có ít nhất một unique SKU.
-- [ ] Variant matrix không mất dữ liệu ngoài ý muốn.
-- [ ] SKU và serial được phân biệt hoàn toàn.
-- [ ] Lock/audit behavior đúng.
-- [ ] Tests/lint/build pass.
+- [x] Mọi Product có ít nhất một unique SKU.
+- [x] Variant matrix không mất dữ liệu ngoài ý muốn.
+- [x] SKU và serial được phân biệt hoàn toàn.
+- [x] Lock/audit behavior đúng.
+- [x] Tests/lint/build pass.
 
 ---
 
@@ -1021,7 +1021,7 @@ Progress bar cố định ở đầu form:
 - [x] `feat(warehouse): add warehouse layout and navigation`
 - [x] `feat(category): add hierarchical category management`
 - [x] `feat(product): add product management wizard`
-- [ ] `feat(sku): add variant matrix and sku generator`
+- [x] `feat(sku): add variant matrix and sku generator`
 - [ ] `feat(inventory): port inventory and serial views`
 - [ ] `feat(receipt): port stock receipt workflow`
 - [ ] `feat(order): port warehouse fulfillment workflow`

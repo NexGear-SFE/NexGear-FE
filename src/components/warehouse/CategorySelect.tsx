@@ -45,7 +45,7 @@ export function CategorySelect({ categories, error, isLoading = false, label = '
     setQuery('')
   }
 
-  return <div className="relative">
+  return <div className="relative" onKeyDown={(event) => { if (event.key === 'Escape' && isOpen) { event.preventDefault(); setIsOpen(false) } }}>
     <label className="mb-2 block text-sm font-medium" id="category-select-label">{label}</label>
     <button type="button" aria-expanded={isOpen} aria-haspopup="listbox" aria-label={`${label}: ${selected?.breadcrumb ?? 'Chọn danh mục'}`} onClick={() => isOpen ? setIsOpen(false) : open()} className="input-gaming flex min-h-11 w-full items-center justify-between gap-2 text-left">
       <span className={cn('truncate', !selected && 'text-text-600')}>{selected?.breadcrumb ?? 'Chọn danh mục'}</span><ChevronDown className="h-4 w-4 shrink-0" />

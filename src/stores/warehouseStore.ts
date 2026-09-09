@@ -11,7 +11,7 @@ import {
 } from '@/constants/warehouseMockData'
 import type { Category } from '@/types/category.type'
 import type { InventoryMovement, ProductSerial, VariantInventory } from '@/types/inventory.type'
-import type { Product, ProductVariant } from '@/types/product.type'
+import type { Product, ProductVariant, SkuAuditEntry } from '@/types/product.type'
 import type { StockReceipt } from '@/types/receipt.type'
 import type { WarehouseOrder, WarehouseOrderState } from '@/types/warehouseOrder.type'
 
@@ -23,6 +23,7 @@ interface WarehouseState {
   categories: Category[]
   products: Product[]
   variants: ProductVariant[]
+  skuAudit: SkuAuditEntry[]
   inventory: VariantInventory[]
   serials: ProductSerial[]
   movements: InventoryMovement[]
@@ -34,6 +35,7 @@ interface WarehouseState {
   moveCategory: (categoryId: string, direction: 'up' | 'down') => void
   saveProduct: (draft: ProductDraft, variants: VariantDraft[], productId?: string) => string
   toggleProductStatus: (productId: string) => void
+  logSkuAudit: (action: SkuAuditEntry['action'], sku: string, variantId?: string) => void
   saveReceipt: (receipt: StockReceipt) => void
   confirmReceipt: (receiptId: string) => void
   acceptOrder: (orderId: string) => void
@@ -62,6 +64,7 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
   categories: initialCategories,
   products: initialProducts,
   variants: initialVariants,
+  skuAudit: [],
   inventory: initialInventory,
   serials: initialSerials,
   movements: initialMovements,
@@ -115,7 +118,12 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
       ? { ...existingProduct, ...draft, updatedAt: changedAt }
       : { ...draft, id, createdAt: changedAt, updatedAt: changedAt }
 
-    const retainedVariants = current.variants.filter((variant) => variant.productId !== id)
+    const submittedSkus = new Set(variantDrafts.map((variant) => variant.sku))
+    const retainedVariants = current.variants
+      .filter((variant) => variant.productId !== id)
+    const archivedLockedVariants = current.variants
+      .filter((variant) => variant.productId === id && variant.skuLocked && !submittedSkus.has(variant.sku))
+      .map((variant) => ({ ...variant, status: 'INACTIVE' as const, updatedAt: changedAt }))
     const variants = variantDrafts.map<ProductVariant>((variant, index) => {
       const existingVariant = current.variants.find((candidate) => candidate.productId === id && candidate.sku === variant.sku)
       return existingVariant
@@ -127,12 +135,14 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
       .filter((variant) => !knownInventory.has(variant.id))
       .map<VariantInventory>((variant) => ({ variantId: variant.id, onHand: 0, reserved: 0 }))
 
+    const createdAudit = variants.filter((variant) => !current.variants.some((item) => item.id === variant.id)).map<SkuAuditEntry>((variant) => ({ id: crypto.randomUUID(), action: 'CREATE', sku: variant.sku, variantId: variant.id, actor: 'Nguyễn Bảo', occurredAt: changedAt }))
     set({
       products: existingProduct
         ? current.products.map((candidate) => candidate.id === id ? product : candidate)
         : [...current.products, product],
-      variants: [...retainedVariants, ...variants],
+      variants: [...retainedVariants, ...archivedLockedVariants, ...variants],
       inventory: [...current.inventory, ...newInventory],
+      skuAudit: [...current.skuAudit, ...createdAudit],
     })
     return id
   },
@@ -142,6 +152,8 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
       ? { ...product, status: product.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE', updatedAt: timestamp() }
       : product),
   })),
+
+  logSkuAudit: (action, sku, variantId) => set((state) => ({ skuAudit: [...state.skuAudit, { id: crypto.randomUUID(), action, sku, variantId, actor: 'Nguyễn Bảo', occurredAt: timestamp() }] })),
 
   saveReceipt: (receipt) => set((state) => ({
     receipts: state.receipts.some((item) => item.id === receipt.id)

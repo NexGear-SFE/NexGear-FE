@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { initialCategories, initialInventory, initialProducts, initialVariants } from '@/constants/warehouseMockData'
+import { initialCategories, initialInventory, initialMovements, initialOrders, initialProducts, initialReceipts, initialSerials, initialVariants } from '@/constants/warehouseMockData'
 import { useWarehouseStore } from '@/stores/warehouseStore'
 
-afterEach(() => useWarehouseStore.setState({ categories: initialCategories, products: initialProducts, variants: initialVariants, inventory: initialInventory }))
+afterEach(() => useWarehouseStore.setState({ categories: initialCategories, products: initialProducts, variants: initialVariants, inventory: initialInventory, movements: initialMovements, orders: initialOrders, receipts: initialReceipts, serials: initialSerials, skuAudit: [] }))
 
 describe('warehouse category store', () => {
   it('deactivates a referenced category without deleting it or its relation', () => {
@@ -33,5 +33,22 @@ describe('warehouse product lifecycle', () => {
     useWarehouseStore.getState().toggleProductStatus(id)
     expect(useWarehouseStore.getState().products.find((product) => product.id === id)?.status).toBe('INACTIVE')
     expect(useWarehouseStore.getState().variants.filter((variant) => variant.productId === id)).toHaveLength(1)
+  })
+
+  it('locks SKU after confirming the first stock movement and keeps an audit trail', () => {
+    useWarehouseStore.setState((state) => ({ variants: state.variants.map((variant) => variant.id === 'V001' ? { ...variant, skuLocked: false } : variant) }))
+    expect(useWarehouseStore.getState().variants.find((variant) => variant.id === 'V001')?.skuLocked).toBe(false)
+    useWarehouseStore.getState().confirmReceipt('PN-20260831-004')
+    expect(useWarehouseStore.getState().variants.find((variant) => variant.id === 'V001')?.skuLocked).toBe(true)
+    useWarehouseStore.getState().logSkuAudit('MANUAL_OVERRIDE', 'CUSTOM-SKU', 'V001')
+    expect(useWarehouseStore.getState().skuAudit.at(-1)).toMatchObject({ action: 'MANUAL_OVERRIDE', sku: 'CUSTOM-SKU', variantId: 'V001' })
+  })
+
+  it('archives a locked variant instead of rewriting its movement history', () => {
+    const product = useWarehouseStore.getState().products.find((item) => item.id === 'P001')!
+    useWarehouseStore.getState().saveProduct({ name: product.name, slug: product.slug, productCode: product.productCode, modelCode: product.modelCode, brand: product.brand, brandCode: product.brandCode, categoryId: product.categoryId, shortDescription: product.shortDescription, specifications: product.specifications, warrantyMonths: product.warrantyMonths, unit: product.unit, origin: product.origin, weightGrams: product.weightGrams, dimensions: product.dimensions, status: product.status }, [{ sku: 'ASU-G16-NEW', skuSource: 'MANUAL', optionValues: [{ option: 'CPU', value: 'New', code: 'NEW' }], serialTracking: true, reorderLevel: 3, status: 'ACTIVE', skuLocked: false }], product.id)
+    expect(useWarehouseStore.getState().variants.find((variant) => variant.id === 'V001')).toMatchObject({ sku: 'ASU-G16-I9-4080', status: 'INACTIVE' })
+    expect(useWarehouseStore.getState().movements.some((movement) => movement.variantId === 'V001')).toBe(true)
+    expect(useWarehouseStore.getState().variants.some((variant) => variant.sku === 'ASU-G16-NEW')).toBe(true)
   })
 })

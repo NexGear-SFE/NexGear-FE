@@ -27,7 +27,7 @@ describe('ProductWizardPage', () => {
     await user.click(screen.getByRole('button', { name: /tiếp tục/i }))
     expect(screen.getByRole('heading', { name: /thông số key\/value/i })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /tiếp tục/i }))
-    expect(screen.getByRole('heading', { name: /biến thể và sku/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /option editor/i })).toBeInTheDocument()
     expect(screen.getByLabelText('SKU 1')).toHaveValue('ASU-MODEL1')
     await user.click(screen.getByRole('button', { name: /quay lại/i }))
     await user.click(screen.getByRole('button', { name: /quay lại/i }))

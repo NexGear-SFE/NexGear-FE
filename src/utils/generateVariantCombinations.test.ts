@@ -15,6 +15,10 @@ describe('generateVariantCombinations', () => {
     expect(combinations[3]?.map((item) => item.code)).toEqual(['WHT', 'L'])
   })
 
+  it('creates one combination for one option with one value', () => {
+    expect(generateVariantCombinations([{ name: 'Màu', code: 'CLR', values: [{ value: 'Đen', code: 'BLK' }] }])).toEqual([[{ option: 'Màu', optionCode: 'CLR', value: 'Đen', code: 'BLK' }]])
+  })
+
   it('returns no combinations for an option without values', () => {
     expect(generateVariantCombinations([{ name: 'Màu', values: [] }])).toEqual([])
   })

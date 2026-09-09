@@ -9,6 +9,7 @@ export interface ProductSpecification {
 
 export interface VariantOptionValue {
   option: string
+  optionCode?: string
   value: string
   code: string
 }
@@ -27,6 +28,15 @@ export interface ProductVariant {
   skuLocked: boolean
   createdAt: string
   updatedAt: string
+}
+
+export interface SkuAuditEntry {
+  id: string
+  action: 'CREATE' | 'MANUAL_OVERRIDE' | 'REGENERATE' | 'DEACTIVATE'
+  sku: string
+  variantId?: string
+  actor: string
+  occurredAt: string
 }
 
 export interface ProductDimensions {
