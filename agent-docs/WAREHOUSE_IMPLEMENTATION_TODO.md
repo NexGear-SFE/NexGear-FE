@@ -31,7 +31,7 @@
 |---|---|---|
 | 0 | Baseline, kiểm kê Figma và quy tắc port code | Hoàn thành qua preview; source export còn mở |
 | 1 | Foundation, domain types, mock architecture | Hoàn thành |
-| 2 | Warehouse shell và navigation | Chưa bắt đầu |
+| 2 | Warehouse shell và navigation | Hoàn thành |
 | 3 | Category Management | Chưa bắt đầu |
 | 4 | Product Management | Chưa bắt đầu |
 | 5 | Variant và SKU Generator | Chưa bắt đầu |
@@ -224,52 +224,52 @@
 
 ## 2.1. Layout
 
-- [ ] Tạo `src/layouts/WarehouseLayout.tsx`.
-- [ ] Port visual shell từ Figma: dark sidebar, top header, user block, main content.
-- [ ] Dùng `<Outlet />` cho route con.
-- [ ] Tách `WarehouseSidebar`, `WarehouseHeader`, `WarehouseUserMenu` thành reusable components.
-- [ ] Dùng design tokens hiện có thay cho hex hardcode.
-- [ ] Giữ border radius tối đa 12px.
-- [ ] Không dùng card hover `translateY`.
-- [ ] Có focus ring rõ ràng.
-- [ ] Mobile sidebar phải là drawer có nút mở/đóng và focus trap.
-- [ ] Tablet/desktop sidebar hiển thị cố định.
+- [x] Tạo `src/layouts/WarehouseLayout.tsx`.
+- [x] Port visual shell từ Figma: dark sidebar, top header, user block, main content.
+- [x] Dùng `<Outlet />` cho route con.
+- [x] Tách `WarehouseSidebar`, `WarehouseHeader`, `WarehouseUserMenu` thành reusable components.
+- [x] Dùng design tokens hiện có thay cho hex hardcode.
+- [x] Giữ border radius tối đa 12px.
+- [x] Không dùng card hover `translateY`.
+- [x] Có focus ring rõ ràng.
+- [x] Mobile sidebar phải là drawer có nút mở/đóng và focus trap.
+- [x] Tablet/desktop sidebar hiển thị cố định.
 
 ## 2.2. Navigation
 
-- [ ] Khai báo route constants, tránh magic strings.
-- [ ] Thêm menu `Tổng quan`.
-- [ ] Thêm menu `Đơn hàng`.
-- [ ] Thêm menu `Phiếu nhập kho`.
-- [ ] Thêm menu `Sản phẩm`.
-- [ ] Thêm menu `Danh mục`.
-- [ ] Thêm menu `Tồn kho`.
-- [ ] Active state dựa trên route hiện tại.
-- [ ] Sub-route detail vẫn giữ đúng parent menu active.
-- [ ] Breadcrumb dùng React Router Link, không dùng `<a href>` nội bộ.
-- [ ] Direct navigation/reload tại nested route không lỗi.
+- [x] Khai báo route constants, tránh magic strings.
+- [x] Thêm menu `Tổng quan`.
+- [x] Thêm menu `Đơn hàng`.
+- [x] Thêm menu `Phiếu nhập kho`.
+- [x] Thêm menu `Sản phẩm`.
+- [x] Thêm menu `Danh mục`.
+- [x] Thêm menu `Tồn kho`.
+- [x] Active state dựa trên route hiện tại.
+- [x] Sub-route detail vẫn giữ đúng parent menu active.
+- [x] Breadcrumb dùng React Router Link, không dùng `<a href>` nội bộ.
+- [x] Direct navigation/reload tại nested route không lỗi.
 
 ## 2.3. Shared UI Warehouse
 
-- [ ] Tạo `WarehousePageHeader`.
-- [ ] Tạo `WarehouseStatCard`.
-- [ ] Tạo `StatusBadge` theo semantic tokens.
-- [ ] Tạo `DataTableEmptyState`.
-- [ ] Tạo `DataTableSkeleton`.
-- [ ] Tạo `ErrorState` kèm Retry.
-- [ ] Tạo `SearchField` accessible.
-- [ ] Tạo filter bar responsive.
-- [ ] Tạo pagination component.
-- [ ] Tạo confirm dialog dùng chung cho deactivate/confirm actions.
-- [ ] Component props phải typed và có single responsibility.
+- [x] Tạo `WarehousePageHeader`.
+- [x] Tạo `WarehouseStatCard`.
+- [x] Tạo `StatusBadge` theo semantic tokens.
+- [x] Tạo `DataTableEmptyState`.
+- [x] Tạo `DataTableSkeleton`.
+- [x] Tạo `ErrorState` kèm Retry.
+- [x] Tạo `SearchField` accessible.
+- [x] Tạo filter bar responsive.
+- [x] Tạo pagination component.
+- [x] Tạo confirm dialog dùng chung cho deactivate/confirm actions.
+- [x] Component props phải typed và có single responsibility.
 
 ### Exit gate Group 2
 
-- [ ] Tất cả warehouse routes render trong cùng layout.
-- [ ] Keyboard điều hướng sidebar được.
-- [ ] Mobile drawer hoạt động.
-- [ ] Không làm hỏng MainLayout/storefront.
-- [ ] Lint/build pass.
+- [x] Tất cả warehouse routes render trong cùng layout.
+- [x] Keyboard điều hướng sidebar được.
+- [x] Mobile drawer hoạt động.
+- [x] Không làm hỏng MainLayout/storefront.
+- [x] Lint/build pass.
 
 ---
 
@@ -1018,7 +1018,7 @@ Progress bar cố định ở đầu form:
 # APPENDIX C — COMMIT CHECKLIST GỢI Ý
 
 - [ ] `chore(warehouse): add warehouse domain foundations`
-- [ ] `feat(warehouse): add warehouse layout and navigation`
+- [x] `feat(warehouse): add warehouse layout and navigation`
 - [ ] `feat(category): add hierarchical category management`
 - [ ] `feat(product): add product management wizard`
 - [ ] `feat(sku): add variant matrix and sku generator`

@@ -19,6 +19,7 @@
   --color-surface-400: #E0E0E0;
   --color-surface-200: #F4F5F7;
   --color-surface-50: #FFFFFF;
+  --color-warehouse-950: #0B1220;
 
   /* Semantic Colors */
   --color-success-500: #00A859;
@@ -50,6 +51,7 @@
   --surface-400: #E0E0E0;
   --surface-200: #F4F5F7;
   --surface-50: #FFFFFF;
+  --warehouse-950: #0B1220;
 
   /* Semantic Variables */
   --success-500: #00A859;
