@@ -2,7 +2,6 @@ import { createBrowserRouter } from 'react-router-dom'
 import { MainLayout } from '@/layouts/MainLayout'
 import { HomePage } from '@/pages/Home/HomePage'
 import { WarehouseLayout } from '@/layouts/WarehouseLayout'
-import { WarehouseComingSoonPage } from '@/pages/Warehouse/WarehouseComingSoonPage'
 import { WarehouseRouteGuard } from '@/components/warehouse/WarehouseRouteGuard'
 import { CategoryManagementPage } from '@/pages/Warehouse/Categories/CategoryManagementPage'
 import { ProductDetailPage } from '@/pages/Warehouse/Products/ProductDetailPage'
@@ -15,6 +14,7 @@ import { ReceiptListPage } from '@/pages/Warehouse/Receipts/ReceiptListPage'
 import { ReceiptWizardPage } from '@/pages/Warehouse/Receipts/ReceiptWizardPage'
 import { OrderDetailPage } from '@/pages/Warehouse/Orders/OrderDetailPage'
 import { OrderListPage } from '@/pages/Warehouse/Orders/OrderListPage'
+import { WarehouseDashboardPage } from '@/pages/Warehouse/WarehouseDashboardPage'
 
 export const router = createBrowserRouter([
   {
@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
       path: '/admin/warehouse',
       element: <WarehouseLayout />,
       children: [
-        { index: true, element: <WarehouseComingSoonPage title="Tổng quan kho" description="Theo dõi nhanh các công việc vận hành trong ngày." /> },
+        { index: true, element: <WarehouseDashboardPage /> },
         { path: 'orders', element: <OrderListPage /> },
         { path: 'orders/:orderId', element: <OrderDetailPage /> },
         { path: 'receipts', element: <ReceiptListPage /> },

@@ -33,12 +33,12 @@
 | 1 | Foundation, domain types, mock architecture | Hoàn thành |
 | 2 | Warehouse shell và navigation | Hoàn thành |
 | 3 | Category Management | Hoàn thành |
-| 4 | Product Management | Đã triển khai; chờ tích hợp Group 5/7/8 |
+| 4 | Product Management | Hoàn thành |
 | 5 | Variant và SKU Generator | Hoàn thành |
-| 6 | Inventory và Serial | Chưa bắt đầu |
+| 6 | Inventory và Serial | Hoàn thành |
 | 7 | Stock Receipt | Hoàn thành |
 | 8 | Order Fulfillment | Hoàn thành |
-| 9 | Warehouse Dashboard và Profile | Chưa bắt đầu |
+| 9 | Warehouse Dashboard và Profile | Hoàn thành |
 | 10 | Cross-module integration và UX hardening | Chưa bắt đầu |
 | 11 | Test, QA, documentation và handoff | Chưa bắt đầu |
 
@@ -823,33 +823,33 @@ Progress bar cố định ở đầu form:
 
 ## 9.1. Dashboard từ Figma
 
-- [ ] Port `/admin/warehouse`.
-- [ ] Order cards dùng state model mới, không giữ label Waiting/Processing cũ nếu không còn đúng.
-- [ ] Cards link tới Order List với URL filter tương ứng.
-- [ ] Inventory stats: total SKU, low stock, out of stock.
-- [ ] Recent receipts list.
-- [ ] Orders requiring action today.
-- [ ] Thêm optional cards Product/Category nếu không làm dashboard quá tải.
-- [ ] Product count active/draft.
-- [ ] Category inactive warning.
-- [ ] Dữ liệu dashboard derive từ cùng mock stores, không duplicate constants.
-- [ ] Loading/error/empty state cho từng dashboard section.
+- [x] Port `/admin/warehouse`.
+- [x] Order cards dùng state model mới, không giữ label Waiting/Processing cũ nếu không còn đúng.
+- [x] Cards link tới Order List với URL filter tương ứng.
+- [x] Inventory stats: total SKU, low stock, out of stock.
+- [x] Recent receipts list.
+- [x] Orders requiring action today.
+- [x] Thêm optional cards Product/Category nếu không làm dashboard quá tải.
+- [x] Product count active/draft.
+- [x] Category inactive warning.
+- [x] Dữ liệu dashboard derive từ cùng mock stores, không duplicate constants.
+- [x] Loading/error/empty state cho từng dashboard section.
 
 ## 9.2. Header/Profile
 
-- [ ] Giữ search/notification/avatar visual từ Figma.
-- [ ] Header search chỉ implement nếu có scope rõ; không để input giả gây hiểu nhầm.
-- [ ] Notification button có accessible label.
-- [ ] Profile menu hỗ trợ keyboard.
-- [ ] Warehouse role hiển thị rõ.
-- [ ] Logout mock chỉ xóa session mock, không xóa domain data.
+- [x] Giữ search/notification/avatar visual từ Figma.
+- [x] Header search chỉ implement nếu có scope rõ; không để input giả gây hiểu nhầm.
+- [x] Notification button có accessible label.
+- [x] Profile menu hỗ trợ keyboard.
+- [x] Warehouse role hiển thị rõ.
+- [x] Logout mock chỉ xóa session mock, không xóa domain data.
 
 ### Exit gate Group 9
 
-- [ ] Dashboard counts khớp Product/Inventory/Receipt/Order stores.
-- [ ] Không có card/link chết.
-- [ ] Responsive và keyboard navigation đạt.
-- [ ] Tests/lint/build pass.
+- [x] Dashboard counts khớp Product/Inventory/Receipt/Order stores.
+- [x] Không có card/link chết.
+- [x] Responsive và keyboard navigation đạt.
+- [x] Tests/lint/build pass.
 
 ---
 
