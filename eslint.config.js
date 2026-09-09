@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   // Bỏ qua các thư mục không cần lint
-  { ignores: ['dist', 'build', 'node_modules'] },
+  { ignores: ['dist', 'build', 'node_modules', 'tmp'] },
 
   // Cấu hình chính cho các file TypeScript
   {

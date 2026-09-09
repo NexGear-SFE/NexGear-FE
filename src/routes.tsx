@@ -8,6 +8,8 @@ import { CategoryManagementPage } from '@/pages/Warehouse/Categories/CategoryMan
 import { ProductDetailPage } from '@/pages/Warehouse/Products/ProductDetailPage'
 import { ProductListPage } from '@/pages/Warehouse/Products/ProductListPage'
 import { ProductWizardPage } from '@/pages/Warehouse/Products/ProductWizardPage'
+import { InventoryDetailPage } from '@/pages/Warehouse/Inventory/InventoryDetailPage'
+import { InventoryListPage } from '@/pages/Warehouse/Inventory/InventoryListPage'
 
 export const router = createBrowserRouter([
   {
@@ -37,8 +39,8 @@ export const router = createBrowserRouter([
         { path: 'products/:productId', element: <ProductDetailPage /> },
         { path: 'products/:productId/edit', element: <ProductWizardPage /> },
         { path: 'categories', element: <CategoryManagementPage /> },
-        { path: 'inventory', element: <WarehouseComingSoonPage title="Tồn kho" description="Tra cứu tồn kho theo sản phẩm và SKU." /> },
-        { path: 'inventory/:productId', element: <WarehouseComingSoonPage title="Chi tiết tồn kho" description="Xem số lượng, serial và lịch sử biến động." /> },
+        { path: 'inventory', element: <InventoryListPage /> },
+        { path: 'inventory/:productId', element: <InventoryDetailPage /> },
       ],
     }],
   },

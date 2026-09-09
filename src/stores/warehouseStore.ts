@@ -200,12 +200,24 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
     }),
   })),
 
-  assignOrderSerials: (orderId, serialIds) => set((state) => ({
-    orders: state.orders.map((order) => order.id === orderId && order.state === 'WAITING_SERIAL'
-      ? addTimeline({ ...order, state: 'READY_TO_PACK', items: order.items.map((item) => ({ ...item, assignedSerialIds: serialIds })) }, 'Đã gán serial')
-      : order),
-    serials: state.serials.map((serial) => serialIds.includes(serial.id) ? { ...serial, status: 'RESERVED' } : serial),
-  })),
+  assignOrderSerials: (orderId, serialIds) => set((state) => {
+    const order = state.orders.find((item) => item.id === orderId)
+    const uniqueIds = new Set(serialIds)
+    if (!order || order.state !== 'WAITING_SERIAL' || uniqueIds.size !== serialIds.length) return state
+    const selected = state.serials.filter((serial) => uniqueIds.has(serial.id))
+    const requiredItems = order.items.filter((item) => state.variants.find((variant) => variant.id === item.variantId)?.serialTracking)
+    const validSelection = selected.length === serialIds.length
+      && selected.every((serial) => serial.status === 'AVAILABLE')
+      && requiredItems.every((item) => selected.filter((serial) => serial.variantId === item.variantId).length === item.quantity)
+      && selected.every((serial) => requiredItems.some((item) => item.variantId === serial.variantId))
+    if (!validSelection) return state
+    return {
+      orders: state.orders.map((candidate) => candidate.id === orderId
+        ? addTimeline({ ...candidate, state: 'READY_TO_PACK', items: candidate.items.map((item) => ({ ...item, assignedSerialIds: selected.filter((serial) => serial.variantId === item.variantId).map((serial) => serial.id) })) }, 'Đã gán serial')
+        : candidate),
+      serials: state.serials.map((serial) => uniqueIds.has(serial.id) ? { ...serial, status: 'RESERVED' } : serial),
+    }
+  }),
 
   packOrder: (orderId, shouldFail = false) => set((state) => ({
     orders: state.orders.map((order) => {

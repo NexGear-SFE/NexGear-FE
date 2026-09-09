@@ -573,58 +573,58 @@ Progress bar cố định ở đầu form:
 
 ## 6.1. Inventory List từ Figma
 
-- [ ] Port `/admin/warehouse/inventory` theo Figma.
-- [ ] Stat cards: total SKU, in stock, low stock, out of stock.
-- [ ] Bảng mỗi row là một variant/SKU, không phải chỉ Product.
-- [ ] Cột Product image/name.
-- [ ] Cột brand.
-- [ ] Cột SKU.
-- [ ] Cột variant summary.
-- [ ] Cột category.
-- [ ] Cột on hand/reserved/available.
-- [ ] Cột serial count hoặc dấu `—`.
-- [ ] Cột stock status.
-- [ ] Search Product/SKU.
-- [ ] Filter category và stock status.
-- [ ] Pagination.
-- [ ] Loading/empty/error states.
+- [x] Port `/admin/warehouse/inventory` theo Figma.
+- [x] Stat cards: total SKU, in stock, low stock, out of stock.
+- [x] Bảng mỗi row là một variant/SKU, không phải chỉ Product.
+- [x] Cột Product image/name.
+- [x] Cột brand.
+- [x] Cột SKU.
+- [x] Cột variant summary.
+- [x] Cột category.
+- [x] Cột on hand/reserved/available.
+- [x] Cột serial count hoặc dấu `—`.
+- [x] Cột stock status.
+- [x] Search Product/SKU.
+- [x] Filter category và stock status.
+- [x] Pagination.
+- [x] Loading/empty/error states.
 
 ## 6.2. Inventory Product Detail từ Figma
 
-- [ ] Port `/admin/warehouse/inventory/:productId`.
-- [ ] Header Product, brand, category, Product ID.
-- [ ] Stats total quantity, variant count, serial count.
-- [ ] Variant/SKU table.
-- [ ] Inventory movement history.
-- [ ] Related receipts.
-- [ ] Links sang Receipt Detail và Product Detail.
-- [ ] Stock state dùng semantic color/token.
-- [ ] Không cho chỉnh stock trực tiếp bằng text field.
+- [x] Port `/admin/warehouse/inventory/:productId`.
+- [x] Header Product, brand, category, Product ID.
+- [x] Stats total quantity, variant count, serial count.
+- [x] Variant/SKU table.
+- [x] Inventory movement history.
+- [x] Related receipts.
+- [x] Links sang Receipt Detail và Product Detail.
+- [x] Stock state dùng semantic color/token.
+- [x] Không cho chỉnh stock trực tiếp bằng text field.
 
 ## 6.3. Serial detail
 
-- [ ] Mở serial list từ SKU row.
-- [ ] Hiển thị serial, SKU, receipt reference, received date, status.
-- [ ] Serial status: Available, Reserved, Sold, Returned nếu mock flow cần.
-- [ ] Search serial chính xác.
-- [ ] Link order/receipt liên quan.
-- [ ] Không cho assign cùng serial cho hai order items.
+- [x] Mở serial list từ SKU row.
+- [x] Hiển thị serial, SKU, receipt reference, received date, status.
+- [x] Serial status: Available, Reserved, Sold, Returned nếu mock flow cần.
+- [x] Search serial chính xác.
+- [x] Link order/receipt liên quan.
+- [x] Không cho assign cùng serial cho hai order items.
 
 ## 6.4. Tests
 
-- [ ] `available = onHand - reserved`.
-- [ ] Low/out-of-stock thresholds.
-- [ ] SKU search.
-- [ ] Serial search.
-- [ ] Movement/receipt links.
-- [ ] Empty/error cases.
+- [x] `available = onHand - reserved`.
+- [x] Low/out-of-stock thresholds.
+- [x] SKU search.
+- [x] Serial search.
+- [x] Movement/receipt links.
+- [x] Empty/error cases.
 
 ### Exit gate Group 6
 
-- [ ] UI giữ được thông tin và flow Figma Inventory.
-- [ ] Inventory hiển thị theo SKU/variant.
-- [ ] Product Detail reuse Inventory components.
-- [ ] Tests/lint/build pass.
+- [x] UI giữ được thông tin và flow Figma Inventory.
+- [x] Inventory hiển thị theo SKU/variant.
+- [x] Product Detail reuse Inventory components.
+- [x] Tests/lint/build pass.
 
 ---
 

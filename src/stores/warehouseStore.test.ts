@@ -52,3 +52,15 @@ describe('warehouse product lifecycle', () => {
     expect(useWarehouseStore.getState().variants.some((variant) => variant.sku === 'ASU-G16-NEW')).toBe(true)
   })
 })
+
+describe('warehouse serial allocation', () => {
+  it('assigns only available matching serials and cannot assign one twice', () => {
+    useWarehouseStore.getState().assignOrderSerials('#GG-20260830-0177', ['S004'])
+    expect(useWarehouseStore.getState().orders.find((order) => order.id === '#GG-20260830-0177')).toMatchObject({ state: 'READY_TO_PACK', items: [{ assignedSerialIds: ['S004'] }] })
+    expect(useWarehouseStore.getState().serials.find((serial) => serial.id === 'S004')?.status).toBe('RESERVED')
+
+    useWarehouseStore.setState((state) => ({ orders: [...state.orders, { ...initialOrders[2], id: 'SECOND-ORDER' }] }))
+    useWarehouseStore.getState().assignOrderSerials('SECOND-ORDER', ['S004'])
+    expect(useWarehouseStore.getState().orders.find((order) => order.id === 'SECOND-ORDER')?.state).toBe('WAITING_SERIAL')
+  })
+})
