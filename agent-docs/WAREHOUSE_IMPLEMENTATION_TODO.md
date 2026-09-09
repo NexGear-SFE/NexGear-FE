@@ -33,7 +33,7 @@
 | 1 | Foundation, domain types, mock architecture | Hoàn thành |
 | 2 | Warehouse shell và navigation | Hoàn thành |
 | 3 | Category Management | Hoàn thành |
-| 4 | Product Management | Chưa bắt đầu |
+| 4 | Product Management | Đã triển khai; chờ tích hợp Group 5/7/8 |
 | 5 | Variant và SKU Generator | Chưa bắt đầu |
 | 6 | Inventory và Serial | Chưa bắt đầu |
 | 7 | Stock Receipt | Chưa bắt đầu |
@@ -355,30 +355,30 @@
 
 ## 4.1. Product List
 
-- [ ] Tạo `/admin/warehouse/products`.
-- [ ] Port layout density và table language từ Inventory Figma.
-- [ ] Cột ảnh + tên Product.
-- [ ] Cột Product ID/code.
-- [ ] Cột brand.
-- [ ] Cột category breadcrumb.
-- [ ] Cột tổng variants/SKUs.
-- [ ] Cột on hand/available.
-- [ ] Cột serial tracking summary.
-- [ ] Cột trạng thái.
-- [ ] Cột updatedAt.
-- [ ] Cột actions: View, Edit, Deactivate.
-- [ ] Search theo name, product code hoặc SKU.
-- [ ] Filter category, gồm lựa chọn root/child rõ ràng.
-- [ ] Filter brand.
-- [ ] Filter Product status.
-- [ ] Filter stock status.
-- [ ] Filter serial tracking.
-- [ ] Sort newest/name/stock.
-- [ ] Pagination.
-- [ ] Đồng bộ filter vào URL search params để reload không mất trạng thái.
-- [ ] Loading skeleton khớp table dimensions.
-- [ ] Empty state phân biệt chưa có Product và filter không có kết quả.
-- [ ] Error state có retry.
+- [x] Tạo `/admin/warehouse/products`.
+- [x] Port layout density và table language từ Inventory Figma.
+- [x] Cột ảnh + tên Product.
+- [x] Cột Product ID/code.
+- [x] Cột brand.
+- [x] Cột category breadcrumb.
+- [x] Cột tổng variants/SKUs.
+- [x] Cột on hand/available.
+- [x] Cột serial tracking summary.
+- [x] Cột trạng thái.
+- [x] Cột updatedAt.
+- [x] Cột actions: View, Edit, Deactivate.
+- [x] Search theo name, product code hoặc SKU.
+- [x] Filter category, gồm lựa chọn root/child rõ ràng.
+- [x] Filter brand.
+- [x] Filter Product status.
+- [x] Filter stock status.
+- [x] Filter serial tracking.
+- [x] Sort newest/name/stock.
+- [x] Pagination.
+- [x] Đồng bộ filter vào URL search params để reload không mất trạng thái.
+- [x] Loading skeleton khớp table dimensions.
+- [x] Empty state phân biệt chưa có Product và filter không có kết quả.
+- [x] Error state có retry.
 
 ## 4.2. Product Create/Edit là flow dài — bắt buộc Stepper
 
@@ -388,103 +388,103 @@ Progress bar cố định ở đầu form:
 1. Thông tin cơ bản → 2. Thông số → 3. Biến thể & SKU → 4. Xác nhận
 ```
 
-- [ ] Tạo `/admin/warehouse/products/new`.
-- [ ] Tạo `/admin/warehouse/products/:productId/edit`.
+- [x] Tạo `/admin/warehouse/products/new`.
+- [x] Tạo `/admin/warehouse/products/:productId/edit`.
 - [ ] Stepper hiển thị current/completed/error state.
-- [ ] Cho quay lại step trước không mất dữ liệu.
-- [ ] Chỉ sang step tiếp theo khi step hiện tại hợp lệ.
-- [ ] Không cho click vượt qua step chưa hoàn thành.
-- [ ] Có `aria-current="step"` và text label, không chỉ dựa vào màu.
-- [ ] Có cảnh báo unsaved changes khi rời route.
+- [x] Cho quay lại step trước không mất dữ liệu.
+- [x] Chỉ sang step tiếp theo khi step hiện tại hợp lệ.
+- [x] Không cho click vượt qua step chưa hoàn thành.
+- [x] Có `aria-current="step"` và text label, không chỉ dựa vào màu.
+- [x] Có cảnh báo unsaved changes khi rời route.
 
 ### Step 1 — Thông tin cơ bản
 
-- [ ] Product name.
-- [ ] Product/model code ổn định, không lấy trực tiếp từ display name.
-- [ ] Brand selector.
-- [ ] CategorySelect từ Group 3.
-- [ ] Unit.
-- [ ] Origin.
-- [ ] Warranty months.
-- [ ] Short operational description.
-- [ ] Product status Draft/Active/Inactive.
-- [ ] Weight và dimensions nếu áp dụng.
-- [ ] Barcode/GTIN ở đúng field, không gọi là SKU.
+- [x] Product name.
+- [x] Product/model code ổn định, không lấy trực tiếp từ display name.
+- [x] Brand selector.
+- [x] CategorySelect từ Group 3.
+- [x] Unit.
+- [x] Origin.
+- [x] Warranty months.
+- [x] Short operational description.
+- [x] Product status Draft/Active/Inactive.
+- [x] Weight và dimensions nếu áp dụng.
+- [x] Barcode/GTIN ở đúng field, không gọi là SKU.
 
 ### Step 2 — Thông số kỹ thuật
 
-- [ ] Specification editor dạng key/value rows.
-- [ ] Add row.
-- [ ] Remove row.
-- [ ] Reorder row.
-- [ ] Không cho duplicate specification key trong cùng Product.
-- [ ] Có suggestion theo category từ constants/mock configuration.
-- [ ] Hỗ trợ các thông số gaming: CPU, GPU, RAM, storage, screen, switch, DPI, chipset, VRAM.
-- [ ] Cho phép custom specification khi suggestion không đủ.
-- [ ] Preview bảng specifications read-only.
+- [x] Specification editor dạng key/value rows.
+- [x] Add row.
+- [x] Remove row.
+- [x] Reorder row.
+- [x] Không cho duplicate specification key trong cùng Product.
+- [x] Có suggestion theo category từ constants/mock configuration.
+- [x] Hỗ trợ các thông số gaming: CPU, GPU, RAM, storage, screen, switch, DPI, chipset, VRAM.
+- [x] Cho phép custom specification khi suggestion không đủ.
+- [x] Preview bảng specifications read-only.
 
 ### Step 3 — Biến thể và SKU
 
 - [ ] Tích hợp toàn bộ Group 5.
-- [ ] Không cho hoàn tất Product nếu không có ít nhất một variant.
-- [ ] Product không có variation vẫn tạo một `Default` variant có SKU.
+- [x] Không cho hoàn tất Product nếu không có ít nhất một variant.
+- [x] Product không có variation vẫn tạo một `Default` variant có SKU.
 
 ### Step 4 — Xác nhận
 
-- [ ] Summary Product master.
-- [ ] Category breadcrumb.
-- [ ] Specifications table.
-- [ ] Variant/SKU table.
-- [ ] Serial tracking flags.
+- [x] Summary Product master.
+- [x] Category breadcrumb.
+- [x] Specifications table.
+- [x] Variant/SKU table.
+- [x] Serial tracking flags.
 - [ ] Validation warning summary liên kết về field/step lỗi.
-- [ ] CTA `Lưu nháp`.
-- [ ] CTA `Lưu và kích hoạt`.
-- [ ] Disable double submit.
-- [ ] Success state điều hướng tới Product Detail.
+- [x] CTA `Lưu nháp`.
+- [x] CTA `Lưu và kích hoạt`.
+- [x] Disable double submit.
+- [x] Success state điều hướng tới Product Detail.
 
 ## 4.3. Product Detail đầy đủ
 
-- [ ] Tạo `/admin/warehouse/products/:productId`.
-- [ ] Header có image, name, code, status, brand và category breadcrumb.
-- [ ] Stat cards: total SKU, on hand, reserved, available, serial count.
-- [ ] Tab `Tổng quan`.
-- [ ] Tab `Biến thể/SKU`.
-- [ ] Tab `Thông số kỹ thuật`.
-- [ ] Tab `Tồn kho & Serial`.
-- [ ] Tab `Lịch sử nhập/xuất`.
-- [ ] Tab `Audit log`.
-- [ ] Warehouse Staff xem được toàn bộ source-of-truth fields.
-- [ ] Nếu hiển thị commercial price thì chỉ read-only trong Warehouse.
-- [ ] Edit action tôn trọng SKU lock rules.
-- [ ] Không duplicate inventory detail logic; reuse component từ Group 6.
+- [x] Tạo `/admin/warehouse/products/:productId`.
+- [x] Header có image, name, code, status, brand và category breadcrumb.
+- [x] Stat cards: total SKU, on hand, reserved, available, serial count.
+- [x] Tab `Tổng quan`.
+- [x] Tab `Biến thể/SKU`.
+- [x] Tab `Thông số kỹ thuật`.
+- [x] Tab `Tồn kho & Serial`.
+- [x] Tab `Lịch sử nhập/xuất`.
+- [x] Tab `Audit log`.
+- [x] Warehouse Staff xem được toàn bộ source-of-truth fields.
+- [x] Nếu hiển thị commercial price thì chỉ read-only trong Warehouse.
+- [x] Edit action tôn trọng SKU lock rules.
+- [x] Không duplicate inventory detail logic; reuse component từ Group 6.
 
 ## 4.4. Product lifecycle
 
-- [ ] Draft có thể chỉnh sửa toàn bộ khi chưa có movement.
+- [x] Draft có thể chỉnh sửa toàn bộ khi chưa có movement.
 - [ ] Active Product dùng được trong Receipt và Order flow.
 - [ ] Inactive Product không được thêm vào receipt mới.
-- [ ] Product có transaction không hard-delete.
-- [ ] Deactivate Product phải xác nhận và hiển thị số variant bị ảnh hưởng.
-- [ ] Product history vẫn mở được sau deactivate.
+- [x] Product có transaction không hard-delete.
+- [x] Deactivate Product phải xác nhận và hiển thị số variant bị ảnh hưởng.
+- [x] Product history vẫn mở được sau deactivate.
 
 ## 4.5. Product tests
 
 - [ ] Search/filter/pagination.
-- [ ] Step validation.
-- [ ] Back/next không mất form state.
-- [ ] Unsaved changes guard.
-- [ ] Category vừa tạo được chọn.
-- [ ] Default variant.
-- [ ] Draft/activate/deactivate flow.
-- [ ] Loading/empty/error states.
+- [x] Step validation.
+- [x] Back/next không mất form state.
+- [x] Unsaved changes guard.
+- [x] Category vừa tạo được chọn.
+- [x] Default variant.
+- [x] Draft/activate/deactivate flow.
+- [x] Loading/empty/error states.
 
 ### Exit gate Group 4
 
-- [ ] Product List, Create, Edit, Detail chạy end-to-end bằng mock data.
-- [ ] Product form dùng progress bar bốn step.
-- [ ] Warehouse Staff xem đầy đủ thông tin Product.
-- [ ] Product lifecycle không phá dữ liệu lịch sử.
-- [ ] Tests/lint/build pass.
+- [x] Product List, Create, Edit, Detail chạy end-to-end bằng mock data.
+- [x] Product form dùng progress bar bốn step.
+- [x] Warehouse Staff xem đầy đủ thông tin Product.
+- [x] Product lifecycle không phá dữ liệu lịch sử.
+- [x] Tests/lint/build pass.
 
 ---
 
@@ -1020,7 +1020,7 @@ Progress bar cố định ở đầu form:
 - [ ] `chore(warehouse): add warehouse domain foundations`
 - [x] `feat(warehouse): add warehouse layout and navigation`
 - [x] `feat(category): add hierarchical category management`
-- [ ] `feat(product): add product management wizard`
+- [x] `feat(product): add product management wizard`
 - [ ] `feat(sku): add variant matrix and sku generator`
 - [ ] `feat(inventory): port inventory and serial views`
 - [ ] `feat(receipt): port stock receipt workflow`
