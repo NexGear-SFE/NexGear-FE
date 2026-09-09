@@ -14,6 +14,7 @@ import { useWarehouseStore } from '@/stores/warehouseStore'
 import type { WarehouseOrderState } from '@/types/warehouseOrder.type'
 import { formatCurrency, formatDate } from '@/utils/formatters'
 import { orderActionLabels, orderStateLabels, sortOrders } from '@/utils/warehouseOrder'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 
 const STATES: WarehouseOrderState[] = ['WAITING_ACCEPTANCE', 'PICKING', 'WAITING_SERIAL', 'READY_TO_PACK', 'WAITING_GHTK_PICKUP', 'ISSUE', 'COMPLETED']
 const PAGE_SIZE = 8
@@ -24,13 +25,14 @@ export function OrderListPage() {
   const [params, setParams] = useSearchParams()
   const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>('loading')
   const query = params.get('q') ?? ''
+  const debouncedQuery = useDebouncedValue(query)
   const tab = params.get('status') ?? 'ALL'
   const payment = params.get('payment') ?? ''
   const staff = params.get('staff') ?? ''
   const sort = params.get('sort') ?? 'smart'
   const mine = params.get('mine') === '1'
   const page = Math.max(1, Number(params.get('page') ?? 1))
-  const rows = useMemo(() => sortOrders(orders.filter((order) => `${order.id} ${order.customerName}`.toLocaleLowerCase('vi').includes(query.trim().toLocaleLowerCase('vi')) && (tab === 'ALL' || order.state === tab) && (!payment || order.paymentMethod === payment) && (!staff || order.assignee === staff) && (!mine || order.assignee === CURRENT_STAFF)), sort), [mine, orders, payment, query, sort, staff, tab])
+  const rows = useMemo(() => sortOrders(orders.filter((order) => `${order.id} ${order.customerName}`.toLocaleLowerCase('vi').includes(debouncedQuery.trim().toLocaleLowerCase('vi')) && (tab === 'ALL' || order.state === tab) && (!payment || order.paymentMethod === payment) && (!staff || order.assignee === staff) && (!mine || order.assignee === CURRENT_STAFF)), sort), [debouncedQuery, mine, orders, payment, sort, staff, tab])
   const pageRows = rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
   const staffOptions = [...new Set(orders.map((order) => order.assignee).filter((value): value is string => Boolean(value)))]
   const updateParam = (key: string, value: string) => setParams((current) => { const next = new URLSearchParams(current); if (value && value !== 'ALL') next.set(key, value); else next.delete(key); if (key !== 'page') next.delete('page'); return next })

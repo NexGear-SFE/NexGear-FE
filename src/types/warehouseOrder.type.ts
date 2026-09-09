@@ -50,4 +50,6 @@ export interface WarehouseOrder {
   assignedAt?: string
   assignedBy?: string
   parcel?: { weightGrams: number; lengthCm: number; widthCm: number; heightCm: number; pickupAddress: string; trackingCode?: string }
+  reservationApplied?: boolean
+  inventoryCommitted?: boolean
 }

@@ -13,6 +13,7 @@ import { ROUTES, warehouseReceiptDetailPath, warehouseReceiptEditPath } from '@/
 import { useWarehouseStore } from '@/stores/warehouseStore'
 import { formatCurrency, formatDate, formatDateOnly } from '@/utils/formatters'
 import { calculateReceiptTotal } from '@/utils/receipt'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 
 const PAGE_SIZE = 8
 export function ReceiptListPage() {
@@ -20,12 +21,13 @@ export function ReceiptListPage() {
   const [params, setParams] = useSearchParams()
   const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>('loading')
   const query = params.get('q') ?? ''
+  const debouncedQuery = useDebouncedValue(query)
   const tab = params.get('status') ?? 'ALL'
   const page = Math.max(1, Number(params.get('page') ?? 1))
   const rows = useMemo(() => receipts.filter((receipt) => {
     const searchText = `${receipt.id} ${receipt.supplier} ${receipt.invoiceCode}`.toLocaleLowerCase('vi')
-    return searchText.includes(query.trim().toLocaleLowerCase('vi')) && (tab === 'ALL' || receipt.status === tab)
-  }).sort((first, second) => second.updatedAt.localeCompare(first.updatedAt)), [query, receipts, tab])
+    return searchText.includes(debouncedQuery.trim().toLocaleLowerCase('vi')) && (tab === 'ALL' || receipt.status === tab)
+  }).sort((first, second) => second.updatedAt.localeCompare(first.updatedAt)), [debouncedQuery, receipts, tab])
   const pageRows = rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
   const updateParam = (key: string, value: string) => setParams((current) => { const next = new URLSearchParams(current); if (value && value !== 'ALL') next.set(key, value); else next.delete(key); if (key !== 'page') next.delete('page'); return next })
   const refresh = () => { setLoadState('loading'); void getReceipts().then(() => setLoadState('ready')).catch(() => setLoadState('error')) }

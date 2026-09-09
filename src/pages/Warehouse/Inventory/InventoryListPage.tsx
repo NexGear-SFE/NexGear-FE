@@ -14,6 +14,7 @@ import { warehouseInventoryDetailPath } from '@/constants/routes'
 import { useWarehouseStore } from '@/stores/warehouseStore'
 import { buildCategoryBreadcrumb, buildCategoryTree, flattenCategoryTree } from '@/utils/buildCategoryTree'
 import { buildInventoryRows, filterInventoryRows } from '@/utils/inventory'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 
 const PAGE_SIZE = 8
 
@@ -22,11 +23,12 @@ export function InventoryListPage() {
   const [params, setParams] = useSearchParams()
   const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>('loading')
   const query = params.get('q') ?? ''
+  const debouncedQuery = useDebouncedValue(query)
   const categoryId = params.get('category') ?? ''
   const status = params.get('status') ?? ''
   const page = Math.max(1, Number(params.get('page') ?? 1))
   const allRows = useMemo(() => buildInventoryRows(products, variants, inventory, serials, categories), [categories, inventory, products, serials, variants])
-  const rows = useMemo(() => filterInventoryRows(allRows, query, categoryId, status), [allRows, categoryId, query, status])
+  const rows = useMemo(() => filterInventoryRows(allRows, debouncedQuery, categoryId, status), [allRows, categoryId, debouncedQuery, status])
   const pageRows = rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
   const categoryOptions = flattenCategoryTree(buildCategoryTree(categories))
   const stats = {

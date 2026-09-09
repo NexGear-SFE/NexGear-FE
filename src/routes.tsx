@@ -3,18 +3,6 @@ import { MainLayout } from '@/layouts/MainLayout'
 import { HomePage } from '@/pages/Home/HomePage'
 import { WarehouseLayout } from '@/layouts/WarehouseLayout'
 import { WarehouseRouteGuard } from '@/components/warehouse/WarehouseRouteGuard'
-import { CategoryManagementPage } from '@/pages/Warehouse/Categories/CategoryManagementPage'
-import { ProductDetailPage } from '@/pages/Warehouse/Products/ProductDetailPage'
-import { ProductListPage } from '@/pages/Warehouse/Products/ProductListPage'
-import { ProductWizardPage } from '@/pages/Warehouse/Products/ProductWizardPage'
-import { InventoryDetailPage } from '@/pages/Warehouse/Inventory/InventoryDetailPage'
-import { InventoryListPage } from '@/pages/Warehouse/Inventory/InventoryListPage'
-import { ReceiptDetailPage } from '@/pages/Warehouse/Receipts/ReceiptDetailPage'
-import { ReceiptListPage } from '@/pages/Warehouse/Receipts/ReceiptListPage'
-import { ReceiptWizardPage } from '@/pages/Warehouse/Receipts/ReceiptWizardPage'
-import { OrderDetailPage } from '@/pages/Warehouse/Orders/OrderDetailPage'
-import { OrderListPage } from '@/pages/Warehouse/Orders/OrderListPage'
-import { WarehouseDashboardPage } from '@/pages/Warehouse/WarehouseDashboardPage'
 
 export const router = createBrowserRouter([
   {
@@ -33,20 +21,20 @@ export const router = createBrowserRouter([
       path: '/admin/warehouse',
       element: <WarehouseLayout />,
       children: [
-        { index: true, element: <WarehouseDashboardPage /> },
-        { path: 'orders', element: <OrderListPage /> },
-        { path: 'orders/:orderId', element: <OrderDetailPage /> },
-        { path: 'receipts', element: <ReceiptListPage /> },
-        { path: 'receipts/new', element: <ReceiptWizardPage /> },
-        { path: 'receipts/:receiptId', element: <ReceiptDetailPage /> },
-        { path: 'receipts/:receiptId/edit', element: <ReceiptWizardPage /> },
-        { path: 'products', element: <ProductListPage /> },
-        { path: 'products/new', element: <ProductWizardPage /> },
-        { path: 'products/:productId', element: <ProductDetailPage /> },
-        { path: 'products/:productId/edit', element: <ProductWizardPage /> },
-        { path: 'categories', element: <CategoryManagementPage /> },
-        { path: 'inventory', element: <InventoryListPage /> },
-        { path: 'inventory/:productId', element: <InventoryDetailPage /> },
+        { index: true, lazy: async () => ({ Component: (await import('@/pages/Warehouse/WarehouseDashboardPage')).WarehouseDashboardPage }) },
+        { path: 'orders', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Orders/OrderListPage')).OrderListPage }) },
+        { path: 'orders/:orderId', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Orders/OrderDetailPage')).OrderDetailPage }) },
+        { path: 'receipts', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Receipts/ReceiptListPage')).ReceiptListPage }) },
+        { path: 'receipts/new', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Receipts/ReceiptWizardPage')).ReceiptWizardPage }) },
+        { path: 'receipts/:receiptId', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Receipts/ReceiptDetailPage')).ReceiptDetailPage }) },
+        { path: 'receipts/:receiptId/edit', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Receipts/ReceiptWizardPage')).ReceiptWizardPage }) },
+        { path: 'products', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Products/ProductListPage')).ProductListPage }) },
+        { path: 'products/new', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Products/ProductWizardPage')).ProductWizardPage }) },
+        { path: 'products/:productId', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Products/ProductDetailPage')).ProductDetailPage }) },
+        { path: 'products/:productId/edit', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Products/ProductWizardPage')).ProductWizardPage }) },
+        { path: 'categories', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Categories/CategoryManagementPage')).CategoryManagementPage }) },
+        { path: 'inventory', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Inventory/InventoryListPage')).InventoryListPage }) },
+        { path: 'inventory/:productId', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Inventory/InventoryDetailPage')).InventoryDetailPage }) },
       ],
     }],
   },

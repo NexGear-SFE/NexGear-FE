@@ -125,5 +125,5 @@ export function VariantMatrixEditor({ brandCode, existingSkus = [], modelCode, o
 }
 
 function SmallButton({ children, label, onClick }: { children: ReactElement; label: string; onClick: () => void }) {
-  return <button type="button" aria-label={label} onClick={onClick} className="flex h-11 w-9 items-center justify-center rounded-sm hover:bg-white focus-visible:outline-none focus-visible:shadow-focus [&_svg]:h-4 [&_svg]:w-4">{children}</button>
+  return <button type="button" aria-label={label} onClick={onClick} className="flex h-11 w-11 items-center justify-center rounded-sm hover:bg-white focus-visible:outline-none focus-visible:shadow-focus [&_svg]:h-4 [&_svg]:w-4">{children}</button>
 }

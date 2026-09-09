@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { initialCategories, initialInventory, initialMovements, initialOrders, initialProducts, initialReceipts, initialSerials, initialVariants } from '@/constants/warehouseMockData'
 import { useWarehouseStore } from '@/stores/warehouseStore'
+import { buildCategoryBreadcrumb } from '@/utils/buildCategoryTree'
 
 afterEach(() => useWarehouseStore.setState({ categories: initialCategories, products: initialProducts, variants: initialVariants, inventory: initialInventory, movements: initialMovements, orders: initialOrders, receipts: initialReceipts, serials: initialSerials, skuAudit: [] }))
 
@@ -146,5 +147,39 @@ describe('order fulfillment state machine', () => {
     const order = useWarehouseStore.getState().orders.find((item) => item.id === orderId)
     expect(order?.state).toBe('COMPLETED')
     expect(order?.timeline.at(-1)?.label).toBe('GHTK đã lấy hàng')
+  })
+})
+
+describe('cross-module inventory integration', () => {
+  it('propagates category renames and new product variants through the shared store', () => {
+    const category = useWarehouseStore.getState().categories.find((item) => item.id === 'cat-mouse')!
+    useWarehouseStore.getState().updateCategory(category.id, { name: 'Chuột Gaming', code: category.code, slug: category.slug, description: category.description, parentId: category.parentId, sortOrder: category.sortOrder, status: category.status })
+    expect(buildCategoryBreadcrumb(useWarehouseStore.getState().categories, category.id)).toContain('Chuột Gaming')
+    const productId = useWarehouseStore.getState().saveProduct({ name: 'Integrated Product', slug: 'integrated-product', productCode: 'INT-1', modelCode: 'INT', brand: 'Test', brandCode: 'TST', categoryId: category.id, shortDescription: '', specifications: [], warrantyMonths: 12, unit: 'Chiếc', origin: '', weightGrams: 1, dimensions: { lengthMm: 1, widthMm: 1, heightMm: 1 }, status: 'ACTIVE' }, [{ sku: 'TST-INT-ONE', skuSource: 'AUTO', optionValues: [], serialTracking: false, reorderLevel: 1, status: 'ACTIVE', skuLocked: false }])
+    const variant = useWarehouseStore.getState().variants.find((item) => item.productId === productId)
+    expect(useWarehouseStore.getState().products.some((product) => product.id === productId)).toBe(true)
+    expect(useWarehouseStore.getState().inventory.find((item) => item.variantId === variant?.id)).toMatchObject({ onHand: 0, reserved: 0 })
+  })
+
+  it('reserves available stock exactly once for a new order', () => {
+    const order = { ...initialOrders[0], id: 'RESERVE-TEST', reservationApplied: false, timeline: [], items: [{ ...initialOrders[0].items[0], id: 'RESERVE-LINE', variantId: 'V004', quantity: 2 }] }
+    useWarehouseStore.setState((state) => ({ orders: [...state.orders, order] }))
+    const before = useWarehouseStore.getState().inventory.find((item) => item.variantId === 'V004')!
+    expect(useWarehouseStore.getState().reserveOrder(order.id)).toBe(true)
+    expect(useWarehouseStore.getState().inventory.find((item) => item.variantId === 'V004')?.reserved).toBe(before.reserved + 2)
+    expect(useWarehouseStore.getState().reserveOrder(order.id)).toBe(false)
+    expect(useWarehouseStore.getState().inventory.find((item) => item.variantId === 'V004')?.reserved).toBe(before.reserved + 2)
+  })
+
+  it('commits stock and movement once when GHTK picks up', () => {
+    const order = { ...initialOrders[0], id: 'COMPLETE-TEST', state: 'WAITING_GHTK_PICKUP' as const, reservationApplied: true, inventoryCommitted: false, timeline: [], items: [{ ...initialOrders[0].items[0], id: 'COMPLETE-LINE', variantId: 'V004', quantity: 2 }] }
+    useWarehouseStore.setState((state) => ({ orders: [...state.orders, order], inventory: state.inventory.map((item) => item.variantId === 'V004' ? { ...item, reserved: item.reserved + 2 } : item) }))
+    const before = useWarehouseStore.getState().inventory.find((item) => item.variantId === 'V004')!
+    useWarehouseStore.getState().completeOrder(order.id)
+    const after = useWarehouseStore.getState()
+    expect(after.inventory.find((item) => item.variantId === 'V004')).toMatchObject({ onHand: before.onHand - 2, reserved: before.reserved - 2 })
+    expect(after.movements.filter((movement) => movement.reference === order.id)).toHaveLength(1)
+    useWarehouseStore.getState().completeOrder(order.id)
+    expect(useWarehouseStore.getState().movements.filter((movement) => movement.reference === order.id)).toHaveLength(1)
   })
 })

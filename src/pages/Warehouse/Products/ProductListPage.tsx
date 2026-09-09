@@ -14,6 +14,7 @@ import { ROUTES, warehouseProductDetailPath, warehouseProductEditPath } from '@/
 import { useWarehouseStore } from '@/stores/warehouseStore'
 import { buildCategoryBreadcrumb, buildCategoryTree, flattenCategoryTree } from '@/utils/buildCategoryTree'
 import { formatDate as formatDateTime } from '@/utils/formatters'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 
 const PAGE_SIZE = 8
 
@@ -23,6 +24,7 @@ export function ProductListPage() {
   const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>('loading')
   const [pendingProductId, setPendingProductId] = useState<string | null>(null)
   const query = params.get('q') ?? ''
+  const debouncedQuery = useDebouncedValue(query)
   const categoryId = params.get('category') ?? ''
   const brand = params.get('brand') ?? ''
   const status = params.get('status') ?? ''
@@ -57,8 +59,8 @@ export function ProductListPage() {
     const searchText = `${product.name} ${product.productCode} ${productVariants.map((variant) => variant.sku).join(' ')}`.toLocaleLowerCase('vi')
     const stockMatch = !stock || (stock === 'available' ? available > 0 : available === 0)
     const serialMatch = !serial || productVariants.some((variant) => variant.serialTracking) === (serial === 'yes')
-    return searchText.includes(query.toLocaleLowerCase('vi')) && (!categoryId || product.categoryId === categoryId) && (!brand || product.brand === brand) && (!status || product.status === status) && stockMatch && serialMatch
-  }).sort((first, second) => sort === 'name' ? first.product.name.localeCompare(second.product.name) : sort === 'stock' ? second.available - first.available : second.product.updatedAt.localeCompare(first.product.updatedAt)), [brand, categoryId, inventory, products, query, serial, sort, status, stock, variants])
+    return searchText.includes(debouncedQuery.toLocaleLowerCase('vi')) && (!categoryId || product.categoryId === categoryId) && (!brand || product.brand === brand) && (!status || product.status === status) && stockMatch && serialMatch
+  }).sort((first, second) => sort === 'name' ? first.product.name.localeCompare(second.product.name) : sort === 'stock' ? second.available - first.available : second.product.updatedAt.localeCompare(first.product.updatedAt)), [brand, categoryId, debouncedQuery, inventory, products, serial, sort, status, stock, variants])
   const pageRows = rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
   const categoryOptions = flattenCategoryTree(buildCategoryTree(categories))
   const brands = [...new Set(products.map((product) => product.brand))].sort()

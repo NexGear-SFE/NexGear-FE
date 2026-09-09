@@ -1,11 +1,11 @@
-import { Boxes, ClipboardList, Edit3, PackageOpen, ShieldCheck, Tags } from 'lucide-react'
+import { ArrowLeft, Boxes, ClipboardList, Edit3, PackageOpen, ShieldCheck, Tags } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { DataState } from '@/components/warehouse/DataState'
 import { ProductInventoryPanel } from '@/components/warehouse/ProductInventoryPanel'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
 import { WarehouseStatCard } from '@/components/warehouse/WarehouseStatCard'
-import { warehouseProductEditPath } from '@/constants/routes'
+import { ROUTES, warehouseProductEditPath } from '@/constants/routes'
 import { useWarehouseStore } from '@/stores/warehouseStore'
 import { buildCategoryBreadcrumb } from '@/utils/buildCategoryTree'
 import { cn } from '@/utils/cn'
@@ -16,7 +16,7 @@ type Tab = typeof tabs[number]
 
 export function ProductDetailPage() {
   const { productId = '' } = useParams()
-  const { products, variants, inventory, serials, movements, skuAudit } = useWarehouseStore()
+  const { products, variants, inventory, serials, movements, skuAudit, categories } = useWarehouseStore()
   const [tab, setTab] = useState<Tab>('Tổng quan')
   const product = products.find((item) => item.id === productId)
   if (!product) return <DataState type="empty" title="Không tìm thấy sản phẩm" description="Product ID không tồn tại hoặc đã bị ẩn khỏi dữ liệu mock." />
@@ -30,7 +30,8 @@ export function ProductDetailPage() {
   const reserved = productInventory.reduce((sum, item) => sum + item.reserved, 0)
 
   return <div className="space-y-6">
-    <header className="rounded-md border border-surface-400 bg-white p-5 md:p-6"><div className="flex flex-col gap-5 md:flex-row md:items-center"><span className="flex h-24 w-24 shrink-0 items-center justify-center rounded-md bg-warehouse-950 font-heading text-xl font-bold text-white">{product.brandCode}</span><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><StatusBadge label={product.status} tone={product.status === 'ACTIVE' ? 'success' : product.status === 'DRAFT' ? 'warning' : 'neutral'} /><span className="text-xs text-text-600">{buildCategoryBreadcrumb(useWarehouseStore.getState().categories, product.categoryId)}</span></div><h1 className="mt-3 font-heading text-2xl font-bold md:text-3xl">{product.name}</h1><p className="mt-2 text-sm text-text-600">{product.productCode} · {product.modelCode} · {product.brand}</p></div><Link to={warehouseProductEditPath(product.id)} className="btn-primary"><Edit3 className="h-4 w-4" /> Chỉnh sửa</Link></div></header>
+    <Link to={ROUTES.warehouseProducts} className="inline-flex items-center gap-2 text-sm font-semibold text-text-600 hover:text-brand-500"><ArrowLeft className="h-4 w-4" /> Danh sách sản phẩm</Link>
+    <header className="rounded-md border border-surface-400 bg-white p-5 md:p-6"><div className="flex flex-col gap-5 md:flex-row md:items-center"><span className="flex h-24 w-24 shrink-0 items-center justify-center rounded-md bg-warehouse-950 font-heading text-xl font-bold text-white">{product.brandCode}</span><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><StatusBadge label={product.status} tone={product.status === 'ACTIVE' ? 'success' : product.status === 'DRAFT' ? 'warning' : 'neutral'} /><span className="text-xs text-text-600">{buildCategoryBreadcrumb(categories, product.categoryId)}</span></div><h1 className="mt-3 font-heading text-2xl font-bold md:text-3xl">{product.name}</h1><p className="mt-2 text-sm text-text-600">{product.productCode} · {product.modelCode} · {product.brand}</p></div><Link to={warehouseProductEditPath(product.id)} className="btn-primary"><Edit3 className="h-4 w-4" /> Chỉnh sửa</Link></div></header>
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5"><WarehouseStatCard icon={Tags} label="Tổng SKU" value={productVariants.length} /><WarehouseStatCard icon={PackageOpen} label="On hand" value={onHand} /><WarehouseStatCard icon={ClipboardList} label="Reserved" value={reserved} /><WarehouseStatCard icon={Boxes} label="Available" value={Math.max(0, onHand - reserved)} /><WarehouseStatCard icon={ShieldCheck} label="Serial" value={productSerials.length} /></div>
     <section className="rounded-md border border-surface-400 bg-white"><div className="overflow-x-auto border-b border-surface-400" role="tablist" aria-label="Chi tiết sản phẩm">{tabs.map((item) => <button key={item} type="button" role="tab" aria-selected={tab === item} onClick={() => setTab(item)} className={cn('min-h-12 whitespace-nowrap border-b-2 px-4 text-sm font-semibold', tab === item ? 'border-brand-500 text-brand-500' : 'border-transparent text-text-600')}>{item}</button>)}</div><div className="p-5 md:p-6">
       {tab === 'Tổng quan' && <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{[['Product ID', product.id], ['Product code', product.productCode], ['Model code', product.modelCode], ['Slug', product.slug], ['Brand', `${product.brand} (${product.brandCode})`], ['Category ID', product.categoryId], ['Đơn vị', product.unit], ['Xuất xứ', product.origin], ['Bảo hành', `${product.warrantyMonths} tháng`], ['Khối lượng', `${product.weightGrams} g`], ['Kích thước', `${product.dimensions.lengthMm} × ${product.dimensions.widthMm} × ${product.dimensions.heightMm} mm`], ['Mô tả', product.shortDescription]].map(([label, value]) => <div key={label} className="rounded-sm bg-surface-200 p-3"><dt className="text-xs font-semibold uppercase text-text-600">{label}</dt><dd className="mt-1 text-sm font-medium">{value}</dd></div>)}</dl>}

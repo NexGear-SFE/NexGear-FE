@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Boxes, ClipboardList, FolderTree, LayoutDashboard, LogOut, PackageOpen, ReceiptText, UserRound, X } from 'lucide-react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { ROUTES } from '@/constants/routes'
 import { cn } from '@/utils/cn'
 
@@ -15,6 +15,7 @@ const navigation = [
 ]
 
 export function WarehouseSidebar({ isOpen, onClose }: WarehouseSidebarProps) {
+  const navigate = useNavigate()
   const drawerRef = useRef<HTMLElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -68,8 +69,8 @@ export function WarehouseSidebar({ isOpen, onClose }: WarehouseSidebarProps) {
       </nav>
       <div className="border-t border-white/10 p-3">
         <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Tài khoản</p>
-        <button type="button" className="flex min-h-11 w-full items-center gap-3 rounded-sm px-3 text-sm text-slate-300 hover:bg-white/8 hover:text-white"><UserRound className="h-[18px] w-[18px]" /> Hồ sơ</button>
-        <button type="button" className="flex min-h-11 w-full items-center gap-3 rounded-sm px-3 text-sm text-slate-300 hover:bg-white/8 hover:text-white"><LogOut className="h-[18px] w-[18px]" /> Đăng xuất</button>
+        <div className="flex min-h-11 w-full items-center gap-3 rounded-sm px-3 text-sm text-slate-300"><UserRound className="h-[18px] w-[18px]" /> Warehouse Staff</div>
+        <button type="button" onClick={() => { window.localStorage.removeItem('warehouseSession'); navigate(ROUTES.home) }} className="flex min-h-11 w-full items-center gap-3 rounded-sm px-3 text-sm text-slate-300 hover:bg-white/8 hover:text-white"><LogOut className="h-[18px] w-[18px]" /> Đăng xuất</button>
         <div className="mt-3 flex items-center gap-3 rounded-md bg-white/6 p-3"><span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-500 text-xs font-bold">NB</span><span><strong className="block text-xs">Nguyễn Bảo</strong><span className="text-[11px] text-slate-400">Warehouse Staff</span></span></div>
       </div>
     </aside>

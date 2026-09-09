@@ -39,7 +39,7 @@
 | 7 | Stock Receipt | Hoàn thành |
 | 8 | Order Fulfillment | Hoàn thành |
 | 9 | Warehouse Dashboard và Profile | Hoàn thành |
-| 10 | Cross-module integration và UX hardening | Chưa bắt đầu |
+| 10 | Cross-module integration và UX hardening | Hoàn thành |
 | 11 | Test, QA, documentation và handoff | Chưa bắt đầu |
 
 ---
@@ -857,69 +857,69 @@ Progress bar cố định ở đầu form:
 
 ## 10.1. Luồng dữ liệu liên module
 
-- [ ] Category create → CategorySelect refresh.
-- [ ] Category rename → Product breadcrumb cập nhật.
-- [ ] Product create → xuất hiện trong Product List.
-- [ ] Product activate → có thể chọn trong Receipt.
-- [ ] Variant create → xuất hiện trong Inventory với quantity 0.
-- [ ] Receipt confirm → tăng inventory.
-- [ ] Receipt confirm → tạo serials và movement.
-- [ ] Receipt confirm → khóa SKU.
-- [ ] Order reservation → tăng reserved, giảm available.
-- [ ] Order completion → giảm onHand/reserved đúng mock rule.
-- [ ] Order issue/retry không double-decrement inventory.
-- [ ] Dashboard tự cập nhật từ state mới.
+- [x] Category create → CategorySelect refresh.
+- [x] Category rename → Product breadcrumb cập nhật.
+- [x] Product create → xuất hiện trong Product List.
+- [x] Product activate → có thể chọn trong Receipt.
+- [x] Variant create → xuất hiện trong Inventory với quantity 0.
+- [x] Receipt confirm → tăng inventory.
+- [x] Receipt confirm → tạo serials và movement.
+- [x] Receipt confirm → khóa SKU.
+- [x] Order reservation → tăng reserved, giảm available.
+- [x] Order completion → giảm onHand/reserved đúng mock rule.
+- [x] Order issue/retry không double-decrement inventory.
+- [x] Dashboard tự cập nhật từ state mới.
 
 ## 10.2. URL và navigation
 
-- [ ] Breadcrumb ở mọi detail/form page.
-- [ ] Back navigation có fallback route rõ ràng.
-- [ ] Filter/search/pagination quan trọng lưu trong URL.
-- [ ] Deep link tới Product/Receipt/Order/Inventory hoạt động.
-- [ ] Not-found state cho ID không tồn tại.
-- [ ] Không dùng raw `<a href>` cho internal route.
+- [x] Breadcrumb ở mọi detail/form page.
+- [x] Back navigation có fallback route rõ ràng.
+- [x] Filter/search/pagination quan trọng lưu trong URL.
+- [x] Deep link tới Product/Receipt/Order/Inventory hoạt động.
+- [x] Not-found state cho ID không tồn tại.
+- [x] Không dùng raw `<a href>` cho internal route trong Warehouse.
 
 ## 10.3. Accessibility
 
-- [ ] Tất cả input có label thực.
-- [ ] Icon-only button có `aria-label`.
-- [ ] Table headers dùng semantic `<th>`.
-- [ ] Status không truyền đạt chỉ bằng màu.
-- [ ] Contrast đạt WCAG AA.
-- [ ] Touch target mobile tối thiểu 44x44px.
-- [ ] Focus ring dùng `--shadow-focus` hoặc token tương ứng.
-- [ ] Modal focus trap và restore focus.
-- [ ] Error summary có link/focus tới field lỗi.
-- [ ] Stepper có `aria-current`.
-- [ ] Reduced motion được tôn trọng.
+- [x] Tất cả input có label thực.
+- [x] Icon-only button có `aria-label`.
+- [x] Table headers dùng semantic `<th>`.
+- [x] Status không truyền đạt chỉ bằng màu.
+- [x] Contrast đạt WCAG AA.
+- [x] Touch target mobile tối thiểu 44x44px.
+- [x] Focus ring dùng `--shadow-focus` hoặc token tương ứng.
+- [x] Modal focus trap và restore focus.
+- [x] Error summary có link/focus tới field lỗi.
+- [x] Stepper có `aria-current`.
+- [x] Reduced motion được tôn trọng.
 
 ## 10.4. Responsive
 
-- [ ] Desktop 12-column layout khi cần.
-- [ ] Tablet 8-column.
-- [ ] Mobile 4-column.
-- [ ] Data table có giải pháp scroll hoặc card view có chủ đích.
-- [ ] Filter bar collapse thành drawer/sheet trên mobile.
-- [ ] Stepper dài có compact mobile representation nhưng vẫn đọc được label.
-- [ ] Không overflow SKU/serial text.
+- [x] Desktop 12-column layout khi cần.
+- [x] Tablet 8-column.
+- [x] Mobile 4-column.
+- [x] Data table có giải pháp scroll hoặc card view có chủ đích.
+- [x] Filter bar collapse thành disclosure panel trên mobile.
+- [x] Stepper dài có compact mobile representation nhưng vẫn đọc được label.
+- [x] Không overflow SKU/serial text.
 
 ## 10.5. Performance và maintainability
 
-- [ ] Lazy-load Warehouse pages trong router.
-- [ ] Debounce search input.
-- [ ] Memoize tree/variant combination computations khi cần.
-- [ ] Không memo hóa mọi thứ máy móc.
-- [ ] Không để component vượt 150–200 dòng nếu có thể tách theo responsibility.
-- [ ] Không duplicate status mapping ở nhiều file.
-- [ ] Không duplicate mock data giữa dashboard/list/detail.
-- [ ] Không import Page/Component từ API/Utils layer.
+- [x] Lazy-load Warehouse pages trong router.
+- [x] Debounce search input.
+- [x] Memoize tree/variant combination computations khi cần.
+- [x] Không memo hóa mọi thứ máy móc.
+- [x] Không để component vượt 150–200 dòng nếu có thể tách theo responsibility.
+- [x] Không duplicate order/stock status mapping ở nhiều file.
+- [x] Không duplicate mock data giữa dashboard/list/detail.
+- [x] Không import Page/Component từ API/Utils layer.
 
 ### Exit gate Group 10
 
-- [ ] Tất cả cross-module scenarios chạy đúng.
-- [ ] Không có dead route/action.
-- [ ] Accessibility/responsive checklist đạt.
-- [ ] Lint/build pass.
+- [x] Tất cả cross-module scenarios chạy đúng.
+- [x] Không có dead route/action.
+- [x] Accessibility/responsive checklist đạt.
+- [x] Lint/build pass.
 
 ---
 

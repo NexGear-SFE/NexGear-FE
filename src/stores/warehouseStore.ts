@@ -39,6 +39,7 @@ interface WarehouseState {
   logSkuAudit: (action: SkuAuditEntry['action'], sku: string, variantId?: string) => void
   saveReceipt: (receipt: StockReceipt) => void
   confirmReceipt: (receiptId: string) => boolean
+  reserveOrder: (orderId: string) => boolean
   acceptOrder: (orderId: string) => void
   setPickedQuantity: (orderId: string, itemId: string, quantity: number) => void
   completePicking: (orderId: string) => void
@@ -190,6 +191,25 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
     return true
   },
 
+  reserveOrder: (orderId) => {
+    const state = get()
+    const order = state.orders.find((item) => item.id === orderId)
+    if (!order || order.reservationApplied || order.inventoryCommitted) return false
+    const canReserve = order.items.every((item) => {
+      const stock = state.inventory.find((candidate) => candidate.variantId === item.variantId)
+      return (stock?.onHand ?? 0) - (stock?.reserved ?? 0) >= item.quantity
+    })
+    if (!canReserve) {
+      set({ orders: state.orders.map((candidate) => candidate.id === orderId ? addTimeline({ ...candidate, state: 'ISSUE', issue: { code: 'INSUFFICIENT_STOCK', title: 'Không đủ tồn kho', message: 'Một hoặc nhiều SKU không đủ available để giữ hàng.', occurredAt: timestamp(), resumeState: 'WAITING_ACCEPTANCE', retryable: true } }, 'Giữ hàng thất bại') : candidate) })
+      return false
+    }
+    set({
+      inventory: state.inventory.map((stock) => ({ ...stock, reserved: stock.reserved + (order.items.find((item) => item.variantId === stock.variantId)?.quantity ?? 0) })),
+      orders: state.orders.map((candidate) => candidate.id === orderId ? addTimeline({ ...candidate, reservationApplied: true }, 'Đã giữ hàng') : candidate),
+    })
+    return true
+  },
+
   acceptOrder: (orderId) => set((state) => ({
     orders: state.orders.map((order) => order.id === orderId && order.state === 'WAITING_ACCEPTANCE'
       ? addTimeline({ ...order, state: 'PICKING', assignee: 'Nguyễn Bảo' }, 'Bắt đầu soạn hàng')
@@ -241,11 +261,20 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
     }),
   })),
 
-  completeOrder: (orderId) => set((state) => ({
-    orders: state.orders.map((order) => order.id === orderId && order.state === 'WAITING_GHTK_PICKUP'
-      ? addTimeline({ ...order, state: 'COMPLETED' }, 'GHTK đã lấy hàng')
-      : order),
-  })),
+  completeOrder: (orderId) => set((state) => {
+    const order = state.orders.find((item) => item.id === orderId)
+    if (!order || order.state !== 'WAITING_GHTK_PICKUP' || order.inventoryCommitted) return state
+    const quantities = new Map(order.items.map((item) => [item.variantId, item.quantity]))
+    return {
+      orders: state.orders.map((candidate) => candidate.id === orderId ? addTimeline({ ...candidate, state: 'COMPLETED', inventoryCommitted: true }, 'GHTK đã lấy hàng') : candidate),
+      inventory: state.inventory.map((stock) => {
+        const quantity = quantities.get(stock.variantId) ?? 0
+        return { ...stock, onHand: Math.max(0, stock.onHand - quantity), reserved: Math.max(0, stock.reserved - (order.reservationApplied ? quantity : 0)) }
+      }),
+      serials: state.serials.map((serial) => order.items.some((item) => item.assignedSerialIds.includes(serial.id)) ? { ...serial, status: 'SOLD' } : serial),
+      movements: [...state.movements, ...order.items.map((item) => ({ id: crypto.randomUUID(), variantId: item.variantId, reason: 'ORDER_FULFILLED' as const, quantityDelta: -item.quantity, reference: order.id, occurredAt: timestamp() }))],
+    }
+  }),
 }))
 
 export function getProductTotal(products: Product[], variants: ProductVariant[], productId: string): number {
