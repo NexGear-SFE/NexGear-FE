@@ -13,6 +13,8 @@ import { InventoryListPage } from '@/pages/Warehouse/Inventory/InventoryListPage
 import { ReceiptDetailPage } from '@/pages/Warehouse/Receipts/ReceiptDetailPage'
 import { ReceiptListPage } from '@/pages/Warehouse/Receipts/ReceiptListPage'
 import { ReceiptWizardPage } from '@/pages/Warehouse/Receipts/ReceiptWizardPage'
+import { OrderDetailPage } from '@/pages/Warehouse/Orders/OrderDetailPage'
+import { OrderListPage } from '@/pages/Warehouse/Orders/OrderListPage'
 
 export const router = createBrowserRouter([
   {
@@ -32,8 +34,8 @@ export const router = createBrowserRouter([
       element: <WarehouseLayout />,
       children: [
         { index: true, element: <WarehouseComingSoonPage title="Tổng quan kho" description="Theo dõi nhanh các công việc vận hành trong ngày." /> },
-        { path: 'orders', element: <WarehouseComingSoonPage title="Đơn hàng" description="Xử lý quy trình xuất kho và bàn giao vận chuyển." /> },
-        { path: 'orders/:orderId', element: <WarehouseComingSoonPage title="Chi tiết đơn hàng" description="Theo dõi và cập nhật từng bước xử lý đơn." /> },
+        { path: 'orders', element: <OrderListPage /> },
+        { path: 'orders/:orderId', element: <OrderDetailPage /> },
         { path: 'receipts', element: <ReceiptListPage /> },
         { path: 'receipts/new', element: <ReceiptWizardPage /> },
         { path: 'receipts/:receiptId', element: <ReceiptDetailPage /> },

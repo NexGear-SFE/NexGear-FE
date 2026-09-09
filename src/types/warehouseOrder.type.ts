@@ -45,4 +45,9 @@ export interface WarehouseOrder {
   issue?: OrderIssue
   timeline: OrderTimelineEvent[]
   createdAt: string
+  pickedAt?: string
+  pickedBy?: string
+  assignedAt?: string
+  assignedBy?: string
+  parcel?: { weightGrams: number; lengthCm: number; widthCm: number; heightCm: number; pickupAddress: string; trackingCode?: string }
 }

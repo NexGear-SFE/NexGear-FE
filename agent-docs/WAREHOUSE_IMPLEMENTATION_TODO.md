@@ -37,7 +37,7 @@
 | 5 | Variant và SKU Generator | Hoàn thành |
 | 6 | Inventory và Serial | Chưa bắt đầu |
 | 7 | Stock Receipt | Hoàn thành |
-| 8 | Order Fulfillment | Chưa bắt đầu |
+| 8 | Order Fulfillment | Hoàn thành |
 | 9 | Warehouse Dashboard và Profile | Chưa bắt đầu |
 | 10 | Cross-module integration và UX hardening | Chưa bắt đầu |
 | 11 | Test, QA, documentation và handoff | Chưa bắt đầu |
@@ -461,7 +461,7 @@ Progress bar cố định ở đầu form:
 ## 4.4. Product lifecycle
 
 - [x] Draft có thể chỉnh sửa toàn bộ khi chưa có movement.
-- [ ] Active Product dùng được trong Receipt và Order flow (Receipt đã xong; chờ Order Group 8).
+- [x] Active Product dùng được trong Receipt và Order flow.
 - [ ] Inactive Product không được thêm vào receipt mới.
 - [x] Product có transaction không hard-delete.
 - [x] Deactivate Product phải xác nhận và hiển thị số variant bị ảnh hưởng.
@@ -723,23 +723,23 @@ Progress bar cố định ở đầu form:
 
 ## 8.1. State machine từ Figma
 
-- [ ] Dùng chính xác các state: `WAITING_ACCEPTANCE`, `PICKING`, `WAITING_SERIAL`, `READY_TO_PACK`, `WAITING_GHTK_PICKUP`, `COMPLETED`, `ISSUE`.
-- [ ] Mỗi transition nằm trong store/service action, không rải trong component.
-- [ ] `ISSUE` giữ `resumeState`.
-- [ ] Không cho nhảy state bằng UI ngoài transition hợp lệ.
-- [ ] Lưu timeline event cho mỗi transition.
+- [x] Dùng chính xác các state: `WAITING_ACCEPTANCE`, `PICKING`, `WAITING_SERIAL`, `READY_TO_PACK`, `WAITING_GHTK_PICKUP`, `COMPLETED`, `ISSUE`.
+- [x] Mỗi transition nằm trong store/service action, không rải trong component.
+- [x] `ISSUE` giữ `resumeState`.
+- [x] Không cho nhảy state bằng UI ngoài transition hợp lệ.
+- [x] Lưu timeline event cho mỗi transition.
 
 ## 8.2. Order List từ Figma
 
-- [ ] Port `/admin/warehouse/orders`.
-- [ ] Status tabs và counts.
-- [ ] Search order/customer.
-- [ ] Filter status, payment, staff.
-- [ ] Sort smart/newest/oldest.
-- [ ] `Việc của tôi` filter.
-- [ ] Columns order, products, status, assignee, issue, total, action.
-- [ ] Action label đúng state: Bắt đầu soạn hàng, Tiếp tục soạn, Gán serial, Đóng gói, Theo dõi lấy hàng, Xử lý sự cố, Xem chi tiết.
-- [ ] Loading/empty/error/pagination.
+- [x] Port `/admin/warehouse/orders`.
+- [x] Status tabs và counts.
+- [x] Search order/customer.
+- [x] Filter status, payment, staff.
+- [x] Sort smart/newest/oldest.
+- [x] `Việc của tôi` filter.
+- [x] Columns order, products, status, assignee, issue, total, action.
+- [x] Action label đúng state: Bắt đầu soạn hàng, Tiếp tục soạn, Gán serial, Đóng gói, Theo dõi lấy hàng, Xử lý sự cố, Xem chi tiết.
+- [x] Loading/empty/error/pagination.
 
 ## 8.3. Fulfillment là flow dài — bắt buộc progress stepper
 
@@ -748,74 +748,74 @@ Progress bar cố định ở đầu form:
                          * bỏ qua nếu không có sản phẩm serial-tracked
 ```
 
-- [ ] Progress bar xuất hiện ở Order Detail và fulfillment modal/drawer.
-- [ ] Current/completed/issue state có text và icon, không chỉ màu.
-- [ ] `ISSUE` hiển thị tại step phát sinh, không biến thành step cuối giả.
-- [ ] Resume issue quay lại đúng `resumeState`.
-- [ ] Timeline và progress bar dùng cùng một state source.
+- [x] Progress bar xuất hiện ở Order Detail và fulfillment action panel.
+- [x] Current/completed/issue state có text và icon, không chỉ màu.
+- [x] `ISSUE` hiển thị tại step phát sinh, không biến thành step cuối giả.
+- [x] Resume issue quay lại đúng `resumeState`.
+- [x] Timeline và progress bar dùng cùng một state source.
 
 ## 8.4. Picking
 
-- [ ] Accept order gán current staff trong mock state.
-- [ ] Picking checklist theo order line/SKU.
-- [ ] Hiển thị requested quantity và available quantity.
-- [ ] Không complete nếu chưa pick đủ.
-- [ ] Sau pick: có serial-tracked item → `WAITING_SERIAL`.
-- [ ] Sau pick: không có serial-tracked item → `READY_TO_PACK`.
-- [ ] Lưu pickedAt/pickedBy.
+- [x] Accept order gán current staff trong mock state.
+- [x] Picking checklist theo order line/SKU.
+- [x] Hiển thị requested quantity và available quantity.
+- [x] Không complete nếu chưa pick đủ.
+- [x] Sau pick: có serial-tracked item → `WAITING_SERIAL`.
+- [x] Sau pick: không có serial-tracked item → `READY_TO_PACK`.
+- [x] Lưu pickedAt/pickedBy.
 
 ## 8.5. Serial assignment
 
-- [ ] Chỉ hiển thị serial Available thuộc đúng SKU.
-- [ ] Số serial được chọn bằng quantity của line.
-- [ ] Chặn serial đang Reserved/Sold.
-- [ ] Chặn cùng serial cho hai line.
-- [ ] Hoàn tất chuyển `READY_TO_PACK`.
-- [ ] Lưu assignedAt/assignedBy.
+- [x] Chỉ hiển thị serial Available thuộc đúng SKU.
+- [x] Số serial được chọn bằng quantity của line.
+- [x] Chặn serial đang Reserved/Sold.
+- [x] Chặn cùng serial cho hai line.
+- [x] Hoàn tất chuyển `READY_TO_PACK`.
+- [x] Lưu assignedAt/assignedBy.
 
 ## 8.6. Packing
 
-- [ ] Step nội bộ `Đo kiện` → `Kiểm tra` → `Tạo vận đơn`.
-- [ ] Fields weight, length, width, height có inline validation.
-- [ ] Hiển thị pickup address mock read-only.
-- [ ] Hiển thị review summary trước submit.
-- [ ] Mock success/failure phải điều khiển được, không dùng `Math.random()`.
-- [ ] Success → `WAITING_GHTK_PICKUP`.
-- [ ] Failure → `ISSUE`, `resumeState = READY_TO_PACK`.
-- [ ] Issue retry mở lại Packing đúng dữ liệu đã nhập.
+- [x] Step nội bộ `Đo kiện` → `Kiểm tra` → `Tạo vận đơn`.
+- [x] Fields weight, length, width, height có inline validation.
+- [x] Hiển thị pickup address mock read-only.
+- [x] Hiển thị review summary trước submit.
+- [x] Mock success/failure phải điều khiển được, không dùng `Math.random()`.
+- [x] Success → `WAITING_GHTK_PICKUP`.
+- [x] Failure → `ISSUE`, `resumeState = READY_TO_PACK`.
+- [x] Issue retry mở lại Packing đúng dữ liệu đã nhập.
 
 ## 8.7. Order Detail từ Figma
 
-- [ ] Port `/admin/warehouse/orders/:orderId`.
-- [ ] Section A: Order information.
-- [ ] Section B: Reservation.
-- [ ] Section C: Customer/shipping information.
-- [ ] Section D: Products/SKUs/variant/stock/serial.
-- [ ] Section E: Timeline.
-- [ ] Action panel theo state.
-- [ ] Order summary card.
-- [ ] Link Product, Inventory SKU và Serial khi phù hợp.
-- [ ] Responsive two-column desktop, single-column mobile.
+- [x] Port `/admin/warehouse/orders/:orderId`.
+- [x] Section A: Order information.
+- [x] Section B: Reservation.
+- [x] Section C: Customer/shipping information.
+- [x] Section D: Products/SKUs/variant/stock/serial.
+- [x] Section E: Timeline.
+- [x] Action panel theo state.
+- [x] Order summary card.
+- [x] Link Product, Inventory SKU và Serial khi phù hợp.
+- [x] Responsive two-column desktop, single-column mobile.
 
 ## 8.8. Tests
 
-- [ ] Mọi valid transition.
-- [ ] Invalid transition bị từ chối.
-- [ ] Conditional serial step.
-- [ ] Picking completeness.
-- [ ] Serial assignment uniqueness.
-- [ ] Packing validation.
-- [ ] Packing success/failure/retry.
-- [ ] Issue resume state.
-- [ ] Timeline order.
+- [x] Mọi valid transition.
+- [x] Invalid transition bị từ chối.
+- [x] Conditional serial step.
+- [x] Picking completeness.
+- [x] Serial assignment uniqueness.
+- [x] Packing validation.
+- [x] Packing success/failure/retry.
+- [x] Issue resume state.
+- [x] Timeline order.
 
 ### Exit gate Group 8
 
-- [ ] Fulfillment state machine chạy end-to-end bằng mock data.
-- [ ] Progress bar phản ánh đúng state.
-- [ ] Không dùng random để test failure.
-- [ ] Order Detail hoàn chỉnh, không giữ limitation cũ của Figma.
-- [ ] Tests/lint/build pass.
+- [x] Fulfillment state machine chạy end-to-end bằng mock data.
+- [x] Progress bar phản ánh đúng state.
+- [x] Không dùng random để test failure.
+- [x] Order Detail hoàn chỉnh, không giữ limitation cũ của Figma.
+- [x] Tests/lint/build pass.
 
 ---
 

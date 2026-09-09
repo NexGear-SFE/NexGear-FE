@@ -40,9 +40,10 @@ interface WarehouseState {
   saveReceipt: (receipt: StockReceipt) => void
   confirmReceipt: (receiptId: string) => boolean
   acceptOrder: (orderId: string) => void
+  setPickedQuantity: (orderId: string, itemId: string, quantity: number) => void
   completePicking: (orderId: string) => void
   assignOrderSerials: (orderId: string, serialIds: string[]) => void
-  packOrder: (orderId: string, shouldFail?: boolean) => void
+  packOrder: (orderId: string, shouldFail?: boolean, parcel?: WarehouseOrder['parcel']) => void
   completeOrder: (orderId: string) => void
 }
 
@@ -195,12 +196,20 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
       : order),
   })),
 
+  setPickedQuantity: (orderId, itemId, quantity) => set((state) => ({
+    orders: state.orders.map((order) => order.id === orderId && order.state === 'PICKING'
+      ? { ...order, items: order.items.map((item) => item.id === itemId ? { ...item, pickedQuantity: Math.min(item.quantity, Math.max(0, quantity)) } : item) }
+      : order),
+  })),
+
   completePicking: (orderId) => set((state) => ({
     orders: state.orders.map((order) => {
       if (order.id !== orderId || order.state !== 'PICKING') return order
+      if (order.items.some((item) => item.pickedQuantity !== item.quantity)) return order
       const requiresSerial = order.items.some((item) => state.variants.find((variant) => variant.id === item.variantId)?.serialTracking)
       const nextState: WarehouseOrderState = requiresSerial ? 'WAITING_SERIAL' : 'READY_TO_PACK'
-      return addTimeline({ ...order, state: nextState, items: order.items.map((item) => ({ ...item, pickedQuantity: item.quantity })) }, 'Đã soạn đủ hàng')
+      const pickedAt = timestamp()
+      return addTimeline({ ...order, state: nextState, pickedAt, pickedBy: 'Nguyễn Bảo' }, 'Đã soạn đủ hàng')
     }),
   })),
 
@@ -217,24 +226,24 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
     if (!validSelection) return state
     return {
       orders: state.orders.map((candidate) => candidate.id === orderId
-        ? addTimeline({ ...candidate, state: 'READY_TO_PACK', items: candidate.items.map((item) => ({ ...item, assignedSerialIds: selected.filter((serial) => serial.variantId === item.variantId).map((serial) => serial.id) })) }, 'Đã gán serial')
+        ? addTimeline({ ...candidate, state: 'READY_TO_PACK', assignedAt: timestamp(), assignedBy: 'Nguyễn Bảo', items: candidate.items.map((item) => ({ ...item, assignedSerialIds: selected.filter((serial) => serial.variantId === item.variantId).map((serial) => serial.id) })) }, 'Đã gán serial')
         : candidate),
       serials: state.serials.map((serial) => uniqueIds.has(serial.id) ? { ...serial, status: 'RESERVED' } : serial),
     }
   }),
 
-  packOrder: (orderId, shouldFail = false) => set((state) => ({
+  packOrder: (orderId, shouldFail = false, parcel) => set((state) => ({
     orders: state.orders.map((order) => {
       const canPack = order.id === orderId && (order.state === 'READY_TO_PACK' || order.state === 'ISSUE')
       if (!canPack) return order
-      if (shouldFail) return addTimeline({ ...order, state: 'ISSUE', issue: { code: 'GHTK_REJECTED', title: 'GHTK từ chối vận đơn', message: 'Kiểm tra lại kích thước kiện hàng.', occurredAt: timestamp(), resumeState: 'READY_TO_PACK', retryable: true } }, 'Tạo vận đơn thất bại')
-      return addTimeline({ ...order, state: 'WAITING_GHTK_PICKUP', issue: undefined }, 'Đã tạo vận đơn GHTK')
+      if (shouldFail) return addTimeline({ ...order, parcel, state: 'ISSUE', issue: { code: 'GHTK_REJECTED', title: 'GHTK từ chối vận đơn', message: 'Kiểm tra lại kích thước kiện hàng.', occurredAt: timestamp(), resumeState: 'READY_TO_PACK', retryable: true } }, 'Tạo vận đơn thất bại')
+      return addTimeline({ ...order, parcel: parcel ? { ...parcel, trackingCode: `GHTK-${order.id.replace(/\D/g, '').slice(-8)}` } : order.parcel, state: 'WAITING_GHTK_PICKUP', issue: undefined }, 'Đã tạo vận đơn GHTK')
     }),
   })),
 
   completeOrder: (orderId) => set((state) => ({
     orders: state.orders.map((order) => order.id === orderId && order.state === 'WAITING_GHTK_PICKUP'
-      ? addTimeline({ ...order, state: 'COMPLETED' }, 'Giao hàng thành công')
+      ? addTimeline({ ...order, state: 'COMPLETED' }, 'GHTK đã lấy hàng')
       : order),
   })),
 }))

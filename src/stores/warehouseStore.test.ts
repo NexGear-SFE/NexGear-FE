@@ -96,3 +96,55 @@ describe('stock receipt transaction', () => {
     expect(useWarehouseStore.getState().inventory.find((item) => item.variantId === 'V001')?.onHand).toBe(beforeStock + 5)
   })
 })
+
+describe('order fulfillment state machine', () => {
+  it('accepts, fully picks and routes a serial-tracked order to serial assignment', () => {
+    const orderId = '#GG-20260831-0182'
+    useWarehouseStore.getState().acceptOrder(orderId)
+    expect(useWarehouseStore.getState().orders.find((order) => order.id === orderId)).toMatchObject({ state: 'PICKING', assignee: 'Nguyễn Bảo' })
+    useWarehouseStore.getState().completePicking(orderId)
+    expect(useWarehouseStore.getState().orders.find((order) => order.id === orderId)?.state).toBe('PICKING')
+    useWarehouseStore.getState().setPickedQuantity(orderId, 'OI001', 1)
+    useWarehouseStore.getState().completePicking(orderId)
+    const order = useWarehouseStore.getState().orders.find((item) => item.id === orderId)
+    expect(order).toMatchObject({ state: 'WAITING_SERIAL', pickedBy: 'Nguyễn Bảo' })
+    expect(order?.timeline.map((event) => event.label)).toEqual(['Đã tạo đơn hàng', 'Đã giữ hàng', 'Bắt đầu soạn hàng', 'Đã soạn đủ hàng'])
+  })
+
+  it('skips serial assignment for a non-tracked order', () => {
+    const orderId = '#GG-20260830-0178'
+    useWarehouseStore.getState().setPickedQuantity(orderId, 'OI002', 1)
+    useWarehouseStore.getState().completePicking(orderId)
+    expect(useWarehouseStore.getState().orders.find((order) => order.id === orderId)?.state).toBe('READY_TO_PACK')
+  })
+
+  it('stores issue resume state and retries packing deterministically', () => {
+    const orderId = '#GG-20260830-0176'
+    const parcel = { weightGrams: 1000, lengthCm: 20, widthCm: 15, heightCm: 10, pickupAddress: 'Kho' }
+    useWarehouseStore.getState().packOrder(orderId, true, parcel)
+    expect(useWarehouseStore.getState().orders.find((order) => order.id === orderId)).toMatchObject({ state: 'ISSUE', issue: { resumeState: 'READY_TO_PACK' } })
+    useWarehouseStore.getState().packOrder(orderId, false, parcel)
+    const order = useWarehouseStore.getState().orders.find((item) => item.id === orderId)
+    expect(order).toMatchObject({ state: 'WAITING_GHTK_PICKUP', issue: undefined })
+    expect(order?.parcel?.trackingCode).toMatch(/^GHTK-/)
+  })
+
+  it('rejects invalid transitions', () => {
+    const completedId = '#GG-20260828-0173'
+    useWarehouseStore.getState().acceptOrder(completedId)
+    useWarehouseStore.getState().packOrder(completedId)
+    expect(useWarehouseStore.getState().orders.find((order) => order.id === completedId)?.state).toBe('COMPLETED')
+  })
+
+  it('completes only after GHTK pickup', () => {
+    const orderId = '#GG-20260830-0176'
+    const parcel = { weightGrams: 1000, lengthCm: 20, widthCm: 15, heightCm: 10, pickupAddress: 'Kho' }
+    useWarehouseStore.getState().completeOrder(orderId)
+    expect(useWarehouseStore.getState().orders.find((order) => order.id === orderId)?.state).toBe('READY_TO_PACK')
+    useWarehouseStore.getState().packOrder(orderId, false, parcel)
+    useWarehouseStore.getState().completeOrder(orderId)
+    const order = useWarehouseStore.getState().orders.find((item) => item.id === orderId)
+    expect(order?.state).toBe('COMPLETED')
+    expect(order?.timeline.at(-1)?.label).toBe('GHTK đã lấy hàng')
+  })
+})
