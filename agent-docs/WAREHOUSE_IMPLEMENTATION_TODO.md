@@ -32,7 +32,7 @@
 | 0 | Baseline, kiểm kê Figma và quy tắc port code | Hoàn thành qua preview; source export còn mở |
 | 1 | Foundation, domain types, mock architecture | Hoàn thành |
 | 2 | Warehouse shell và navigation | Hoàn thành |
-| 3 | Category Management | Chưa bắt đầu |
+| 3 | Category Management | Hoàn thành |
 | 4 | Product Management | Chưa bắt đầu |
 | 5 | Variant và SKU Generator | Chưa bắt đầu |
 | 6 | Inventory và Serial | Chưa bắt đầu |
@@ -277,77 +277,77 @@
 
 ## 3.1. Data model và quy tắc cây
 
-- [ ] Dùng `parentId` làm quan hệ canonical; không lưu một `childCategoryId` duy nhất.
-- [ ] Dùng `sortOrder` để sắp xếp category cùng cấp.
-- [ ] Children được derive bằng `buildCategoryTree`.
-- [ ] Cho phép nhiều root và nhiều children.
-- [ ] Giới hạn depth theo constant, mặc định đề xuất 3.
-- [ ] Chặn self-parent.
-- [ ] Chặn chọn descendant làm parent.
-- [ ] Không hard-delete category đã có child hoặc product.
-- [ ] Category đang được dùng chỉ được chuyển `INACTIVE`.
+- [x] Dùng `parentId` làm quan hệ canonical; không lưu một `childCategoryId` duy nhất.
+- [x] Dùng `sortOrder` để sắp xếp category cùng cấp.
+- [x] Children được derive bằng `buildCategoryTree`.
+- [x] Cho phép nhiều root và nhiều children.
+- [x] Giới hạn depth theo constant, mặc định đề xuất 3.
+- [x] Chặn self-parent.
+- [x] Chặn chọn descendant làm parent.
+- [x] Không hard-delete category đã có child hoặc product.
+- [x] Category đang được dùng chỉ được chuyển `INACTIVE`.
 
 ## 3.2. Category page
 
-- [ ] Tạo `src/pages/Warehouse/Categories/CategoryManagementPage.tsx`.
-- [ ] Desktop dùng split view: tree trái, detail/form phải.
-- [ ] Mobile chuyển thành list + full-screen form/drawer.
-- [ ] Hiển thị tổng category, active, inactive, root count.
-- [ ] Search theo tên, code, slug.
-- [ ] Expand/collapse từng node.
-- [ ] Expand/collapse tất cả.
-- [ ] Hiển thị depth bằng indentation rõ ràng.
-- [ ] Hiển thị số product trực thuộc category.
-- [ ] Hiển thị trạng thái active/inactive.
-- [ ] Có CTA tạo root category.
-- [ ] Có CTA tạo child tại từng node.
-- [ ] Có edit action.
-- [ ] Có activate/deactivate action.
-- [ ] Có reorder action lên/xuống; drag/drop chỉ làm nếu không làm accessibility kém đi.
+- [x] Tạo `src/pages/Warehouse/Categories/CategoryManagementPage.tsx`.
+- [x] Desktop dùng split view: tree trái, detail/form phải.
+- [x] Mobile chuyển thành list + full-screen form/drawer.
+- [x] Hiển thị tổng category, active, inactive, root count.
+- [x] Search theo tên, code, slug.
+- [x] Expand/collapse từng node.
+- [x] Expand/collapse tất cả.
+- [x] Hiển thị depth bằng indentation rõ ràng.
+- [x] Hiển thị số product trực thuộc category.
+- [x] Hiển thị trạng thái active/inactive.
+- [x] Có CTA tạo root category.
+- [x] Có CTA tạo child tại từng node.
+- [x] Có edit action.
+- [x] Có activate/deactivate action.
+- [x] Có reorder action lên/xuống; drag/drop chỉ làm nếu không làm accessibility kém đi.
 
 ## 3.3. Category form
 
-- [ ] Fields: name, code, slug, description, parent, sortOrder, status.
-- [ ] Auto-generate slug từ name nhưng vẫn cho sửa trước save.
-- [ ] Code normalize uppercase/kebab theo convention đã chốt.
-- [ ] Parent select loại bỏ chính node và descendants.
-- [ ] Hiển thị breadcrumb preview.
-- [ ] Inline validation cạnh field lỗi.
-- [ ] Disable Save khi submitting.
-- [ ] Giữ dữ liệu người dùng khi mock API lỗi.
-- [ ] Sau create, chọn và focus node vừa tạo.
-- [ ] Sau edit, tree và breadcrumb cập nhật ngay.
+- [x] Fields: name, code, slug, description, parent, sortOrder, status.
+- [x] Auto-generate slug từ name nhưng vẫn cho sửa trước save.
+- [x] Code normalize uppercase/kebab theo convention đã chốt.
+- [x] Parent select loại bỏ chính node và descendants.
+- [x] Hiển thị breadcrumb preview.
+- [x] Inline validation cạnh field lỗi.
+- [x] Disable Save khi submitting.
+- [x] Giữ dữ liệu người dùng khi mock API lỗi.
+- [x] Sau create, chọn và focus node vừa tạo.
+- [x] Sau edit, tree và breadcrumb cập nhật ngay.
 
 ## 3.4. Reusable CategorySelect
 
-- [ ] Tạo `src/components/warehouse/CategorySelect.tsx`.
-- [ ] Chỉ hiển thị category active khi tạo Product.
-- [ ] Cho search theo name/code/breadcrumb.
-- [ ] Hiển thị đầy đủ breadcrumb để phân biệt category trùng tên.
-- [ ] Hỗ trợ keyboard Up/Down/Enter/Escape.
-- [ ] Có loading/empty/error state.
-- [ ] Empty state có CTA đi tới Category Management.
-- [ ] Có callback refresh sau khi category mới được tạo.
-- [ ] Payload Product chỉ lưu `categoryId`, không duplicate object category.
+- [x] Tạo `src/components/warehouse/CategorySelect.tsx`.
+- [x] Chỉ hiển thị category active khi tạo Product.
+- [x] Cho search theo name/code/breadcrumb.
+- [x] Hiển thị đầy đủ breadcrumb để phân biệt category trùng tên.
+- [x] Hỗ trợ keyboard Up/Down/Enter/Escape.
+- [x] Có loading/empty/error state.
+- [x] Empty state có CTA đi tới Category Management.
+- [x] Có callback refresh sau khi category mới được tạo.
+- [x] Payload Product chỉ lưu `categoryId`, không duplicate object category.
 
 ## 3.5. Category tests
 
-- [ ] Test flat list thành tree.
-- [ ] Test nhiều root/nhiều child.
-- [ ] Test orphan parent.
-- [ ] Test cycle prevention.
-- [ ] Test deactivate category có product.
-- [ ] Test search breadcrumb.
-- [ ] Test CategorySelect keyboard.
-- [ ] Test create category rồi xuất hiện trong select.
+- [x] Test flat list thành tree.
+- [x] Test nhiều root/nhiều child.
+- [x] Test orphan parent.
+- [x] Test cycle prevention.
+- [x] Test deactivate category có product.
+- [x] Test search breadcrumb.
+- [x] Test CategorySelect keyboard.
+- [x] Test create category rồi xuất hiện trong select.
 
 ### Exit gate Group 3
 
-- [ ] CRUD mock Category hoàn chỉnh.
-- [ ] Không tạo được cycle.
-- [ ] Không hard-delete dữ liệu đang được tham chiếu.
-- [ ] CategorySelect sẵn sàng cho Product form.
-- [ ] Tests/lint/build pass.
+- [x] CRUD mock Category hoàn chỉnh.
+- [x] Không tạo được cycle.
+- [x] Không hard-delete dữ liệu đang được tham chiếu.
+- [x] CategorySelect sẵn sàng cho Product form.
+- [x] Tests/lint/build pass.
 
 ---
 
@@ -1019,7 +1019,7 @@ Progress bar cố định ở đầu form:
 
 - [ ] `chore(warehouse): add warehouse domain foundations`
 - [x] `feat(warehouse): add warehouse layout and navigation`
-- [ ] `feat(category): add hierarchical category management`
+- [x] `feat(category): add hierarchical category management`
 - [ ] `feat(product): add product management wizard`
 - [ ] `feat(sku): add variant matrix and sku generator`
 - [ ] `feat(inventory): port inventory and serial views`

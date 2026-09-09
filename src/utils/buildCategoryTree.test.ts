@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Category } from '@/types/category.type'
-import { buildCategoryBreadcrumb, buildCategoryTree, isCategoryDescendant } from '@/utils/buildCategoryTree'
+import { buildCategoryBreadcrumb, buildCategoryTree, canUseCategoryParent, filterCategoryOptions, flattenCategoryTree, isCategoryDescendant } from '@/utils/buildCategoryTree'
 
 const base = { description: '', sortOrder: 1, status: 'ACTIVE', createdAt: '', updatedAt: '' } as const
 const categories: Category[] = [
@@ -19,5 +19,27 @@ describe('category tree utilities', () => {
   it('detects descendants without looping', () => {
     expect(isCategoryDescendant(categories, 'intel', 'root')).toBe(true)
     expect(isCategoryDescendant(categories, 'root', 'intel')).toBe(false)
+  })
+
+  it('supports multiple roots and promotes orphan categories to roots', () => {
+    const extra: Category[] = [
+      { ...base, id: 'other', code: 'OTHER', name: 'Khác', slug: 'khac', parentId: null },
+      { ...base, id: 'orphan', code: 'ORPHAN', name: 'Mồ côi', slug: 'mo-coi', parentId: 'missing' },
+    ]
+    const tree = buildCategoryTree([...categories, ...extra])
+    expect(tree.map((node) => node.id)).toEqual(['other', 'root', 'orphan'])
+    expect(tree.find((node) => node.id === 'root')?.children).toHaveLength(1)
+  })
+
+  it('prevents self-parent, descendant parent and excessive depth', () => {
+    expect(canUseCategoryParent(categories, 'root', 'root')).toBe(false)
+    expect(canUseCategoryParent(categories, 'root', 'intel')).toBe(false)
+    expect(canUseCategoryParent(categories, undefined, 'intel')).toBe(false)
+    expect(canUseCategoryParent(categories, 'intel', null)).toBe(true)
+  })
+
+  it('searches category breadcrumbs without case sensitivity', () => {
+    const options = flattenCategoryTree(buildCategoryTree(categories))
+    expect(filterCategoryOptions(options, 'linh KIỆN / cpu').map((option) => option.id)).toEqual(['cpu', 'intel'])
   })
 })

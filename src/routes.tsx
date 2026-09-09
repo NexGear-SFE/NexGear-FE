@@ -4,6 +4,7 @@ import { HomePage } from '@/pages/Home/HomePage'
 import { WarehouseLayout } from '@/layouts/WarehouseLayout'
 import { WarehouseComingSoonPage } from '@/pages/Warehouse/WarehouseComingSoonPage'
 import { WarehouseRouteGuard } from '@/components/warehouse/WarehouseRouteGuard'
+import { CategoryManagementPage } from '@/pages/Warehouse/Categories/CategoryManagementPage'
 
 export const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
         { path: 'products/new', element: <WarehouseComingSoonPage title="Tạo sản phẩm" description="Khai báo sản phẩm và ma trận biến thể." /> },
         { path: 'products/:productId', element: <WarehouseComingSoonPage title="Chi tiết sản phẩm" description="Tra cứu toàn bộ thông tin sản phẩm." /> },
         { path: 'products/:productId/edit', element: <WarehouseComingSoonPage title="Chỉnh sửa sản phẩm" description="Cập nhật thông tin và trạng thái sản phẩm." /> },
-        { path: 'categories', element: <WarehouseComingSoonPage title="Danh mục" description="Quản lý cấu trúc danh mục nhiều cấp." /> },
+        { path: 'categories', element: <CategoryManagementPage /> },
         { path: 'inventory', element: <WarehouseComingSoonPage title="Tồn kho" description="Tra cứu tồn kho theo sản phẩm và SKU." /> },
         { path: 'inventory/:productId', element: <WarehouseComingSoonPage title="Chi tiết tồn kho" description="Xem số lượng, serial và lịch sử biến động." /> },
       ],

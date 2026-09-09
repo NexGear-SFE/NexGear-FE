@@ -31,6 +31,7 @@ interface WarehouseState {
   createCategory: (draft: CategoryDraft) => string
   updateCategory: (categoryId: string, draft: CategoryDraft) => void
   toggleCategoryStatus: (categoryId: string) => void
+  moveCategory: (categoryId: string, direction: 'up' | 'down') => void
   saveProduct: (draft: ProductDraft, variants: VariantDraft[], productId?: string) => string
   toggleProductStatus: (productId: string) => void
   saveReceipt: (receipt: StockReceipt) => void
@@ -85,6 +86,25 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
       ? { ...category, status: category.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE', updatedAt: timestamp() }
       : category),
   })),
+
+  moveCategory: (categoryId, direction) => set((state) => {
+    const category = state.categories.find((item) => item.id === categoryId)
+    if (!category) return state
+    const siblings = state.categories
+      .filter((item) => item.parentId === category.parentId)
+      .sort((first, second) => first.sortOrder - second.sortOrder)
+    const currentIndex = siblings.findIndex((item) => item.id === categoryId)
+    const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1
+    const target = siblings[targetIndex]
+    if (!target) return state
+    return {
+      categories: state.categories.map((item) => {
+        if (item.id === category.id) return { ...item, sortOrder: target.sortOrder, updatedAt: timestamp() }
+        if (item.id === target.id) return { ...item, sortOrder: category.sortOrder, updatedAt: timestamp() }
+        return item
+      }),
+    }
+  }),
 
   saveProduct: (draft, variantDrafts, productId) => {
     const current = get()

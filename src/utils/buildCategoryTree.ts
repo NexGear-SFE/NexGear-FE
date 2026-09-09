@@ -1,5 +1,7 @@
 import type { Category, CategoryOption, CategoryTreeNode } from '@/types/category.type'
 
+export const MAX_CATEGORY_DEPTH = 3
+
 export function buildCategoryTree(categories: Category[]): CategoryTreeNode[] {
   const nodes = new Map<string, CategoryTreeNode>()
   categories.forEach((category) => nodes.set(category.id, { ...category, children: [] }))
@@ -55,4 +57,29 @@ export function flattenCategoryTree(nodes: CategoryTreeNode[], depth = 0): Categ
       breadcrumb: `${node.name} / ${option.breadcrumb}`,
     })),
   ])
+}
+
+export function getCategoryDepth(categories: Category[], categoryId: string): number {
+  const byId = new Map(categories.map((category) => [category.id, category]))
+  const visited = new Set<string>()
+  let depth = 0
+  let current = byId.get(categoryId)
+  while (current?.parentId && !visited.has(current.id)) {
+    visited.add(current.id)
+    depth += 1
+    current = byId.get(current.parentId)
+  }
+  return depth
+}
+
+export function canUseCategoryParent(categories: Category[], categoryId: string | undefined, parentId: string | null): boolean {
+  if (!parentId) return true
+  if (categoryId && (parentId === categoryId || isCategoryDescendant(categories, parentId, categoryId))) return false
+  return getCategoryDepth(categories, parentId) + 1 < MAX_CATEGORY_DEPTH
+}
+
+export function filterCategoryOptions(options: CategoryOption[], query: string): CategoryOption[] {
+  const normalizedQuery = query.trim().toLocaleLowerCase('vi')
+  if (!normalizedQuery) return options
+  return options.filter((option) => `${option.name} ${option.breadcrumb}`.toLocaleLowerCase('vi').includes(normalizedQuery))
 }
