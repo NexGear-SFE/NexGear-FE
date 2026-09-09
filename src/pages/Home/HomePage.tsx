@@ -1,34 +1,167 @@
-import { useState } from 'react'
-import { Zap, ArrowRight } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Zap, ArrowRight, ChevronRight, CheckCircle2 } from 'lucide-react'
 import type { Product } from '@/types/product.type'
 import { ProductCard } from '@/components/ProductCard'
 import { TrustBadges } from '@/components/TrustBadges'
 import { CategorySidebar } from '@/components/CategorySidebar'
+import { QuickAccess } from '@/components/QuickAccess'
+import { TechNews } from '@/components/TechNews'
 import { Button } from '@/components/ui/Button'
 
 export const HomePage = () => {
-  const [activeCategory, setActiveCategory] = useState<'all' | 'pc' | 'laptop' | 'gear'>('all')
+  const [activePcFilter, setActivePcFilter] = useState('all')
+  const [activeLaptopFilter, setActiveLaptopFilter] = useState('all')
+  const [activeGearFilter, setActiveGearFilter] = useState('all')
+  const [isOverlayActive, setIsOverlayActive] = useState(false)
 
-  const mockProducts: Product[] = [
+  useEffect(() => {
+    const handleToggle = () => setIsOverlayActive((prev) => !prev)
+    const handleClose = () => setIsOverlayActive(false)
+
+    window.addEventListener('toggle-category-overlay', handleToggle)
+    window.addEventListener('close-category-overlay', handleClose)
+    return () => {
+      window.removeEventListener('toggle-category-overlay', handleToggle)
+      window.removeEventListener('close-category-overlay', handleClose)
+    }
+  }, [])
+
+  // 1. PC Bán chạy Mock Products Data
+  const mockPcProducts: Product[] = [
     {
-      id: 'prod-1',
-      name: 'CPU Intel Core i9-14900K (Up to 6.0GHz, 24 Nhân 32 Luồng)',
-      slug: 'cpu-intel-core-i9-14900k',
-      price: 14990000,
+      id: 'pc-1',
+      name: 'PC GVN Intel i5-12400F / VGA RTX 3050 6GB (Main H610)',
+      slug: 'pc-gvn-intel-i5-12400f-rtx-3050',
+      price: 17490000,
+      originalPrice: 19620000,
       image: '',
       category: 'pc',
       inStock: true,
       specs: [
-        { label: 'CPU', value: 'i9-14900K' },
-        { label: 'Cores', value: '24 Cores / 32 Threads' },
-        { label: 'Clock', value: 'Up to 6.0GHz' },
+        { label: 'CPU', value: 'Intel Core i5-12400F' },
+        { label: 'RAM/SSD', value: '16GB DDR4 | 512GB SSD' },
+        { label: 'VGA', value: 'GeForce RTX 3050 6GB' },
       ],
     },
     {
-      id: 'prod-2',
+      id: 'pc-2',
+      name: 'PC GVN Intel i5-13400F / VGA RTX 4060 8GB (Main B760)',
+      slug: 'pc-gvn-intel-i5-13400f-rtx-4060',
+      price: 21990000,
+      originalPrice: 24500000,
+      image: '',
+      category: 'pc',
+      inStock: true,
+      specs: [
+        { label: 'CPU', value: 'Intel Core i5-13400F' },
+        { label: 'RAM/SSD', value: '16GB DDR5 | 512GB NVMe' },
+        { label: 'VGA', value: 'GeForce RTX 4060 8GB' },
+      ],
+    },
+    {
+      id: 'pc-3',
+      name: 'PC GVN x ASUS ROG Intel i7-14700F / VGA RTX 4070 Ti SUPER',
+      slug: 'pc-gvn-asus-rog-i7-14700f-rtx-4070ti',
+      price: 52990000,
+      originalPrice: 57990000,
+      image: '',
+      category: 'pc',
+      inStock: true,
+      specs: [
+        { label: 'CPU', value: 'Intel Core i7-14700F' },
+        { label: 'RAM/SSD', value: '32GB DDR5 | 1TB NVMe Gen4' },
+        { label: 'VGA', value: 'RTX 4070 Ti SUPER 16GB' },
+      ],
+    },
+    {
+      id: 'pc-4',
+      name: 'PC GVN x MSI LIGHTNING AMD Ryzen 9 7950X3D / VGA RTX 4090',
+      slug: 'pc-gvn-msi-ryzen-9-7950x3d-rtx-4090',
+      price: 95990000,
+      originalPrice: 105000000,
+      image: '',
+      category: 'pc',
+      inStock: true,
+      specs: [
+        { label: 'CPU', value: 'AMD Ryzen 9 7950X3D' },
+        { label: 'RAM/SSD', value: '64GB DDR5 | 2TB NVMe' },
+        { label: 'VGA', value: 'GeForce RTX 4090 24GB' },
+      ],
+    },
+  ]
+
+  // 2. Laptop Bán chạy Mock Products Data
+  const mockLaptopProducts: Product[] = [
+    {
+      id: 'laptop-1',
+      name: 'Laptop Gaming ASUS ROG Strix G16 (i7-13650HX, 16GB, RTX 4060)',
+      slug: 'laptop-gaming-asus-rog-strix-g16',
+      price: 38990000,
+      originalPrice: 42990000,
+      image: '',
+      category: 'laptop',
+      inStock: true,
+      specs: [
+        { label: 'CPU', value: 'Intel Core i7-13650HX' },
+        { label: 'RAM', value: '16GB DDR5 4800MHz' },
+        { label: 'GPU', value: 'GeForce RTX 4060 8GB' },
+      ],
+    },
+    {
+      id: 'laptop-2',
+      name: 'Laptop Gaming ACER Nitro V 15 (i5-13420H, 16GB, RTX 4050 6GB)',
+      slug: 'laptop-gaming-acer-nitro-v-15',
+      price: 22490000,
+      originalPrice: 24990000,
+      image: '',
+      category: 'laptop',
+      inStock: true,
+      specs: [
+        { label: 'CPU', value: 'Intel Core i5-13420H' },
+        { label: 'RAM/SSD', value: '16GB DDR5 | 512GB SSD' },
+        { label: 'GPU', value: 'GeForce RTX 4050 6GB' },
+      ],
+    },
+    {
+      id: 'laptop-3',
+      name: 'Laptop Gaming MSI Cyborg 15 (i7-12650H, 16GB, RTX 4050)',
+      slug: 'laptop-gaming-msi-cyborg-15',
+      price: 25990000,
+      originalPrice: 28500000,
+      image: '',
+      category: 'laptop',
+      inStock: true,
+      specs: [
+        { label: 'CPU', value: 'Intel Core i7-12650H' },
+        { label: 'RAM/SSD', value: '16GB DDR5 | 512GB SSD' },
+        { label: 'GPU', value: 'GeForce RTX 4050 6GB' },
+      ],
+    },
+    {
+      id: 'laptop-4',
+      name: 'Laptop Lenovo Legion Pro 5 (i7-14700HX, 32GB, RTX 4070 8GB)',
+      slug: 'laptop-lenovo-legion-pro-5',
+      price: 46990000,
+      originalPrice: 51990000,
+      image: '',
+      category: 'laptop',
+      inStock: true,
+      specs: [
+        { label: 'CPU', value: 'Intel Core i7-14700HX' },
+        { label: 'RAM/SSD', value: '32GB DDR5 | 1TB NVMe' },
+        { label: 'GPU', value: 'GeForce RTX 4070 8GB' },
+      ],
+    },
+  ]
+
+  // 3. Gear & Linh Kiện Bán chạy Mock Products Data
+  const mockGearProducts: Product[] = [
+    {
+      id: 'gear-1',
       name: 'VGA ASUS ROG Strix GeForce RTX 4080 SUPER 16GB GDDR6X',
       slug: 'vga-asus-rog-strix-geforce-rtx-4080-super-16gb',
       price: 32490000,
+      originalPrice: 35990000,
       image: '',
       category: 'pc',
       inStock: true,
@@ -39,24 +172,11 @@ export const HomePage = () => {
       ],
     },
     {
-      id: 'prod-3',
-      name: 'Laptop Gaming ASUS ROG Strix G16 (i7-13650HX, 16GB RAM, RTX 4060)',
-      slug: 'laptop-gaming-asus-rog-strix-g16',
-      price: 38990000,
-      image: '',
-      category: 'laptop',
-      inStock: true,
-      specs: [
-        { label: 'CPU', value: 'i7-13650HX' },
-        { label: 'RAM', value: '16GB DDR5' },
-        { label: 'GPU', value: 'RTX 4060 8GB' },
-      ],
-    },
-    {
-      id: 'prod-4',
+      id: 'gear-2',
       name: 'Bàn phím cơ Akko 3098B Multi-modes Wireless Mech Keyboard',
       slug: 'ban-phim-co-akko-3098b',
       price: 2450000,
+      originalPrice: 2890000,
       image: '',
       category: 'gear',
       inStock: true,
@@ -66,41 +186,81 @@ export const HomePage = () => {
         { label: 'Keycap', value: 'PBT Double-Shot' },
       ],
     },
+    {
+      id: 'gear-3',
+      name: 'Chuột Gaming Không Dây Razer DeathAdder V3 Pro Wireless',
+      slug: 'chuot-gaming-razer-deathadder-v3-pro',
+      price: 3490000,
+      originalPrice: 3990000,
+      image: '',
+      category: 'gear',
+      inStock: true,
+      specs: [
+        { label: 'Sensor', value: 'Focus Pro 30K DPI' },
+        { label: 'Weight', value: 'Ultra Light 63g' },
+        { label: 'Battery', value: 'Up to 90 Hours' },
+      ],
+    },
+    {
+      id: 'gear-4',
+      name: 'Màn hình Gaming LG UltraGear 27GR75Q 27" 2K 165Hz Fast IPS',
+      slug: 'man-hinh-lg-ultragear-27gr75q',
+      price: 6890000,
+      originalPrice: 7990000,
+      image: '',
+      category: 'screen',
+      inStock: true,
+      specs: [
+        { label: 'Size/Res', value: '27 inch QHD (2560x1440)' },
+        { label: 'Refresh', value: '165Hz | 1ms GtG' },
+        { label: 'Panel', value: 'Fast IPS | HDR10' },
+      ],
+    },
   ]
 
+  const [addedToast, setAddedToast] = useState<string | null>(null)
+
   const handleAddToCart = (product: Product) => {
-    alert(`Đã thêm sản phẩm "${product.name}" vào giỏ hàng thành công!`)
+    setAddedToast(product.name)
+    setTimeout(() => {
+      setAddedToast(null)
+    }, 3000)
   }
 
   const handleSelectSidebarCategory = (catId: string) => {
-    let mappedCategory: 'all' | 'pc' | 'laptop' | 'gear' = 'all'
+    let targetSectionId = 'pc-banchay'
     if (catId === 'laptop' || catId === 'laptop-gaming') {
-      mappedCategory = 'laptop'
-    } else if (catId === 'pc' || catId === 'components' || catId === 'case-power-cooling' || catId === 'storage-ram') {
-      mappedCategory = 'pc'
+      targetSectionId = 'laptop-banchay'
     } else if (catId === 'audio-gear' || catId === 'screen') {
-      mappedCategory = 'gear'
+      targetSectionId = 'gear-banchay'
     }
-    setActiveCategory(mappedCategory)
+    window.dispatchEvent(new CustomEvent('close-category-overlay'))
 
-    const productsEl = document.getElementById('products-section')
-    if (productsEl) {
-      productsEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    const targetEl = document.getElementById(targetSectionId)
+    if (targetEl) {
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 
-  const filteredProducts =
-    activeCategory === 'all'
-      ? mockProducts
-      : mockProducts.filter((p) => p.category === activeCategory)
-
   return (
-    <div className="py-8">
-      <div className="max-w-7xl mx-auto px-4 space-y-10">
+    <div className="py-8 relative">
+      {/* Translucent Backdrop Overlay when Category is focused */}
+      {isOverlayActive && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-30 transition-opacity duration-200"
+          onClick={() => window.dispatchEvent(new CustomEvent('close-category-overlay'))}
+        />
+      )}
+
+      <div className="max-w-7xl mx-auto px-4 space-y-12 relative">
         {/* Category Sidebar & Hero Banner Section */}
-        <section id="category-section" className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-stretch scroll-mt-24">
+        <section
+          id="category-section"
+          className={`grid grid-cols-1 lg:grid-cols-4 gap-6 items-stretch scroll-mt-24 transition-all duration-300 relative ${isOverlayActive ? 'z-40' : ''
+            }`}
+        >
           {/* Category Sidebar */}
-          <div className="lg:col-span-1">
+          <div className={`lg:col-span-1 relative transition-all duration-300 ${isOverlayActive ? 'z-40 ring-2 ring-[#E30019] rounded-[8px] shadow-2xl' : ''}`}>
             <CategorySidebar onSelectCategory={handleSelectSidebarCategory} />
           </div>
 
@@ -127,7 +287,7 @@ export const HomePage = () => {
                     size="lg"
                     className="border-zinc-700 text-white hover:border-white hover:text-white"
                     onClick={() => {
-                      const el = document.getElementById('products-section')
+                      const el = document.getElementById('pc-banchay')
                       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
                     }}
                   >
@@ -142,49 +302,64 @@ export const HomePage = () => {
         {/* 4 Trust Badges Section */}
         <TrustBadges />
 
-        {/* Product Grid Section with Category Chip Filters */}
-        <section id="products-section" className="space-y-6 scroll-mt-24">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <h2 className="text-2xl font-bold font-heading text-[#040004]">
-              Sản phẩm Nổi bật
-            </h2>
+        {/* Quick Access Categories & Official Brand Partners */}
+        <QuickAccess />
 
-            {/* Category Filter Chips */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <Button
-                variant="chip"
-                isActive={activeCategory === 'all'}
-                onClick={() => setActiveCategory('all')}
+        {/* SECTION 1: PC BÁN CHẠY */}
+        <section id="pc-banchay" className="space-y-6 scroll-mt-24">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E0E0E0] pb-4">
+            <div className="flex items-center gap-3">
+              <h2 className="text-2xl font-bold font-heading text-[#040004]">
+                PC Bán Chạy
+              </h2>
+            </div>
+
+            {/* Filter Chips & View All Collections Link */}
+            <div className="flex items-center gap-3 flex-wrap justify-between md:justify-end w-full md:w-auto">
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button
+                  variant="chip"
+                  isActive={activePcFilter === 'all'}
+                  onClick={() => setActivePcFilter('all')}
+                >
+                  Tất cả PC
+                </Button>
+                <Button
+                  variant="chip"
+                  isActive={activePcFilter === 'ai'}
+                  onClick={() => setActivePcFilter('ai')}
+                >
+                  PC AI
+                </Button>
+                <Button
+                  variant="chip"
+                  isActive={activePcFilter === 'i5'}
+                  onClick={() => setActivePcFilter('i5')}
+                >
+                  PC Core i5
+                </Button>
+                <Button
+                  variant="chip"
+                  isActive={activePcFilter === 'i7'}
+                  onClick={() => setActivePcFilter('i7')}
+                >
+                  PC Core i7
+                </Button>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActivePcFilter('all')}
+                className="inline-flex items-center gap-1 text-sm font-bold text-[#E30019] hover:underline transition-mechanical cursor-pointer shrink-0"
               >
-                Tất cả
-              </Button>
-              <Button
-                variant="chip"
-                isActive={activeCategory === 'pc'}
-                onClick={() => setActiveCategory('pc')}
-              >
-                Linh kiện PC
-              </Button>
-              <Button
-                variant="chip"
-                isActive={activeCategory === 'laptop'}
-                onClick={() => setActiveCategory('laptop')}
-              >
-                Laptop Gaming
-              </Button>
-              <Button
-                variant="chip"
-                isActive={activeCategory === 'gear'}
-                onClick={() => setActiveCategory('gear')}
-              >
-                Gaming Gear
-              </Button>
+                <span>Xem tất cả </span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
-          {/* Product Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
+            {mockPcProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
@@ -193,7 +368,146 @@ export const HomePage = () => {
             ))}
           </div>
         </section>
+
+        {/* SECTION 2: LAPTOP BÁN CHẠY */}
+        <section id="laptop-banchay" className="space-y-6 scroll-mt-24">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E0E0E0] pb-4">
+            <div className="flex items-center gap-3">
+              <h2 className="text-2xl font-bold font-heading text-[#040004]">
+                Laptop Bán Chạy
+              </h2>
+            </div>
+
+            <div className="flex items-center gap-3 flex-wrap justify-between md:justify-end w-full md:w-auto">
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button
+                  variant="chip"
+                  isActive={activeLaptopFilter === 'all'}
+                  onClick={() => setActiveLaptopFilter('all')}
+                >
+                  Tất cả Laptop
+                </Button>
+                <Button
+                  variant="chip"
+                  isActive={activeLaptopFilter === 'rog'}
+                  onClick={() => setActiveLaptopFilter('rog')}
+                >
+                  ASUS ROG
+                </Button>
+                <Button
+                  variant="chip"
+                  isActive={activeLaptopFilter === 'nitro'}
+                  onClick={() => setActiveLaptopFilter('nitro')}
+                >
+                  Acer Predator
+                </Button>
+                <Button
+                  variant="chip"
+                  isActive={activeLaptopFilter === 'msi'}
+                  onClick={() => setActiveLaptopFilter('msi')}
+                >
+                  MSI Gaming
+                </Button>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveLaptopFilter('all')}
+                className="inline-flex items-center gap-1 text-sm font-bold text-[#E30019] hover:underline transition-mechanical cursor-pointer shrink-0"
+              >
+                <span>Xem tất cả </span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {mockLaptopProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* SECTION 3: LINH KIỆN & GAMING GEAR BÁN CHẠY */}
+        <section id="gear-banchay" className="space-y-6 scroll-mt-24">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E0E0E0] pb-4">
+            <div className="flex items-center gap-3">
+              <h2 className="text-2xl font-bold font-heading text-[#040004]">
+                Linh Kiện & Gear Bán Chạy
+              </h2>
+            </div>
+
+            <div className="flex items-center gap-3 flex-wrap justify-between md:justify-end w-full md:w-auto">
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button
+                  variant="chip"
+                  isActive={activeGearFilter === 'all'}
+                  onClick={() => setActiveGearFilter('all')}
+                >
+                  Tất cả Gear
+                </Button>
+                <Button
+                  variant="chip"
+                  isActive={activeGearFilter === 'keyboard'}
+                  onClick={() => setActiveGearFilter('keyboard')}
+                >
+                  Bàn Phím Cơ
+                </Button>
+                <Button
+                  variant="chip"
+                  isActive={activeGearFilter === 'mouse'}
+                  onClick={() => setActiveGearFilter('mouse')}
+                >
+                  Chuột Gaming
+                </Button>
+                <Button
+                  variant="chip"
+                  isActive={activeGearFilter === 'screen'}
+                  onClick={() => setActiveGearFilter('screen')}
+                >
+                  Màn Hình
+                </Button>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveGearFilter('all')}
+                className="inline-flex items-center gap-1 text-sm font-bold text-[#E30019] hover:underline transition-mechanical cursor-pointer shrink-0"
+              >
+                <span>Xem tất cả </span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {mockGearProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* News, Reviews & Featured Video Section */}
+        <TechNews />
       </div>
+
+      {/* Floating Add to Cart Toast Notification */}
+      {addedToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#040004] text-white px-5 py-3 rounded-[8px] border border-[#E30019] shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-200">
+          <CheckCircle2 className="w-5 h-5 text-[#00A859] shrink-0" />
+          <span className="text-xs font-semibold">
+            Đã thêm <strong className="text-white font-bold">{addedToast}</strong> vào giỏ hàng thành công!
+          </span>
+        </div>
+      )}
     </div>
   )
 }

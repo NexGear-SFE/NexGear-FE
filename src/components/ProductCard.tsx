@@ -33,15 +33,33 @@ export const ProductCard = ({
     return <Monitor className="w-3.5 h-3.5 text-gray-500 shrink-0" />
   }
 
+  const discountPercent =
+    product.originalPrice && product.originalPrice > product.price
+      ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+      : 0
+
   return (
     <div
       className={cn(
-        'bg-white border border-[#E0E0E0] rounded-[8px] p-4 flex flex-col justify-between space-y-3.5 shadow-sm transition-mechanical hover:border-[#E30019] group',
+        'bg-white border border-[#E0E0E0] rounded-[8px] p-4 flex flex-col justify-between space-y-3.5 shadow-sm transition-mechanical hover:border-[#E30019] group relative',
         className
       )}
     >
       {/* Product Image Area */}
       <div className="w-full aspect-square bg-[#F4F5F7] rounded-[4px] flex items-center justify-center overflow-hidden relative">
+        {/* Discount Badge */}
+        {discountPercent > 0 && (
+          <span className="absolute top-2 left-2 bg-[#E30019] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] shadow-sm z-10 tracking-tight">
+            Giảm {discountPercent}%
+          </span>
+        )}
+
+        {/* Stock Status Tag */}
+        <span className="absolute top-2 right-2 bg-white/95 backdrop-blur-sm border border-[#E0E0E0] text-[10px] font-semibold px-2 py-0.5 rounded-[2px] flex items-center gap-1 text-[#00A859] z-10">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00A859]" />
+          {product.inStock !== false ? 'Còn hàng' : 'Liên hệ'}
+        </span>
+
         {imageError || !product.image ? (
           <div className="flex flex-col items-center gap-1.5 text-gray-400">
             <ImageOff className="w-10 h-10 stroke-1" />
@@ -83,10 +101,15 @@ export const ProductCard = ({
         )}
 
         {/* Price Section */}
-        <div className="pt-1">
+        <div className="pt-1 flex items-baseline gap-2 flex-wrap">
           <span className="text-base font-bold text-[#E30019]">
             {formatCurrency(product.price)}
           </span>
+          {product.originalPrice && product.originalPrice > product.price && (
+            <span className="text-xs text-gray-400 line-through font-medium">
+              {formatCurrency(product.originalPrice)}
+            </span>
+          )}
         </div>
       </div>
 
