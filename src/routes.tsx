@@ -10,6 +10,9 @@ import { ProductListPage } from '@/pages/Warehouse/Products/ProductListPage'
 import { ProductWizardPage } from '@/pages/Warehouse/Products/ProductWizardPage'
 import { InventoryDetailPage } from '@/pages/Warehouse/Inventory/InventoryDetailPage'
 import { InventoryListPage } from '@/pages/Warehouse/Inventory/InventoryListPage'
+import { ReceiptDetailPage } from '@/pages/Warehouse/Receipts/ReceiptDetailPage'
+import { ReceiptListPage } from '@/pages/Warehouse/Receipts/ReceiptListPage'
+import { ReceiptWizardPage } from '@/pages/Warehouse/Receipts/ReceiptWizardPage'
 
 export const router = createBrowserRouter([
   {
@@ -31,9 +34,10 @@ export const router = createBrowserRouter([
         { index: true, element: <WarehouseComingSoonPage title="Tổng quan kho" description="Theo dõi nhanh các công việc vận hành trong ngày." /> },
         { path: 'orders', element: <WarehouseComingSoonPage title="Đơn hàng" description="Xử lý quy trình xuất kho và bàn giao vận chuyển." /> },
         { path: 'orders/:orderId', element: <WarehouseComingSoonPage title="Chi tiết đơn hàng" description="Theo dõi và cập nhật từng bước xử lý đơn." /> },
-        { path: 'receipts', element: <WarehouseComingSoonPage title="Phiếu nhập kho" description="Quản lý các lần nhập hàng và kiểm đếm serial." /> },
-        { path: 'receipts/new', element: <WarehouseComingSoonPage title="Tạo phiếu nhập" description="Ghi nhận lô hàng mới vào kho." /> },
-        { path: 'receipts/:receiptId', element: <WarehouseComingSoonPage title="Chi tiết phiếu nhập" description="Kiểm tra thông tin và trạng thái phiếu nhập." /> },
+        { path: 'receipts', element: <ReceiptListPage /> },
+        { path: 'receipts/new', element: <ReceiptWizardPage /> },
+        { path: 'receipts/:receiptId', element: <ReceiptDetailPage /> },
+        { path: 'receipts/:receiptId/edit', element: <ReceiptWizardPage /> },
         { path: 'products', element: <ProductListPage /> },
         { path: 'products/new', element: <ProductWizardPage /> },
         { path: 'products/:productId', element: <ProductDetailPage /> },

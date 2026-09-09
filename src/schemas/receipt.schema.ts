@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const receiptLineSchema = z.object({
   variantId: z.string().min(1),
   quantity: z.number().int().positive('Số lượng phải lớn hơn 0'),
-  unitCost: z.number().min(0, 'Giá nhập không được âm'),
+  unitCost: z.number().positive('Giá nhập phải lớn hơn 0'),
   serials: z.array(z.string().trim().min(1)),
 })
 

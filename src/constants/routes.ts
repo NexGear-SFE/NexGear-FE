@@ -18,6 +18,10 @@ export function warehouseReceiptDetailPath(receiptId: string): string {
   return `${ROUTES.warehouseReceipts}/${encodeURIComponent(receiptId)}`
 }
 
+export function warehouseReceiptEditPath(receiptId: string): string {
+  return `${warehouseReceiptDetailPath(receiptId)}/edit`
+}
+
 export function warehouseProductDetailPath(productId: string): string {
   return `${ROUTES.warehouseProducts}/${encodeURIComponent(productId)}`
 }

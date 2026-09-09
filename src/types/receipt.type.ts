@@ -15,8 +15,11 @@ export interface StockReceipt {
   invoiceCode: string
   notes: string
   creator: string
+  warehouseName: string
   status: ReceiptStatus
   lines: ReceiptLine[]
   createdAt: string
   updatedAt: string
+  confirmedBy?: string
+  confirmedAt?: string
 }

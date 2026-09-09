@@ -64,3 +64,35 @@ describe('warehouse serial allocation', () => {
     expect(useWarehouseStore.getState().orders.find((order) => order.id === 'SECOND-ORDER')?.state).toBe('WAITING_SERIAL')
   })
 })
+
+describe('stock receipt transaction', () => {
+  it('saves an incomplete draft without changing inventory', () => {
+    const before = useWarehouseStore.getState().inventory
+    useWarehouseStore.getState().saveReceipt({ id: 'DRAFT-EMPTY', supplier: '', warehouseName: 'Kho trung tâm TP.HCM', receiptDate: '', invoiceCode: '', notes: '', creator: 'Tester', status: 'DRAFT', lines: [], createdAt: '', updatedAt: '' })
+    expect(useWarehouseStore.getState().receipts.find((receipt) => receipt.id === 'DRAFT-EMPTY')?.status).toBe('DRAFT')
+    expect(useWarehouseStore.getState().inventory).toEqual(before)
+  })
+
+  it('rejects invalid serial count without partial updates', () => {
+    const draft = initialReceipts[0]
+    useWarehouseStore.setState((state) => ({ receipts: state.receipts.map((receipt) => receipt.id === draft.id ? { ...draft, lines: [{ ...draft.lines[0], quantity: 6 }] } : receipt) }))
+    const inventoryBefore = useWarehouseStore.getState().inventory
+    expect(useWarehouseStore.getState().confirmReceipt(draft.id)).toBe(false)
+    expect(useWarehouseStore.getState().inventory).toEqual(inventoryBefore)
+    expect(useWarehouseStore.getState().receipts.find((receipt) => receipt.id === draft.id)?.status).toBe('DRAFT')
+  })
+
+  it('confirms once, creates movements and serials, and locks the SKU', () => {
+    const receiptId = initialReceipts[0].id
+    const beforeStock = useWarehouseStore.getState().inventory.find((item) => item.variantId === 'V001')?.onHand ?? 0
+    expect(useWarehouseStore.getState().confirmReceipt(receiptId)).toBe(true)
+    const afterFirst = useWarehouseStore.getState()
+    expect(afterFirst.inventory.find((item) => item.variantId === 'V001')?.onHand).toBe(beforeStock + 5)
+    expect(afterFirst.movements.filter((movement) => movement.reference === receiptId)).toHaveLength(1)
+    expect(afterFirst.serials.filter((serial) => serial.receiptId === receiptId)).toHaveLength(5)
+    expect(afterFirst.variants.find((variant) => variant.id === 'V001')?.skuLocked).toBe(true)
+    expect(afterFirst.receipts.find((receipt) => receipt.id === receiptId)).toMatchObject({ status: 'CONFIRMED', confirmedBy: 'Nguyễn Bảo' })
+    expect(useWarehouseStore.getState().confirmReceipt(receiptId)).toBe(false)
+    expect(useWarehouseStore.getState().inventory.find((item) => item.variantId === 'V001')?.onHand).toBe(beforeStock + 5)
+  })
+})

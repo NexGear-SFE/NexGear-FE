@@ -14,6 +14,7 @@ import type { InventoryMovement, ProductSerial, VariantInventory } from '@/types
 import type { Product, ProductVariant, SkuAuditEntry } from '@/types/product.type'
 import type { StockReceipt } from '@/types/receipt.type'
 import type { WarehouseOrder, WarehouseOrderState } from '@/types/warehouseOrder.type'
+import { getReceiptValidationIssues } from '@/utils/receipt'
 
 type CategoryDraft = Omit<Category, 'id' | 'createdAt' | 'updatedAt'>
 type ProductDraft = Omit<Product, 'id' | 'createdAt' | 'updatedAt'>
@@ -37,7 +38,7 @@ interface WarehouseState {
   toggleProductStatus: (productId: string) => void
   logSkuAudit: (action: SkuAuditEntry['action'], sku: string, variantId?: string) => void
   saveReceipt: (receipt: StockReceipt) => void
-  confirmReceipt: (receiptId: string) => void
+  confirmReceipt: (receiptId: string) => boolean
   acceptOrder: (orderId: string) => void
   completePicking: (orderId: string) => void
   assignOrderSerials: (orderId: string, serialIds: string[]) => void
@@ -161,29 +162,32 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
       : [receipt, ...state.receipts],
   })),
 
-  confirmReceipt: (receiptId) => set((state) => {
+  confirmReceipt: (receiptId) => {
+    const state = get()
     const receipt = state.receipts.find((item) => item.id === receiptId)
-    if (!receipt || receipt.status === 'CONFIRMED') return state
+    if (!receipt || receipt.status === 'CONFIRMED' || getReceiptValidationIssues(receipt, state.variants, state.serials).length > 0) return false
     const confirmedAt = timestamp()
     const quantityByVariant = new Map(receipt.lines.map((line) => [line.variantId, line.quantity]))
+    const existingVariantIds = new Set(state.inventory.map((item) => item.variantId))
     const inventory = state.inventory.map((item) => ({
       ...item,
       onHand: item.onHand + (quantityByVariant.get(item.variantId) ?? 0),
-    }))
+    })).concat(receipt.lines.filter((line) => !existingVariantIds.has(line.variantId)).map((line) => ({ variantId: line.variantId, onHand: line.quantity, reserved: 0 })))
     const serials = receipt.lines.flatMap((line) => line.serials.map<ProductSerial>((value) => ({
       id: crypto.randomUUID(), variantId: line.variantId, value, receiptId, status: 'AVAILABLE', receivedAt: confirmedAt,
     })))
     const movements = receipt.lines.map<InventoryMovement>((line) => ({
       id: crypto.randomUUID(), variantId: line.variantId, reason: 'STOCK_RECEIPT', quantityDelta: line.quantity, reference: receiptId, occurredAt: confirmedAt,
     }))
-    return {
-      receipts: state.receipts.map((item) => item.id === receiptId ? { ...item, status: 'CONFIRMED', updatedAt: confirmedAt } : item),
+    set({
+      receipts: state.receipts.map((item) => item.id === receiptId ? { ...item, status: 'CONFIRMED', updatedAt: confirmedAt, confirmedAt, confirmedBy: 'Nguyễn Bảo' } : item),
       inventory,
       serials: [...state.serials, ...serials],
       movements: [...state.movements, ...movements],
       variants: state.variants.map((variant) => quantityByVariant.has(variant.id) ? { ...variant, skuLocked: true } : variant),
-    }
-  }),
+    })
+    return true
+  },
 
   acceptOrder: (orderId) => set((state) => ({
     orders: state.orders.map((order) => order.id === orderId && order.state === 'WAITING_ACCEPTANCE'

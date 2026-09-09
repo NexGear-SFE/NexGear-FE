@@ -63,8 +63,8 @@ export const initialMovements: InventoryMovement[] = [
 ]
 
 export const initialReceipts: StockReceipt[] = [
-  { id: 'PN-20260831-004', supplier: 'ASUS Vietnam Co., Ltd.', receiptDate: '2026-08-31', invoiceCode: 'INV-ASUS-2026-0831', notes: 'Nhập bổ sung ROG Strix G16', creator: 'Nguyễn Bảo', status: 'DRAFT', lines: [{ id: 'RL001', variantId: 'V001', quantity: 5, unitCost: 40000000, serials: ['ROG16-4080-0101', 'ROG16-4080-0102', 'ROG16-4080-0103', 'ROG16-4080-0104', 'ROG16-4080-0105'] }], createdAt: '2026-08-31T09:00:00.000Z', updatedAt: '2026-08-31T09:00:00.000Z' },
-  { id: 'PN-20260827-002', supplier: 'Kingston Technology Vietnam', receiptDate: '2026-08-27', invoiceCode: 'INV-KING-2026-0827', notes: '', creator: 'Nguyễn Bảo', status: 'CONFIRMED', lines: [{ id: 'RL002', variantId: 'V009', quantity: 20, unitCost: 3000000, serials: [] }], createdAt: '2026-08-27T08:00:00.000Z', updatedAt: '2026-08-27T10:00:00.000Z' },
+  { id: 'PN-20260831-004', supplier: 'ASUS Vietnam Co., Ltd.', warehouseName: 'Kho trung tâm TP.HCM', receiptDate: '2026-08-31', invoiceCode: 'INV-ASUS-2026-0831', notes: 'Nhập bổ sung ROG Strix G16', creator: 'Nguyễn Bảo', status: 'DRAFT', lines: [{ id: 'RL001', variantId: 'V001', quantity: 5, unitCost: 40000000, serials: ['ROG16-4080-0101', 'ROG16-4080-0102', 'ROG16-4080-0103', 'ROG16-4080-0104', 'ROG16-4080-0105'] }], createdAt: '2026-08-31T09:00:00.000Z', updatedAt: '2026-08-31T09:00:00.000Z' },
+  { id: 'PN-20260827-002', supplier: 'Kingston Technology Vietnam', warehouseName: 'Kho trung tâm TP.HCM', receiptDate: '2026-08-27', invoiceCode: 'INV-KING-2026-0827', notes: '', creator: 'Nguyễn Bảo', status: 'CONFIRMED', lines: [{ id: 'RL002', variantId: 'V009', quantity: 20, unitCost: 3000000, serials: [] }], createdAt: '2026-08-27T08:00:00.000Z', updatedAt: '2026-08-27T10:00:00.000Z', confirmedBy: 'Nguyễn Bảo', confirmedAt: '2026-08-27T10:00:00.000Z' },
 ]
 
 export const initialOrders: WarehouseOrder[] = [

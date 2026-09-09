@@ -36,7 +36,7 @@
 | 4 | Product Management | Đã triển khai; chờ tích hợp Group 5/7/8 |
 | 5 | Variant và SKU Generator | Hoàn thành |
 | 6 | Inventory và Serial | Chưa bắt đầu |
-| 7 | Stock Receipt | Chưa bắt đầu |
+| 7 | Stock Receipt | Hoàn thành |
 | 8 | Order Fulfillment | Chưa bắt đầu |
 | 9 | Warehouse Dashboard và Profile | Chưa bắt đầu |
 | 10 | Cross-module integration và UX hardening | Chưa bắt đầu |
@@ -461,7 +461,7 @@ Progress bar cố định ở đầu form:
 ## 4.4. Product lifecycle
 
 - [x] Draft có thể chỉnh sửa toàn bộ khi chưa có movement.
-- [ ] Active Product dùng được trong Receipt và Order flow.
+- [ ] Active Product dùng được trong Receipt và Order flow (Receipt đã xong; chờ Order Group 8).
 - [ ] Inactive Product không được thêm vào receipt mới.
 - [x] Product có transaction không hard-delete.
 - [x] Deactivate Product phải xác nhận và hiển thị số variant bị ảnh hưởng.
@@ -632,12 +632,12 @@ Progress bar cố định ở đầu form:
 
 ## 7.1. Receipt List từ Figma
 
-- [ ] Port `/admin/warehouse/receipts`.
-- [ ] Tabs All/Draft/Confirmed.
-- [ ] Search receipt code, supplier, invoice code.
-- [ ] Cột receipt code, supplier, creator, SKU count, total quantity, total value, status.
-- [ ] Actions Continue Edit/View Detail.
-- [ ] Loading/empty/error/pagination.
+- [x] Port `/admin/warehouse/receipts`.
+- [x] Tabs All/Draft/Confirmed.
+- [x] Search receipt code, supplier, invoice code.
+- [x] Cột receipt code, supplier, creator, SKU count, total quantity, total value, status.
+- [x] Actions Continue Edit/View Detail.
+- [x] Loading/empty/error/pagination.
 
 ## 7.2. Create/Edit Receipt là flow dài — bắt buộc Stepper
 
@@ -647,75 +647,75 @@ Progress bar cố định ở đầu form:
 
 ### Step 1 — Receipt information
 
-- [ ] Supplier.
-- [ ] Receipt date.
-- [ ] Invoice/document code.
-- [ ] Notes.
-- [ ] Save Draft cho phép dữ liệu chưa đầy đủ.
+- [x] Supplier.
+- [x] Receipt date.
+- [x] Invoice/document code.
+- [x] Notes.
+- [x] Save Draft cho phép dữ liệu chưa đầy đủ.
 
 ### Step 2 — Product/SKU selection
 
-- [ ] Search active Product hoặc SKU.
-- [ ] Group kết quả theo Product, chọn đúng variant.
-- [ ] Hiển thị category breadcrumb và variant summary.
-- [ ] Không cho chọn inactive Product/Variant.
-- [ ] Không thêm trùng SKU; nếu chọn lại thì focus/update line hiện có.
+- [x] Search active Product hoặc SKU.
+- [x] Group kết quả theo Product, chọn đúng variant.
+- [x] Hiển thị category breadcrumb và variant summary.
+- [x] Không cho chọn inactive Product/Variant.
+- [x] Không thêm trùng SKU; nếu chọn lại thì focus/update line hiện có.
 
 ### Step 3 — Quantity, cost và serial
 
-- [ ] Quantity integer > 0.
-- [ ] Unit cost >= 0.
-- [ ] Line amount và receipt total được tính bằng pure utility.
-- [ ] Variant có serial tracking mở serial editor.
-- [ ] Paste nhiều serial theo dòng.
-- [ ] Trim và bỏ dòng rỗng.
-- [ ] Báo duplicate trong cùng line, trong receipt và trong inventory.
-- [ ] Serial valid count phải bằng quantity trước Confirm.
-- [ ] Variant không tracking serial không hiển thị serial editor.
+- [x] Quantity integer > 0.
+- [x] Unit cost >= 0 (UI áp dụng quy tắc chặt hơn: phải > 0 khi Confirm).
+- [x] Line amount và receipt total được tính bằng pure utility.
+- [x] Variant có serial tracking mở serial editor.
+- [x] Paste nhiều serial theo dòng.
+- [x] Trim và bỏ dòng rỗng.
+- [x] Báo duplicate trong cùng line, trong receipt và trong inventory.
+- [x] Serial valid count phải bằng quantity trước Confirm.
+- [x] Variant không tracking serial không hiển thị serial editor.
 
 ### Step 4 — Review và Confirm
 
-- [ ] Summary supplier/date/invoice.
-- [ ] SKU count, total quantity, total value.
-- [ ] Danh sách lines và serial validation state.
-- [ ] CTA Back/Edit.
-- [ ] CTA Save Draft.
-- [ ] CTA Confirm Receipt có confirm dialog.
-- [ ] Disable double submit.
-- [ ] Confirm cập nhật mock inventory đúng một lần.
-- [ ] Receipt Confirmed trở thành read-only.
-- [ ] Tạo movement `STOCK_RECEIPT` cho từng SKU.
-- [ ] Khóa SKU có movement đầu tiên.
+- [x] Summary supplier/date/invoice.
+- [x] SKU count, total quantity, total value.
+- [x] Danh sách lines và serial validation state.
+- [x] CTA Back/Edit.
+- [x] CTA Save Draft.
+- [x] CTA Confirm Receipt có confirm dialog.
+- [x] Disable double submit.
+- [x] Confirm cập nhật mock inventory đúng một lần.
+- [x] Receipt Confirmed trở thành read-only.
+- [x] Tạo movement `STOCK_RECEIPT` cho từng SKU.
+- [x] Khóa SKU có movement đầu tiên.
 
 ## 7.3. Receipt Detail từ Figma
 
-- [ ] Port `/admin/warehouse/receipts/:receiptId`.
-- [ ] Hiển thị Draft/Confirmed badge.
-- [ ] Receipt information.
-- [ ] Product/SKU/variant lines.
-- [ ] Quantity, unit cost, line total.
-- [ ] Serial valid count.
-- [ ] Summary card.
-- [ ] Draft có Continue Editing và Confirm.
-- [ ] Confirmed chỉ xem, có link Inventory/Product.
+- [x] Port `/admin/warehouse/receipts/:receiptId`.
+- [x] Hiển thị Draft/Confirmed badge.
+- [x] Receipt information.
+- [x] Product/SKU/variant lines.
+- [x] Quantity, unit cost, line total.
+- [x] Serial valid count.
+- [x] Summary card.
+- [x] Draft có Continue Editing và Confirm.
+- [x] Confirmed chỉ xem, có link Inventory/Product.
 
 ## 7.4. Tests
 
-- [ ] Draft incomplete save.
-- [ ] Confirm validation.
-- [ ] Serial count mismatch.
-- [ ] Duplicate serial.
-- [ ] Total calculation.
-- [ ] Confirm idempotency.
-- [ ] Inventory movement creation.
-- [ ] SKU lock after confirm.
+- [x] Draft incomplete save.
+- [x] Confirm validation.
+- [x] Serial count mismatch.
+- [x] Duplicate serial.
+- [x] Total calculation.
+- [x] Confirm idempotency.
+- [x] Inventory movement creation.
+- [x] SKU lock after confirm.
 
 ### Exit gate Group 7
 
-- [ ] Receipt flow bốn step hoàn chỉnh.
-- [ ] Confirm receipt cập nhật mock inventory/movement/serial chính xác.
-- [ ] Không thể confirm hai lần.
-- [ ] Tests/lint/build pass.
+- [x] Receipt flow bốn step hoàn chỉnh.
+- [x] Confirm receipt cập nhật mock inventory/movement/serial chính xác.
+- [x] Không thể confirm hai lần.
+- [x] Tests/lint/build pass.
 
 ---
 
