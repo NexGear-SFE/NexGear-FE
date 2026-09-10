@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Headphones, X } from 'lucide-react'
+import { MessengerIcon } from '@/assets/icons'
 
 export const SupportWidget = () => {
   const [showSpeechBubble, setShowSpeechBubble] = useState(true)
@@ -76,9 +77,7 @@ export const SupportWidget = () => {
         onClick={handleOpenMessenger}
         className="relative group bg-gradient-to-tr from-[#0084FF] via-[#A033FF] to-[#FF5252] text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-mechanical hover:scale-105 cursor-pointer active:scale-95 border-2 border-white"
       >
-        <svg className="w-6 h-6 fill-white" viewBox="0 0 24 24">
-          <path d="M12 2C6.477 2 2 6.145 2 11.259c0 2.913 1.454 5.512 3.736 7.204V22l3.414-1.874c.915.253 1.885.392 2.85.392 5.523 0 10-4.145 10-9.259C22 6.145 17.523 2 12 2zm1.191 12.185l-2.55-2.72-4.976 2.72 5.474-5.815 2.612 2.72 4.914-2.72-5.474 5.815z" />
-        </svg>
+        <MessengerIcon className="w-6 h-6 fill-white" />
 
         {/* Tooltip on Hover */}
         <div className="absolute right-14 top-1/2 -translate-y-1/2 bg-[#040004] text-white text-xs font-semibold px-3 py-1.5 rounded-[4px] shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150">
