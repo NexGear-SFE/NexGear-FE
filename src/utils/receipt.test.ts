@@ -15,4 +15,10 @@ describe('receipt rules', () => {
     expect(issues.some((issue) => issue.includes('đã tồn tại'))).toBe(true)
     expect(issues.some((issue) => issue.includes('bị trùng'))).toBe(true)
   })
+  it('rejects empty lines, zero quantity and zero cost at confirmation', () => {
+    expect(getReceiptValidationIssues({ ...receipt, lines: [] }, initialVariants, initialSerials)).toContain('Thêm ít nhất một SKU.')
+    const issues = getReceiptValidationIssues({ ...receipt, lines: [{ ...receipt.lines[0], quantity: 0, unitCost: 0, serials: [] }] }, initialVariants, initialSerials)
+    expect(issues.some((issue) => issue.includes('số lượng'))).toBe(true)
+    expect(issues.some((issue) => issue.includes('giá nhập'))).toBe(true)
+  })
 })

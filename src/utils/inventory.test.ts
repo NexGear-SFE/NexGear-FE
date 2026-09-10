@@ -20,4 +20,10 @@ describe('inventory utilities', () => {
     expect(findSerialExact(initialSerials, 'rog16-4080-0002').map((item) => item.id)).toEqual(['S002'])
     expect(findSerialExact(initialSerials, 'ROG16-4080')).toEqual([])
   })
+
+  it('keeps long product names searchable without changing the row model', () => {
+    const longName = 'Sản phẩm gaming có tên rất dài '.repeat(8).trim()
+    const rows = buildInventoryRows([{ ...initialProducts[0], name: longName }], initialVariants.filter((variant) => variant.productId === 'P001'), initialInventory, initialSerials, initialCategories)
+    expect(filterInventoryRows(rows, 'tên rất dài', '', '')).toHaveLength(2)
+  })
 })

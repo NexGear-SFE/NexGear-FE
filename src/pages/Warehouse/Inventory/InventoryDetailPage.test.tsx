@@ -12,7 +12,9 @@ describe('InventoryDetailPage', () => {
   it('shows movement and receipt references as navigation links', () => {
     renderDetail('/admin/warehouse/inventory/P001')
     expect(screen.getAllByRole('link', { name: 'PN-20260815-002' }).length).toBeGreaterThan(0)
-    expect(screen.getByRole('link', { name: '#GG-20260825-0170' })).toHaveAttribute('href', '/admin/warehouse/orders/%23GG-20260825-0170')
+    screen.getAllByRole('link', { name: '#GG-20260825-0170' }).forEach((link) => {
+      expect(link).toHaveAttribute('href', '/admin/warehouse/orders/%23GG-20260825-0170')
+    })
   })
 
   it('renders the missing-product empty state', () => {

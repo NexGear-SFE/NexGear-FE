@@ -42,4 +42,12 @@ describe('ProductWizardPage', () => {
     window.dispatchEvent(event)
     expect(event.defaultPrevented).toBe(true)
   })
+
+  it('marks the invalid step and links the review summary back to it', async () => {
+    const user = userEvent.setup()
+    renderWizard()
+    await user.click(screen.getByRole('button', { name: /tiếp tục/i }))
+    expect(screen.getByRole('listitem', { name: /thông tin cơ bản có lỗi/i })).toBeInTheDocument()
+    expect(screen.getByRole('alert')).toHaveTextContent('Không thể tiếp tục')
+  })
 })

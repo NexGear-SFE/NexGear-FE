@@ -14,7 +14,7 @@ import { formatCurrency } from '@/utils/formatters'
 import { calculateReceiptTotal, getReceiptValidationIssues } from '@/utils/receipt'
 
 const STEPS = ['Thông tin phiếu', 'Sản phẩm & SKU', 'Số lượng, giá & serial', 'Xác nhận']
-const TODAY = new Date().toISOString().slice(0, 10)
+const TODAY = new Intl.DateTimeFormat('en-CA', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'Asia/Bangkok' }).format(new Date())
 
 export function ReceiptWizardPage() {
   const { receiptId } = useParams()

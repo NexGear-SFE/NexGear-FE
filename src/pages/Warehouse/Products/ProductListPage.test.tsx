@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import * as productApi from '@/apis/product.api'
@@ -34,5 +35,24 @@ describe('ProductListPage', () => {
     renderList()
     await waitFor(() => expect(screen.getByRole('heading', { name: /không tải được sản phẩm/i })).toBeInTheDocument())
     expect(screen.getByRole('button', { name: /thử lại/i })).toBeInTheDocument()
+  })
+
+  it('paginates a filtered catalog through URL-backed controls', async () => {
+    const user = userEvent.setup()
+    const template = initialProducts[0]
+    useWarehouseStore.setState({
+      products: Array.from({ length: 9 }, (_, index) => ({
+        ...template,
+        id: `PX${index}`,
+        name: `Sản phẩm kiểm thử ${index + 1}`,
+        productCode: `PX${index}`,
+        slug: `san-pham-kiem-thu-${index + 1}`,
+        updatedAt: `2026-09-${String(index + 1).padStart(2, '0')}T00:00:00.000Z`,
+      })),
+    })
+    renderList()
+    expect(await screen.findByText('1 / 2')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Trang sau' }))
+    expect(screen.getByText('2 / 2')).toBeInTheDocument()
   })
 })

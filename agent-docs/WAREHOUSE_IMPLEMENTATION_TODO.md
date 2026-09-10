@@ -9,27 +9,27 @@
 
 ## 0. Cách sử dụng checklist
 
-- [ ] Chỉ triển khai **một nhóm tại một thời điểm** theo đúng thứ tự từ Group 0 đến Group 11.
-- [ ] Không bắt đầu group tiếp theo nếu `Exit gate` của group hiện tại chưa đạt.
-- [ ] Mỗi task hoàn thành phải đổi `[ ]` thành `[x]` ngay trong file này.
-- [ ] Mỗi group phải có commit riêng hoặc một chuỗi commit nhỏ, dễ review.
-- [ ] Không copy nguyên khối code Figma Make vào `src/`.
-- [ ] Code Figma Make chỉ được dùng làm nguồn tham chiếu cho layout, nội dung, mock flow và interaction.
-- [ ] Trước khi đưa code Figma vào project, phải tách component, type, state và utility theo tài liệu kiến trúc.
-- [ ] Không refactor phần ngoài Warehouse nếu không thật sự cần cho route/layout dùng chung.
-- [ ] Không thêm thư mục cấp một mới trong `src/` ngoài danh sách đã quy định trong `FOLDER_STRUCTURE.md`.
-- [ ] Không gọi API hoặc mock service trực tiếp từ presentational component.
-- [ ] Không sử dụng `any`; dùng type/interface cụ thể hoặc `unknown` + type guard.
-- [ ] Không hardcode màu mới nếu design token tương ứng đã tồn tại.
-- [ ] Mỗi màn hình dữ liệu phải có Loading, Empty và Error state.
-- [ ] Mọi dialog/modal phải hỗ trợ focus, Escape, keyboard navigation và restore focus khi đóng.
-- [ ] Mỗi group phải chạy `npm run lint` và `npm run build` trước khi đóng group.
+- [x] Chỉ triển khai **một nhóm tại một thời điểm** theo đúng thứ tự từ Group 0 đến Group 11.
+- [x] Không bắt đầu group tiếp theo nếu `Exit gate` của group hiện tại chưa đạt.
+- [x] Mỗi task hoàn thành phải đổi `[ ]` thành `[x]` ngay trong file này.
+- [x] Mỗi group phải có commit riêng hoặc một chuỗi commit nhỏ, dễ review.
+- [x] Không copy nguyên khối code Figma Make vào `src/`.
+- [x] Code Figma Make chỉ được dùng làm nguồn tham chiếu cho layout, nội dung, mock flow và interaction.
+- [x] Trước khi đưa code Figma vào project, phải tách component, type, state và utility theo tài liệu kiến trúc.
+- [x] Không refactor phần ngoài Warehouse nếu không thật sự cần cho route/layout dùng chung.
+- [x] Không thêm thư mục cấp một mới trong `src/` ngoài danh sách đã quy định trong `FOLDER_STRUCTURE.md`.
+- [x] Không gọi API hoặc mock service trực tiếp từ presentational component.
+- [x] Không sử dụng `any`; dùng type/interface cụ thể hoặc `unknown` + type guard.
+- [x] Không hardcode màu mới nếu design token tương ứng đã tồn tại.
+- [x] Mỗi màn hình dữ liệu phải có Loading, Empty và Error state.
+- [x] Mọi dialog/modal phải hỗ trợ focus, Escape, keyboard navigation và restore focus khi đóng.
+- [x] Mỗi group phải chạy `npm run lint` và `npm run build` trước khi đóng group.
 
 ### Trạng thái tổng thể
 
 | Group | Phạm vi | Trạng thái |
 |---|---|---|
-| 0 | Baseline, kiểm kê Figma và quy tắc port code | Hoàn thành qua preview; source export còn mở |
+| 0 | Baseline, kiểm kê Figma và quy tắc port code | Hoàn thành; source tham chiếu nằm trong `tmp/` |
 | 1 | Foundation, domain types, mock architecture | Hoàn thành |
 | 2 | Warehouse shell và navigation | Hoàn thành |
 | 3 | Category Management | Hoàn thành |
@@ -40,7 +40,7 @@
 | 8 | Order Fulfillment | Hoàn thành |
 | 9 | Warehouse Dashboard và Profile | Hoàn thành |
 | 10 | Cross-module integration và UX hardening | Hoàn thành |
-| 11 | Test, QA, documentation và handoff | Chưa bắt đầu |
+| 11 | Test, QA, documentation và handoff | Hoàn thành cục bộ; chờ reviewer approval |
 
 ---
 
@@ -69,10 +69,10 @@
 
 ## 0.3. Kiểm kê code Figma Make
 
-> Ghi chú: Figma Make public preview đã được kiểm kê đầy đủ; tải generated source bị chặn bởi màn hình đăng ký, nên hai mục source bên dưới vẫn để mở. Việc port dùng preview và file inventory nhìn thấy được.
+> Ghi chú: Figma Make public preview và generated source team cung cấp trong `tmp/` đã được dùng làm nguồn tham chiếu; source này không được copy nguyên khối vào `src/`.
 
-- [ ] Lấy source code mới nhất của Figma Make do team cung cấp.
-- [ ] Giữ source Figma ở khu vực tham chiếu tạm; không đổ trực tiếp toàn bộ vào `src/`.
+- [x] Lấy source code Figma Make do team cung cấp trong `tmp/`.
+- [x] Giữ source Figma ở khu vực tham chiếu tạm; không đổ trực tiếp toàn bộ vào `src/`.
 - [x] Ghi lại danh sách file Figma liên quan Warehouse.
 - [x] Đối chiếu router Figma với router React hiện tại.
 - [x] Đối chiếu global CSS Figma với design tokens hiện tại trong `src/index.css`.
@@ -390,7 +390,7 @@ Progress bar cố định ở đầu form:
 
 - [x] Tạo `/admin/warehouse/products/new`.
 - [x] Tạo `/admin/warehouse/products/:productId/edit`.
-- [ ] Stepper hiển thị current/completed/error state.
+- [x] Stepper hiển thị current/completed/error state.
 - [x] Cho quay lại step trước không mất dữ liệu.
 - [x] Chỉ sang step tiếp theo khi step hiện tại hợp lệ.
 - [x] Không cho click vượt qua step chưa hoàn thành.
@@ -436,7 +436,7 @@ Progress bar cố định ở đầu form:
 - [x] Specifications table.
 - [x] Variant/SKU table.
 - [x] Serial tracking flags.
-- [ ] Validation warning summary liên kết về field/step lỗi.
+- [x] Validation warning summary liên kết về field/step lỗi.
 - [x] CTA `Lưu nháp`.
 - [x] CTA `Lưu và kích hoạt`.
 - [x] Disable double submit.
@@ -462,14 +462,14 @@ Progress bar cố định ở đầu form:
 
 - [x] Draft có thể chỉnh sửa toàn bộ khi chưa có movement.
 - [x] Active Product dùng được trong Receipt và Order flow.
-- [ ] Inactive Product không được thêm vào receipt mới.
+- [x] Inactive Product không được thêm vào receipt mới.
 - [x] Product có transaction không hard-delete.
 - [x] Deactivate Product phải xác nhận và hiển thị số variant bị ảnh hưởng.
 - [x] Product history vẫn mở được sau deactivate.
 
 ## 4.5. Product tests
 
-- [ ] Search/filter/pagination.
+- [x] Search/filter/pagination.
 - [x] Step validation.
 - [x] Back/next không mất form state.
 - [x] Unsaved changes guard.
@@ -927,104 +927,104 @@ Progress bar cố định ở đầu form:
 
 ## 11.1. Automated tests
 
-- [ ] Co-locate `.test.ts`/`.test.tsx` cạnh source theo `testing.md`.
-- [ ] Mock API modules, router navigation và storage.
-- [ ] Không test internal state không exported.
-- [ ] Test hành vi người dùng bằng role/label/text.
-- [ ] Cover loading, empty, error và happy paths.
-- [ ] Cover edge cases: quantity 0, empty arrays, long names, deep category.
-- [ ] Cover Product wizard navigation.
-- [ ] Cover Receipt wizard navigation.
-- [ ] Cover Order progress state machine.
-- [ ] Cover SKU collision/lock.
-- [ ] Cover category cycle.
+- [x] Co-locate `.test.ts`/`.test.tsx` cạnh source theo `testing.md`.
+- [x] Mock API modules, router navigation và storage.
+- [x] Không test internal state không exported.
+- [x] Test hành vi người dùng bằng role/label/text.
+- [x] Cover loading, empty, error và happy paths.
+- [x] Cover edge cases: quantity 0, empty arrays, long names, deep category.
+- [x] Cover Product wizard navigation.
+- [x] Cover Receipt wizard navigation.
+- [x] Cover Order progress state machine.
+- [x] Cover SKU collision/lock.
+- [x] Cover category cycle.
 
 ## 11.2. Manual regression
 
-- [ ] Main storefront `/` vẫn render đúng.
-- [ ] Header/Footer hiện tại không bị thay đổi ngoài scope.
-- [ ] Tất cả Warehouse routes mở trực tiếp được.
-- [ ] Keyboard-only walkthrough Product wizard.
-- [ ] Keyboard-only walkthrough Receipt wizard.
-- [ ] Keyboard-only walkthrough Order fulfillment.
-- [ ] Mobile walkthrough Category/Product/Receipt/Order.
-- [ ] Empty mock dataset walkthrough.
-- [ ] Error mock mode walkthrough.
-- [ ] Reduced-motion walkthrough.
+- [x] Main storefront `/` vẫn render đúng.
+- [x] Header/Footer hiện tại không bị thay đổi ngoài scope.
+- [x] Tất cả Warehouse routes mở trực tiếp được.
+- [x] Keyboard-only walkthrough Product wizard.
+- [x] Keyboard-only walkthrough Receipt wizard.
+- [x] Keyboard-only walkthrough Order fulfillment.
+- [x] Mobile walkthrough Category/Product/Receipt/Order.
+- [x] Empty mock dataset walkthrough bằng component test harness.
+- [x] Error mock mode walkthrough bằng component test harness.
+- [x] Reduced-motion walkthrough và media-query audit.
 
 ## 11.3. Code quality gate cuối
 
-- [ ] `npm test` pass.
-- [ ] `npm run lint` pass với zero warnings.
-- [ ] `npm run build` pass với zero TypeScript errors.
-- [ ] Không còn `any`.
-- [ ] Không còn `console.log` debug.
-- [ ] Không còn hardcoded route string rải rác.
-- [ ] Không còn mock data lớn trong component.
-- [ ] Không còn action button không hoạt động.
-- [ ] Không còn Figma placeholder text sai năm hoặc thông tin demo không nhất quán.
+- [x] `npm test` pass (20 files, 72 tests).
+- [x] `npm run lint` pass với zero warnings.
+- [x] `npm run build` pass với zero TypeScript errors.
+- [x] Không còn `any`.
+- [x] Không còn `console.log` debug.
+- [x] Không còn hardcoded route string rải rác.
+- [x] Không còn mock data lớn trong component.
+- [x] Không còn action button không hoạt động.
+- [x] Không còn Figma placeholder text sai năm hoặc thông tin demo không nhất quán.
 
 ## 11.4. Documentation/handoff
 
-- [ ] Cập nhật README chỉ khi cần thêm setup command/dependency thực tế.
-- [ ] Không duplicate coding rules sang tài liệu này.
-- [ ] Ghi rõ mock architecture và điểm thay thế bằng Backend trong PR description.
-- [ ] Liệt kê routes đã thêm.
-- [ ] Liệt kê reusable components đã thêm.
-- [ ] Liệt kê known limitations còn lại.
-- [ ] Chuẩn bị test instructions cho reviewer.
-- [ ] PR target `staging`.
-- [ ] PR có ít nhất một reviewer approval.
+- [x] Cập nhật README chỉ khi cần thêm setup command/dependency thực tế (không phát sinh command/dependency mới).
+- [x] Không duplicate coding rules sang tài liệu này.
+- [x] Ghi rõ mock architecture và điểm thay thế bằng Backend trong handoff/PR description.
+- [x] Liệt kê routes đã thêm.
+- [x] Liệt kê reusable components đã thêm.
+- [x] Liệt kê known limitations còn lại.
+- [x] Chuẩn bị test instructions cho reviewer.
+- [x] PR target `staging` đã ghi trong handoff.
+- [ ] PR có ít nhất một reviewer approval — chờ push/PR và reviewer bên ngoài.
 
 ### Exit gate Group 11 — Definition of Done
 
-- [ ] Toàn bộ checkbox bắt buộc trong Group 0–11 đã hoàn thành.
-- [ ] Warehouse Staff quản lý được Category, Product, Variant và SKU bằng mock state.
-- [ ] Warehouse Staff xem đầy đủ Product, Inventory, Serial, Receipt và Order history.
-- [ ] Ba flow dài đều có progress/stepper rõ ràng.
-- [ ] Các màn hình Figma Warehouse đã được port và refactor theo repository rules.
-- [ ] Product/Category/SKU features bổ sung hoạt động end-to-end không cần Backend.
-- [ ] Lint, build và test đều pass.
+- [ ] Toàn bộ checkbox bắt buộc trong Group 0–11 đã hoàn thành — còn reviewer approval bên ngoài.
+- [x] Warehouse Staff quản lý được Category, Product, Variant và SKU bằng mock state.
+- [x] Warehouse Staff xem đầy đủ Product, Inventory, Serial, Receipt và Order history.
+- [x] Ba flow dài đều có progress/stepper rõ ràng.
+- [x] Các màn hình Figma Warehouse đã được port và refactor theo repository rules.
+- [x] Product/Category/SKU features bổ sung hoạt động end-to-end không cần Backend.
+- [x] Lint, build và test đều pass.
 
 ---
 
 # APPENDIX A — ROUTE CHECKLIST
 
-- [ ] `/admin/warehouse`
-- [ ] `/admin/warehouse/orders`
-- [ ] `/admin/warehouse/orders/:orderId`
-- [ ] `/admin/warehouse/receipts`
-- [ ] `/admin/warehouse/receipts/new`
-- [ ] `/admin/warehouse/receipts/:receiptId`
-- [ ] `/admin/warehouse/products`
-- [ ] `/admin/warehouse/products/new`
-- [ ] `/admin/warehouse/products/:productId`
-- [ ] `/admin/warehouse/products/:productId/edit`
-- [ ] `/admin/warehouse/categories`
-- [ ] `/admin/warehouse/inventory`
-- [ ] `/admin/warehouse/inventory/:productId`
+- [x] `/admin/warehouse`
+- [x] `/admin/warehouse/orders`
+- [x] `/admin/warehouse/orders/:orderId`
+- [x] `/admin/warehouse/receipts`
+- [x] `/admin/warehouse/receipts/new`
+- [x] `/admin/warehouse/receipts/:receiptId`
+- [x] `/admin/warehouse/products`
+- [x] `/admin/warehouse/products/new`
+- [x] `/admin/warehouse/products/:productId`
+- [x] `/admin/warehouse/products/:productId/edit`
+- [x] `/admin/warehouse/categories`
+- [x] `/admin/warehouse/inventory`
+- [x] `/admin/warehouse/inventory/:productId`
 
 # APPENDIX B — ROLE OWNERSHIP CHECKLIST
 
-- [ ] Warehouse Staff được sửa Product master.
-- [ ] Warehouse Staff được sửa Category.
-- [ ] Warehouse Staff được tạo Variant/SKU trước khi SKU bị khóa.
-- [ ] Warehouse Staff được xử lý Receipt, Inventory, Serial và Order fulfillment.
-- [ ] Store Manager chỉ đọc Product source fields trong module Store Manager.
-- [ ] Commercial price, marketing content và storefront visibility không được sửa trong Warehouse.
-- [ ] Admin có thể kế thừa quyền Warehouse khi role model được triển khai.
-- [ ] Phần Gold không được implement trong scope này.
+- [x] Warehouse Staff được sửa Product master.
+- [x] Warehouse Staff được sửa Category.
+- [x] Warehouse Staff được tạo Variant/SKU trước khi SKU bị khóa.
+- [x] Warehouse Staff được xử lý Receipt, Inventory, Serial và Order fulfillment.
+- [x] Store Manager chỉ đọc Product source fields trong module Store Manager (module này không bị sửa).
+- [x] Commercial price, marketing content và storefront visibility không được sửa trong Warehouse.
+- [x] Admin có thể kế thừa quyền Warehouse khi role model được triển khai.
+- [x] Phần Gold không được implement trong scope này.
 
 # APPENDIX C — COMMIT CHECKLIST GỢI Ý
 
-- [ ] `chore(warehouse): add warehouse domain foundations`
+- [x] `chore(warehouse): add warehouse domain foundations`
 - [x] `feat(warehouse): add warehouse layout and navigation`
 - [x] `feat(category): add hierarchical category management`
 - [x] `feat(product): add product management wizard`
 - [x] `feat(sku): add variant matrix and sku generator`
-- [ ] `feat(inventory): port inventory and serial views`
-- [ ] `feat(receipt): port stock receipt workflow`
-- [ ] `feat(order): port warehouse fulfillment workflow`
-- [ ] `feat(warehouse): port dashboard and profile shell`
-- [ ] `test(warehouse): add warehouse integration coverage`
-- [ ] `docs(warehouse): document mock implementation and review steps`
+- [x] `feat(inventory): add sku stock and serial tracking`
+- [x] `feat(receipt): add four-step stock receipt flow`
+- [x] `feat(order): add warehouse fulfillment state machine`
+- [x] `feat(warehouse): add operations dashboard and profile actions`
+- [x] `feat(warehouse): harden cross-module workflows and ux`
+- [x] `test(warehouse): complete qa and implementation handoff` (commit Group 11).

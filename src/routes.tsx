@@ -4,10 +4,13 @@ import { HomePage } from '@/pages/Home/HomePage'
 import { WarehouseLayout } from '@/layouts/WarehouseLayout'
 import { WarehouseRouteGuard } from '@/components/warehouse/WarehouseRouteGuard'
 
+const routeFallback = <div role="status" aria-label="Đang tải trang" className="min-h-64 animate-pulse rounded-md bg-surface-200" />
+
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />,
+    hydrateFallbackElement: routeFallback,
     children: [
       {
         index: true,
@@ -20,6 +23,7 @@ export const router = createBrowserRouter([
     children: [{
       path: '/admin/warehouse',
       element: <WarehouseLayout />,
+      hydrateFallbackElement: routeFallback,
       children: [
         { index: true, lazy: async () => ({ Component: (await import('@/pages/Warehouse/WarehouseDashboardPage')).WarehouseDashboardPage }) },
         { path: 'orders', lazy: async () => ({ Component: (await import('@/pages/Warehouse/Orders/OrderListPage')).OrderListPage }) },
