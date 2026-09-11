@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Menu, Search, ShoppingCart, User, X } from 'lucide-react'
 import logoImg from '@/assets/images/Avatar.jpg'
+import { useCartCount, cartStore } from '@/stores/cartStore'
 
 export const MainHeader = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [isCategoryActive, setIsCategoryActive] = useState(false)
+  const cartCount = useCartCount()
 
   useEffect(() => {
     const handleToggle = () => setIsCategoryActive((prev) => !prev)
@@ -79,18 +81,21 @@ export const MainHeader = () => {
         {/* Right: Actions (Cart & Account) */}
         <div className="flex items-center gap-3 shrink-0">
           {/* Cart Drawer Trigger */}
-          <a
-            href="#cart"
-            className="flex items-center gap-2.5 border border-gray-200 hover:border-[#E30019] bg-white text-[#E30019] px-5 py-2.5 rounded-[8px] text-sm font-bold transition-all shadow-sm group"
+          <button
+            type="button"
+            onClick={() => cartStore.toggleDrawer(true)}
+            className="flex items-center gap-2.5 border border-gray-200 hover:border-[#E30019] bg-white text-[#E30019] px-5 py-2.5 rounded-[8px] text-sm font-bold transition-all shadow-sm group cursor-pointer"
           >
             <div className="relative">
               <ShoppingCart className="w-4 h-4 group-hover:scale-110 transition-transform" />
-              <span className="absolute -top-3 -right-3 bg-[#E30019] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                1
-              </span>
+              {cartCount > 0 && (
+                <span className="absolute -top-3 -right-3 bg-[#E30019] text-white text-[10px] font-bold min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center shadow-xs">
+                  {cartCount}
+                </span>
+              )}
             </div>
             <span>Giỏ hàng</span>
-          </a>
+          </button>
 
           {/* User Account */}
           <a

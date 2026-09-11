@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { Header } from '@/components/Header/Header'
 import { Footer } from '@/components/Footer/Footer'
 import { SupportWidget } from '@/components/SupportWidget'
+import { CartDrawer } from '@/components/Cart/CartDrawer'
 
 export const MainLayout = () => {
   return (
@@ -19,6 +20,9 @@ export const MainLayout = () => {
 
       {/* Floating Support Widget (Technical Support, Zalo, Messenger) */}
       <SupportWidget />
+
+      {/* Cart Drawer Slide-over Panel */}
+      <CartDrawer />
     </div>
   )
 }

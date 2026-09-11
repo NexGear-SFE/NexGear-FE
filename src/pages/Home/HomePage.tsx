@@ -9,6 +9,8 @@ import { TechNews } from '@/components/TechNews'
 import { Button } from '@/components/ui/Button'
 import { mockPcProducts, mockLaptopProducts, mockGearProducts } from '@/mocks/product.mock'
 
+import { cartStore } from '@/stores/cartStore'
+
 export const HomePage = () => {
   const [activePcFilter, setActivePcFilter] = useState('all')
   const [activeLaptopFilter, setActiveLaptopFilter] = useState('all')
@@ -30,6 +32,7 @@ export const HomePage = () => {
   const [addedToast, setAddedToast] = useState<string | null>(null)
 
   const handleAddToCart = (product: Product) => {
+    cartStore.addItem(product)
     setAddedToast(product.name)
     setTimeout(() => {
       setAddedToast(null)
@@ -128,29 +131,22 @@ export const HomePage = () => {
               <div className="flex items-center gap-2 flex-wrap">
                 <Button
                   variant="chip"
-                  isActive={activePcFilter === 'all'}
-                  onClick={() => setActivePcFilter('all')}
-                >
-                  Tất cả PC
-                </Button>
-                <Button
-                  variant="chip"
                   isActive={activePcFilter === 'ai'}
-                  onClick={() => setActivePcFilter('ai')}
+                  onClick={() => setActivePcFilter(activePcFilter === 'ai' ? 'all' : 'ai')}
                 >
                   PC AI
                 </Button>
                 <Button
                   variant="chip"
                   isActive={activePcFilter === 'i5'}
-                  onClick={() => setActivePcFilter('i5')}
+                  onClick={() => setActivePcFilter(activePcFilter === 'i5' ? 'all' : 'i5')}
                 >
                   PC Core i5
                 </Button>
                 <Button
                   variant="chip"
                   isActive={activePcFilter === 'i7'}
-                  onClick={() => setActivePcFilter('i7')}
+                  onClick={() => setActivePcFilter(activePcFilter === 'i7' ? 'all' : 'i7')}
                 >
                   PC Core i7
                 </Button>
@@ -191,29 +187,22 @@ export const HomePage = () => {
               <div className="flex items-center gap-2 flex-wrap">
                 <Button
                   variant="chip"
-                  isActive={activeLaptopFilter === 'all'}
-                  onClick={() => setActiveLaptopFilter('all')}
-                >
-                  Tất cả Laptop
-                </Button>
-                <Button
-                  variant="chip"
                   isActive={activeLaptopFilter === 'rog'}
-                  onClick={() => setActiveLaptopFilter('rog')}
+                  onClick={() => setActiveLaptopFilter(activeLaptopFilter === 'rog' ? 'all' : 'rog')}
                 >
                   ASUS ROG
                 </Button>
                 <Button
                   variant="chip"
                   isActive={activeLaptopFilter === 'nitro'}
-                  onClick={() => setActiveLaptopFilter('nitro')}
+                  onClick={() => setActiveLaptopFilter(activeLaptopFilter === 'nitro' ? 'all' : 'nitro')}
                 >
                   Acer Predator
                 </Button>
                 <Button
                   variant="chip"
                   isActive={activeLaptopFilter === 'msi'}
-                  onClick={() => setActiveLaptopFilter('msi')}
+                  onClick={() => setActiveLaptopFilter(activeLaptopFilter === 'msi' ? 'all' : 'msi')}
                 >
                   MSI Gaming
                 </Button>
@@ -254,29 +243,22 @@ export const HomePage = () => {
               <div className="flex items-center gap-2 flex-wrap">
                 <Button
                   variant="chip"
-                  isActive={activeGearFilter === 'all'}
-                  onClick={() => setActiveGearFilter('all')}
-                >
-                  Tất cả Gear
-                </Button>
-                <Button
-                  variant="chip"
                   isActive={activeGearFilter === 'keyboard'}
-                  onClick={() => setActiveGearFilter('keyboard')}
+                  onClick={() => setActiveGearFilter(activeGearFilter === 'keyboard' ? 'all' : 'keyboard')}
                 >
                   Bàn Phím Cơ
                 </Button>
                 <Button
                   variant="chip"
                   isActive={activeGearFilter === 'mouse'}
-                  onClick={() => setActiveGearFilter('mouse')}
+                  onClick={() => setActiveGearFilter(activeGearFilter === 'mouse' ? 'all' : 'mouse')}
                 >
                   Chuột Gaming
                 </Button>
                 <Button
                   variant="chip"
                   isActive={activeGearFilter === 'screen'}
-                  onClick={() => setActiveGearFilter('screen')}
+                  onClick={() => setActiveGearFilter(activeGearFilter === 'screen' ? 'all' : 'screen')}
                 >
                   Màn Hình
                 </Button>
