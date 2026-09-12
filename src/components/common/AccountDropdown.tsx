@@ -1,18 +1,20 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Settings, LogOut, Shield } from 'lucide-react'
+import { Settings, LogOut, Shield, Package } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 
 interface AccountDropdownProps {
   isOpen: boolean
   onClose: () => void
   onOpenSettings: () => void
+  onOpenOrders?: () => void
 }
 
 export const AccountDropdown = ({
   isOpen,
   onClose,
   onOpenSettings,
+  onOpenOrders,
 }: AccountDropdownProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const { user, logout } = useAuth()
@@ -45,6 +47,15 @@ export const AccountDropdown = ({
     navigate('/')
   }
 
+  const handleOrdersClick = () => {
+    onClose()
+    if (onOpenOrders) {
+      onOpenOrders()
+    } else {
+      navigate('/account/settings?tab=orders')
+    }
+  }
+
   return (
     <div
       ref={dropdownRef}
@@ -65,17 +76,17 @@ export const AccountDropdown = ({
         )}
         <div className="flex flex-col min-w-0">
           <span className="font-bold text-xs text-[#040004] truncate">
-            {user?.name || 'Người dùng'}
+            {user?.name || 'Nguyễn Văn Khách'}
           </span>
           <span className="text-[11px] text-[#636363] truncate">
-            {user?.email || 'user@example.com'}
+            {user?.email || 'user@gmail.com'}
           </span>
           <div className="flex items-center gap-1.5 mt-1">
             <span className={`text-white text-[10px] font-bold px-1.5 py-0.5 rounded inline-flex items-center gap-0.5 ${user?.role === 'STORE_MANAGER' ? 'bg-[#E30019]' : 'bg-blue-600'}`}>
               <Shield className="w-2.5 h-2.5" /> {user?.role === 'STORE_MANAGER' ? 'ADMIN' : 'STAFF'}
             </span>
             <span className="text-[11px] text-[#636363] font-medium">
-              {user?.roleName || 'Nhân viên'}
+              {user?.roleName || 'Khách hàng'}
             </span>
           </div>
         </div>
@@ -84,14 +95,24 @@ export const AccountDropdown = ({
       {/* Phân cách */}
       <div className="border-b border-[#E0E0E0] my-2" />
 
-      {/* Mục 1: Cài đặt tài khoản */}
+      {/* Mục 1: Đơn hàng của tôi */}
+      <button
+        type="button"
+        onClick={handleOrdersClick}
+        className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-semibold text-[#040004] hover:bg-slate-100 transition-mechanical cursor-pointer text-left"
+      >
+        <Package className="w-4 h-4 text-slate-600 shrink-0" />
+        <span>Đơn hàng của tôi</span>
+      </button>
+
+      {/* Mục 2: Cài đặt tài khoản */}
       <button
         type="button"
         onClick={() => {
           onClose()
           onOpenSettings()
         }}
-        className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium text-[#040004] hover:bg-slate-100 transition-mechanical cursor-pointer text-left"
+        className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-semibold text-[#040004] hover:bg-slate-100 transition-mechanical cursor-pointer text-left"
       >
         <Settings className="w-4 h-4 text-slate-600 shrink-0" />
         <span>Cài đặt tài khoản</span>

@@ -16,6 +16,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { ALLOWED_ROLES } from '@/constants/roles'
 
 import { CustomerAccountSettingsPage } from '@/pages/customer/AccountSettingsPage'
+import { OrderDetailPage } from '@/pages/customer/Order/OrderDetailPage'
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: '/account/settings',
         element: <CustomerAccountSettingsPage />,
+      },
+      {
+        path: '/account/orders/:id',
+        element: <OrderDetailPage />,
       },
       {
         path: '/account',
