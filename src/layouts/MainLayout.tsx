@@ -3,8 +3,10 @@ import { Header } from '@/components/customer/Header/Header'
 import { Footer } from '@/components/customer/Footer/Footer'
 import { SupportWidget } from '@/components/customer/SupportWidget'
 import { CartDrawer } from '@/components/customer/Cart/CartDrawer'
+import { QuickLoginModal } from '@/components/auth/QuickLoginModal'
 
 export const MainLayout = () => {
+
   return (
     <div className="flex flex-col min-h-screen bg-[#F4F5F7]">
       {/* Top Header Wrapper */}
@@ -18,6 +20,9 @@ export const MainLayout = () => {
       {/* Footer Wrapper */}
       <Footer />
 
+      {/* Login Popup Modal (Chỉ hiển thị khi chưa đăng nhập) */}
+      <QuickLoginModal />
+
       {/* Floating Support Widget (Technical Support, Zalo, Messenger) */}
       <SupportWidget />
 
@@ -26,3 +31,4 @@ export const MainLayout = () => {
     </div>
   )
 }
+
