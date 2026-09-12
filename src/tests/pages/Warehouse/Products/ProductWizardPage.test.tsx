@@ -12,8 +12,7 @@ describe('ProductWizardPage', () => {
   it('validates steps and preserves basic data when navigating back', async () => {
     const user = userEvent.setup()
     const { container } = renderWizard()
-    await user.click(screen.getByRole('button', { name: /tiếp tục/i }))
-    expect(screen.getByRole('alert')).toHaveTextContent(/tên sản phẩm/i)
+    expect(screen.getByRole('button', { name: /tiếp tục/i })).toBeDisabled()
 
     await user.type(screen.getByLabelText('Tên sản phẩm'), 'ROG Test Product')
     await user.type(screen.getByLabelText('Product code'), 'PTEST')
@@ -27,7 +26,7 @@ describe('ProductWizardPage', () => {
     await user.click(screen.getByRole('button', { name: /tiếp tục/i }))
     expect(screen.getByRole('heading', { name: /thông số key\/value/i })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /tiếp tục/i }))
-    expect(screen.getByRole('heading', { name: /thiết lập thuộc tính sản phẩm/i })).toBeInTheDocument()
+    expect(screen.getByText(/sản phẩm có nhiều cấu hình không/i)).toBeInTheDocument()
     expect(screen.getByLabelText('SKU 1')).toHaveValue('ASU-MODEL1')
     await user.click(screen.getByRole('button', { name: /quay lại/i }))
     await user.click(screen.getByRole('button', { name: /quay lại/i }))
@@ -43,11 +42,9 @@ describe('ProductWizardPage', () => {
     expect(event.defaultPrevented).toBe(true)
   })
 
-  it('marks the invalid step and links the review summary back to it', async () => {
-    const user = userEvent.setup()
+  it('does not allow moving forward before the current step is complete', () => {
     renderWizard()
-    await user.click(screen.getByRole('button', { name: /tiếp tục/i }))
-    expect(screen.getByRole('listitem', { name: /thông tin cơ bản có lỗi/i })).toBeInTheDocument()
-    expect(screen.getByRole('alert')).toHaveTextContent('Không thể tiếp tục')
+    expect(screen.getByRole('button', { name: /tiếp tục/i })).toBeDisabled()
+    expect(screen.getByText('Thông tin sản phẩm')).toBeInTheDocument()
   })
 })

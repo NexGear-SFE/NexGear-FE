@@ -1,16 +1,15 @@
-import { AlertTriangle, Minus, MoveDown, MoveUp, Plus, RefreshCw } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import type { ReactElement } from 'react'
 import { ConfirmDialog } from '@/components/warehouse/ConfirmDialog'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
-import type { ProductVariant, VariantOption } from '@/types/variant.type'
+import type { ProductVariant, VariantOption, VariantOptionValue } from '@/types/variant.type'
+import { formatCurrency } from '@/utils/formatCurrency'
 import { generateSkuPreview, normalizeSkuInput, normalizeSkuSegment } from '@/utils/generateSkuPreview'
-import { generateVariantCombinations } from '@/utils/generateVariantCombinations'
 import { findDuplicateSkus } from '@/utils/skuRules'
 
 export type VariantDraft = Omit<ProductVariant, 'id' | 'productId' | 'createdAt' | 'updatedAt'>
 
-type VariantMatrixEditorProps = {
+type Props = {
   brandCode: string
   existingSkus?: string[]
   modelCode: string
@@ -19,15 +18,9 @@ type VariantMatrixEditorProps = {
   variants: VariantDraft[]
 }
 
-type PendingAction =
-  | { type: 'options'; nextOptions: VariantOption[]; description: string }
-  | { type: 'regenerate-all'; description: string }
-  | { type: 'apply-defaults'; description: string }
-  | null
+type PendingDelete = { index: number; label: string } | null
 
-const MATRIX_WARNING_THRESHOLD = 50
-
-function combinationKey(values: VariantDraft['optionValues']): string {
+function combinationKey(values: VariantOptionValue[]): string {
   return values.map((item) => `${item.optionCode ?? item.option}:${item.code}`).sort().join('|')
 }
 
@@ -42,103 +35,148 @@ function deriveOptions(variants: VariantDraft[]): VariantOption[] {
   return [...byOption.values()].map((option) => ({ ...option, values: [...option.values].map(([code, value]) => ({ code, value })) }))
 }
 
-export function VariantMatrixEditor({ brandCode, existingSkus = [], modelCode, onAudit, onChange, variants }: VariantMatrixEditorProps) {
-  const templateVariant = variants.find((variant) => variant.status === 'ACTIVE') ?? variants[0]
-  const [options, setOptions] = useState<VariantOption[]>(() => deriveOptions(variants))
-  const [pending, setPending] = useState<PendingAction>(null)
-  const [defaultSerialTracking, setDefaultSerialTracking] = useState(templateVariant?.serialTracking ?? false)
-  const [defaultReorderLevel, setDefaultReorderLevel] = useState(templateVariant?.reorderLevel ?? 0)
-  const [matrixMessage, setMatrixMessage] = useState('')
-  const combinations = useMemo(() => generateVariantCombinations(options), [options])
-  const duplicateOptionCode = new Set(options.map((option) => normalizeSkuSegment(option.code ?? ''))).size !== options.length
-  const duplicateOptionName = new Set(options.map((option) => option.name.trim().toLocaleLowerCase('vi'))).size !== options.length
-  const duplicateValue = options.some((option) => {
-    const codes = option.values.map((value) => normalizeSkuSegment(value.code))
-    const names = option.values.map((value) => value.value.trim().toLocaleLowerCase('vi'))
-    return new Set(codes).size !== codes.length || new Set(names).size !== names.length
-  })
-  const hasIncompleteOption = options.some((option) => !option.name.trim() || !option.code?.trim() || option.values.length === 0 || option.values.some((value) => !value.value.trim() || !value.code.trim()))
-  const duplicateSkus = findDuplicateSkus(variants.map((variant) => variant.sku || (variant.skuSource === 'AUTO' ? generateSkuPreview(brandCode, modelCode, variant.optionValues) : '')), existingSkus)
-
-  function applyOptions(nextOptions: VariantOption[]) {
-    const previousRows = new Map(variants.map((variant) => [combinationKey(variant.optionValues), variant]))
-    const nextCombinations = generateVariantCombinations(nextOptions)
-    const source = nextOptions.length === 0 ? [[]] : nextCombinations
-    const nextVariants = source.map<VariantDraft>((values) => {
-      const previous = previousRows.get(combinationKey(values))
-      if (!previous) return { sku: generateSkuPreview(brandCode, modelCode, values), skuSource: 'AUTO', optionValues: values, barcode: '', gtin: '', serialTracking: defaultSerialTracking, reorderLevel: defaultReorderLevel, status: 'ACTIVE', skuLocked: false }
-      return { ...previous, optionValues: values, sku: previous.skuSource === 'AUTO' && !previous.skuLocked ? generateSkuPreview(brandCode, modelCode, values) : previous.sku }
-    })
-    setOptions(nextOptions)
-    onChange(nextVariants)
-    const retainedCount = nextVariants.filter((variant) => previousRows.has(combinationKey(variant.optionValues))).length
-    setMatrixMessage(`Đã cập nhật ${nextVariants.length} biến thể: giữ nguyên cấu hình của ${retainedCount} dòng hiện có, áp dụng thiết lập mặc định cho ${nextVariants.length - retainedCount} dòng mới.`)
+function createDefaultVariant(brandCode: string, modelCode: string, serialTracking: boolean): VariantDraft {
+  return {
+    sku: generateSkuPreview(brandCode, modelCode, []), skuSource: 'AUTO', optionValues: [], barcode: '', gtin: '',
+    purchasePrice: 0, serialTracking, reorderLevel: 0, status: 'ACTIVE', skuLocked: false,
   }
+}
 
-  function changeOption(index: number, patch: Partial<VariantOption>) {
+export function VariantMatrixEditor({ brandCode, existingSkus = [], modelCode, onAudit, onChange, variants }: Props) {
+  const initialOptions = useMemo(() => deriveOptions(variants), [])
+  const [hasConfigurations, setHasConfigurations] = useState(initialOptions.length > 0)
+  const [options, setOptions] = useState<VariantOption[]>(initialOptions)
+  const [selection, setSelection] = useState<Record<string, string>>({})
+  const [message, setMessage] = useState('')
+  const [pendingDelete, setPendingDelete] = useState<PendingDelete>(null)
+  const serialTracking = variants[0]?.serialTracking ?? false
+  const lockedVariants = variants.filter((variant) => variant.skuLocked)
+  const duplicateSkus = findDuplicateSkus(variants.map((variant) => variant.sku), existingSkus)
+  const optionNames = options.map((option) => option.name.trim().toLocaleLowerCase('vi'))
+  const duplicateOptionNames = new Set(optionNames).size !== optionNames.length
+  const incompleteOptions = options.some((option) => !option.name.trim() || option.values.length === 0 || option.values.some((value) => !value.value.trim()))
+
+  function updateOption(index: number, patch: Partial<VariantOption>) {
     setOptions((current) => current.map((option, itemIndex) => itemIndex === index ? { ...option, ...patch } : option))
+    setMessage('')
   }
 
-  function moveOption(index: number, delta: number) {
-    const targetIndex = index + delta
-    if (targetIndex < 0 || targetIndex >= options.length) return
-    const next = [...options]
-    ;[next[index], next[targetIndex]] = [next[targetIndex], next[index]]
-    setPending({ type: 'options', nextOptions: next, description: 'Đổi thứ tự option sẽ đổi thứ tự segment của các SKU tự động.' })
+  function updateTracking(nextValue: boolean) {
+    onChange(variants.map((variant) => variant.skuLocked ? variant : { ...variant, serialTracking: nextValue }))
+  }
+
+  function selectConfigurationMode(nextValue: boolean) {
+    if (lockedVariants.length) return
+    setHasConfigurations(nextValue)
+    setMessage('')
+    if (nextValue) {
+      setOptions((current) => current.length ? current : [{ name: '', code: '', values: [{ value: '', code: '' }] }])
+      onChange([])
+      return
+    }
+    setOptions([])
+    setSelection({})
+    onChange([createDefaultVariant(brandCode, modelCode, serialTracking)])
+  }
+
+  function addConfiguration() {
+    if (!options.length || incompleteOptions || duplicateOptionNames) {
+      setMessage('Hãy nhập đủ tên thuộc tính và các giá trị trước khi thêm cấu hình.')
+      return
+    }
+    const optionValues = options.map<VariantOptionValue>((option) => {
+      const optionCode = option.code || normalizeSkuSegment(option.name)
+      const selectedValue = option.values.find((value) => value.code === selection[optionCode])
+      return { option: option.name.trim(), optionCode, value: selectedValue?.value.trim() ?? '', code: selectedValue?.code ?? '' }
+    })
+    if (optionValues.some((value) => !value.code)) {
+      setMessage('Mỗi thuộc tính đều phải được chọn khi tạo cấu hình.')
+      return
+    }
+    const key = combinationKey(optionValues)
+    if (variants.some((variant) => combinationKey(variant.optionValues) === key)) {
+      setMessage('Cấu hình này đã có trong danh sách.')
+      return
+    }
+    onChange([...variants, { ...createDefaultVariant(brandCode, modelCode, serialTracking), sku: generateSkuPreview(brandCode, modelCode, optionValues), optionValues }])
+    setSelection({})
+    setMessage('Đã thêm cấu hình. Hãy nhập giá nhập và kiểm tra SKU bên dưới.')
   }
 
   function updateVariant(index: number, patch: Partial<VariantDraft>) {
     onChange(variants.map((variant, itemIndex) => itemIndex === index ? { ...variant, ...patch } : variant))
   }
 
-  function regenerateRow(index: number) {
-    const variant = variants[index]
-    if (!variant || variant.skuLocked) return
-    const sku = generateSkuPreview(brandCode, modelCode, variant.optionValues)
-    updateVariant(index, { sku, skuSource: 'AUTO' })
-    onAudit?.('REGENERATE', sku)
-  }
-
-  function regenerateAll() {
-    onChange(variants.map((variant) => variant.skuLocked ? variant : { ...variant, sku: generateSkuPreview(brandCode, modelCode, variant.optionValues), skuSource: 'AUTO' }))
-    variants.filter((variant) => !variant.skuLocked).forEach((variant) => onAudit?.('REGENERATE', variant.sku))
-  }
-
-  function applyDefaults() {
-    onChange(variants.map((variant) => variant.skuLocked ? variant : { ...variant, serialTracking: defaultSerialTracking, reorderLevel: defaultReorderLevel }))
-    setMatrixMessage(`Đã áp dụng thiết lập chung cho ${variants.filter((variant) => !variant.skuLocked).length} biến thể chưa khóa.`)
-  }
-
-  function confirmPending() {
-    if (pending?.type === 'options') applyOptions(pending.nextOptions)
-    if (pending?.type === 'regenerate-all') regenerateAll()
-    if (pending?.type === 'apply-defaults') applyDefaults()
-    setPending(null)
+  function confirmDelete() {
+    if (!pendingDelete) return
+    onChange(variants.filter((_, index) => index !== pendingDelete.index))
+    setPendingDelete(null)
   }
 
   return <div className="space-y-5">
-    <section className="rounded-md border border-surface-400 p-4">
-      <div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="font-heading text-lg font-semibold">Thiết lập thuộc tính sản phẩm</h2><p className="text-sm text-text-600">Ví dụ: CPU, GPU hoặc màu sắc. Mã ngắn được dùng để tạo SKU tự động.</p></div><button type="button" className="btn-outlined" onClick={() => setOptions((current) => [...current, { name: '', code: '', values: [{ value: '', code: '' }] }])}><Plus className="h-4 w-4" /> Thêm thuộc tính</button></div>
-      <div className="mt-4 space-y-3">{options.map((option, optionIndex) => <div key={`option-${optionIndex}`} className="rounded-sm bg-surface-200 p-3">
-        <div className="grid gap-2 md:grid-cols-[1fr_140px_auto]"><input aria-label={`Tên thuộc tính ${optionIndex + 1}`} autoComplete="off" name={`option-name-${optionIndex}`} value={option.name} onChange={(event) => changeOption(optionIndex, { name: event.target.value })} className="input-gaming" placeholder="Ví dụ: CPU, GPU, màu sắc…" /><input aria-label={`Mã thuộc tính ${optionIndex + 1}`} autoComplete="off" name={`option-code-${optionIndex}`} value={option.code ?? ''} onChange={(event) => changeOption(optionIndex, { code: normalizeSkuSegment(event.target.value) })} className="input-gaming font-mono" placeholder="Ví dụ: CPU…" /><div className="flex"><SmallButton label="Đưa thuộc tính lên" onClick={() => moveOption(optionIndex, -1)}><MoveUp /></SmallButton><SmallButton label="Đưa thuộc tính xuống" onClick={() => moveOption(optionIndex, 1)}><MoveDown /></SmallButton><SmallButton label="Xóa thuộc tính" onClick={() => setPending({ type: 'options', nextOptions: options.filter((_, index) => index !== optionIndex), description: `Xóa thuộc tính ${option.name || optionIndex + 1} sẽ loại các tổ hợp liên quan.` })}><Minus /></SmallButton></div></div>
-        <div className="mt-3 space-y-2">{option.values.map((value, valueIndex) => <div key={`value-${valueIndex}`} className="grid grid-cols-[1fr_140px_auto] gap-2"><input aria-label={`Giá trị ${optionIndex + 1}-${valueIndex + 1}`} autoComplete="off" name={`option-value-${optionIndex}-${valueIndex}`} value={value.value} onChange={(event) => changeOption(optionIndex, { values: option.values.map((item, index) => index === valueIndex ? { ...item, value: event.target.value } : item) })} className="input-gaming" placeholder="Ví dụ: RTX 4080…" /><input aria-label={`Mã giá trị ${optionIndex + 1}-${valueIndex + 1}`} autoComplete="off" name={`value-code-${optionIndex}-${valueIndex}`} value={value.code} onChange={(event) => changeOption(optionIndex, { values: option.values.map((item, index) => index === valueIndex ? { ...item, code: normalizeSkuSegment(event.target.value) } : item) })} className="input-gaming font-mono" placeholder="Ví dụ: 4080…" /><SmallButton label="Xóa giá trị" onClick={() => setPending({ type: 'options', nextOptions: options.map((item, index) => index === optionIndex ? { ...item, values: item.values.filter((_, childIndex) => childIndex !== valueIndex) } : item), description: `Xóa ${value.value || 'giá trị'} sẽ loại các tổ hợp liên quan.` })}><Minus /></SmallButton></div>)}</div>
-        <button type="button" className="mt-2 text-xs font-semibold text-brand-500 hover:underline" onClick={() => changeOption(optionIndex, { values: [...option.values, { value: '', code: '' }] })}>+ Thêm giá trị</button>
-      </div>)}</div>
-      {(duplicateOptionCode || duplicateOptionName || duplicateValue) && <p role="alert" className="mt-3 text-sm text-error-700">Tên và mã của thuộc tính/giá trị không được trùng trong cùng sản phẩm.</p>}
-      {combinations.length > MATRIX_WARNING_THRESHOLD && <p className="mt-3 flex gap-2 rounded-sm bg-amber-50 p-3 text-sm text-warning-500"><AlertTriangle className="h-5 w-5" aria-hidden="true" /> Danh sách vượt {MATRIX_WARNING_THRESHOLD} tổ hợp. Hãy kiểm tra kỹ trước khi cập nhật.</p>}
-      <fieldset className="mt-4 rounded-sm border border-surface-400 bg-surface-200 p-4"><legend className="px-1 text-sm font-semibold">Thiết lập mặc định cho tổ hợp mới</legend><p className="mb-3 text-xs text-text-600">Dòng cũ giữ nguyên cấu hình. Dòng mới sẽ dùng thiết lập dưới đây và luôn ở trạng thái Đang dùng.</p><div className="flex flex-wrap items-end gap-4"><label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" checked={defaultSerialTracking} onChange={(event) => setDefaultSerialTracking(event.target.checked)} className="h-5 w-5 accent-brand-500" /> Quản lý từng serial</label><label className="text-sm font-medium">Ngưỡng cảnh báo nhập lại<input type="number" min="0" step="1" value={defaultReorderLevel} onChange={(event) => setDefaultReorderLevel(Math.max(0, Number(event.target.value)))} className="input-gaming mt-1 block w-36 tabular-nums" /></label><button type="button" className="btn-outlined" disabled={!variants.some((variant) => !variant.skuLocked)} onClick={() => setPending({ type: 'apply-defaults', description: `Áp dụng ${defaultSerialTracking ? 'quản lý theo serial' : 'quản lý theo số lượng'} và ngưỡng cảnh báo ${defaultReorderLevel} cho tất cả biến thể chưa khóa. Các biến thể đã có giao dịch kho không thay đổi.` })}>Áp dụng cho dòng chưa khóa</button></div></fieldset>
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3"><p className="text-sm"><strong>{options.length ? combinations.length : 1}</strong> tổ hợp dự kiến</p><div className="flex flex-wrap gap-2"><button type="button" className="btn-outlined" onClick={() => variants.some((variant) => variant.skuSource === 'MANUAL' && !variant.skuLocked) ? setPending({ type: 'regenerate-all', description: 'Tạo lại toàn bộ sẽ ghi đè các SKU nhập thủ công chưa bị khóa. SKU đã có giao dịch kho vẫn được giữ nguyên.' }) : regenerateAll()}><RefreshCw className="h-4 w-4" aria-hidden="true" /> Tạo lại toàn bộ SKU</button><button type="button" disabled={hasIncompleteOption || duplicateOptionCode || duplicateOptionName || duplicateValue} className="btn-primary disabled:opacity-50" onClick={() => applyOptions(options)}><RefreshCw className="h-4 w-4" aria-hidden="true" /> Cập nhật danh sách biến thể</button></div></div>
+    <fieldset className="rounded-md border border-surface-400 p-4">
+      <legend className="px-1 font-heading text-lg font-semibold">Sản phẩm có nhiều cấu hình không?</legend>
+      <p className="mb-4 text-sm text-text-600">Chỉ tạo những cấu hình thực tế đang nhập và bán. Hệ thống không tự sinh tổ hợp.</p>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <ModeCard checked={!hasConfigurations} disabled={lockedVariants.length > 0} name="configuration-mode" title="Không, chỉ có một SKU" description="Phù hợp sản phẩm không phân chia CPU, màu hoặc dung lượng." onChange={() => selectConfigurationMode(false)} />
+        <ModeCard checked={hasConfigurations} disabled={lockedVariants.length > 0} name="configuration-mode" title="Có, tự ghép từng cấu hình" description="Ví dụ CPU + GPU + RAM + dung lượng." onChange={() => selectConfigurationMode(true)} />
+      </div>
+      {lockedVariants.length > 0 && <p className="mt-3 text-xs font-medium text-warning-700">Không thể đổi loại sản phẩm vì đã có SKU phát sinh giao dịch kho.</p>}
+    </fieldset>
+
+    {hasConfigurations && <section className="rounded-md border border-surface-400 p-4">
+      <div className="flex flex-wrap items-start justify-between gap-3"><div><h2 className="font-heading text-lg font-semibold">1. Khai báo thuộc tính cấu hình</h2><p className="mt-1 text-sm text-text-600">Mọi thuộc tính ở đây đều bắt buộc phải chọn khi thêm SKU.</p></div><button type="button" className="btn-outlined" onClick={() => setOptions((current) => [...current, { name: '', code: '', values: [{ value: '', code: '' }] }])}><Plus className="h-4 w-4" /> Thêm thuộc tính</button></div>
+      <div className="mt-4 space-y-4">{options.map((option, optionIndex) => {
+        const optionInUse = variants.some((variant) => variant.optionValues.some((value) => (value.optionCode ?? normalizeSkuSegment(value.option)) === option.code))
+        return <div key={`option-${optionIndex}`} className="rounded-sm border border-surface-400 bg-surface-100 p-4">
+          <div className="flex gap-2"><label className="min-w-0 flex-1 text-sm font-medium">Tên thuộc tính<input aria-label={`Tên thuộc tính ${optionIndex + 1}`} value={option.name} onChange={(event) => updateOption(optionIndex, { name: event.target.value, code: normalizeSkuSegment(event.target.value) })} className="input-gaming mt-2 w-full" placeholder="CPU, GPU, RAM, dung lượng…" /></label><DeleteButton label={`Xóa thuộc tính ${optionIndex + 1}`} disabled={optionInUse} onClick={() => setOptions((current) => current.filter((_, index) => index !== optionIndex))} /></div>
+          <div className="mt-3 grid gap-2 md:grid-cols-2">{option.values.map((value, valueIndex) => {
+            const valueInUse = variants.some((variant) => variant.optionValues.some((item) => item.optionCode === option.code && item.code === value.code))
+            return <div key={`value-${valueIndex}`} className="flex gap-2"><input aria-label={`Giá trị ${optionIndex + 1}-${valueIndex + 1}`} value={value.value} onChange={(event) => updateOption(optionIndex, { values: option.values.map((item, index) => index === valueIndex ? { value: event.target.value, code: normalizeSkuSegment(event.target.value) } : item) })} className="input-gaming min-w-0 flex-1" placeholder="Nhập một giá trị…" /><DeleteButton label={`Xóa giá trị ${optionIndex + 1}-${valueIndex + 1}`} disabled={valueInUse || option.values.length === 1} onClick={() => updateOption(optionIndex, { values: option.values.filter((_, index) => index !== valueIndex) })} /></div>
+          })}</div>
+          <button type="button" className="mt-2 min-h-11 text-sm font-semibold text-brand-500 hover:underline" onClick={() => updateOption(optionIndex, { values: [...option.values, { value: '', code: '' }] })}>+ Thêm giá trị</button>
+        </div>
+      })}</div>
+      {duplicateOptionNames && <p role="alert" className="mt-3 text-sm text-error-700">Tên thuộc tính không được trùng.</p>}
+    </section>}
+
+    {hasConfigurations && <section className="rounded-md border border-surface-400 p-4">
+      <h2 className="font-heading text-lg font-semibold">2. Tự ghép cấu hình bán được</h2><p className="mt-1 text-sm text-text-600">Chọn đủ một giá trị ở mỗi thuộc tính rồi thêm vào danh sách.</p>
+      <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">{options.map((option) => <label key={option.code} className="text-sm font-medium">{option.name || 'Thuộc tính chưa đặt tên'}<select aria-label={`Chọn ${option.name || 'thuộc tính'}`} value={selection[option.code ?? ''] ?? ''} onChange={(event) => setSelection((current) => ({ ...current, [option.code ?? '']: event.target.value }))} className="input-gaming mt-2 w-full"><option value="">Chọn giá trị</option>{option.values.filter((value) => value.value.trim()).map((value) => <option key={value.code} value={value.code}>{value.value}</option>)}</select></label>)}</div>
+      <button type="button" disabled={!options.length || incompleteOptions || duplicateOptionNames} className="btn-primary mt-4 disabled:cursor-not-allowed disabled:opacity-40" onClick={addConfiguration}><Plus className="h-4 w-4" /> Thêm cấu hình</button>
+      {message && <p aria-live="polite" className={`mt-3 rounded-sm border p-3 text-sm ${message.startsWith('Đã thêm') ? 'border-info-200 bg-info-50 text-info-700' : 'border-error-200 bg-error-50 text-error-700'}`}>{message}</p>}
+    </section>}
+
+    <fieldset className="rounded-md border border-surface-400 p-4">
+      <legend className="px-1 font-heading text-lg font-semibold">Cách quản lý tồn kho</legend><p className="mb-4 text-sm text-text-600">Áp dụng chung cho các SKU chưa phát sinh giao dịch.</p>
+      <div className="grid gap-3 md:grid-cols-2"><ModeCard checked={!serialTracking} name="tracking-mode" title="Theo số lượng" description="Dành cho phụ kiện hoặc hàng hóa đồng nhất." onChange={() => updateTracking(false)} /><ModeCard checked={serialTracking} name="tracking-mode" title="Theo từng serial" description="Khi nhập kho phải khai báo đủ serial đúng với số lượng." onChange={() => updateTracking(true)} /></div>
+    </fieldset>
+
+    <section className="rounded-md border border-surface-400 bg-white">
+      <div className="border-b border-surface-400 p-4"><h2 className="font-heading text-lg font-semibold">{hasConfigurations ? '3. Danh sách cấu hình' : 'Thông tin SKU'}</h2><p className="mt-1 text-sm text-text-600">{variants.length} SKU · Giá nhập được lưu theo từng SKU.</p></div>
+      {!variants.length && <p className="p-8 text-center text-sm text-text-600">Chưa có cấu hình. Hãy chọn thuộc tính ở trên để thêm.</p>}
+      <div className="divide-y divide-surface-400">{variants.map((variant, index) => <VariantRow key={`${combinationKey(variant.optionValues)}-${index}`} variant={variant} index={index} hasConfigurations={hasConfigurations} collision={duplicateSkus.has(variant.sku)} onUpdate={(patch) => updateVariant(index, patch)} onAudit={onAudit} onDelete={() => setPendingDelete({ index, label: variant.optionValues.map((item) => `${item.option}: ${item.value}`).join(' · ') })} />)}</div>
     </section>
-    {matrixMessage && <p aria-live="polite" className="rounded-sm border border-blue-200 bg-blue-50 p-3 text-sm text-info-500">{matrixMessage}</p>}
-    <div className="overflow-x-auto rounded-md border border-surface-400"><table className="w-full min-w-[1240px] text-left text-sm"><thead className="bg-surface-200"><tr><th className="p-3">Tổ hợp</th><th className="p-3">Mã SKU</th><th className="p-3">Cách tạo</th><th className="p-3">Mã vạch / GTIN</th><th className="p-3">Cách quản lý</th><th className="p-3">Ngưỡng nhập lại</th><th className="p-3">Trạng thái sử dụng</th></tr></thead><tbody>{variants.map((variant, index) => {
-      const previewSku = variant.sku || (variant.skuSource === 'AUTO' ? generateSkuPreview(brandCode, modelCode, variant.optionValues) : '')
-      const collision = duplicateSkus.has(previewSku)
-      return <tr key={combinationKey(variant.optionValues) || index} className="border-b border-surface-400 align-top"><td className="p-3"><span className="font-medium">{variant.optionValues.map((item) => `${item.option}: ${item.value}`).join(' · ') || 'Mặc định'}</span>{variant.skuLocked && <span className="mt-2 block text-xs font-semibold text-warning-500">Đã khóa do có giao dịch kho</span>}</td><td className="p-3"><div className="flex items-center gap-2"><input aria-label={`SKU ${index + 1}`} autoComplete="off" name={`sku-${index}`} spellCheck={false} title={variant.skuLocked ? 'SKU đã khóa vì biến thể đã có giao dịch kho.' : undefined} disabled={variant.skuLocked} value={previewSku} onChange={(event) => { const sku = normalizeSkuInput(event.target.value); updateVariant(index, { sku, skuSource: 'MANUAL' }); onAudit?.('MANUAL_OVERRIDE', sku) }} onBlur={(event) => updateVariant(index, { sku: normalizeSkuSegment(event.target.value) })} className="input-gaming w-60 font-mono disabled:bg-surface-200" /><button type="button" aria-label={`Tạo lại SKU ${index + 1}`} title={variant.skuLocked ? 'Không thể tạo lại SKU đã khóa' : 'Tạo lại SKU tự động'} disabled={variant.skuLocked} onClick={() => regenerateRow(index)} className="flex h-11 w-10 items-center justify-center rounded-sm border border-surface-400 hover:border-brand-500 focus-visible:outline-none focus-visible:shadow-focus disabled:opacity-40"><RefreshCw className="h-4 w-4" aria-hidden="true" /></button></div>{collision && <span className="mt-1 block text-xs text-error-700">SKU bị trùng trong danh mục sản phẩm.</span>}</td><td className="p-3"><StatusBadge label={variant.skuSource === 'AUTO' ? 'Tự động' : 'Thủ công'} tone={variant.skuSource === 'AUTO' ? 'info' : 'warning'} /></td><td className="p-3"><input aria-label={`Mã vạch ${index + 1}`} autoComplete="off" name={`barcode-${index}`} spellCheck={false} value={variant.barcode ?? ''} onChange={(event) => updateVariant(index, { barcode: event.target.value })} className="input-gaming mb-1 w-36" placeholder="Mã vạch…" /><input aria-label={`GTIN ${index + 1}`} autoComplete="off" name={`gtin-${index}`} spellCheck={false} value={variant.gtin ?? ''} onChange={(event) => updateVariant(index, { gtin: event.target.value })} className="input-gaming w-36" placeholder="GTIN…" /></td><td className="p-3"><label className="flex min-h-11 items-center gap-2"><input aria-label={`Theo dõi serial ${index + 1}`} title={variant.skuLocked ? 'Không thể đổi cách quản lý vì biến thể đã có giao dịch kho.' : undefined} type="checkbox" disabled={variant.skuLocked} checked={variant.serialTracking} onChange={(event) => updateVariant(index, { serialTracking: event.target.checked })} className="h-5 w-5 accent-brand-500 disabled:opacity-50" />{variant.serialTracking ? 'Theo từng serial' : 'Theo số lượng'}</label></td><td className="p-3"><input aria-label={`Ngưỡng nhập lại ${index + 1}`} type="number" min="0" step="1" value={variant.reorderLevel} onChange={(event) => updateVariant(index, { reorderLevel: Math.max(0, Number(event.target.value)) })} className="input-gaming w-24 tabular-nums" /></td><td className="p-3"><select aria-label={`Trạng thái SKU ${index + 1}`} value={variant.status} onChange={(event) => { const status = event.target.value as VariantDraft['status']; updateVariant(index, { status }); if (status === 'INACTIVE') onAudit?.('DEACTIVATE', variant.sku) }} className="input-gaming"><option value="ACTIVE">Đang dùng</option><option value="INACTIVE">Ngừng dùng</option></select></td></tr>
-    })}</tbody></table></div>
-    <ConfirmDialog isOpen={Boolean(pending)} title={pending?.type === 'regenerate-all' ? 'Ghi đè SKU thủ công?' : pending?.type === 'apply-defaults' ? 'Áp dụng thiết lập chung?' : 'Cập nhật danh sách biến thể?'} description={pending?.description ?? ''} confirmLabel="Xác nhận" onCancel={() => setPending(null)} onConfirm={confirmPending} />
+    <ConfirmDialog isOpen={Boolean(pendingDelete)} title="Xóa cấu hình này?" description={pendingDelete ? `${pendingDelete.label} sẽ bị xóa khỏi danh sách SKU đang tạo.` : ''} confirmLabel="Xóa cấu hình" onCancel={() => setPendingDelete(null)} onConfirm={confirmDelete} />
   </div>
 }
 
-function SmallButton({ children, label, onClick }: { children: ReactElement; label: string; onClick: () => void }) {
-  return <button type="button" aria-label={label} onClick={onClick} className="flex h-11 w-11 items-center justify-center rounded-sm hover:bg-white focus-visible:outline-none focus-visible:shadow-focus [&_svg]:h-4 [&_svg]:w-4">{children}</button>
+function ModeCard({ checked, description, disabled = false, name, onChange, title }: { checked: boolean; description: string; disabled?: boolean; name: string; onChange: () => void; title: string }) {
+  return <label className={`flex min-h-20 cursor-pointer gap-3 rounded-sm border p-4 ${checked ? 'border-brand-500 bg-brand-50' : 'border-surface-400 bg-white'} ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}><input type="radio" name={name} checked={checked} disabled={disabled} onChange={onChange} className="mt-0.5 h-5 w-5 accent-brand-500" /><span><strong className="block text-sm">{title}</strong><span className="mt-1 block text-xs text-text-600">{description}</span></span></label>
+}
+
+function DeleteButton({ disabled, label, onClick }: { disabled: boolean; label: string; onClick: () => void }) {
+  return <button type="button" aria-label={label} disabled={disabled} onClick={onClick} className="mt-7 flex h-11 w-11 shrink-0 items-center justify-center rounded-sm text-error-700 hover:bg-error-50 disabled:cursor-not-allowed disabled:text-text-600 disabled:opacity-40"><Trash2 className="h-4 w-4" /></button>
+}
+
+function VariantRow({ collision, hasConfigurations, index, onAudit, onDelete, onUpdate, variant }: { collision: boolean; hasConfigurations: boolean; index: number; onAudit?: Props['onAudit']; onDelete: () => void; onUpdate: (patch: Partial<VariantDraft>) => void; variant: VariantDraft }) {
+  const label = variant.optionValues.map((item) => `${item.option}: ${item.value}`).join(' · ') || 'Cấu hình mặc định'
+  return <article className="grid gap-4 p-4 xl:grid-cols-[minmax(220px,1.2fr)_minmax(200px,1fr)_180px_160px_auto] xl:items-start">
+    <div><strong className="text-sm">{label}</strong><span className="mt-2 block"><StatusBadge label={variant.serialTracking ? 'Theo serial' : 'Theo số lượng'} tone="info" /></span>{variant.skuLocked && <p className="mt-2 text-xs font-semibold text-warning-700">Đã khóa do có giao dịch kho</p>}</div>
+    <label className="text-sm font-medium">SKU<input aria-label={`SKU ${index + 1}`} disabled={variant.skuLocked} value={variant.sku} onChange={(event) => { const sku = normalizeSkuInput(event.target.value); onUpdate({ sku, skuSource: 'MANUAL' }); onAudit?.('MANUAL_OVERRIDE', sku) }} onBlur={(event) => onUpdate({ sku: normalizeSkuSegment(event.target.value) })} className="input-gaming mt-2 w-full font-mono disabled:bg-surface-200" />{collision && <span className="mt-1 block text-xs text-error-700">SKU đã tồn tại.</span>}</label>
+    <label className="text-sm font-medium">Giá nhập<input aria-label={`Giá nhập ${index + 1}`} type="number" min="1" step="1000" value={variant.purchasePrice || ''} onChange={(event) => onUpdate({ purchasePrice: Number(event.target.value) })} className="input-gaming mt-2 w-full tabular-nums" placeholder="0" /><span className="mt-1 block text-xs text-text-600">{variant.purchasePrice > 0 ? formatCurrency(variant.purchasePrice) : 'Bắt buộc'}</span></label>
+    <label className="text-sm font-medium">Sắp hết khi còn<input aria-label={`Ngưỡng sắp hết ${index + 1}`} type="number" min="0" step="1" value={variant.reorderLevel} onChange={(event) => onUpdate({ reorderLevel: Math.max(0, Number(event.target.value)) })} className="input-gaming mt-2 w-full tabular-nums" /></label>
+    <div className="flex justify-end">{hasConfigurations && <button type="button" aria-label={`Xóa cấu hình ${index + 1}`} disabled={variant.skuLocked} onClick={onDelete} className="flex h-11 w-11 items-center justify-center rounded-sm border border-error-200 text-error-700 hover:bg-error-50 disabled:cursor-not-allowed disabled:opacity-40"><Trash2 className="h-4 w-4" /></button>}</div>
+    <details className="xl:col-span-5"><summary className="cursor-pointer py-2 text-sm font-semibold text-text-600">Thông tin nâng cao</summary><div className="mt-2 grid gap-3 rounded-sm bg-surface-100 p-4 sm:grid-cols-3"><label className="text-sm font-medium">Mã vạch<input value={variant.barcode ?? ''} onChange={(event) => onUpdate({ barcode: event.target.value })} className="input-gaming mt-2 w-full" /></label><label className="text-sm font-medium">GTIN<input value={variant.gtin ?? ''} onChange={(event) => onUpdate({ gtin: event.target.value })} className="input-gaming mt-2 w-full" /></label><label className="text-sm font-medium">Trạng thái<select value={variant.status} onChange={(event) => { const status = event.target.value as VariantDraft['status']; onUpdate({ status }); if (status === 'INACTIVE') onAudit?.('DEACTIVATE', variant.sku) }} className="input-gaming mt-2 w-full"><option value="ACTIVE">Đang dùng</option><option value="INACTIVE">Ngừng dùng</option></select></label></div></details>
+  </article>
 }

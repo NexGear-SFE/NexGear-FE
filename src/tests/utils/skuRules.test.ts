@@ -27,7 +27,7 @@ describe('SKU and serial rules', () => {
   })
 
   it('rejects duplicate option combinations', () => {
-    const row = { sku: 'ASU-G16-BLK', skuSource: 'AUTO', optionValues: [{ option: 'Màu', optionCode: 'CLR', value: 'Đen', code: 'BLK' }], serialTracking: false, reorderLevel: 0, status: 'ACTIVE' }
+    const row = { sku: 'ASU-G16-BLK', skuSource: 'AUTO', optionValues: [{ option: 'Màu', optionCode: 'CLR', value: 'Đen', code: 'BLK' }], purchasePrice: 100000, serialTracking: false, reorderLevel: 0, status: 'ACTIVE' }
     expect(variantCollectionSchema.safeParse([row, { ...row, sku: 'ASU-G16-BLK-2' }]).success).toBe(false)
   })
 })

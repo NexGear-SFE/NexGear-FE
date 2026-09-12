@@ -11,21 +11,33 @@
   --font-body: 'Plus Jakarta Sans', sans-serif;
 
   /* Core Palette */
+  --color-brand-50: #FFF1F3;
   --color-brand-500: #E30019;
   --color-brand-600: #B30014;
   --color-btn-secondary: #040004;
   --color-text-900: #040004;
   --color-text-600: #636363;
   --color-surface-400: #E0E0E0;
+  --color-surface-100: #FAFAFB;
   --color-surface-200: #F4F5F7;
   --color-surface-50: #FFFFFF;
   --color-warehouse-950: #0B1220;
 
   /* Semantic Colors */
-  --color-success-500: #00A859;
-  --color-warning-500: #FB8C00;
-  --color-info-500: #1E88E5;
+  --color-success-50: #EAF8F1;
+  --color-success-200: #A7DEC4;
+  --color-success-500: #008F4C;
+  --color-success-700: #006B39;
+  --color-warning-50: #FFF6E8;
+  --color-warning-200: #FFD59A;
+  --color-warning-500: #C96A00;
+  --color-warning-700: #914C00;
+  --color-info-50: #EBF5FF;
+  --color-info-200: #A8D4FA;
+  --color-info-500: #1476C6;
+  --color-info-700: #0B5797;
   --color-error-50: #FEECEE;
+  --color-error-200: #F4AAB2;
   --color-error-700: #B70014;
 
   /* Border Radius Tokens */
@@ -43,21 +55,33 @@
 
 :root {
   /* Core Palette Variables */
+  --brand-50: #FFF1F3;
   --brand-500: #E30019;
   --brand-600: #B30014;
   --btn-secondary: #040004;
   --text-900: #040004;
   --text-600: #636363;
   --surface-400: #E0E0E0;
+  --surface-100: #FAFAFB;
   --surface-200: #F4F5F7;
   --surface-50: #FFFFFF;
   --warehouse-950: #0B1220;
 
   /* Semantic Variables */
-  --success-500: #00A859;
-  --warning-500: #FB8C00;
-  --info-500: #1E88E5;
+  --success-50: #EAF8F1;
+  --success-200: #A7DEC4;
+  --success-500: #008F4C;
+  --success-700: #006B39;
+  --warning-50: #FFF6E8;
+  --warning-200: #FFD59A;
+  --warning-500: #C96A00;
+  --warning-700: #914C00;
+  --info-50: #EBF5FF;
+  --info-200: #A8D4FA;
+  --info-500: #1476C6;
+  --info-700: #0B5797;
   --error-50: #FEECEE;
+  --error-200: #F4AAB2;
   --error-700: #B70014;
 
   /* Typography Families */
