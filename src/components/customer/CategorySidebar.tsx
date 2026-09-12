@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { ChevronRight } from 'lucide-react'
-import { CATEGORIES_DATA, type CategoryItem, type SubcategoryGroup } from '@/mocks/category.mock'
+import { CATEGORIES_DATA, type CategoryItem, type SubcategoryGroup } from '@/mocks/customer/category.mock'
 
 export type { CategoryItem, SubcategoryGroup }
 
@@ -60,24 +60,21 @@ export const CategorySidebar = ({ activeCategoryId, onSelectCategory }: Category
                       onSelectCategory?.(item.id)
                       toggleMobileAccordion(item.id)
                     }}
-                    className={`w-full flex items-center justify-between px-4 py-3 text-left transition-mechanical group cursor-pointer ${
-                      isActive
+                    className={`w-full flex items-center justify-between px-4 py-3 text-left transition-mechanical group cursor-pointer ${isActive
                         ? 'bg-[#FEECEE]/60 text-[#E30019]'
                         : 'text-[#040004] hover:text-[#E30019] hover:bg-[#FEECEE]/30'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
                       <Icon
-                        className={`w-5 h-5 shrink-0 transition-mechanical ${
-                          isActive ? 'text-[#E30019]' : 'text-gray-600 group-hover:text-[#E30019]'
-                        }`}
+                        className={`w-5 h-5 shrink-0 transition-mechanical ${isActive ? 'text-[#E30019]' : 'text-gray-600 group-hover:text-[#E30019]'
+                          }`}
                       />
                       <span className="font-semibold text-sm tracking-tight truncate">{item.name}</span>
                     </div>
                     <ChevronRight
-                      className={`w-4 h-4 shrink-0 transition-mechanical ${
-                        isMobileExpanded ? 'rotate-90 text-[#E30019]' : isActive ? 'text-[#E30019]' : 'text-gray-400 group-hover:text-[#E30019]'
-                      }`}
+                      className={`w-4 h-4 shrink-0 transition-mechanical ${isMobileExpanded ? 'rotate-90 text-[#E30019]' : isActive ? 'text-[#E30019]' : 'text-gray-400 group-hover:text-[#E30019]'
+                        }`}
                     />
                   </button>
 

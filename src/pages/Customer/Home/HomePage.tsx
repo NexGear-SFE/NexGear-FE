@@ -7,7 +7,7 @@ import { CategorySidebar } from '@/components/customer/CategorySidebar'
 import { QuickAccess } from '@/components/customer/QuickAccess'
 import { TechNews } from '@/components/customer/TechNews'
 import { Button } from '@/components/ui/Button'
-import { mockPcProducts, mockLaptopProducts, mockGearProducts } from '@/mocks/product.mock'
+import { mockPcProducts, mockLaptopProducts, mockGearProducts } from '@/mocks/customer/product.mock'
 
 import { cartStore } from '@/stores/cartStore'
 

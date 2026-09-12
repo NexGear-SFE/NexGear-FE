@@ -1,14 +1,10 @@
+import { Link } from 'react-router-dom'
 import { ChevronRight, Clock, Play } from 'lucide-react'
-import { articles, type ArticleItem } from '@/mocks/news.mock'
+import { articles, type ArticleItem } from '@/mocks/customer/news.mock'
 
 export type { ArticleItem }
 
 export const TechNews = () => {
-
-  const handleOpenNews = (title: string) => {
-    alert(`Đang mở bài viết: "${title}"`)
-  }
-
   return (
     <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
       {/* 1. Left Section: Tin tức & Đánh giá (2 Columns) */}
@@ -17,23 +13,22 @@ export const TechNews = () => {
           <h2 className="text-2xl font-bold font-heading text-[#040004]">
             Tin tức & Đánh giá
           </h2>
-          <button
-            type="button"
-            onClick={() => alert('Chuyển tới trang danh mục Tin Tức')}
+          <Link
+            to="/blogs"
             className="inline-flex items-center gap-1 text-xs font-bold text-[#E30019] hover:underline cursor-pointer"
           >
             <span>Xem tất cả</span>
             <ChevronRight className="w-3.5 h-3.5" />
-          </button>
+          </Link>
         </div>
 
         {/* Articles List */}
         <div className="space-y-3">
           {articles.map((item) => (
-            <div
+            <Link
               key={item.id}
-              onClick={() => handleOpenNews(item.title)}
-              className="bg-white border border-[#E0E0E0] rounded-[8px] p-3 flex gap-4 items-center hover:border-[#E30019] transition-mechanical shadow-sm cursor-pointer group"
+              to={`/blogs/${item.id}`}
+              className="bg-white border border-[#E0E0E0] rounded-[8px] p-3 flex gap-4 items-center hover:border-[#E30019] transition-mechanical shadow-sm cursor-pointer group block"
             >
               {/* Thumbnail Image */}
               <div className="w-28 sm:w-36 h-20 bg-[#F4F5F7] rounded-[4px] overflow-hidden shrink-0 relative">
@@ -59,7 +54,7 @@ export const TechNews = () => {
                   <span>{item.readTime}</span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

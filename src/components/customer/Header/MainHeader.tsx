@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Menu, Search, ShoppingCart, User, X } from 'lucide-react'
 import logoImg from '@/assets/images/Avatar.jpg'
 import { useCartCount, cartStore } from '@/stores/cartStore'
+import { useAuth } from '@/hooks/useAuth'
+import { AccountDropdown } from '@/components/common/AccountDropdown'
 
 export const MainHeader = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [isCategoryActive, setIsCategoryActive] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const cartCount = useCartCount()
+  const { isAuthenticated, user, openLoginModal } = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleToggle = () => setIsCategoryActive((prev) => !prev)
@@ -98,13 +104,44 @@ export const MainHeader = () => {
           </button>
 
           {/* User Account */}
-          <a
-            href="#account"
-            className="flex items-center gap-2 border border-gray-200 hover:border-gray-400 bg-white text-gray-800 px-5 py-2.5 rounded-[8px] text-sm font-bold transition-all shadow-sm"
-          >
-            <User className="w-4 h-4 text-gray-600" />
-            <span>Đăng nhập</span>
-          </a>
+          {isAuthenticated ? (
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen((prev) => !prev)}
+                className="flex items-center gap-2 border border-gray-200 hover:border-[#E30019] bg-white text-gray-800 px-4 py-2.5 rounded-[8px] text-sm font-bold transition-all shadow-sm cursor-pointer"
+              >
+                {user?.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className="w-5 h-5 rounded-full object-cover"
+                  />
+                ) : (
+                  <User className="w-4 h-4 text-[#E30019]" />
+                )}
+                <span className="truncate max-w-[120px]">{user?.name || 'Tài khoản'}</span>
+              </button>
+              <AccountDropdown
+                isOpen={isDropdownOpen}
+                onClose={() => setIsDropdownOpen(false)}
+                onOpenSettings={() => {
+                  if (user?.role === 'STORE_MANAGER') navigate('/storemanager/settings')
+                  else if (user?.role === 'TECH_STAFF') navigate('/tech-staff/settings')
+                  else navigate('/account/settings')
+                }}
+              />
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={openLoginModal}
+              className="flex items-center gap-2 border border-gray-200 hover:border-gray-400 bg-white text-gray-800 px-5 py-2.5 rounded-[8px] text-sm font-bold transition-all shadow-sm cursor-pointer"
+            >
+              <User className="w-4 h-4 text-gray-600" />
+              <span>Đăng nhập</span>
+            </button>
+          )}
         </div>
       </div>
     </div>
