@@ -1,13 +1,22 @@
-import { Outlet } from 'react-router-dom'
-import { Header } from '@/components/header/Header'
-import { Footer } from '@/components/footer/Footer'
+import { useEffect } from 'react'
+import { Outlet, useLocation, ScrollRestoration } from 'react-router-dom'
+import { Header } from '@/components/customer/Header/Header'
+import { Footer } from '@/components/customer/Footer/Footer'
+import { SupportWidget } from '@/components/customer/Home/SupportWidget'
+import { CartDrawer } from '@/components/customer/Cart/CartDrawer'
 import { QuickLoginModal } from '@/components/auth/QuickLoginModal'
-import { Bot } from 'lucide-react'
 
 export const MainLayout = () => {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F4F5F7]">
+      <ScrollRestoration />
+
       {/* Top Header Wrapper */}
       <Header />
 
@@ -22,24 +31,11 @@ export const MainLayout = () => {
       {/* Login Popup Modal (Chỉ hiển thị khi chưa đăng nhập) */}
       <QuickLoginModal />
 
-      {/* Floating Action Button (Chatbot Support) */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <button
-          type="button"
-          aria-label="Hỗ trợ AI Chatbot"
-          className="relative group bg-[#E30019] hover:bg-[#B30014] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-mechanical cursor-pointer active:scale-95"
-        >
-          <Bot className="w-7 h-7" />
-          
-          {/* Active Status Indicator Pulse */}
-          <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-[#00A859] border-2 border-white rounded-full" />
+      {/* Floating Support Widget (Technical Support, Zalo, Messenger) */}
+      <SupportWidget />
 
-          {/* Tooltip on Hover */}
-          <div className="absolute right-16 top-1/2 -translate-y-1/2 bg-[#040004] text-white text-xs font-semibold px-3 py-1.5 rounded-[4px] shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150">
-            Tư vấn AI 24/7
-          </div>
-        </button>
-      </div>
+      {/* Cart Drawer Slide-over Panel */}
+      <CartDrawer />
     </div>
   )
 }
