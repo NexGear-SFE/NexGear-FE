@@ -14,6 +14,7 @@ import {
   HelpCircle,
 } from 'lucide-react'
 import { AccountDropdown } from '@/components/AdminLayout/AccountDropdown'
+import { LoginModal } from '@/components/Auth/LoginModal'
 import type { BlogPost } from '@/types/blog.type'
 
 export type ViewMode = 'list' | 'create' | 'edit' | 'settings'
@@ -246,6 +247,9 @@ export const AdminLayout = () => {
         </main>
       </div>
 
+      {/* Login Popup Modal */}
+      <LoginModal />
+
       {/* 5.6 Floating Help Button */}
       <button
         type="button"
@@ -258,4 +262,5 @@ export const AdminLayout = () => {
     </div>
   )
 }
+
 

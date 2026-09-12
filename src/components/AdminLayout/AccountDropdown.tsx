@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Settings, LogOut, Shield } from 'lucide-react'
+import { useAuth } from '@/hooks/useAuth'
 
 interface AccountDropdownProps {
   isOpen: boolean
@@ -13,6 +15,8 @@ export const AccountDropdown = ({
   onOpenSettings,
 }: AccountDropdownProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -35,6 +39,12 @@ export const AccountDropdown = ({
 
   if (!isOpen) return null
 
+  const handleLogout = () => {
+    onClose()
+    logout()
+    navigate('/')
+  }
+
   return (
     <div
       ref={dropdownRef}
@@ -42,22 +52,30 @@ export const AccountDropdown = ({
     >
       {/* Thông tin người dùng (Top) */}
       <div className="flex items-center gap-3 p-1">
-        <div className="w-10 h-10 rounded-full bg-[#E30019] text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-xs">
-          SM
-        </div>
+        {user?.avatar ? (
+          <img
+            src={user.avatar}
+            alt={user.name}
+            className="w-10 h-10 rounded-full object-cover border border-[#E30019] shrink-0"
+          />
+        ) : (
+          <div className="w-10 h-10 rounded-full bg-[#E30019] text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-xs">
+            {user?.name ? user.name.charAt(0) : 'U'}
+          </div>
+        )}
         <div className="flex flex-col min-w-0">
           <span className="font-bold text-xs text-[#040004] truncate">
-            Store Manager
+            {user?.name || 'Quản lý Cửa Hàng'}
           </span>
           <span className="text-[11px] text-[#636363] truncate">
-            storemanager@gmail.com
+            {user?.email || 'storemanager@gmail.com'}
           </span>
           <div className="flex items-center gap-1.5 mt-1">
             <span className="bg-[#E30019] text-white text-[10px] font-bold px-1.5 py-0.2 rounded inline-flex items-center gap-0.5">
               <Shield className="w-2.5 h-2.5" /> ADMIN
             </span>
             <span className="text-[11px] text-[#636363] font-medium">
-              Super Admin
+              {user?.roleName || 'Store Manager'}
             </span>
           </div>
         </div>
@@ -85,10 +103,7 @@ export const AccountDropdown = ({
       {/* Mục 2: Đăng xuất */}
       <button
         type="button"
-        onClick={() => {
-          onClose()
-          alert('Đã đăng xuất tài khoản Store Manager!')
-        }}
+        onClick={handleLogout}
         className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-semibold text-[#E30019] hover:bg-red-50 transition-mechanical cursor-pointer text-left"
       >
         <LogOut className="w-4 h-4 text-[#E30019] shrink-0" />
@@ -97,3 +112,4 @@ export const AccountDropdown = ({
     </div>
   )
 }
+

@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { Header } from '@/components/Header/Header'
 import { Footer } from '@/components/Footer/Footer'
+import { LoginModal } from '@/components/Auth/LoginModal'
 import { Bot } from 'lucide-react'
 
 export const MainLayout = () => {
@@ -16,6 +17,9 @@ export const MainLayout = () => {
 
       {/* Footer Wrapper */}
       <Footer />
+
+      {/* Login Popup Modal */}
+      <LoginModal />
 
       {/* Floating Action Button (Chatbot Support) */}
       <div className="fixed bottom-6 right-6 z-50">
@@ -38,3 +42,4 @@ export const MainLayout = () => {
     </div>
   )
 }
+

@@ -17,8 +17,8 @@ export const BlogFilterTabs = ({
 }: BlogFilterTabsProps) => {
   const tabs: { key: BlogFilterStatus; label: string; count: number }[] = [
     { key: 'all', label: 'Tất cả', count: counts.all },
-    { key: 'published', label: 'Published', count: counts.published },
-    { key: 'draft', label: 'Draft', count: counts.draft },
+    { key: 'published', label: 'Xuất bản', count: counts.published },
+    { key: 'draft', label: 'Bản nháp', count: counts.draft },
   ]
 
   return (

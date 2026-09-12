@@ -60,12 +60,12 @@ export const BlogTableRow = ({ post, onEdit, onDelete }: BlogTableRowProps) => {
           {isPublished ? (
             <span className="bg-[#E6F7ED] text-[#00A859] rounded-full px-3 py-0.5 text-xs font-medium inline-flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#00A859]" />
-              Published
+              Xuất bản
             </span>
           ) : (
             <span className="bg-slate-100 text-slate-600 rounded-full px-3 py-0.5 text-xs font-medium inline-flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-              Draft
+              Bản nháp
             </span>
           )}
 
