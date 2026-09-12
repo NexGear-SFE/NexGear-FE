@@ -7,7 +7,7 @@ export const mockPcProducts: Product[] = [
     slug: 'pc-gvn-intel-i5-12400f-rtx-3050',
     price: 17490000,
     originalPrice: 19620000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=800&q=80',
     category: 'pc',
     inStock: true,
     specs: [
@@ -22,7 +22,7 @@ export const mockPcProducts: Product[] = [
     slug: 'pc-gvn-intel-i5-13400f-rtx-4060',
     price: 21990000,
     originalPrice: 24500000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=800&q=80',
     category: 'pc',
     inStock: true,
     specs: [
@@ -37,7 +37,7 @@ export const mockPcProducts: Product[] = [
     slug: 'pc-gvn-asus-rog-i7-14700f-rtx-4070ti',
     price: 52990000,
     originalPrice: 57990000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
     category: 'pc',
     inStock: true,
     specs: [
@@ -52,7 +52,7 @@ export const mockPcProducts: Product[] = [
     slug: 'pc-gvn-msi-ryzen-9-7950x3d-rtx-4090',
     price: 95990000,
     originalPrice: 105000000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
     category: 'pc',
     inStock: true,
     specs: [
@@ -70,7 +70,7 @@ export const mockLaptopProducts: Product[] = [
     slug: 'laptop-gaming-asus-rog-strix-g16',
     price: 38990000,
     originalPrice: 42990000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=800&q=80',
     category: 'laptop',
     inStock: true,
     specs: [
@@ -85,7 +85,7 @@ export const mockLaptopProducts: Product[] = [
     slug: 'laptop-gaming-acer-nitro-v-15',
     price: 22490000,
     originalPrice: 24990000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=800&q=80',
     category: 'laptop',
     inStock: true,
     specs: [
@@ -100,7 +100,7 @@ export const mockLaptopProducts: Product[] = [
     slug: 'laptop-gaming-msi-cyborg-15',
     price: 25990000,
     originalPrice: 28500000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&fit=crop&w=800&q=80',
     category: 'laptop',
     inStock: true,
     specs: [
@@ -115,7 +115,7 @@ export const mockLaptopProducts: Product[] = [
     slug: 'laptop-lenovo-legion-pro-5',
     price: 46990000,
     originalPrice: 51990000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1629429408209-1f912961dbd8?auto=format&fit=crop&w=800&q=80',
     category: 'laptop',
     inStock: true,
     specs: [
@@ -133,7 +133,7 @@ export const mockGearProducts: Product[] = [
     slug: 'vga-asus-rog-strix-geforce-rtx-4080-super-16gb',
     price: 32490000,
     originalPrice: 35990000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=800&q=80',
     category: 'pc',
     inStock: true,
     specs: [
@@ -148,7 +148,7 @@ export const mockGearProducts: Product[] = [
     slug: 'ban-phim-co-akko-3098b',
     price: 2450000,
     originalPrice: 2890000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80',
     category: 'gear',
     inStock: true,
     specs: [
@@ -163,7 +163,7 @@ export const mockGearProducts: Product[] = [
     slug: 'chuot-logitech-g-pro-x-superlight-2',
     price: 3590000,
     originalPrice: 3890000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=800&q=80',
     category: 'gear',
     inStock: true,
     specs: [
@@ -178,7 +178,7 @@ export const mockGearProducts: Product[] = [
     slug: 'tai-nghe-hyperx-cloud-iii-wireless',
     price: 3890000,
     originalPrice: 4290000,
-    image: '',
+    image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80',
     category: 'gear',
     inStock: true,
     specs: [
