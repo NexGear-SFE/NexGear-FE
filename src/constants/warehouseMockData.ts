@@ -1,7 +1,8 @@
 import type { Category } from '@/types/category.type'
 import type { InventoryMovement, ProductSerial, VariantInventory } from '@/types/inventory.type'
-import type { Product, ProductVariant } from '@/types/product.type'
+import type { Product } from '@/types/product.type'
 import type { StockReceipt } from '@/types/receipt.type'
+import type { ProductVariant } from '@/types/variant.type'
 import type { WarehouseOrder } from '@/types/warehouseOrder.type'
 
 const now = '2026-09-09T09:00:00.000Z'

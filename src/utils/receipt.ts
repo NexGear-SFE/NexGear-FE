@@ -1,5 +1,5 @@
 import type { ProductSerial } from '@/types/inventory.type'
-import type { ProductVariant } from '@/types/product.type'
+import type { ProductVariant } from '@/types/variant.type'
 import type { ReceiptLine, StockReceipt } from '@/types/receipt.type'
 
 export function calculateLineTotal(line: Pick<ReceiptLine, 'quantity' | 'unitCost'>): number {

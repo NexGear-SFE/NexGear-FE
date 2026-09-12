@@ -1,4 +1,4 @@
-import type { VariantOptionValue } from '@/types/product.type'
+import type { VariantOptionValue } from '@/types/variant.type'
 
 export const SKU_PATTERN = /^[A-Z0-9]+(?:-[A-Z0-9]+)*$/
 export const SKU_MAX_LENGTH = 32

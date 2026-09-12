@@ -1,16 +1,10 @@
 import type { Category } from '@/types/category.type'
-import type { ProductSerial, StockStatus, VariantInventory } from '@/types/inventory.type'
-import type { Product, ProductVariant } from '@/types/product.type'
-import { getAvailableStock } from '@/utils/formatters'
+import type { InventoryRow, ProductSerial, StockStatus, VariantInventory } from '@/types/inventory.type'
+import type { Product } from '@/types/product.type'
+import type { ProductVariant } from '@/types/variant.type'
 
-export interface InventoryRow {
-  product: Product
-  variant: ProductVariant
-  category: Category | undefined
-  stock: VariantInventory
-  available: number
-  serialCount: number
-  status: StockStatus
+export function getAvailableStock(onHand: number, reserved: number): number {
+  return Math.max(0, onHand - reserved)
 }
 
 export function getStockStatus(onHand: number, reserved: number, reorderLevel: number): StockStatus {
@@ -37,16 +31,17 @@ export function buildInventoryRows(
       stock,
       available: getAvailableStock(stock.onHand, stock.reserved),
       serialCount: serials.filter((serial) => serial.variantId === variant.id).length,
+      serialsAvailable: serials.filter((serial) => serial.variantId === variant.id && serial.status === 'AVAILABLE').length,
       status: getStockStatus(stock.onHand, stock.reserved, variant.reorderLevel),
     }
   }).filter((row): row is InventoryRow => row !== null)
 }
 
-export function filterInventoryRows(rows: InventoryRow[], query: string, categoryId: string, status: string): InventoryRow[] {
+export function filterInventoryRows(rows: InventoryRow[], query: string, categoryId: string, status: string, serialVariantIds: ReadonlySet<string> = new Set()): InventoryRow[] {
   const normalizedQuery = query.trim().toLocaleLowerCase('vi')
   return rows.filter((row) => {
     const searchText = `${row.product.name} ${row.variant.sku}`.toLocaleLowerCase('vi')
-    return (!normalizedQuery || searchText.includes(normalizedQuery))
+    return (!normalizedQuery || searchText.includes(normalizedQuery) || serialVariantIds.has(row.variant.id))
       && (!categoryId || row.product.categoryId === categoryId)
       && (!status || row.status === status)
   })

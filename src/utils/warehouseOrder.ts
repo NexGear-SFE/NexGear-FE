@@ -1,3 +1,4 @@
+import { packingSchema } from '@/schemas/warehouseOrder.schema'
 import type { WarehouseOrder, WarehouseOrderState } from '@/types/warehouseOrder.type'
 
 export const orderStateLabels: Record<WarehouseOrderState, string> = {
@@ -20,10 +21,6 @@ export function getOrderProgressIndex(order: WarehouseOrder, requiresSerial: boo
 }
 
 export function validateParcel(parcel: { weightGrams: number; lengthCm: number; widthCm: number; heightCm: number }): string[] {
-  const issues: string[] = []
-  if (parcel.weightGrams <= 0) issues.push('Khối lượng phải lớn hơn 0.')
-  if (parcel.lengthCm <= 0) issues.push('Chiều dài phải lớn hơn 0.')
-  if (parcel.widthCm <= 0) issues.push('Chiều rộng phải lớn hơn 0.')
-  if (parcel.heightCm <= 0) issues.push('Chiều cao phải lớn hơn 0.')
-  return issues
+  const result = packingSchema.safeParse(parcel)
+  return result.success ? [] : result.error.issues.map((issue) => issue.message)
 }

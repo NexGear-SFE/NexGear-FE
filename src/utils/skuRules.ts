@@ -1,5 +1,5 @@
 import type { ProductSerial } from '@/types/inventory.type'
-import type { ProductVariant } from '@/types/product.type'
+import type { ProductVariant } from '@/types/variant.type'
 
 export function findDuplicateSkus(currentSkus: string[], existingSkus: string[] = []): Set<string> {
   const counts = new Map<string, number>()

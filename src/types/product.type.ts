@@ -1,42 +1,8 @@
 export type ProductStatus = 'DRAFT' | 'ACTIVE' | 'INACTIVE'
-export type VariantStatus = 'ACTIVE' | 'INACTIVE'
-export type SkuSource = 'AUTO' | 'MANUAL'
 
 export interface ProductSpecification {
   key: string
   value: string
-}
-
-export interface VariantOptionValue {
-  option: string
-  optionCode?: string
-  value: string
-  code: string
-}
-
-export interface ProductVariant {
-  id: string
-  productId: string
-  sku: string
-  skuSource: SkuSource
-  optionValues: VariantOptionValue[]
-  barcode?: string
-  gtin?: string
-  serialTracking: boolean
-  reorderLevel: number
-  status: VariantStatus
-  skuLocked: boolean
-  createdAt: string
-  updatedAt: string
-}
-
-export interface SkuAuditEntry {
-  id: string
-  action: 'CREATE' | 'MANUAL_OVERRIDE' | 'REGENERATE' | 'DEACTIVATE'
-  sku: string
-  variantId?: string
-  actor: string
-  occurredAt: string
 }
 
 export interface ProductDimensions {
@@ -66,3 +32,12 @@ export interface Product {
   createdAt: string
   updatedAt: string
 }
+
+export type {
+  ProductVariant,
+  SkuAuditEntry,
+  SkuSource,
+  VariantOption,
+  VariantOptionValue,
+  VariantStatus,
+} from '@/types/variant.type'

@@ -1,5 +1,6 @@
 import { initialProducts, initialVariants } from '@/constants/warehouseMockData'
-import type { Product, ProductVariant } from '@/types/product.type'
+import type { Product } from '@/types/product.type'
+import type { ProductVariant } from '@/types/variant.type'
 import { mockResponse } from '@/apis/mockResponse'
 
 export function getProducts() { return mockResponse<Product[]>(initialProducts) }

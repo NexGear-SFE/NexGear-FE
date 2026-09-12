@@ -11,8 +11,9 @@ import {
 } from '@/constants/warehouseMockData'
 import type { Category } from '@/types/category.type'
 import type { InventoryMovement, ProductSerial, VariantInventory } from '@/types/inventory.type'
-import type { Product, ProductVariant, SkuAuditEntry } from '@/types/product.type'
+import type { Product } from '@/types/product.type'
 import type { StockReceipt } from '@/types/receipt.type'
+import type { ProductVariant, SkuAuditEntry } from '@/types/variant.type'
 import type { WarehouseOrder, WarehouseOrderState } from '@/types/warehouseOrder.type'
 import { getReceiptValidationIssues } from '@/utils/receipt'
 
@@ -20,7 +21,7 @@ type CategoryDraft = Omit<Category, 'id' | 'createdAt' | 'updatedAt'>
 type ProductDraft = Omit<Product, 'id' | 'createdAt' | 'updatedAt'>
 type VariantDraft = Omit<ProductVariant, 'id' | 'productId' | 'createdAt' | 'updatedAt'>
 
-interface WarehouseState {
+export interface WarehouseState {
   categories: Category[]
   products: Product[]
   variants: ProductVariant[]
@@ -44,6 +45,10 @@ interface WarehouseState {
   setPickedQuantity: (orderId: string, itemId: string, quantity: number) => void
   completePicking: (orderId: string) => void
   assignOrderSerials: (orderId: string, serialIds: string[]) => void
+  releaseSerialReservation: (serialId: string) => boolean
+  markSerialReturned: (serialId: string) => boolean
+  restockReturnedSerial: (serialId: string) => boolean
+  adjustInventory: (variantId: string, quantityDelta: number, reference: string) => boolean
   packOrder: (orderId: string, shouldFail?: boolean, parcel?: WarehouseOrder['parcel']) => void
   completeOrder: (orderId: string) => void
 }
@@ -203,9 +208,11 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
       set({ orders: state.orders.map((candidate) => candidate.id === orderId ? addTimeline({ ...candidate, state: 'ISSUE', issue: { code: 'INSUFFICIENT_STOCK', title: 'Không đủ tồn kho', message: 'Một hoặc nhiều SKU không đủ available để giữ hàng.', occurredAt: timestamp(), resumeState: 'WAITING_ACCEPTANCE', retryable: true } }, 'Giữ hàng thất bại') : candidate) })
       return false
     }
+    const reservedAt = timestamp()
     set({
       inventory: state.inventory.map((stock) => ({ ...stock, reserved: stock.reserved + (order.items.find((item) => item.variantId === stock.variantId)?.quantity ?? 0) })),
       orders: state.orders.map((candidate) => candidate.id === orderId ? addTimeline({ ...candidate, reservationApplied: true }, 'Đã giữ hàng') : candidate),
+      movements: [...state.movements, ...order.items.map((item) => ({ id: crypto.randomUUID(), variantId: item.variantId, reason: 'ORDER_RESERVED' as const, quantityDelta: 0, reference: order.id, occurredAt: reservedAt }))],
     })
     return true
   },
@@ -252,6 +259,55 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
     }
   }),
 
+  releaseSerialReservation: (serialId) => {
+    const state = get()
+    const serial = state.serials.find((candidate) => candidate.id === serialId)
+    if (!serial || serial.status !== 'RESERVED') return false
+    const relatedOrder = state.orders.find((order) => order.items.some((item) => item.assignedSerialIds.includes(serialId)))
+    set({
+      serials: state.serials.map((candidate) => candidate.id === serialId ? { ...candidate, status: 'AVAILABLE' } : candidate),
+      orders: state.orders.map((order) => {
+        if (order.id !== relatedOrder?.id) return order
+        const nextOrder = { ...order, state: order.state === 'READY_TO_PACK' ? 'WAITING_SERIAL' as const : order.state, items: order.items.map((item) => ({ ...item, assignedSerialIds: item.assignedSerialIds.filter((id) => id !== serialId) })) }
+        return addTimeline(nextOrder, `Đã hủy giữ serial ${serial.value}`)
+      }),
+    })
+    return true
+  },
+
+  markSerialReturned: (serialId) => {
+    const state = get()
+    const serial = state.serials.find((candidate) => candidate.id === serialId)
+    if (!serial || serial.status !== 'SOLD') return false
+    set({ serials: state.serials.map((candidate) => candidate.id === serialId ? { ...candidate, status: 'RETURNED' } : candidate) })
+    return true
+  },
+
+  restockReturnedSerial: (serialId) => {
+    const state = get()
+    const serial = state.serials.find((candidate) => candidate.id === serialId)
+    if (!serial || serial.status !== 'RETURNED') return false
+    const occurredAt = timestamp()
+    set({
+      serials: state.serials.map((candidate) => candidate.id === serialId ? { ...candidate, status: 'AVAILABLE' } : candidate),
+      inventory: state.inventory.map((stock) => stock.variantId === serial.variantId ? { ...stock, onHand: stock.onHand + 1 } : stock),
+      movements: [...state.movements, { id: crypto.randomUUID(), variantId: serial.variantId, reason: 'ADJUSTMENT', quantityDelta: 1, reference: `RETURN-${serial.value}`, occurredAt }],
+    })
+    return true
+  },
+
+  adjustInventory: (variantId, quantityDelta, reference) => {
+    const state = get()
+    const variant = state.variants.find((candidate) => candidate.id === variantId)
+    const stock = state.inventory.find((candidate) => candidate.variantId === variantId)
+    if (!variant || variant.serialTracking || !stock || !Number.isInteger(quantityDelta) || quantityDelta === 0 || !reference.trim() || stock.onHand + quantityDelta < stock.reserved) return false
+    set({
+      inventory: state.inventory.map((candidate) => candidate.variantId === variantId ? { ...candidate, onHand: candidate.onHand + quantityDelta } : candidate),
+      movements: [...state.movements, { id: crypto.randomUUID(), variantId, reason: 'ADJUSTMENT', quantityDelta, reference: reference.trim(), occurredAt: timestamp() }],
+    })
+    return true
+  },
+
   packOrder: (orderId, shouldFail = false, parcel) => set((state) => ({
     orders: state.orders.map((order) => {
       const canPack = order.id === orderId && (order.state === 'READY_TO_PACK' || order.state === 'ISSUE')
@@ -277,17 +333,65 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
   }),
 }))
 
-export function getProductTotal(products: Product[], variants: ProductVariant[], productId: string): number {
-  return products.some((product) => product.id === productId)
-    ? variants.filter((variant) => variant.productId === productId).length
-    : 0
-}
-
 export const warehouseSelectors = {
-  categories: (state: WarehouseState) => state.categories,
-  products: (state: WarehouseState) => state.products,
-  variants: (state: WarehouseState) => state.variants,
-  inventory: (state: WarehouseState) => state.inventory,
-  receipts: (state: WarehouseState) => state.receipts,
-  orders: (state: WarehouseState) => state.orders,
+  catalog: (state: WarehouseState) => ({
+    categories: state.categories,
+    products: state.products,
+    variants: state.variants,
+    inventory: state.inventory,
+    serials: state.serials,
+    movements: state.movements,
+    skuAudit: state.skuAudit,
+    createCategory: state.createCategory,
+    updateCategory: state.updateCategory,
+    toggleCategoryStatus: state.toggleCategoryStatus,
+    moveCategory: state.moveCategory,
+    saveProduct: state.saveProduct,
+    toggleProductStatus: state.toggleProductStatus,
+    logSkuAudit: state.logSkuAudit,
+  }),
+  inventory: (state: WarehouseState) => ({
+    categories: state.categories,
+    products: state.products,
+    variants: state.variants,
+    inventory: state.inventory,
+    serials: state.serials,
+    movements: state.movements,
+    receipts: state.receipts,
+    orders: state.orders,
+    releaseSerialReservation: state.releaseSerialReservation,
+    markSerialReturned: state.markSerialReturned,
+    restockReturnedSerial: state.restockReturnedSerial,
+    adjustInventory: state.adjustInventory,
+  }),
+  receipts: (state: WarehouseState) => ({
+    categories: state.categories,
+    products: state.products,
+    variants: state.variants,
+    serials: state.serials,
+    receipts: state.receipts,
+    saveReceipt: state.saveReceipt,
+    confirmReceipt: state.confirmReceipt,
+  }),
+  orders: (state: WarehouseState) => ({
+    products: state.products,
+    variants: state.variants,
+    inventory: state.inventory,
+    serials: state.serials,
+    orders: state.orders,
+    acceptOrder: state.acceptOrder,
+    setPickedQuantity: state.setPickedQuantity,
+    completePicking: state.completePicking,
+    assignOrderSerials: state.assignOrderSerials,
+    packOrder: state.packOrder,
+    completeOrder: state.completeOrder,
+  }),
+  dashboard: (state: WarehouseState) => ({
+    categories: state.categories,
+    products: state.products,
+    variants: state.variants,
+    inventory: state.inventory,
+    receipts: state.receipts,
+    orders: state.orders,
+  }),
 }
