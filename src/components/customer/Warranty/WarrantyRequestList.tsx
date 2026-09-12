@@ -202,13 +202,6 @@ export function WarrantyRequestList({ requests, onOpenCreateModal, onSelectReque
                     <h3 className="font-bold text-sm sm:text-base text-[#040004] leading-snug truncate">
                       {req.productName}
                     </h3>
-                    <div className="flex items-center gap-2 text-xs font-mono text-slate-500 flex-wrap">
-                      <span className="font-bold text-slate-900">{req.requestCode}</span>
-                      <span>·</span>
-                      <span>SN: {req.serialNumber}</span>
-                      <span>·</span>
-                      <span>Đơn hàng {req.orderCode}</span>
-                    </div>
                   </div>
                 </div>
 

@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Menu, Search, ShoppingCart, User, X } from 'lucide-react'
+import { Menu, Search, ShoppingCart, User, X, ChevronRight } from 'lucide-react'
 import logoImg from '@/assets/images/Avatar.jpg'
 import { useCartCount, cartStore } from '@/stores/cartStore'
 import { useAuth } from '@/hooks/useAuth'
 import { AccountDropdown } from '@/components/common/AccountDropdown'
+import { CATEGORIES_DATA, type CategoryItem } from '@/mocks/customer/category.mock'
 
 export const MainHeader = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [isCategoryActive, setIsCategoryActive] = useState(false)
+  const [hoveredCategory, setHoveredCategory] = useState<CategoryItem>(CATEGORIES_DATA[0])
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const cartCount = useCartCount()
   const { isAuthenticated, user, openLoginModal } = useAuth()
@@ -27,15 +29,39 @@ export const MainHeader = () => {
   }, [])
 
   const handleCategoryClick = () => {
-    const el = document.getElementById('category-section')
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
+    setIsCategoryActive((prev) => !prev)
     window.dispatchEvent(new CustomEvent('toggle-category-overlay'))
   }
 
+  const handleSelectCategory = (catId: string) => {
+    setIsCategoryActive(false)
+    window.dispatchEvent(new CustomEvent('close-category-overlay'))
+
+    let targetSectionId = 'pc-banchay'
+    if (catId === 'laptop' || catId === 'laptop-gaming') {
+      targetSectionId = 'laptop-banchay'
+    } else if (['audio-gear', 'screen', 'gear', 'monitor', 'main-cpu-vga', 'storage', 'stream'].includes(catId)) {
+      targetSectionId = 'gear-banchay'
+    }
+
+    if (window.location.pathname !== '/') {
+      navigate('/')
+      setTimeout(() => {
+        const targetEl = document.getElementById(targetSectionId)
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
+    } else {
+      const targetEl = document.getElementById(targetSectionId)
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+  }
+
   return (
-    <div className="bg-white border-b border-gray-200 text-[#040004] py-3">
+    <div className="bg-white border-b border-gray-200 text-[#040004] py-3 relative">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-4">
         {/* Left: Logo */}
         <a href="/" className="flex items-center group shrink-0">
@@ -50,10 +76,11 @@ export const MainHeader = () => {
         <div className="flex-1 max-w-3xl mx-2 flex items-center gap-2.5">
           {/* Category Trigger Button */}
           <button
+            type="button"
             onClick={handleCategoryClick}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-[8px] text-sm font-bold transition-all shadow-sm cursor-pointer shrink-0 ${
               isCategoryActive
-                ? 'bg-[#E30019] text-white ring-2 ring-red-400/50 z-40'
+                ? 'bg-[#E30019] text-white ring-2 ring-red-400/50 z-50'
                 : 'bg-black text-white hover:bg-zinc-800'
             }`}
           >
@@ -144,6 +171,96 @@ export const MainHeader = () => {
           )}
         </div>
       </div>
+
+      {/* Category Mega Menu Overlay Dropdown */}
+      {isCategoryActive && (
+        <>
+          {/* Translucent Backdrop Overlay */}
+          <div
+            className="fixed inset-0 top-[110px] bg-black/50 z-40 transition-opacity duration-200"
+            onClick={() => {
+              setIsCategoryActive(false)
+              window.dispatchEvent(new CustomEvent('close-category-overlay'))
+            }}
+          />
+
+          {/* Mega Menu Dropdown Panel */}
+          <div className="absolute top-full left-0 right-0 z-50 bg-white border-t border-b border-gray-200 shadow-2xl animate-in slide-in-from-top-2 duration-150">
+            <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-12 gap-6 min-h-[360px]">
+              {/* Left Column: Categories List */}
+              <div className="col-span-12 lg:col-span-4 border-r border-gray-100 pr-4 space-y-1">
+                <div className="px-3 py-1.5 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                  Tất cả danh mục sản phẩm
+                </div>
+                {CATEGORIES_DATA.map((cat) => {
+                  const Icon = cat.icon
+                  const isHovered = hoveredCategory.id === cat.id
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onMouseEnter={() => setHoveredCategory(cat)}
+                      onClick={() => handleSelectCategory(cat.id)}
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-[6px] text-left transition-all cursor-pointer ${
+                        isHovered
+                          ? 'bg-red-50 text-[#E30019] font-bold'
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-black font-semibold'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <Icon className={`w-4 h-4 shrink-0 ${isHovered ? 'text-[#E30019]' : 'text-gray-500'}`} />
+                        <span className="text-xs sm:text-sm truncate">{cat.name}</span>
+                      </div>
+                      <ChevronRight className={`w-4 h-4 shrink-0 ${isHovered ? 'text-[#E30019]' : 'text-gray-300'}`} />
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Right Column: Active Category Subgroups */}
+              <div className="col-span-12 lg:col-span-8 pl-2 space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                  <h3 className="text-base font-bold text-[#040004] font-heading flex items-center gap-2">
+                    <span>{hoveredCategory.name}</span>
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => handleSelectCategory(hoveredCategory.id)}
+                    className="text-xs font-bold text-[#E30019] hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>Xem tất cả sản phẩm</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                  {hoveredCategory.subgroups?.map((group, gIdx) => (
+                    <div key={gIdx} className="space-y-2.5">
+                      <h4 className="font-bold text-xs text-slate-900 border-b border-gray-100 pb-1.5 font-heading">
+                        {group.title}
+                      </h4>
+                      <ul className="space-y-1.5">
+                        {group.items.map((item, iIdx) => (
+                          <li key={iIdx}>
+                            <button
+                              type="button"
+                              onClick={() => handleSelectCategory(hoveredCategory.id)}
+                              className="text-xs text-gray-600 hover:text-[#E30019] transition-colors cursor-pointer text-left block w-full hover:translate-x-0.5"
+                            >
+                              {item}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
+
