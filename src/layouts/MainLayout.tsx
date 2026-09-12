@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Outlet, useLocation, ScrollRestoration } from 'react-router-dom'
 import { Header } from '@/components/customer/Header/Header'
 import { Footer } from '@/components/customer/Footer/Footer'
-import { SupportWidget } from '@/components/customer/SupportWidget'
+import { SupportWidget } from '@/components/customer/Home/SupportWidget'
 import { CartDrawer } from '@/components/customer/Cart/CartDrawer'
 import { QuickLoginModal } from '@/components/auth/QuickLoginModal'
 
