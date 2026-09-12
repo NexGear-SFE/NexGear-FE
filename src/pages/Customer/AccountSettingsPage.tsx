@@ -1,11 +1,16 @@
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { LayoutDashboard, Package, ShieldCheck, User, Wrench, Search, ChevronRight } from 'lucide-react'
+import { LayoutDashboard, Package, ShieldCheck, User, Search, ChevronRight } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { SharedAccountSettings } from '@/components/common/SharedAccountSettings'
 import type { UserProfile } from '@/types/account.type'
 import { MOCK_ORDERS } from '@/mocks/customer/order.mock'
 import { formatCurrency } from '@/utils/formatCurrency'
+import { WarrantyRequestList } from '@/components/customer/Warranty/WarrantyRequestList'
+import { CreateWarrantyModal } from '@/components/customer/Warranty/CreateWarrantyModal'
+import { WarrantyDetailModal } from '@/components/customer/Warranty/WarrantyDetailModal'
+import { MOCK_CUSTOMER_WARRANTY_REQUESTS } from '@/mocks/customer/warranty.mock'
+import type { CustomerWarrantyRequest } from '@/types/customerWarranty.type'
 
 type CustomerTab = 'overview' | 'orders' | 'warranty' | 'profile'
 type OrderFilterStatus = 'all' | 'processing' | 'shipping' | 'delivered' | 'cancelled' | 'returned'
@@ -20,6 +25,11 @@ export function CustomerAccountSettingsPage() {
   const [orderFilter, setOrderFilter] = useState<OrderFilterStatus>('all')
   const [searchQuery, setSearchQuery] = useState('')
   const { user } = useAuth()
+
+  // Warranty Tab States
+  const [warrantyRequests, setWarrantyRequests] = useState<CustomerWarrantyRequest[]>(MOCK_CUSTOMER_WARRANTY_REQUESTS)
+  const [isCreateWarrantyOpen, setIsCreateWarrantyOpen] = useState(false)
+  const [selectedWarrantyDetail, setSelectedWarrantyDetail] = useState<CustomerWarrantyRequest | null>(null)
 
   const handleTabChange = (tabKey: CustomerTab) => {
     setSearchParams({ tab: tabKey })
@@ -133,11 +143,10 @@ export function CustomerAccountSettingsPage() {
                 key={t.key}
                 type="button"
                 onClick={() => handleTabChange(t.key)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-                  isActive
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${isActive
                     ? 'bg-[#E30019] text-white shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                }`}
+                  }`}
               >
                 <span>{t.icon}</span>
                 <span>{t.label}</span>
@@ -150,15 +159,187 @@ export function CustomerAccountSettingsPage() {
         <div>
           {/* 1. OVERVIEW TAB */}
           {activeTab === 'overview' && (
-            <div className="bg-white rounded-xl border border-[#E0E0E0] p-12 text-center space-y-4 shadow-xs">
-              <div className="w-16 h-16 rounded-full bg-red-50 text-[#E30019] mx-auto flex items-center justify-center">
-                <Wrench className="w-8 h-8" />
+            <div className="space-y-6">
+              {/* Welcome Header */}
+              <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 md:p-8 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <h2 className="text-xl sm:text-2xl font-bold font-heading text-[#040004]">
+                    Xin chào, {user?.name || 'Nguyễn Văn Khách'}!
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                    Chào mừng bạn quay trở lại NexGear. Quản lý đơn hàng, bảo hành và thông tin tài khoản của bạn tại đây.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => handleTabChange('orders')}
+                    className="inline-flex items-center gap-2 bg-[#E30019] hover:bg-[#cc0016] text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-[6px] transition-all cursor-pointer shadow-xs"
+                  >
+                    <Package className="w-4 h-4" />
+                    <span>Xem đơn hàng ({MOCK_ORDERS.length})</span>
+                  </button>
+                </div>
               </div>
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-[#040004]">Tính năng Tổng quan</h3>
-                <p className="text-xs md:text-sm text-slate-500 max-w-md mx-auto">
-                  Tính năng xem tổng quan đang được hoàn thiện và sẽ ra mắt trong thời gian sớm nhất!
-                </p>
+
+              {/* Quick Access Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Card 1: Orders */}
+                <div
+                  onClick={() => handleTabChange('orders')}
+                  className="bg-white rounded-xl border border-[#E0E0E0] hover:border-[#E30019] p-6 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between space-y-4"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 rounded-lg bg-red-50 text-[#E30019] flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Package className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 font-mono">
+                      {MOCK_ORDERS.length} đơn
+                    </span>
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="font-bold text-base text-[#040004] group-hover:text-[#E30019] transition-colors">
+                      Đơn hàng của tôi
+                    </h3>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      Theo dõi trạng thái giao hàng, lịch sử mua và xem chi tiết hóa đơn.
+                    </p>
+                  </div>
+                  <div className="flex items-center text-xs font-bold text-[#E30019] pt-2 border-t border-gray-100">
+                    <span>Xem đơn hàng</span>
+                    <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+
+                {/* Card 2: Warranty */}
+                <div
+                  onClick={() => handleTabChange('warranty')}
+                  className="bg-white rounded-xl border border-[#E0E0E0] hover:border-[#E30019] p-6 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between space-y-4"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <ShieldCheck className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 font-mono">
+                      {warrantyRequests.length} yêu cầu
+                    </span>
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="font-bold text-base text-[#040004] group-hover:text-[#E30019] transition-colors">
+                      Yêu cầu bảo hành
+                    </h3>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      Gửi yêu cầu bảo hành mới và kiểm tra tiến trình xử lý kỹ thuật.
+                    </p>
+                  </div>
+                  <div className="flex items-center text-xs font-bold text-[#E30019] pt-2 border-t border-gray-100">
+                    <span>Xem bảo hành</span>
+                    <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+
+                {/* Card 3: Profile */}
+                <div
+                  onClick={() => handleTabChange('profile')}
+                  className="bg-white rounded-xl border border-[#E0E0E0] hover:border-[#E30019] p-6 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between space-y-4"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <User className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700">
+                      Hồ sơ cá nhân
+                    </span>
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="font-bold text-base text-[#040004] group-hover:text-[#E30019] transition-colors">
+                      Thông tin &amp; Bảo mật
+                    </h3>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      Cập nhật tên, email, số điện thoại và thay đổi mật khẩu đăng nhập.
+                    </p>
+                  </div>
+                  <div className="flex items-center text-xs font-bold text-[#E30019] pt-2 border-t border-gray-100">
+                    <span>Cập nhật hồ sơ</span>
+                    <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Recent Orders Section */}
+              <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 md:p-8 space-y-4 shadow-xs">
+                <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                  <h3 className="text-base sm:text-lg font-bold font-heading text-[#040004]">
+                    Đơn hàng gần đây
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => handleTabChange('orders')}
+                    className="text-xs font-bold text-[#E30019] hover:underline inline-flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>Xem tất cả đơn hàng ({MOCK_ORDERS.length})</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {MOCK_ORDERS.slice(0, 3).map((order) => {
+                    const firstItem = order.items[0]
+                    return (
+                      <div
+                        key={order.id}
+                        className="border border-[#E0E0E0] rounded-[10px] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-gray-300 transition-all bg-white shadow-2xs"
+                      >
+                        <div className="flex items-center gap-4 flex-1 min-w-0">
+                          <div className="w-14 h-14 bg-[#F4F5F7] rounded-[8px] flex items-center justify-center overflow-hidden shrink-0 border border-gray-100">
+                            <img
+                              src={firstItem.image}
+                              alt={firstItem.name}
+                              className="w-full h-full object-contain p-1"
+                            />
+                          </div>
+
+                          <div className="space-y-1 min-w-0 flex-1">
+                            <h4 className="font-bold text-xs sm:text-sm text-[#040004] leading-snug line-clamp-1">
+                              {firstItem.name}
+                              {firstItem.quantity > 1 && (
+                                <span className="text-xs text-gray-600 font-semibold ml-1.5">
+                                  x{firstItem.quantity}
+                                </span>
+                              )}
+                              {order.items.length > 1 && (
+                                <span className="text-xs text-gray-500 font-normal ml-1">
+                                  và {order.items.length - 1} sản phẩm khác
+                                </span>
+                              )}
+                            </h4>
+
+                            <div className="flex items-center gap-2 text-xs text-gray-500 font-mono flex-wrap">
+                              <span>{order.createdAt}</span>
+                              <span>·</span>
+                              <span className="font-bold text-[#E30019]">
+                                {formatCurrency(order.totalAmount)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
+                          {renderStatusBadge(order.status)}
+
+                          <Link
+                            to={`/account/orders/${order.id}`}
+                            className="inline-flex items-center justify-center border border-gray-300 hover:border-[#E30019] text-gray-800 hover:text-[#E30019] text-xs font-bold px-3 py-1.5 rounded-[6px] transition-all bg-white shadow-xs cursor-pointer whitespace-nowrap"
+                          >
+                            <span>Xem chi tiết</span>
+                            <ChevronRight className="w-3.5 h-3.5 ml-1" />
+                          </Link>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             </div>
           )}
@@ -194,11 +375,10 @@ export function CustomerAccountSettingsPage() {
                       key={filter.key}
                       type="button"
                       onClick={() => setOrderFilter(filter.key)}
-                      className={`px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                        isActive
+                      className={`px-4 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${isActive
                           ? 'bg-red-50 text-[#E30019] border border-red-200'
                           : 'text-gray-600 hover:text-[#040004] hover:bg-gray-50'
-                      }`}
+                        }`}
                     >
                       {filter.label}
                     </button>
@@ -279,17 +459,23 @@ export function CustomerAccountSettingsPage() {
 
           {/* 3. WARRANTY TAB */}
           {activeTab === 'warranty' && (
-            <div className="bg-white rounded-xl border border-[#E0E0E0] p-12 text-center space-y-4 shadow-xs">
-              <div className="w-16 h-16 rounded-full bg-red-50 text-[#E30019] mx-auto flex items-center justify-center">
-                <ShieldCheck className="w-8 h-8" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-[#040004]">Trung tâm Bảo hành</h3>
-                <p className="text-xs md:text-sm text-slate-500 max-w-md mx-auto">
-                  Tính năng yêu cầu và tra cứu bảo hành sản phẩm đang được phát triển!
-                </p>
-              </div>
-            </div>
+            <>
+              <WarrantyRequestList
+                requests={warrantyRequests}
+                onOpenCreateModal={() => setIsCreateWarrantyOpen(true)}
+                onSelectRequest={(req) => setSelectedWarrantyDetail(req)}
+              />
+              <CreateWarrantyModal
+                isOpen={isCreateWarrantyOpen}
+                onClose={() => setIsCreateWarrantyOpen(false)}
+                onSubmitSuccess={(newReq) => setWarrantyRequests((prev) => [newReq, ...prev])}
+              />
+              <WarrantyDetailModal
+                request={selectedWarrantyDetail}
+                isOpen={Boolean(selectedWarrantyDetail)}
+                onClose={() => setSelectedWarrantyDetail(null)}
+              />
+            </>
           )}
 
           {/* 4. PERSONAL PROFILE TAB */}
