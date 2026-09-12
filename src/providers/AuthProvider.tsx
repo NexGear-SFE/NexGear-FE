@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import type { ReactNode } from 'react'
 import type { User, LoginPayload } from '@/types/auth.type'
-import { MOCK_USERS } from '@/constants/auth.mock'
+import { MOCK_USERS } from '@/mocks/auth.mock'
 import { STORAGE_KEYS } from '@/constants/storageKeys'
 import { useToast } from '@/hooks/useToast'
 import { AuthContext } from '@/contexts/AuthContext'

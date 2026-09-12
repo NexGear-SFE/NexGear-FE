@@ -6,11 +6,11 @@ import { BlogManagementPage } from '@/pages/AdminBlog/BlogManagementPage'
 import { AccountSettingsPage } from '@/pages/AccountSettings/AccountSettingsPage'
 import { BlogListPage } from '@/pages/Blog/BlogListPage'
 import { BlogDetailPage } from '@/pages/Blog/BlogDetailPage'
-import { UserProfilePage } from '@/pages/Profile/UserProfilePage'
-import { TechStaffDashboard } from '@/pages/Admin/TechStaffDashboard'
-import { WarehouseDashboard } from '@/pages/Admin/WarehouseDashboard'
+
 import { RegisterPage } from '@/pages/Register/RegisterPage'
+import { LoginPage } from '@/pages/Login/LoginPage'
 import { ProtectedRoute } from '@/components/Auth/ProtectedRoute'
+import { ALLOWED_ROLES } from '@/constants/roles'
 
 export const router = createBrowserRouter([
   {
@@ -21,14 +21,14 @@ export const router = createBrowserRouter([
         index: true,
         element: <HomePage />,
       },
-      {
-        path: 'profile',
-        element: (
-          <ProtectedRoute allowedRoles={['USER', 'STORE_MANAGER', 'TECH_STAFF', 'WAREHOUSE_STORE']}>
-            <UserProfilePage />
-          </ProtectedRoute>
-        ),
-      },
+      // {
+      //   path: 'profile',
+      //   element: (
+      //     <ProtectedRoute allowedRoles={ALLOWED_ROLES.ALL}>
+      //       <UserProfilePage />
+      //     </ProtectedRoute>
+      //   ),
+      // },
       {
         path: 'blogs',
         element: <BlogListPage />,
@@ -39,32 +39,32 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: '/admin',
-    element: <AdminLayout />,
-    children: [
-      {
-        path: 'tech-staff',
-        element: (
-          <ProtectedRoute allowedRoles={['TECH_STAFF']}>
-            <TechStaffDashboard />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'warehouse',
-        element: (
-          <ProtectedRoute allowedRoles={['WAREHOUSE_STORE']}>
-            <WarehouseDashboard />
-          </ProtectedRoute>
-        ),
-      },
-    ],
-  },
+  // {
+  //   path: '/admin',
+  //   element: <AdminLayout />,
+  //   children: [
+  //     {
+  //       path: 'tech-staff',
+  //       element: (
+  //         <ProtectedRoute allowedRoles={ALLOWED_ROLES.TECH_STAFF}>
+  //           <TechStaffDashboard />
+  //         </ProtectedRoute>
+  //       ),
+  //     },
+  //     {
+  //       path: 'warehouse',
+  //       element: (
+  //         <ProtectedRoute allowedRoles={ALLOWED_ROLES.WAREHOUSE_STORE}>
+  //           <WarehouseDashboard />
+  //         </ProtectedRoute>
+  //       ),
+  //     },
+  //   ],
+  // },
   {
     path: '/storemanager',
     element: (
-      <ProtectedRoute allowedRoles={['STORE_MANAGER']}>
+      <ProtectedRoute allowedRoles={ALLOWED_ROLES.STORE_MANAGER}>
         <AdminLayout />
       </ProtectedRoute>
     ),
@@ -82,6 +82,10 @@ export const router = createBrowserRouter([
         element: <AccountSettingsPage />,
       },
     ],
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
   },
   {
     path: '/register',

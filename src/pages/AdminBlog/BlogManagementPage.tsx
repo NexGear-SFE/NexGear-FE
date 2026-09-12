@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import type { BlogPost, BlogFilterStatus } from '@/types/blog.type'
-import { INITIAL_BLOG_POSTS } from '@/constants/blog.mock'
+import type { BlogPost, BlogFilterStatus, BlogStatus } from '@/types/blog.type'
+import { INITIAL_BLOG_POSTS } from '@/mocks/blog.mock'
+import { BLOG_STATUS, BLOG_FILTER_STATUS } from '@/constants/blog'
 import { BlogFilterTabs } from '@/components/AdminBlog/BlogFilterTabs'
 import { BlogTable } from '@/components/AdminBlog/BlogTable'
 import { BlogEditorPage } from '@/pages/AdminBlog/BlogEditorPage'
@@ -21,15 +22,15 @@ export const BlogManagementPage = () => {
   const setEditingPost = context ? context.setEditingPost : setLocalEditingPost
 
   const [posts, setPosts] = useState<BlogPost[]>(INITIAL_BLOG_POSTS)
-  const [filterStatus, setFilterStatus] = useState<BlogFilterStatus>('all')
+  const [filterStatus, setFilterStatus] = useState<BlogFilterStatus>(BLOG_FILTER_STATUS.ALL)
 
   // Delete modal state
   const [deletingPostId, setDeletingPostId] = useState<string | null>(null)
 
   // Calculated tab counts
   const counts = useMemo(() => {
-    const published = posts.filter((p) => p.status === 'published').length
-    const draft = posts.filter((p) => p.status === 'draft').length
+    const published = posts.filter((p) => p.status === BLOG_STATUS.PUBLISHED).length
+    const draft = posts.filter((p) => p.status === BLOG_STATUS.DRAFT).length
     return {
       all: posts.length,
       published,
@@ -39,11 +40,11 @@ export const BlogManagementPage = () => {
 
   // Filtered posts array according to tab filter
   const filteredPosts = useMemo(() => {
-    if (filterStatus === 'published') {
-      return posts.filter((p) => p.status === 'published')
+    if (filterStatus === BLOG_FILTER_STATUS.PUBLISHED) {
+      return posts.filter((p) => p.status === BLOG_STATUS.PUBLISHED)
     }
-    if (filterStatus === 'draft') {
-      return posts.filter((p) => p.status === 'draft')
+    if (filterStatus === BLOG_FILTER_STATUS.DRAFT) {
+      return posts.filter((p) => p.status === BLOG_STATUS.DRAFT)
     }
     return posts
   }, [posts, filterStatus])
@@ -74,7 +75,7 @@ export const BlogManagementPage = () => {
   // Save Blog Post Handler (Create or Update)
   const handleSaveBlog = (
     postData: Partial<BlogPost>,
-    status: 'published' | 'draft'
+    status: BlogStatus
   ) => {
     const todayStr = new Date().toLocaleDateString('vi-VN', {
       day: '2-digit',
@@ -88,12 +89,12 @@ export const BlogManagementPage = () => {
         prev.map((p) =>
           p.id === editingPost.id
             ? {
-                ...p,
-                ...postData,
-                status,
-                publishedAt:
-                  status === 'published' ? p.publishedAt || todayStr : null,
-              }
+              ...p,
+              ...postData,
+              status,
+              publishedAt:
+                status === BLOG_STATUS.PUBLISHED ? p.publishedAt || todayStr : null,
+            }
             : p
         )
       )
@@ -106,7 +107,7 @@ export const BlogManagementPage = () => {
         author: postData.author || 'Store Manager',
         tags: postData.tags || ['Gaming', 'Tech'],
         status,
-        publishedAt: status === 'published' ? todayStr : null,
+        publishedAt: status === BLOG_STATUS.PUBLISHED ? todayStr : null,
       }
       setPosts((prev) => [newPost, ...prev])
     }

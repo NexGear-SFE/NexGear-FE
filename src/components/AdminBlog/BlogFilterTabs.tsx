@@ -1,4 +1,5 @@
 import type { BlogFilterStatus } from '@/types/blog.type'
+import { BLOG_FILTER_STATUS } from '@/constants/blog'
 
 interface BlogFilterTabsProps {
   activeFilter: BlogFilterStatus
@@ -16,9 +17,9 @@ export const BlogFilterTabs = ({
   counts,
 }: BlogFilterTabsProps) => {
   const tabs: { key: BlogFilterStatus; label: string; count: number }[] = [
-    { key: 'all', label: 'Tất cả', count: counts.all },
-    { key: 'published', label: 'Xuất bản', count: counts.published },
-    { key: 'draft', label: 'Bản nháp', count: counts.draft },
+    { key: BLOG_FILTER_STATUS.ALL, label: 'Tất cả', count: counts.all },
+    { key: BLOG_FILTER_STATUS.PUBLISHED, label: 'Xuất bản', count: counts.published },
+    { key: BLOG_FILTER_STATUS.DRAFT, label: 'Bản nháp', count: counts.draft },
   ]
 
   return (

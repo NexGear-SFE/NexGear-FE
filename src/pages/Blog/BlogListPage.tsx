@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Calendar, User, Clock, ArrowRight } from 'lucide-react'
-import { INITIAL_BLOG_POSTS } from '@/constants/blog.mock'
+import { INITIAL_BLOG_POSTS } from '@/mocks/blog.mock'
 
 export const BlogListPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('Tất cả')
@@ -57,7 +57,7 @@ export const BlogListPage: React.FC = () => {
                     <span>{featuredPost.publishedAt}</span>
                   </div>
                   <h2 className="font-heading font-bold text-xl md:text-2xl text-[#040004] leading-snug mb-3 hover:text-[#E30019] transition-colors">
-                    <Link to={`/blog/${featuredPost.id}`}>{featuredPost.title}</Link>
+                    <Link to={`/blogs/${featuredPost.id}`}>{featuredPost.title}</Link>
                   </h2>
                   <p className="text-xs md:text-sm text-slate-600 line-clamp-3 mb-4 leading-relaxed">
                     {featuredPost.summary}
@@ -72,7 +72,7 @@ export const BlogListPage: React.FC = () => {
                     ))}
                   </div>
                   <Link
-                    to={`/blog/${featuredPost.id}`}
+                    to={`/blogs/${featuredPost.id}`}
                     className="btn-primary w-full sm:w-auto text-xs md:text-sm inline-flex items-center justify-center gap-2"
                   >
                     Đọc bài viết chi tiết <ArrowRight className="w-4 h-4" />
@@ -90,11 +90,10 @@ export const BlogListPage: React.FC = () => {
               key={cat}
               type="button"
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                selectedCategory === cat
+              className={`px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${selectedCategory === cat
                   ? 'bg-[#E30019] text-white shadow-sm'
                   : 'bg-white text-[#636363] hover:text-[#040004] border border-[#E0E0E0]'
-              }`}
+                }`}
             >
               {cat}
             </button>
@@ -135,7 +134,7 @@ export const BlogListPage: React.FC = () => {
                     </span>
                   </div>
                   <h3 className="font-heading font-bold text-base md:text-lg text-[#040004] group-hover:text-[#E30019] transition-colors line-clamp-2 mb-2">
-                    <Link to={`/blog/${post.id}`}>{post.title}</Link>
+                    <Link to={`/blogs/${post.id}`}>{post.title}</Link>
                   </h3>
                   <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
                     {post.summary}
@@ -149,7 +148,7 @@ export const BlogListPage: React.FC = () => {
                   <span>{post.readTime || '1 phút đọc'}</span>
                 </div>
                 <Link
-                  to={`/blog/${post.id}`}
+                  to={`/blogs/${post.id}`}
                   className="text-xs font-semibold text-[#E30019] hover:underline inline-flex items-center gap-1"
                 >
                   Chi tiết <ArrowRight className="w-3.5 h-3.5" />

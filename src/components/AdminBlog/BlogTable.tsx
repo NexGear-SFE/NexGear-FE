@@ -23,7 +23,7 @@ export const BlogTable = ({
               <th className="py-3 px-4 w-[18%]">CHUYÊN MỤC</th>
               <th className="py-3 px-4 w-[14%]">TÁC GIẢ</th>
               <th className="py-3 px-4 w-[13%]">NGÀY ĐĂNG</th>
-              <th className="py-3 px-4 w-[15%]">TRANG THÁI</th>
+              <th className="py-3 px-4 w-[15%]">TRẠNG THÁI</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#E0E0E0]">

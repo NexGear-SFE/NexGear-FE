@@ -5,7 +5,7 @@ import { X, Eye, EyeOff, Lock, Mail } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 
 export const LoginModal = () => {
-  const { isLoginModalOpen, closeLoginModal, login } = useAuth()
+  const { isLoginModalOpen, closeLoginModal, login, isAuthenticated } = useAuth()
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
@@ -25,7 +25,7 @@ export const LoginModal = () => {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isLoginModalOpen, closeLoginModal])
 
-  if (!isLoginModalOpen) return null
+  if (!isLoginModalOpen || isAuthenticated) return null
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()

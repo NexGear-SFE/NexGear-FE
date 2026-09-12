@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import type { BlogPost } from '@/types/blog.type'
+import type { BlogPost, BlogStatus } from '@/types/blog.type'
+import { BLOG_STATUS } from '@/constants/blog'
 import {
   ArrowLeft,
   Link as LinkIcon,
@@ -18,12 +19,13 @@ import {
   Plus,
   Upload,
   Check,
+  Save,
 } from 'lucide-react'
 
 interface BlogEditorPageProps {
   mode: 'create' | 'edit'
   initialPost?: BlogPost | null
-  onSave: (postData: Partial<BlogPost>, status: 'published' | 'draft') => void
+  onSave: (postData: Partial<BlogPost>, status: BlogStatus) => void
   onCancel: () => void
 }
 
@@ -351,7 +353,7 @@ export const BlogEditorPage = ({
 
             <button
               type="button"
-              onClick={() => handlePublish('published')}
+              onClick={() => handlePublish(BLOG_STATUS.PUBLISHED)}
               className="btn-primary w-full py-2.5 justify-center shadow-xs"
             >
               <Check className="w-4 h-4" />
@@ -360,10 +362,11 @@ export const BlogEditorPage = ({
 
             <button
               type="button"
-              onClick={() => handlePublish('draft')}
+              onClick={() => handlePublish(BLOG_STATUS.DRAFT)}
               className="w-full py-2 bg-white text-[#040004] border border-[#E0E0E0] rounded-sm text-xs font-semibold hover:bg-slate-50 transition-mechanical cursor-pointer flex items-center justify-center gap-1.5"
             >
-              💾 Lưu nháp
+              <Save className="w-4 h-4 text-slate-500" />
+              <span>Lưu nháp</span>
             </button>
 
             <button

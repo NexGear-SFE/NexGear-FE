@@ -1,4 +1,5 @@
 import type { BlogPost } from '@/types/blog.type'
+import { BLOG_STATUS } from '@/constants/blog'
 import { FileText, Pencil, Trash2 } from 'lucide-react'
 
 interface BlogTableRowProps {
@@ -8,7 +9,7 @@ interface BlogTableRowProps {
 }
 
 export const BlogTableRow = ({ post, onEdit, onDelete }: BlogTableRowProps) => {
-  const isPublished = post.status === 'published'
+  const isPublished = post.status === BLOG_STATUS.PUBLISHED
 
   return (
     <tr className="hover:bg-slate-50/80 transition-mechanical border-b border-[#E0E0E0] last:border-b-0">

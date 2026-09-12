@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Calendar, User, Clock, ChevronLeft, Share2, Tag, ArrowRight } from 'lucide-react'
-import { INITIAL_BLOG_POSTS } from '@/constants/blog.mock'
+import { INITIAL_BLOG_POSTS } from '@/mocks/blog.mock'
 
 export const BlogDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -236,7 +236,7 @@ export const BlogDetailPage: React.FC = () => {
           {/* Footer of Article: Navigation & Actions */}
           <div className="mt-10 pt-6 border-t border-[#E0E0E0] flex flex-col sm:flex-row items-center justify-between gap-4">
             <Link
-              to="/blog"
+              to="/blogs"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-[#E0E0E0] text-sm font-semibold text-[#040004] hover:border-[#E30019] hover:text-[#E30019] transition-all cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -261,7 +261,7 @@ export const BlogDetailPage: React.FC = () => {
         <section className="mt-10">
           <h2 className="font-heading font-bold text-xl text-[#040004] mb-5 flex items-center justify-between">
             <span>Bài viết liên quan</span>
-            <Link to="/blog" className="text-xs text-[#E30019] hover:underline inline-flex items-center gap-1">
+            <Link to="/blogs" className="text-xs text-[#E30019] hover:underline inline-flex items-center gap-1">
               Xem tất cả <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </h2>
@@ -272,7 +272,7 @@ export const BlogDetailPage: React.FC = () => {
               .map((relatedPost) => (
                 <Link
                   key={relatedPost.id}
-                  to={`/blog/${relatedPost.id}`}
+                  to={`/blogs/${relatedPost.id}`}
                   className="bg-white border border-[#E0E0E0] hover:border-[#E30019] rounded-xl p-4 flex gap-4 transition-all hover:shadow-md group"
                 >
                   <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg overflow-hidden shrink-0 bg-slate-100">
