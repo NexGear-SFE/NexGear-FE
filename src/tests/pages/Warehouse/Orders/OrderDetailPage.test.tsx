@@ -18,5 +18,8 @@ describe('OrderDetailPage', () => {
     await user.click(screen.getByRole('button', { name: 'Hoàn tất soạn hàng' }))
     expect(screen.getByText('Chờ gán serial')).toBeInTheDocument()
     expect(screen.getByText('Gán serial')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Mở danh sách serial' }))
+    expect(screen.getByRole('dialog', { name: 'Chọn serial xuất kho' })).toBeInTheDocument()
+    expect(screen.getByRole('listbox', { name: /serial của ASU-G16-I9-4080/i })).toBeInTheDocument()
   })
 })
