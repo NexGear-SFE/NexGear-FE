@@ -17,6 +17,7 @@ import {
   XCircle,
 } from 'lucide-react'
 import { MOCK_ORDERS } from '@/mocks/customer/order.mock'
+import { orderApi } from '@/apis/order.api'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { cartStore } from '@/stores/cartStore'
 
@@ -25,6 +26,7 @@ export function OrderDetailPage() {
   const navigate = useNavigate()
   const [showCancelModal, setShowCancelModal] = useState(false)
   const [cancelReasonInput, setCancelReasonInput] = useState('')
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
 
   // Find order by ID or fallback to first order
   const order = MOCK_ORDERS.find((o) => o.id === id || o.orderCode === id) || MOCK_ORDERS[0]
@@ -89,8 +91,32 @@ export function OrderDetailPage() {
     }
   }
 
+  const showNotification = (msg: string) => {
+    setToastMessage(msg)
+    setTimeout(() => setToastMessage(null), 3000)
+  }
+
+  const handleConfirmCancel = async () => {
+    const res = await orderApi.cancelOrder(order.id, cancelReasonInput)
+    if (res.success) {
+      showNotification('Đã gửi yêu cầu hủy đơn hàng thành công!')
+      setShowCancelModal(false)
+      setTimeout(() => {
+        navigate('/account/settings?tab=orders')
+      }, 1200)
+    }
+  }
+
   return (
-    <div className="bg-[#F4F5F7] min-h-screen py-6 md:py-10 font-body">
+    <div className="bg-[#F4F5F7] min-h-screen py-6 md:py-10 font-body relative">
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed top-6 right-6 z-50 bg-[#040004] text-white px-5 py-3 rounded-[8px] border border-[#E30019] shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-200">
+          <CheckCircle2 className="w-5 h-5 text-[#00A859] shrink-0" />
+          <span className="text-xs font-semibold">{toastMessage}</span>
+        </div>
+      )}
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
         {/* A. Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs md:text-sm text-gray-600 font-medium">
@@ -404,7 +430,7 @@ export function OrderDetailPage() {
 
                   <button
                     type="button"
-                    onClick={() => alert('Chức năng Đánh giá sản phẩm đang được cập nhật!')}
+                    onClick={() => showNotification('Chức năng Đánh giá sản phẩm đang được cập nhật!')}
                     className="w-full border border-gray-300 hover:border-gray-400 text-gray-800 font-bold py-3 px-4 rounded-[6px] text-xs md:text-sm transition-all cursor-pointer"
                   >
                     Đánh giá sản phẩm
@@ -427,7 +453,7 @@ export function OrderDetailPage() {
               {(order.status === 'shipping' || order.status === 'processing') && (
                 <button
                   type="button"
-                  onClick={() => alert(`Mã vận đơn: ${order.shippingInfo.trackingCode || 'NEX-7739102'}`)}
+                  onClick={() => showNotification(`Mã vận đơn: ${order.shippingInfo.trackingCode || 'NEX-7739102'}`)}
                   className="w-full bg-black text-white hover:bg-zinc-800 font-bold py-3 px-4 rounded-[6px] text-xs md:text-sm transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
                   <Truck className="w-4 h-4" />
@@ -486,11 +512,7 @@ export function OrderDetailPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    alert('Đã gửi yêu cầu hủy đơn hàng thành công!')
-                    setShowCancelModal(false)
-                    navigate('/account/settings?tab=orders')
-                  }}
+                  onClick={handleConfirmCancel}
                   className="px-4 py-2 text-xs font-bold bg-[#E30019] text-white rounded-[6px] hover:bg-[#cc0016] cursor-pointer"
                 >
                   Xác nhận Hủy Đơn
@@ -503,3 +525,4 @@ export function OrderDetailPage() {
     </div>
   )
 }
+

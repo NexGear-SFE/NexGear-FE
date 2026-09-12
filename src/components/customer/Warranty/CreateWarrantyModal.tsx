@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X, Check, ShieldCheck, Upload, ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react'
+import { X, Check, ShieldCheck, Upload, ArrowRight, ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react'
 import { MOCK_ELIGIBLE_WARRANTY_PRODUCTS } from '@/mocks/customer/warranty.mock'
 import type { WarrantyEligibleProduct, CustomerWarrantyRequest } from '@/types/customerWarranty.type'
 import { formatDate } from '@/utils/formatDate'
@@ -21,6 +21,8 @@ export function CreateWarrantyModal({ isOpen, onClose, onSubmitSuccess }: Create
   const [description, setDescription] = useState('')
   const [discoveryDate, setDiscoveryDate] = useState(new Date().toISOString().split('T')[0])
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
+  const [errorMessage, setErrorMessage] = useState('')
+  const [uploadNotice, setUploadNotice] = useState(false)
 
   // Created Request Code for Step 4 (Success)
   const [createdCode, setCreatedCode] = useState('')
@@ -28,19 +30,20 @@ export function CreateWarrantyModal({ isOpen, onClose, onSubmitSuccess }: Create
   if (!isOpen) return null
 
   const handleNextStep = () => {
+    setErrorMessage('')
     if (currentStep === 1) {
       if (!selectedProduct) {
-        alert('Vui lòng chọn 1 sản phẩm cần bảo hành')
+        setErrorMessage('Vui lòng chọn 1 sản phẩm cần bảo hành')
         return
       }
       setCurrentStep(2)
     } else if (currentStep === 2) {
       if (!reason.trim()) {
-        alert('Vui lòng nhập lý do bảo hành')
+        setErrorMessage('Vui lòng nhập lý do bảo hành')
         return
       }
       if (!description.trim()) {
-        alert('Vui lòng nhập mô tả chi tiết sự cố sản phẩm')
+        setErrorMessage('Vui lòng nhập mô tả chi tiết sự cố sản phẩm')
         return
       }
       setCurrentStep(3)
@@ -92,7 +95,8 @@ export function CreateWarrantyModal({ isOpen, onClose, onSubmitSuccess }: Create
   const handleMockUpload = () => {
     if (selectedProduct) {
       setUploadedFiles([selectedProduct.image])
-      alert('Đã đính kèm hình ảnh minh chứng lỗi thành công!')
+      setUploadNotice(true)
+      setTimeout(() => setUploadNotice(false), 3000)
     }
   }
 
@@ -115,6 +119,14 @@ export function CreateWarrantyModal({ isOpen, onClose, onSubmitSuccess }: Create
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        {/* Validation Banner */}
+        {errorMessage && (
+          <div className="bg-red-50 text-[#E30019] border border-red-200 text-xs font-semibold px-3 py-2.5 rounded-[6px] flex items-center gap-2 animate-in fade-in">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{errorMessage}</span>
+          </div>
+        )}
 
         {/* Stepper Header (Only for Steps 1, 2, 3) */}
         {currentStep < 4 && (
@@ -275,6 +287,11 @@ export function CreateWarrantyModal({ isOpen, onClose, onSubmitSuccess }: Create
                 <p className="text-xs text-slate-600 font-medium">Bấm để tải lên ảnh hoặc video chứng minh lỗi</p>
                 {uploadedFiles.length > 0 && (
                   <p className="text-xs text-emerald-600 font-bold mt-1">✓ Đã đính kèm 1 file minh chứng</p>
+                )}
+                {uploadNotice && (
+                  <span className="text-[11px] text-[#00A859] font-medium block mt-1 animate-in fade-in">
+                    ✓ Đã tải file minh chứng thành công!
+                  </span>
                 )}
               </div>
             </div>
