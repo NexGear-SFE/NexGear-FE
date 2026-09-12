@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, Hammer } from 'lucide-react';
-import { TECH_STAFF_USER } from '@/mocks/staff.mock';
+import { TECH_STAFF_USER } from '@/mocks/techstaff/staff.mock';
 import type { TechNav } from '@/types/staff.type';
 import {
   IcTechMenu,
@@ -12,7 +12,10 @@ import {
   IcTechHistory,
   IcTechSettings,
   IcTechBell,
-} from '@/components/Icons';
+} from '@/components/common/Icons';
+import { AccountDropdown } from '@/components/common/AccountDropdown';
+import { SidebarUserWidget } from '@/components/common/SidebarUserWidget';
+import { useAuth } from '@/hooks/useAuth';
 
 // ─── Nav Configuration ────────────────────────────────────────────────────────
 type NavItem = {
@@ -47,6 +50,8 @@ export function TechStaffLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [devModalOpen, setDevModalOpen] = useState(false);
+  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
+  const { user } = useAuth();
 
   // Derive active nav from path
   const activeNav = NAV_ITEMS.find((item) => 
@@ -103,36 +108,7 @@ export function TechStaffLayout() {
           })}
         </nav>
 
-        {/* User Info */}
-        <div className="border-t border-[var(--surface-400)]">
-          <div className="p-4 flex items-center gap-3">
-            <img
-              src={TECH_STAFF_USER.avatar}
-              alt={`Avatar của ${TECH_STAFF_USER.name}`}
-              className="w-9 h-9 rounded-full object-cover bg-[var(--surface-200)] shrink-0"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  'https://ui-avatars.com/api/?name=NVT&background=E30019&color=fff';
-              }}
-            />
-            <div className="flex-1 overflow-hidden">
-              <div className="text-body-sm font-semibold text-[var(--text-900)] truncate">
-                {TECH_STAFF_USER.name}
-              </div>
-              <div className="text-caption text-[var(--text-600)] truncate">{TECH_STAFF_USER.role}</div>
-            </div>
-          </div>
-
-          {/* Back to store */}
-          <div className="px-3 pb-3">
-            <Link
-              to="/"
-              className="flex items-center gap-2 px-3 py-2 text-body-sm text-[var(--text-600)] hover:text-[var(--text-900)] transition-mechanical w-full rounded-md hover:bg-[var(--surface-200)]"
-            >
-              ← Về trang cửa hàng
-            </Link>
-          </div>
-        </div>
+        <SidebarUserWidget settingsPath="/tech-staff/settings" />
       </aside>
 
       {/* ── Main Content ── */}
@@ -168,27 +144,38 @@ export function TechStaffLayout() {
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[var(--brand-500)] rounded-full" />
             </button>
 
-            <button
-              type="button"
-              className="flex items-center gap-2 px-2.5 py-1.5 border border-[var(--surface-400)] rounded-md hover:border-[var(--brand-500)] transition-mechanical"
-            >
-              <img
-                src={TECH_STAFF_USER.avatar}
-                alt={`Avatar của ${TECH_STAFF_USER.name}`}
-                className="w-7 h-7 rounded-full object-cover bg-[var(--surface-200)]"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    'https://ui-avatars.com/api/?name=NVT&background=E30019&color=fff';
-                }}
-              />
-              <div className="text-left hidden md:block">
-                <div className="text-caption font-bold text-[var(--text-900)] leading-none">
-                  {TECH_STAFF_USER.name}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
+                className="flex items-center gap-2 px-2.5 py-1.5 border border-[var(--surface-400)] rounded-md hover:border-[var(--brand-500)] transition-mechanical cursor-pointer"
+              >
+                <img
+                  src={user?.avatar || TECH_STAFF_USER.avatar}
+                  alt={`Avatar của ${user?.name || TECH_STAFF_USER.name}`}
+                  className="w-7 h-7 rounded-full object-cover bg-[var(--surface-200)]"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src =
+                      'https://ui-avatars.com/api/?name=NVT&background=E30019&color=fff';
+                  }}
+                />
+                <div className="text-left hidden md:block">
+                  <div className="text-caption font-bold text-[var(--text-900)] leading-none">
+                    {user?.name || TECH_STAFF_USER.name}
+                  </div>
+                  <div className="text-[10px] text-[var(--text-600)] mt-0.5">{user?.roleName || TECH_STAFF_USER.role}</div>
                 </div>
-                <div className="text-[10px] text-[var(--text-600)] mt-0.5">{TECH_STAFF_USER.role}</div>
-              </div>
-              <ChevronDown className="w-3.5 h-3.5 text-[var(--text-600)]" />
-            </button>
+                <ChevronDown className="w-3.5 h-3.5 text-[var(--text-600)]" />
+              </button>
+              
+              <AccountDropdown 
+                isOpen={isAccountDropdownOpen} 
+                onClose={() => setIsAccountDropdownOpen(false)} 
+                onOpenSettings={() => {
+                  navigate('/tech-staff/settings');
+                }} 
+              />
+            </div>
           </div>
         </header>
 

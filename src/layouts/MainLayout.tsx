@@ -1,9 +1,11 @@
 import { Outlet } from 'react-router-dom'
-import { Header } from '@/components/Header/Header'
-import { Footer } from '@/components/Footer/Footer'
+import { Header } from '@/components/header/Header'
+import { Footer } from '@/components/footer/Footer'
+import { QuickLoginModal } from '@/components/auth/QuickLoginModal'
 import { Bot } from 'lucide-react'
 
 export const MainLayout = () => {
+
   return (
     <div className="flex flex-col min-h-screen bg-[#F4F5F7]">
       {/* Top Header Wrapper */}
@@ -16,6 +18,9 @@ export const MainLayout = () => {
 
       {/* Footer Wrapper */}
       <Footer />
+
+      {/* Login Popup Modal (Chỉ hiển thị khi chưa đăng nhập) */}
+      <QuickLoginModal />
 
       {/* Floating Action Button (Chatbot Support) */}
       <div className="fixed bottom-6 right-6 z-50">
@@ -38,3 +43,4 @@ export const MainLayout = () => {
     </div>
   )
 }
+

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { KANBAN_COLUMNS, TICKETS } from '@/mocks/ticket.mock';
-import { IcTechSearch } from '@/components/Icons';
+import { KANBAN_COLUMNS, TICKETS } from '@/mocks/techstaff/ticket.mock';
+import { IcTechSearch } from '@/components/common/Icons';
 import type { KanbanStatus } from '@/types/ticket.type';
-import { KanbanTicketCard } from '@/components/TechStaff/KanbanTicketCard';
+import { KanbanTicketCard } from '@/components/techstaff/KanbanTicketCard';
 import { FileText, Zap, Wrench, MessageSquare, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export function TechStaffDashboard() {

@@ -1,5 +1,5 @@
 import { Cpu, ShieldCheck, Zap, ArrowRight } from 'lucide-react'
-import { ProductCard } from '@/components/ProductCard'
+import { ProductCard } from '@/components/common/ProductCard'
 
 export const HomePage = () => {
   return (

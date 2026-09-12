@@ -10,6 +10,7 @@ function PwInput({
   show,
   onToggle,
   error,
+  placeholder,
 }: {
   label: string;
   value: string;
@@ -17,10 +18,11 @@ function PwInput({
   show: boolean;
   onToggle: () => void;
   error?: string;
+  placeholder?: string;
 }) {
   return (
     <div>
-      <label className="block text-[12px] font-bold font-body text-[var(--text-600)] mb-1.5 tracking-[0.02em]">
+      <label className="block text-xs font-semibold text-[#040004] mb-1.5">
         {label}
       </label>
       <div className="relative">
@@ -28,14 +30,15 @@ function PwInput({
           type={show ? "text" : "password"}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full h-[42px] pl-3.5 pr-11 bg-white border rounded-md text-[var(--text-900)] text-[14px] font-body outline-none transition-colors duration-150 focus:border-[var(--brand-500)] ${
-            error ? "border-red-400" : "border-[var(--surface-400)]"
+          placeholder={placeholder}
+          className={`input-gaming w-full pr-11 ${
+            error ? "border-red-400 focus:border-red-500 focus:ring-red-500/20" : ""
           }`}
         />
         <button
           type="button"
           onClick={onToggle}
-          className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-[var(--text-600)] p-1 flex items-center justify-center hover:text-[var(--text-900)]"
+          className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-slate-400 p-1 flex items-center justify-center hover:text-slate-600 transition-colors"
         >
           {show ? <EyeOff size={16} /> : <Eye size={16} />}
         </button>
@@ -49,7 +52,7 @@ function PwInput({
   );
 }
 
-export function PasswordTab() {
+export function PasswordSection() {
   const [curPass, setCurPass] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confPass, setConfPass] = useState("");
@@ -159,123 +162,122 @@ export function PasswordTab() {
     resetChecks.every((c) => c.ok) && resetNewPass === resetConfPass;
 
   return (
-    <div>
-      <div className="mb-6">
-        <div className="text-[11px] font-bold tracking-[0.1em] text-[var(--text-400)] uppercase font-body mb-1">
-          Bảo mật
+    <>
+      <div className="bg-white border border-[#E0E0E0] rounded-lg p-6 space-y-5 shadow-xs self-start h-full flex flex-col">
+        <div className="flex items-center">
+          <span className="h-5 w-1 bg-[#E30019] rounded-full inline-block mr-2" />
+          <h2 className="font-heading text-lg font-bold text-[#040004]">
+            Bảo mật & Mật khẩu
+          </h2>
         </div>
-        <h2 className="m-0 text-[20px] font-bold text-[var(--text-900)] font-heading tracking-[-0.02em]">
-          Đổi mật khẩu
-        </h2>
-        <p className="m-0 mt-1 text-[13px] text-[var(--text-600)] font-body">
-          Cập nhật mật khẩu đăng nhập của bạn.
-        </p>
-      </div>
 
-      <div className="max-w-[420px]">
-        <div className="bg-white rounded-xl border border-black/5 overflow-hidden">
-          <div className="px-5 py-4 border-b border-[var(--surface-400)]">
-            <div className="text-[11px] font-bold tracking-[0.08em] text-[var(--text-400)] uppercase font-body mb-0.5">
-              Bảo mật
-            </div>
-            <div className="text-[15px] font-bold text-[var(--text-900)] font-heading">
-              Bảo mật & Mật khẩu
-            </div>
+        {pwSuccess && (
+          <div className="p-3 bg-emerald-50 border border-emerald-200 text-[#00A859] rounded text-xs font-semibold flex items-center gap-2">
+            <Check className="w-4 h-4 shrink-0" />
+            <span>Đổi mật khẩu thành công.</span>
           </div>
+        )}
 
-          <div className="px-5 py-[18px] flex flex-col gap-3.5">
-            {pwSuccess && (
-              <div className="flex items-center gap-2.5 px-3.5 py-2.5 bg-green-50 border border-green-200/50 rounded-lg">
-                <Check size={18} className="text-green-500" />
-                <span className="text-green-500 text-[13px] font-body font-semibold">
-                  Đổi mật khẩu thành công.
-                </span>
-              </div>
-            )}
-            {pwError && (
-              <div className="flex items-center gap-2.5 px-3.5 py-2.5 bg-red-50 border border-red-200/50 rounded-lg">
-                <AlertTriangle size={16} className="text-red-400" />
-                <span className="text-red-400 text-[13px] font-body">
-                  {pwError}
-                </span>
-              </div>
-            )}
+        {pwError && (
+          <div className="p-3 bg-red-50 border border-red-200 text-[#E30019] rounded text-xs font-semibold flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{pwError}</span>
+          </div>
+        )}
 
-            <PwInput
-              label="Mật khẩu hiện tại"
-              value={curPass}
-              onChange={setCurPass}
-              show={showCur}
-              onToggle={() => setShowCur((v) => !v)}
-            />
-            <div>
-              <PwInput
-                label="Mật khẩu mới"
-                value={newPass}
-                onChange={setNewPass}
-                show={showNew}
-                onToggle={() => setShowNew((v) => !v)}
-                error={pwTooShort ? "Mật khẩu phải có ít nhất 8 ký tự" : undefined}
+        <div className="space-y-4 flex-1">
+          <div>
+            <label className="block text-xs font-semibold text-[#040004] mb-1.5">
+              Mật khẩu hiện tại <span className="text-[#E30019]">*</span>
+            </label>
+            <div className="relative">
+              <input
+                type={showCur ? "text" : "password"}
+                required
+                value={curPass}
+                onChange={(e) => setCurPass(e.target.value)}
+                className="input-gaming w-full pr-11"
               />
-              {newPass.length > 0 && (
-                <div className="grid grid-cols-2 gap-y-[3px] gap-x-2 mt-2">
-                  {pwChecks.map((c) => (
-                    <div key={c.label} className="flex items-center gap-1.5">
-                      <span className={`text-[10px] font-bold ${c.ok ? "text-green-500" : "text-[var(--text-400)]"}`}>
-                        {c.ok ? "✓" : "○"}
-                      </span>
-                      <span className={`text-[10px] font-body ${c.ok ? "text-green-500" : "text-[var(--text-600)]"}`}>
-                        {c.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <button
+                type="button"
+                onClick={() => setShowCur(!showCur)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-slate-400 p-1 flex items-center justify-center hover:text-slate-600 transition-colors"
+              >
+                {showCur ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
             </div>
-            <PwInput
-              label="Xác nhận mật khẩu mới"
-              value={confPass}
-              onChange={setConfPass}
-              show={showConf}
-              onToggle={() => setShowConf((v) => !v)}
-              error={pwMismatch ? "Mật khẩu không khớp" : undefined}
-            />
           </div>
 
-          <div className="px-5 py-3.5 border-t border-[var(--surface-400)] flex items-center justify-between gap-2">
-            <button
-              onClick={() => {
-                setShowForgotModal(true);
-                setForgotStep("email");
-              }}
-              className="bg-transparent border-none cursor-pointer text-blue-500 text-[12px] p-0 font-body underline hover:text-blue-600"
-            >
-              Quên mật khẩu?
-            </button>
-            <button
-              className={`h-9 px-4 bg-[var(--brand-500)] text-white border-none rounded-md text-[12px] font-bold font-body flex items-center gap-[7px] transition-colors duration-100
-                ${pwValid ? 'hover:bg-[var(--brand-600)] cursor-pointer opacity-100' : 'opacity-50 cursor-not-allowed'}
-              `}
-              disabled={!pwValid}
-              onClick={() => {
-                setSavingPw(true);
-                setPwError("");
-                setTimeout(() => {
-                  setSavingPw(false);
-                  setCurPass("");
-                  setNewPass("");
-                  setConfPass("");
-                  setPwSuccess(true);
-                  setTimeout(() => setPwSuccess(false), 3000);
-                }, 900);
-              }}
-            >
-              {savingPw && (
-                <span className="inline-block w-3 h-3 border-2 border-[var(--text-400)] border-t-white rounded-full animate-spin" />
-              )}
-              Cập nhật mật khẩu
-            </button>
+          <div>
+            <PwInput
+              label="Mật khẩu mới *"
+              value={newPass}
+              onChange={setNewPass}
+              show={showNew}
+              onToggle={() => setShowNew((v) => !v)}
+              placeholder="Tối thiểu 8 ký tự"
+              error={pwTooShort ? "Mật khẩu phải có ít nhất 8 ký tự" : undefined}
+            />
+            {newPass.length > 0 && (
+              <div className="grid grid-cols-2 gap-y-[4px] gap-x-2 mt-2">
+                {pwChecks.map((c) => (
+                  <div key={c.label} className="flex items-center gap-1.5">
+                    <span className={`text-[10px] font-bold ${c.ok ? "text-emerald-500" : "text-slate-400"}`}>
+                      {c.ok ? "✓" : "○"}
+                    </span>
+                    <span className={`text-[10px] font-medium ${c.ok ? "text-emerald-500" : "text-slate-500"}`}>
+                      {c.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
+          
+          <PwInput
+            label="Xác nhận mật khẩu mới *"
+            value={confPass}
+            onChange={setConfPass}
+            show={showConf}
+            onToggle={() => setShowConf((v) => !v)}
+            placeholder="Nhập lại mật khẩu mới"
+            error={pwMismatch ? "Mật khẩu không khớp" : undefined}
+          />
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-[#E0E0E0] mt-auto">
+          <button
+            onClick={() => {
+              setShowForgotModal(true);
+              setForgotStep("email");
+            }}
+            className="text-blue-500 text-xs font-medium underline hover:text-blue-600 transition-colors bg-transparent border-none cursor-pointer p-0"
+          >
+            Quên mật khẩu?
+          </button>
+          <button
+            className={`btn-secondary py-2.5 px-4 text-xs font-medium justify-center transition-all w-full sm:w-auto
+              ${pwValid ? 'opacity-100 cursor-pointer shadow-xs' : 'opacity-50 cursor-not-allowed shadow-none'}
+            `}
+            disabled={!pwValid}
+            onClick={() => {
+              setSavingPw(true);
+              setPwError("");
+              setTimeout(() => {
+                setSavingPw(false);
+                setCurPass("");
+                setNewPass("");
+                setConfPass("");
+                setPwSuccess(true);
+                setTimeout(() => setPwSuccess(false), 3000);
+              }, 900);
+            }}
+          >
+            {savingPw && (
+              <span className="inline-block w-3.5 h-3.5 border-2 border-slate-500 border-t-white rounded-full animate-spin mr-1.5" />
+            )}
+            Cập nhật mật khẩu
+          </button>
         </div>
       </div>
 
@@ -287,20 +289,20 @@ export function PasswordTab() {
             className="fixed inset-0 z-[400] bg-black/70 backdrop-blur-sm"
           />
           <div className="fixed inset-0 z-[401] flex items-center justify-center p-5">
-            <div className="bg-white border border-[var(--surface-400)] rounded-2xl w-full max-w-[460px] shadow-[0_24px_64px_rgba(0,0,0,0.7)] overflow-hidden">
+            <div className="bg-white border border-[#E0E0E0] rounded-2xl w-full max-w-[460px] shadow-[0_24px_64px_rgba(0,0,0,0.7)] overflow-hidden">
               {/* Modal header */}
               <div className="px-6 py-5 border-b border-black/5 flex items-center justify-between">
                 <div>
-                  <div className="text-[16px] font-bold text-[var(--text-900)] font-heading">
+                  <div className="text-[16px] font-bold text-[#040004] font-heading">
                     Quên mật khẩu
                   </div>
-                  <div className="text-[12px] text-[var(--text-600)] font-body mt-0.5">
+                  <div className="text-[12px] text-[#636363] mt-0.5">
                     Đặt lại mật khẩu qua email và mã OTP.
                   </div>
                 </div>
                 <button
                   onClick={exitForgot}
-                  className="w-8 h-8 border-none bg-[var(--surface-400)] rounded-md cursor-pointer text-[var(--text-600)] flex items-center justify-center hover:bg-[var(--surface-500)] hover:text-[var(--text-900)] transition-colors"
+                  className="w-8 h-8 border-none bg-slate-100 rounded-md cursor-pointer text-slate-500 flex items-center justify-center hover:bg-slate-200 hover:text-slate-800 transition-colors"
                 >
                   <X size={18} />
                 </button>
@@ -319,18 +321,18 @@ export function PasswordTab() {
                         <div key={s} className="flex-1 flex flex-col items-center gap-1">
                           <div className="flex items-center w-full">
                             {i > 0 && (
-                              <div className={`flex-1 h-[2px] ${isPast || isCurrent ? "bg-[var(--brand-500)]" : "bg-[var(--surface-400)]"}`} />
+                              <div className={`flex-1 h-[2px] ${isPast || isCurrent ? "bg-[#E30019]" : "bg-slate-200"}`} />
                             )}
                             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0
-                              ${isPast ? "bg-green-600 text-white" : isCurrent ? "bg-[var(--brand-500)] text-white" : "bg-[var(--surface-400)] text-[var(--text-400)]"}
+                              ${isPast ? "bg-emerald-500 text-white" : isCurrent ? "bg-[#E30019] text-white" : "bg-slate-100 text-slate-400"}
                             `}>
                               {isPast ? "✓" : i + 1}
                             </div>
                             {i < 3 && (
-                              <div className={`flex-1 h-[2px] ${isPast ? "bg-[var(--brand-500)]" : "bg-[var(--surface-400)]"}`} />
+                              <div className={`flex-1 h-[2px] ${isPast ? "bg-[#E30019]" : "bg-slate-200"}`} />
                             )}
                           </div>
-                          <span className={`text-[10px] font-body whitespace-nowrap ${isCurrent ? "font-semibold text-black" : "font-normal text-[var(--text-600)]"}`}>
+                          <span className={`text-[10px] whitespace-nowrap ${isCurrent ? "font-semibold text-black" : "font-normal text-slate-500"}`}>
                             {labels[i]}
                           </span>
                         </div>
@@ -343,30 +345,30 @@ export function PasswordTab() {
                 {forgotStep === "email" && (
                   <div className="flex flex-col gap-4">
                     <div>
-                      <label className="block text-[12px] font-bold font-body text-[var(--text-600)] mb-1.5 tracking-[0.02em]">Địa chỉ email tài khoản</label>
+                      <label className="block text-xs font-semibold text-[#040004] mb-1.5">Địa chỉ email tài khoản</label>
                       <input
                         value={forgotEmail}
                         onChange={(e) => setForgotEmail(e.target.value)}
                         placeholder="email@geargo.vn"
-                        className="w-full h-[42px] px-3.5 bg-white border border-[var(--surface-400)] rounded-md text-[var(--text-900)] text-[14px] font-body outline-none transition-colors focus:border-[var(--brand-500)]"
+                        className="input-gaming w-full"
                       />
                     </div>
                     <div className="flex justify-between gap-2.5">
                       <button
-                        className="h-10 px-5 bg-white text-[var(--text-900)] border border-[var(--surface-400)] rounded-md text-[13px] font-semibold font-body cursor-pointer hover:bg-[var(--surface-400)] transition-colors"
+                        className="btn-outlined py-2 px-5 text-xs font-semibold"
                         onClick={exitForgot}
                       >
                         Hủy
                       </button>
                       <button
-                        className={`h-10 px-5 bg-[var(--brand-500)] text-white border-none rounded-md text-[13px] font-bold font-body flex items-center gap-2 transition-colors
-                          ${!forgotEmail.trim() || forgotLoading ? 'opacity-60 cursor-not-allowed' : 'opacity-100 cursor-pointer hover:bg-[var(--brand-600)]'}
+                        className={`btn-primary py-2 px-5 text-xs font-semibold flex items-center gap-2
+                          ${!forgotEmail.trim() || forgotLoading ? 'opacity-60 cursor-not-allowed' : 'opacity-100 cursor-pointer'}
                         `}
                         disabled={!forgotEmail.trim() || forgotLoading}
                         onClick={sendOtp}
                       >
                         {forgotLoading && (
-                          <span className="inline-block w-3.5 h-3.5 border-2 border-[var(--text-400)] border-t-white rounded-full animate-spin" />
+                          <span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         )}
                         Gửi mã OTP
                       </button>
@@ -377,12 +379,12 @@ export function PasswordTab() {
                 {/* Step 2: OTP */}
                 {forgotStep === "otp" && (
                   <div className="flex flex-col gap-4">
-                    <div className="text-[13px] text-[var(--text-600)] font-body leading-relaxed">
-                      Mã OTP đã được gửi đến <strong className="text-[var(--text-900)]">{forgotEmail}</strong>.
+                    <div className="text-[13px] text-[#636363] leading-relaxed">
+                      Mã OTP đã được gửi đến <strong className="text-[#040004]">{forgotEmail}</strong>.
                       Kiểm tra hộp thư và nhập mã bên dưới.
                     </div>
                     <div>
-                      <label className="block text-[12px] font-bold font-body text-[var(--text-600)] mb-1.5 tracking-[0.02em]">Mã OTP (6 chữ số)</label>
+                      <label className="block text-xs font-semibold text-[#040004] mb-1.5">Mã OTP (6 chữ số)</label>
                       <input
                         value={otpValue}
                         onChange={(e) => {
@@ -391,18 +393,18 @@ export function PasswordTab() {
                         }}
                         placeholder="______"
                         maxLength={6}
-                        className={`w-full h-[42px] px-3.5 bg-white border rounded-md text-[var(--text-900)] font-mono text-[22px] tracking-[0.3em] text-center outline-none transition-colors focus:border-[var(--brand-500)] ${otpError ? 'border-red-400' : 'border-[var(--surface-400)]'}`}
+                        className={`input-gaming w-full font-mono text-center text-xl tracking-[0.3em] h-12 ${otpError ? 'border-red-400 focus:border-red-500 focus:ring-red-500/20' : ''}`}
                       />
                       {otpError && (
-                        <div className="text-[12px] text-red-400 mt-1.5 font-body flex items-center gap-1.5">
+                        <div className="text-[12px] text-red-400 mt-1.5 flex items-center gap-1.5">
                           <AlertTriangle size={14} /> {otpError}
                         </div>
                       )}
                     </div>
                     <div className="flex items-center justify-between gap-2.5 flex-wrap">
                       {otpCountdown > 0 ? (
-                        <span className="text-[12px] text-[var(--text-600)] font-body">
-                          Gửi lại OTP sau <strong className="text-[var(--text-900)] font-mono">{otpCountdown}s</strong>
+                        <span className="text-[12px] text-[#636363]">
+                          Gửi lại OTP sau <strong className="text-[#040004] font-mono">{otpCountdown}s</strong>
                         </span>
                       ) : (
                         <button
@@ -411,27 +413,27 @@ export function PasswordTab() {
                             setOtpError("");
                             startOtpCountdown();
                           }}
-                          className="bg-transparent border-none cursor-pointer text-blue-500 text-[12px] p-0 font-body underline hover:text-blue-600"
+                          className="bg-transparent border-none cursor-pointer text-blue-500 text-[12px] p-0 underline hover:text-blue-600"
                         >
                           Gửi lại OTP
                         </button>
                       )}
                       <div className="flex gap-2">
                         <button
-                          className="h-10 px-5 bg-white text-[var(--text-900)] border border-[var(--surface-400)] rounded-md text-[13px] font-semibold font-body cursor-pointer hover:bg-[var(--surface-400)] transition-colors"
+                          className="btn-outlined py-2 px-5 text-xs font-semibold"
                           onClick={exitForgot}
                         >
                           Hủy
                         </button>
                         <button
-                          className={`h-10 px-5 bg-[var(--brand-500)] text-white border-none rounded-md text-[13px] font-bold font-body flex items-center gap-2 transition-colors
-                            ${otpValue.length < 4 || forgotLoading ? 'opacity-60 cursor-not-allowed' : 'opacity-100 cursor-pointer hover:bg-[var(--brand-600)]'}
+                          className={`btn-primary py-2 px-5 text-xs font-semibold flex items-center gap-2
+                            ${otpValue.length < 4 || forgotLoading ? 'opacity-60 cursor-not-allowed' : 'opacity-100 cursor-pointer'}
                           `}
                           disabled={otpValue.length < 4 || forgotLoading}
                           onClick={verifyOtp}
                         >
                           {forgotLoading && (
-                            <span className="inline-block w-3.5 h-3.5 border-2 border-[var(--text-400)] border-t-white rounded-full animate-spin" />
+                            <span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                           )}
                           Xác nhận OTP
                         </button>
@@ -445,7 +447,7 @@ export function PasswordTab() {
                   <div className="flex flex-col gap-4">
                     <div>
                       <PwInput
-                        label="Mật khẩu mới"
+                        label="Mật khẩu mới *"
                         value={resetNewPass}
                         onChange={setResetNewPass}
                         show={showResetNew}
@@ -455,10 +457,10 @@ export function PasswordTab() {
                         <div className="grid grid-cols-2 gap-y-1 gap-x-3 mt-2.5">
                           {resetChecks.map((c) => (
                             <div key={c.label} className="flex items-center gap-1.5">
-                              <span className={`text-[11px] font-bold ${c.ok ? "text-green-500" : "text-[var(--text-400)]"}`}>
+                              <span className={`text-[11px] font-bold ${c.ok ? "text-emerald-500" : "text-slate-400"}`}>
                                 {c.ok ? "✓" : "○"}
                               </span>
-                              <span className={`text-[11px] font-body ${c.ok ? "text-green-500" : "text-[var(--text-600)]"}`}>
+                              <span className={`text-[11px] ${c.ok ? "text-emerald-500" : "text-slate-500"}`}>
                                 {c.label}
                               </span>
                             </div>
@@ -467,7 +469,7 @@ export function PasswordTab() {
                       )}
                     </div>
                     <PwInput
-                      label="Xác nhận mật khẩu mới"
+                      label="Xác nhận mật khẩu mới *"
                       value={resetConfPass}
                       onChange={setResetConfPass}
                       show={showResetConf}
@@ -480,20 +482,20 @@ export function PasswordTab() {
                     />
                     <div className="flex justify-end gap-2">
                       <button
-                        className="h-10 px-5 bg-white text-[var(--text-900)] border border-[var(--surface-400)] rounded-md text-[13px] font-semibold font-body cursor-pointer hover:bg-[var(--surface-400)] transition-colors"
+                        className="btn-outlined py-2 px-5 text-xs font-semibold"
                         onClick={exitForgot}
                       >
                         Hủy
                       </button>
                       <button
-                        className={`h-10 px-5 bg-[var(--brand-500)] text-white border-none rounded-md text-[13px] font-bold font-body flex items-center gap-2 transition-colors
-                          ${!resetNewPassValid || forgotLoading ? 'opacity-60 cursor-not-allowed' : 'opacity-100 cursor-pointer hover:bg-[var(--brand-600)]'}
+                        className={`btn-primary py-2 px-5 text-xs font-semibold flex items-center gap-2
+                          ${!resetNewPassValid || forgotLoading ? 'opacity-60 cursor-not-allowed' : 'opacity-100 cursor-pointer'}
                         `}
                         disabled={!resetNewPassValid || forgotLoading}
                         onClick={resetPassword}
                       >
                         {forgotLoading && (
-                          <span className="inline-block w-3.5 h-3.5 border-2 border-[var(--text-400)] border-t-white rounded-full animate-spin" />
+                          <span className="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         )}
                         Đặt lại mật khẩu
                       </button>
@@ -504,20 +506,20 @@ export function PasswordTab() {
                 {/* Step 4: Done */}
                 {forgotStep === "done" && (
                   <div className="text-center pt-4 pb-2">
-                    <div className="w-14 h-14 rounded-full bg-green-50 border-2 border-green-200/50 flex items-center justify-center text-[24px] text-green-500 mx-auto mb-4">
+                    <div className="w-14 h-14 rounded-full bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center text-[24px] text-emerald-500 mx-auto mb-4">
                       <Check size={28} />
                     </div>
-                    <div className="text-[var(--text-900)] text-[16px] font-bold font-heading mb-2">
+                    <div className="text-[#040004] text-[16px] font-bold font-heading mb-2">
                       Đặt lại mật khẩu thành công
                     </div>
-                    <div className="text-[var(--text-600)] text-[13px] font-body mb-5">
+                    <div className="text-[#636363] text-[13px] mb-5">
                       Mật khẩu mới của bạn đã được cập nhật. Hãy dùng mật khẩu mới để đăng nhập lần tiếp theo.
                     </div>
                     <button
-                      className="h-10 px-5 bg-[var(--brand-500)] text-white border-none rounded-md text-[13px] font-bold font-body cursor-pointer hover:bg-[var(--brand-600)] transition-colors inline-block"
+                      className="btn-primary py-2.5 px-6 text-xs font-semibold inline-block"
                       onClick={exitForgot}
                     >
-                      Quay lại đăng nhập
+                      Xong
                     </button>
                   </div>
                 )}
@@ -526,6 +528,6 @@ export function PasswordTab() {
           </div>
         </>
       )}
-    </div>
+    </>
   );
 }

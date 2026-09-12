@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import type { WarrantyProvider } from "@/mocks/warranty.mock";
+import type { WarrantyProvider } from "@/mocks/techstaff/warranty.mock";
 import { Info, Search, Plus, Eye, Pencil, ExternalLink, Ban, CheckCircle, X, AlertTriangle, Check } from "lucide-react";
 
 export function WarrantyTab({

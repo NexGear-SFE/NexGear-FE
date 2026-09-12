@@ -1,35 +1,43 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, Eye, EyeOff, Check } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 type QuickLoginModalProps = {
-  onClose: () => void;
-  onGoRegister: () => void;
-  onGoFullLogin: () => void;
-  onLogin?: () => void;
-  onTechLogin?: () => void;
-  onStoreManagerLogin?: () => void;
-  onWarehouseLogin?: () => void;
-  onWarehouseAdminLogin?: () => void;
+  onClose?: () => void;
+  onGoRegister?: () => void;
+  onGoFullLogin?: () => void;
 };
 
 export function QuickLoginModal({
   onClose,
   onGoRegister,
   onGoFullLogin,
-  onLogin,
-  onTechLogin,
-  onStoreManagerLogin,
-  onWarehouseLogin,
-  onWarehouseAdminLogin,
 }: QuickLoginModalProps) {
+  const { isLoginModalOpen, closeLoginModal, login, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
   const [phone, setPhone] = useState('');
   const [pass, setPass] = useState('');
   const [showPass, setShowPass] = useState(false);
-  const [remember, setRemember] = useState(false);
+  const [remember, setRemember] = useState(true);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const emailNorm = phone.trim().toLowerCase();
 
-  // Prevent background scrolling when modal is open
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isLoginModalOpen) {
+        closeLoginModal();
+        if (onClose) onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isLoginModalOpen, closeLoginModal, onClose]);
+
+  // Prevent background scrolling
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -37,24 +45,49 @@ export function QuickLoginModal({
     };
   }, []);
 
-  function handleLogin() {
-    if (emailNorm === 'storemanager@gmail.com') {
-      onStoreManagerLogin?.();
-    } else if (emailNorm === 'techstaff@gmail.com') {
-      onTechLogin?.();
-    } else if (emailNorm === 'warehousestaff@gmail.com') {
-      onWarehouseLogin?.();
-    } else if (emailNorm === 'warehouseadmin@gmail.com') {
-      onWarehouseAdminLogin?.();
-    } else {
-      onLogin?.();
+  if (!isLoginModalOpen || isAuthenticated) return null;
+
+  const handleClose = () => {
+    closeLoginModal();
+    if (onClose) onClose();
+  };
+
+  function handleLogin(e?: React.FormEvent) {
+    if (e) e.preventDefault();
+    setErrorMsg('');
+
+    if (!emailNorm) {
+      setErrorMsg('Vui lòng nhập Email hoặc Số điện thoại!');
+      return;
     }
-    onClose();
+
+    if (!pass) {
+      setErrorMsg('Vui lòng nhập Mật khẩu!');
+      return;
+    }
+
+    const result = login({ email: phone, password: pass, rememberMe: remember });
+    if (result.success && result.user) {
+      handleClose();
+      navigate(result.user.redirectPath);
+    } else if (result.error) {
+      setErrorMsg(result.error);
+    }
   }
+
+  const handleGoogleLogin = () => {
+    setPhone('user@gmail.com');
+    setPass('123456');
+    const result = login({ email: 'user@gmail.com', password: '123456', rememberMe: remember });
+    if (result.success && result.user) {
+      handleClose();
+      navigate(result.user.redirectPath);
+    }
+  };
 
   return (
     <div
-      onClick={onClose}
+      onClick={handleClose}
       className="fixed inset-0 bg-[#040004]/55 z-[1000] flex items-center justify-center p-5 backdrop-blur-[2px]"
     >
       <div
@@ -78,7 +111,7 @@ export function QuickLoginModal({
             </div>
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="p-1 rounded text-[var(--text-600)] hover:text-[var(--text-900)] hover:bg-[var(--surface-200)] transition-mechanical -mt-1"
             >
               <X size={20} />
@@ -89,7 +122,8 @@ export function QuickLoginModal({
             {/* Google SSO */}
             <button
               type="button"
-              className="flex items-center justify-center gap-2 w-full py-2.5 border border-[var(--surface-400)] rounded-md font-medium text-body-sm hover:bg-[var(--surface-200)] transition-mechanical"
+              onClick={handleGoogleLogin}
+              className="flex items-center justify-center gap-2 w-full py-2.5 border border-[var(--surface-400)] rounded-md font-medium text-body-sm hover:bg-[var(--surface-200)] transition-mechanical cursor-pointer"
             >
               <svg width="18" height="18" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
@@ -107,7 +141,14 @@ export function QuickLoginModal({
               <div className="flex-1 h-px bg-[var(--surface-400)]"></div>
             </div>
 
-            {/* Phone/Email */}
+            <form onSubmit={handleLogin} className="flex flex-col gap-4">
+              {errorMsg && (
+                <div className="p-2.5 bg-red-50 border border-[#E30019] text-[#E30019] text-[13px] font-semibold rounded-[4px]">
+                  {errorMsg}
+                </div>
+              )}
+
+              {/* Phone/Email */}
             <div>
               <label className="block text-caption text-[var(--text-600)] uppercase font-semibold mb-1.5 tracking-widest">
                 Số điện thoại hoặc Email
@@ -218,17 +259,22 @@ export function QuickLoginModal({
               </div>
             )}
 
-            {/* CTA */}
-            <button type="button" className="btn-primary w-full h-12 mt-2 text-[15px]" onClick={handleLogin}>
-              Đăng nhập
-            </button>
+              {/* CTA */}
+              <button type="submit" className="btn-primary w-full h-12 mt-2 text-[15px] cursor-pointer shadow-xs">
+                Đăng nhập
+              </button>
+            </form>
 
             {/* Switch to register */}
             <p className="m-0 text-center text-[13px] text-[var(--text-600)]">
               Chưa có tài khoản?{' '}
               <button
                 type="button"
-                onClick={onGoRegister}
+                onClick={() => {
+                  handleClose();
+                  if (onGoRegister) onGoRegister();
+                  else navigate('/register');
+                }}
                 className="text-[13px] font-bold text-[var(--brand-500)] hover:text-[var(--brand-600)] transition-mechanical bg-transparent border-none p-0 cursor-pointer"
               >
                 Đăng ký ngay
