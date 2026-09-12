@@ -1,5 +1,5 @@
 import type { User } from '@/types/auth.type'
-import { USER_ROLES } from '../constants/roles'
+import { USER_ROLES } from '../../constants/roles'
 
 export const DEFAULT_MOCK_PASSWORD = '123456'
 
@@ -32,7 +32,7 @@ export const MOCK_USERS: User[] = [
     roleName: 'Tech Staff',
     avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=150&q=80',
     phone: '0912345678',
-    redirectPath: '/admin/tech-staff',
+    redirectPath: '/tech-staff',
   },
   {
     id: 'usr_004',

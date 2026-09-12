@@ -168,6 +168,7 @@ export const MainHeader = () => {
           )}
         </div>
       </div>
+
     </header>
-  )
-}
+  );
+};

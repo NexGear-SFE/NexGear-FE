@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Calendar, User, Clock, ChevronLeft, Share2, Tag, ArrowRight } from 'lucide-react'
-import { INITIAL_BLOG_POSTS } from '@/mocks/blog.mock'
+import { INITIAL_BLOG_POSTS } from '@/mocks/storemanager/blog.mock'
 
 export const BlogDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()

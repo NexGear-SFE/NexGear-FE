@@ -1,15 +1,19 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom'
-import { MainLayout } from '@/layouts/MainLayout'
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { MainLayout } from '@/layouts/MainLayout';
 import { AdminLayout } from '@/layouts/AdminLayout'
-import { HomePage } from '@/pages/Home/HomePage'
-import { BlogManagementPage } from '@/pages/AdminBlog/BlogManagementPage'
-import { AccountSettingsPage } from '@/pages/AccountSettings/AccountSettingsPage'
-import { BlogListPage } from '@/pages/Blog/BlogListPage'
-import { BlogDetailPage } from '@/pages/Blog/BlogDetailPage'
+import { HomePage } from '@/pages/customer/HomePage';
+import { TechStaffLayout } from '@/layouts/TechStaffLayout';
+import { TechStaffDashboard } from '@/pages/techstaff/Dashboard';
+import { SerialCheck } from '@/pages/techstaff/SerialCheck';
+import { Settings } from '@/pages/techstaff/Settings';
+import { BlogManagementPage } from '@/pages/admin/BlogManagementPage'
+import { AccountSettingsPage } from '@/pages/common/AccountSettingsPage'
+import { BlogListPage } from '@/pages/customer/BlogListPage'
+import { BlogDetailPage } from '@/pages/customer/BlogDetailPage'
 
-import { RegisterPage } from '@/pages/Register/RegisterPage'
-import { LoginPage } from '@/pages/Login/LoginPage'
-import { ProtectedRoute } from '@/components/Auth/ProtectedRoute'
+import { RegisterPage } from '@/pages/auth/RegisterPage'
+import { LoginPage } from '@/pages/auth/LoginPage'
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { ALLOWED_ROLES } from '@/constants/roles'
 
 export const router = createBrowserRouter([
@@ -39,28 +43,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: '/admin',
-  //   element: <AdminLayout />,
-  //   children: [
-  //     {
-  //       path: 'tech-staff',
-  //       element: (
-  //         <ProtectedRoute allowedRoles={ALLOWED_ROLES.TECH_STAFF}>
-  //           <TechStaffDashboard />
-  //         </ProtectedRoute>
-  //       ),
-  //     },
-  //     {
-  //       path: 'warehouse',
-  //       element: (
-  //         <ProtectedRoute allowedRoles={ALLOWED_ROLES.WAREHOUSE_STORE}>
-  //           <WarehouseDashboard />
-  //         </ProtectedRoute>
-  //       ),
-  //     },
-  //   ],
-  // },
   {
     path: '/storemanager',
     element: (
@@ -91,4 +73,22 @@ export const router = createBrowserRouter([
     path: '/register',
     element: <RegisterPage />,
   },
-])
+  {
+    path: '/tech-staff',
+    element: <TechStaffLayout />,
+    children: [
+      {
+        index: true,
+        element: <TechStaffDashboard />,
+      },
+      {
+        path: 'serial',
+        element: <SerialCheck />,
+      },
+      {
+        path: 'settings',
+        element: <Settings />,
+      },
+    ],
+  },
+]);

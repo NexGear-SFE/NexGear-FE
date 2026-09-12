@@ -65,17 +65,17 @@ export const AccountDropdown = ({
         )}
         <div className="flex flex-col min-w-0">
           <span className="font-bold text-xs text-[#040004] truncate">
-            {user?.name || 'Quản lý Cửa Hàng'}
+            {user?.name || 'Người dùng'}
           </span>
           <span className="text-[11px] text-[#636363] truncate">
-            {user?.email || 'storemanager@gmail.com'}
+            {user?.email || 'user@example.com'}
           </span>
           <div className="flex items-center gap-1.5 mt-1">
-            <span className="bg-[#E30019] text-white text-[10px] font-bold px-1.5 py-0.2 rounded inline-flex items-center gap-0.5">
-              <Shield className="w-2.5 h-2.5" /> ADMIN
+            <span className={`text-white text-[10px] font-bold px-1.5 py-0.5 rounded inline-flex items-center gap-0.5 ${user?.role === 'STORE_MANAGER' ? 'bg-[#E30019]' : 'bg-blue-600'}`}>
+              <Shield className="w-2.5 h-2.5" /> {user?.role === 'STORE_MANAGER' ? 'ADMIN' : 'STAFF'}
             </span>
             <span className="text-[11px] text-[#636363] font-medium">
-              {user?.roleName || 'Store Manager'}
+              {user?.roleName || 'Nhân viên'}
             </span>
           </div>
         </div>

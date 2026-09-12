@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Calendar, User, Clock, ArrowRight } from 'lucide-react'
-import { INITIAL_BLOG_POSTS } from '@/mocks/blog.mock'
+import { INITIAL_BLOG_POSTS } from '@/mocks/storemanager/blog.mock'
 
 export const BlogListPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('Tất cả')

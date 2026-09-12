@@ -6,15 +6,15 @@ import {
   Package,
   MessageSquare,
   Newspaper,
-  Settings,
   Store,
   ChevronRight,
   Bell,
   ChevronDown,
   HelpCircle,
 } from 'lucide-react'
-import { AccountDropdown } from '@/components/AdminLayout/AccountDropdown'
-import { LoginModal } from '@/components/Auth/LoginModal'
+import { AccountDropdown } from '@/components/common/AccountDropdown'
+import { SidebarUserWidget } from '@/components/common/SidebarUserWidget'
+import { QuickLoginModal } from '@/components/auth/QuickLoginModal'
 import type { BlogPost } from '@/types/blog.type'
 
 export type ViewMode = 'list' | 'create' | 'edit' | 'settings'
@@ -114,31 +114,7 @@ export const AdminLayout = () => {
           </div>
         </div>
 
-        {/* Footer Sidebar - Khung tài khoản đáy */}
-        <div className="p-3 border-t border-[#E0E0E0] bg-slate-50/50">
-          <div className="flex items-center justify-between bg-white border border-[#E0E0E0] rounded-md p-2 shadow-xs">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-[#E30019] text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
-                SM
-              </div>
-              <div className="flex flex-col min-w-0">
-                <span className="text-xs font-semibold text-[#040004] truncate">
-                  storemanager
-                </span>
-                <span className="text-[10px] text-[#636363]">Super Admin</span>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={handleOpenSettings}
-              aria-label="Cài đặt tài khoản"
-              title="Cài đặt tài khoản"
-              className="p-1.5 text-slate-400 hover:text-[#E30019] hover:bg-red-50 transition-mechanical rounded cursor-pointer"
-            >
-              <Settings className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        <SidebarUserWidget settingsPath="/storemanager/settings" />
       </aside>
 
       {/* Main Container */}
@@ -247,8 +223,7 @@ export const AdminLayout = () => {
         </main>
       </div>
 
-      {/* Login Popup Modal */}
-      <LoginModal />
+      <QuickLoginModal />
 
       {/* 5.6 Floating Help Button */}
       <button
