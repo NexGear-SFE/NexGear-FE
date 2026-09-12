@@ -25,11 +25,11 @@ export function WarehouseDashboardPage() {
   useEffect(() => { void Promise.all([getWarehouseOrders(), getReceipts(), getInventory()]).then(() => setLoadState('ready')).catch(() => setLoadState('error')) }, [])
   const cards = [
     { label: 'Đơn chờ tiếp nhận', value: metrics.waitingAcceptance, icon: ClipboardList, to: `${ROUTES.warehouseOrders}?status=WAITING_ACCEPTANCE`, tone: 'text-brand-500 bg-error-50' },
-    { label: 'Tổng SKU', value: metrics.totalSku, icon: Boxes, to: ROUTES.warehouseInventory, tone: 'text-info-500 bg-blue-50' },
-    { label: 'SKU sắp hết', value: metrics.lowStock, icon: AlertTriangle, to: `${ROUTES.warehouseInventory}?status=LOW_STOCK`, tone: 'text-warning-500 bg-amber-50' },
+    { label: 'Tổng SKU', value: metrics.totalSku, icon: Boxes, to: ROUTES.warehouseInventory, tone: 'text-info-700 bg-info-50' },
+    { label: 'SKU sắp hết', value: metrics.lowStock, icon: AlertTriangle, to: `${ROUTES.warehouseInventory}?status=LOW_STOCK`, tone: 'text-warning-700 bg-warning-50' },
     { label: 'SKU hết hàng', value: metrics.outOfStock, icon: Boxes, to: `${ROUTES.warehouseInventory}?status=OUT_OF_STOCK`, tone: 'text-error-700 bg-error-50' },
-    { label: 'Sản phẩm Active / Draft', value: `${metrics.activeProducts} / ${metrics.draftProducts}`, icon: PackageOpen, to: ROUTES.warehouseProducts, tone: 'text-info-500 bg-blue-50' },
-    { label: 'Danh mục ngừng dùng', value: metrics.inactiveCategories, icon: FolderTree, to: ROUTES.warehouseCategories, tone: metrics.inactiveCategories > 0 ? 'text-warning-500 bg-amber-50' : 'text-success-500 bg-emerald-50' },
+    { label: 'Sản phẩm đang dùng / nháp', value: `${metrics.activeProducts} / ${metrics.draftProducts}`, icon: PackageOpen, to: ROUTES.warehouseProducts, tone: 'text-info-700 bg-info-50' },
+    { label: 'Danh mục ngừng dùng', value: metrics.inactiveCategories, icon: FolderTree, to: ROUTES.warehouseCategories, tone: metrics.inactiveCategories > 0 ? 'text-warning-700 bg-warning-50' : 'text-success-700 bg-success-50' },
   ]
   return <div className="space-y-8"><WarehousePageHeader eyebrow="Warehouse operations" title="Tổng quan kho" description="Theo dõi công việc cần xử lý, sức khỏe tồn kho và các phiếu nhập gần nhất." />
     {loadState === 'loading' && <DataTableSkeleton columns={3} rows={2} />}{loadState === 'error' && <DataState type="error" title="Không tải được tổng quan kho" description="Dữ liệu vận hành đang gián đoạn." onRetry={refresh} />}

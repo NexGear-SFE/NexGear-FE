@@ -1,5 +1,5 @@
 import { Plus, Trash2 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { ConfirmDialog } from '@/components/warehouse/ConfirmDialog'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
 import type { ProductVariant, VariantOption, VariantOptionValue } from '@/types/variant.type'
@@ -43,7 +43,7 @@ function createDefaultVariant(brandCode: string, modelCode: string, serialTracki
 }
 
 export function VariantMatrixEditor({ brandCode, existingSkus = [], modelCode, onAudit, onChange, variants }: Props) {
-  const initialOptions = useMemo(() => deriveOptions(variants), [])
+  const [initialOptions] = useState(() => deriveOptions(variants))
   const [hasConfigurations, setHasConfigurations] = useState(initialOptions.length > 0)
   const [options, setOptions] = useState<VariantOption[]>(initialOptions)
   const [selection, setSelection] = useState<Record<string, string>>({})
