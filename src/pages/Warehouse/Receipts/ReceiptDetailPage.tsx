@@ -1,26 +1,27 @@
 import { ArrowLeft, Boxes, CheckCircle2, Pencil, RotateCcw } from 'lucide-react'
 import { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 import { ConfirmDialog } from '@/components/warehouse/ConfirmDialog'
 import { DataState } from '@/components/warehouse/DataState'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
 import { WarehousePageHeader } from '@/components/warehouse/WarehousePageHeader'
 import { ROUTES, warehouseInventoryDetailPath, warehouseProductDetailPath, warehouseReceiptEditPath } from '@/constants/routes'
-import { useWarehouseStore } from '@/stores/warehouseStore'
-import { formatCurrency, formatDate, formatDateOnly } from '@/utils/formatters'
+import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
+import { formatCurrency } from '@/utils/formatCurrency'
+import { formatDate, formatDateOnly } from '@/utils/formatDate'
 import { calculateReceiptTotal, getReceiptValidationIssues } from '@/utils/receipt'
 
 export function ReceiptDetailPage() {
   const { receiptId = '' } = useParams()
-  const navigate = useNavigate()
-  const store = useWarehouseStore()
+  const store = useWarehouseStore(useShallow(warehouseSelectors.receipts))
   const receipt = store.receipts.find((item) => item.id === receiptId)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [issues, setIssues] = useState<string[]>([])
   if (!receipt) return <DataState type="empty" title="Không tìm thấy phiếu nhập" description="Mã phiếu không tồn tại hoặc đã thay đổi." />
   const totalQuantity = receipt.lines.reduce((sum, line) => sum + line.quantity, 0)
   const requestConfirm = () => { const nextIssues = getReceiptValidationIssues(receipt, store.variants, store.serials); setIssues(nextIssues); if (nextIssues.length === 0) setConfirmOpen(true) }
-  const confirm = () => { if (store.confirmReceipt(receipt.id)) { setConfirmOpen(false); navigate(0) } }
+  const confirm = () => { if (store.confirmReceipt(receipt.id)) setConfirmOpen(false) }
   return <div className="space-y-6"><Link to={ROUTES.warehouseReceipts} className="inline-flex items-center gap-2 text-sm font-semibold text-text-600"><ArrowLeft className="h-4 w-4" /> Danh sách phiếu nhập</Link><WarehousePageHeader eyebrow="Receipt detail" title={receipt.id} description={`${receipt.supplier || 'Chưa chọn nhà cung cấp'} · ${formatDateOnly(receipt.receiptDate)}`} actions={receipt.status === 'DRAFT' ? <><Link className="btn-primary" to={warehouseReceiptEditPath(receipt.id)}><Pencil className="h-4 w-4" /> Tiếp tục chỉnh sửa</Link><button type="button" className="btn-outlined" onClick={requestConfirm}>Xác nhận phiếu nhập</button></> : <button type="button" className="btn-outlined" disabled title="Dành cho Manager/Admin"><RotateCcw className="h-4 w-4" /> Tạo phiếu điều chỉnh</button>} />
     {receipt.status === 'DRAFT' ? <div className="rounded-sm border border-amber-200 bg-amber-50 p-4 text-sm text-warning-500"><strong>Phiếu chưa được xác nhận. Tồn kho chưa thay đổi.</strong>{issues.length > 0 && <p className="mt-1">Còn {issues.length} vấn đề cần xử lý trước khi xác nhận.</p>}</div> : <div className="flex items-center gap-3 rounded-sm border border-emerald-200 bg-emerald-50 p-4 text-sm font-semibold text-success-500"><CheckCircle2 className="h-5 w-5" /> Tồn kho đã được cập nhật thành công.</div>}
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]"><section className="space-y-6"><div className="rounded-md border border-surface-400 bg-white p-5"><div className="flex items-center justify-between"><h2 className="font-heading text-lg font-semibold">Thông tin phiếu</h2><StatusBadge label={receipt.status === 'DRAFT' ? 'Bản nháp' : 'Đã xác nhận'} tone={receipt.status === 'DRAFT' ? 'warning' : 'success'} /></div><dl className="mt-5 grid gap-4 text-sm md:grid-cols-2"><div><dt className="text-text-600">Nhà cung cấp</dt><dd className="mt-1 font-semibold">{receipt.supplier || 'Chưa chọn'}</dd></div><div><dt className="text-text-600">Kho nhận</dt><dd className="mt-1 font-semibold">{receipt.warehouseName}</dd></div><div><dt className="text-text-600">Mã chứng từ</dt><dd className="mt-1 font-semibold">{receipt.invoiceCode || 'Chưa nhập'}</dd></div><div><dt className="text-text-600">Người tạo / thời gian</dt><dd className="mt-1 font-semibold">{receipt.creator} · {formatDate(receipt.createdAt)}</dd></div>{receipt.confirmedBy && <div><dt className="text-text-600">Người xác nhận / thời gian</dt><dd className="mt-1 font-semibold">{receipt.confirmedBy} · {formatDate(receipt.confirmedAt ?? receipt.updatedAt)}</dd></div>}<div><dt className="text-text-600">Ghi chú</dt><dd className="mt-1">{receipt.notes || '—'}</dd></div></dl></div>
