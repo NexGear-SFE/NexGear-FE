@@ -1,6 +1,7 @@
 import { FilePlus2, Pencil, ReceiptText } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 import { getReceipts } from '@/apis/receipt.api'
 import { DataState } from '@/components/warehouse/DataState'
 import { DataTableSkeleton } from '@/components/warehouse/DataTableSkeleton'
@@ -10,14 +11,15 @@ import { WarehouseFilterBar } from '@/components/warehouse/WarehouseFilterBar'
 import { WarehousePageHeader } from '@/components/warehouse/WarehousePageHeader'
 import { WarehousePagination } from '@/components/warehouse/WarehousePagination'
 import { ROUTES, warehouseReceiptDetailPath, warehouseReceiptEditPath } from '@/constants/routes'
-import { useWarehouseStore } from '@/stores/warehouseStore'
-import { formatCurrency, formatDate, formatDateOnly } from '@/utils/formatters'
+import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
+import { formatCurrency } from '@/utils/formatCurrency'
+import { formatDate, formatDateOnly } from '@/utils/formatDate'
 import { calculateReceiptTotal } from '@/utils/receipt'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 
 const PAGE_SIZE = 8
 export function ReceiptListPage() {
-  const receipts = useWarehouseStore((state) => state.receipts)
+  const { receipts } = useWarehouseStore(useShallow(warehouseSelectors.receipts))
   const [params, setParams] = useSearchParams()
   const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>('loading')
   const query = params.get('q') ?? ''

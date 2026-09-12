@@ -1,22 +1,23 @@
 import { ArrowLeft, Boxes, ClipboardList, Edit3, PackageOpen, ShieldCheck, Tags } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 import { DataState } from '@/components/warehouse/DataState'
 import { ProductInventoryPanel } from '@/components/warehouse/ProductInventoryPanel'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
 import { WarehouseStatCard } from '@/components/warehouse/WarehouseStatCard'
 import { ROUTES, warehouseProductEditPath } from '@/constants/routes'
-import { useWarehouseStore } from '@/stores/warehouseStore'
+import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
 import { buildCategoryBreadcrumb } from '@/utils/buildCategoryTree'
 import { cn } from '@/utils/cn'
-import { formatDate as formatDateTime } from '@/utils/formatters'
+import { formatDate as formatDateTime } from '@/utils/formatDate'
 
 const tabs = ['Tổng quan', 'Biến thể/SKU', 'Thông số kỹ thuật', 'Tồn kho & Serial', 'Lịch sử nhập/xuất', 'Audit log'] as const
 type Tab = typeof tabs[number]
 
 export function ProductDetailPage() {
   const { productId = '' } = useParams()
-  const { products, variants, inventory, serials, movements, skuAudit, categories } = useWarehouseStore()
+  const { products, variants, inventory, serials, movements, skuAudit, categories } = useWarehouseStore(useShallow(warehouseSelectors.catalog))
   const [tab, setTab] = useState<Tab>('Tổng quan')
   const product = products.find((item) => item.id === productId)
   if (!product) return <DataState type="empty" title="Không tìm thấy sản phẩm" description="Product ID không tồn tại hoặc đã bị ẩn khỏi dữ liệu mock." />

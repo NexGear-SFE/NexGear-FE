@@ -1,6 +1,7 @@
 import { AlertTriangle, ArrowRight, Boxes, ClipboardList, FolderTree, PackageOpen, ReceiptText } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 import { getInventory } from '@/apis/inventory.api'
 import { getReceipts } from '@/apis/receipt.api'
 import { getWarehouseOrders } from '@/apis/warehouseOrder.api'
@@ -9,13 +10,13 @@ import { DataTableSkeleton } from '@/components/warehouse/DataTableSkeleton'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
 import { WarehousePageHeader } from '@/components/warehouse/WarehousePageHeader'
 import { ROUTES, warehouseOrderDetailPath, warehouseReceiptDetailPath } from '@/constants/routes'
-import { useWarehouseStore } from '@/stores/warehouseStore'
-import { formatCurrency } from '@/utils/formatters'
+import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
+import { formatCurrency } from '@/utils/formatCurrency'
 import { getDashboardMetrics } from '@/utils/warehouseDashboard'
 import { orderStateLabels } from '@/utils/warehouseOrder'
 
 export function WarehouseDashboardPage() {
-  const store = useWarehouseStore()
+  const store = useWarehouseStore(useShallow(warehouseSelectors.dashboard))
   const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>('loading')
   const metrics = getDashboardMetrics(store)
   const actionOrders = store.orders.filter((order) => order.state !== 'COMPLETED')

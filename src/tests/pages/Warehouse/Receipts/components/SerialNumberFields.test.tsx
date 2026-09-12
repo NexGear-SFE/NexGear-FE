@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { SerialNumberFields } from '@/components/warehouse/SerialNumberFields'
+import { SerialNumberFields } from '@/pages/Warehouse/Receipts/components/SerialNumberFields'
 
 describe('SerialNumberFields', () => {
   it('does not render serial inputs for quantity-only variants', () => {

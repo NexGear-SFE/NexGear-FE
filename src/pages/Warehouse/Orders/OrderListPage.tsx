@@ -1,6 +1,7 @@
 import { ArrowRight, ClipboardList } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 import { getWarehouseOrders } from '@/apis/warehouseOrder.api'
 import { DataState } from '@/components/warehouse/DataState'
 import { DataTableSkeleton } from '@/components/warehouse/DataTableSkeleton'
@@ -10,9 +11,10 @@ import { WarehouseFilterBar } from '@/components/warehouse/WarehouseFilterBar'
 import { WarehousePageHeader } from '@/components/warehouse/WarehousePageHeader'
 import { WarehousePagination } from '@/components/warehouse/WarehousePagination'
 import { warehouseOrderDetailPath } from '@/constants/routes'
-import { useWarehouseStore } from '@/stores/warehouseStore'
+import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
 import type { WarehouseOrderState } from '@/types/warehouseOrder.type'
-import { formatCurrency, formatDate } from '@/utils/formatters'
+import { formatCurrency } from '@/utils/formatCurrency'
+import { formatDate } from '@/utils/formatDate'
 import { orderActionLabels, orderStateLabels, sortOrders } from '@/utils/warehouseOrder'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 
@@ -21,7 +23,7 @@ const PAGE_SIZE = 8
 const CURRENT_STAFF = 'Nguyễn Bảo'
 
 export function OrderListPage() {
-  const { orders, variants } = useWarehouseStore()
+  const { orders, variants } = useWarehouseStore(useShallow(warehouseSelectors.orders))
   const [params, setParams] = useSearchParams()
   const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>('loading')
   const query = params.get('q') ?? ''

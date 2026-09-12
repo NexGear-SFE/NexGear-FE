@@ -2,15 +2,16 @@ import { ArrowLeft, ArrowRight, Check, Minus, MoveDown, MoveUp, Plus, Save } fro
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactElement, ReactNode } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { CategorySelect } from '@/components/warehouse/CategorySelect'
+import { useShallow } from 'zustand/react/shallow'
 import { ConfirmDialog } from '@/components/warehouse/ConfirmDialog'
 import { ProgressStepper } from '@/components/warehouse/ProgressStepper'
 import { WarehousePageHeader } from '@/components/warehouse/WarehousePageHeader'
-import { VariantMatrixEditor, type VariantDraft } from '@/components/warehouse/VariantMatrixEditor'
 import { ROUTES, warehouseProductDetailPath } from '@/constants/routes'
+import { CategorySelect } from '@/pages/Warehouse/Products/components/CategorySelect'
+import { VariantMatrixEditor, type VariantDraft } from '@/pages/Warehouse/Products/components/VariantMatrixEditor'
 import { productSchema, type ProductFormValues } from '@/schemas/product.schema'
 import { variantCollectionSchema } from '@/schemas/variant.schema'
-import { useWarehouseStore } from '@/stores/warehouseStore'
+import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
 import type { ProductSpecification } from '@/types/product.type'
 import { buildCategoryBreadcrumb } from '@/utils/buildCategoryTree'
 import { generateSkuPreview, normalizeSkuSegment } from '@/utils/generateSkuPreview'
@@ -24,7 +25,7 @@ const emptyProduct: ProductFormValues = { name: '', slug: '', productCode: '', m
 export function ProductWizardPage() {
   const { productId } = useParams()
   const navigate = useNavigate()
-  const { categories, products, variants, saveProduct, logSkuAudit } = useWarehouseStore()
+  const { categories, products, variants, saveProduct, logSkuAudit } = useWarehouseStore(useShallow(warehouseSelectors.catalog))
   const existing = products.find((product) => product.id === productId)
   const [step, setStep] = useState(0)
   const [product, setProduct] = useState<ProductFormValues>(() => existing ? { name: existing.name, slug: existing.slug, productCode: existing.productCode, modelCode: existing.modelCode, brand: existing.brand, brandCode: existing.brandCode, categoryId: existing.categoryId, shortDescription: existing.shortDescription, warrantyMonths: existing.warrantyMonths, unit: existing.unit, origin: existing.origin, weightGrams: existing.weightGrams, dimensions: existing.dimensions, status: existing.status } : emptyProduct)

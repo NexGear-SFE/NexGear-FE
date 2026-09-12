@@ -1,16 +1,17 @@
 import { ArrowLeft, ArrowRight, Save, ScanLine, Trash2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 import { ConfirmDialog } from '@/components/warehouse/ConfirmDialog'
 import { ProgressStepper } from '@/components/warehouse/ProgressStepper'
-import { ReceiptSerialDialog } from '@/components/warehouse/ReceiptSerialDialog'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
 import { WarehousePageHeader } from '@/components/warehouse/WarehousePageHeader'
 import { ROUTES, warehouseReceiptDetailPath, warehouseReceiptEditPath } from '@/constants/routes'
-import { useWarehouseStore } from '@/stores/warehouseStore'
+import { ReceiptSerialDialog } from '@/pages/Warehouse/Receipts/components/ReceiptSerialDialog'
+import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
 import type { ReceiptLine, StockReceipt } from '@/types/receipt.type'
 import { buildCategoryBreadcrumb } from '@/utils/buildCategoryTree'
-import { formatCurrency } from '@/utils/formatters'
+import { formatCurrency } from '@/utils/formatCurrency'
 import { calculateReceiptTotal, getReceiptValidationIssues } from '@/utils/receipt'
 
 const STEPS = ['Thông tin phiếu', 'Sản phẩm & SKU', 'Số lượng, giá & serial', 'Xác nhận']
@@ -19,7 +20,7 @@ const TODAY = new Intl.DateTimeFormat('en-CA', { day: '2-digit', month: '2-digit
 export function ReceiptWizardPage() {
   const { receiptId } = useParams()
   const navigate = useNavigate()
-  const store = useWarehouseStore()
+  const store = useWarehouseStore(useShallow(warehouseSelectors.receipts))
   const existing = store.receipts.find((receipt) => receipt.id === receiptId)
   const [currentId, setCurrentId] = useState(receiptId ?? '')
   const [step, setStep] = useState(0)

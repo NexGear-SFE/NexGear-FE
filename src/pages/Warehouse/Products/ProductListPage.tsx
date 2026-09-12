@@ -1,6 +1,7 @@
 import { Eye, PackagePlus, Pencil } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 import { getProducts } from '@/apis/product.api'
 import { ConfirmDialog } from '@/components/warehouse/ConfirmDialog'
 import { DataState } from '@/components/warehouse/DataState'
@@ -11,15 +12,15 @@ import { WarehouseFilterBar } from '@/components/warehouse/WarehouseFilterBar'
 import { WarehousePageHeader } from '@/components/warehouse/WarehousePageHeader'
 import { WarehousePagination } from '@/components/warehouse/WarehousePagination'
 import { ROUTES, warehouseProductDetailPath, warehouseProductEditPath } from '@/constants/routes'
-import { useWarehouseStore } from '@/stores/warehouseStore'
+import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
 import { buildCategoryBreadcrumb, buildCategoryTree, flattenCategoryTree } from '@/utils/buildCategoryTree'
-import { formatDate as formatDateTime } from '@/utils/formatters'
+import { formatDate as formatDateTime } from '@/utils/formatDate'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 
 const PAGE_SIZE = 8
 
 export function ProductListPage() {
-  const { products, variants, inventory, categories, toggleProductStatus } = useWarehouseStore()
+  const { products, variants, inventory, categories, toggleProductStatus } = useWarehouseStore(useShallow(warehouseSelectors.catalog))
   const [params, setParams] = useSearchParams()
   const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>('loading')
   const [pendingProductId, setPendingProductId] = useState<string | null>(null)

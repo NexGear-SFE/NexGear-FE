@@ -32,12 +32,3 @@ export interface Product {
   createdAt: string
   updatedAt: string
 }
-
-export type {
-  ProductVariant,
-  SkuAuditEntry,
-  SkuSource,
-  VariantOption,
-  VariantOptionValue,
-  VariantStatus,
-} from '@/types/variant.type'

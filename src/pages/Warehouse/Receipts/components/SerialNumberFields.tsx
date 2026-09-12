@@ -1,6 +1,6 @@
 import { AlertTriangle } from 'lucide-react'
 import type { ProductSerial } from '@/types/inventory.type'
-import type { ProductVariant } from '@/types/product.type'
+import type { ProductVariant } from '@/types/variant.type'
 import { areSerialsUnique, hasRequiredReceiptSerials } from '@/utils/skuRules'
 
 type SerialNumberFieldsProps = {

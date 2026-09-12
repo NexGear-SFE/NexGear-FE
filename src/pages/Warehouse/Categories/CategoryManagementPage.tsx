@@ -1,13 +1,14 @@
 import { ChevronDown, ChevronRight, ChevronsDownUp, ChevronsUpDown, FolderPlus, MoveDown, MoveUp, Pencil, Plus, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
+import { useShallow } from 'zustand/react/shallow'
 import { saveCategoryDraft } from '@/apis/category.api'
 import { ConfirmDialog } from '@/components/warehouse/ConfirmDialog'
 import { SearchField } from '@/components/warehouse/SearchField'
 import { WarehousePageHeader } from '@/components/warehouse/WarehousePageHeader'
 import { WarehouseStatCard } from '@/components/warehouse/WarehouseStatCard'
 import { categorySchema, type CategoryFormValues } from '@/schemas/category.schema'
-import { useWarehouseStore } from '@/stores/warehouseStore'
+import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
 import type { Category } from '@/types/category.type'
 import { buildCategoryBreadcrumb, buildCategoryTree, canUseCategoryParent, flattenCategoryTree, MAX_CATEGORY_DEPTH } from '@/utils/buildCategoryTree'
 import { cn } from '@/utils/cn'
@@ -23,7 +24,7 @@ function toFormValues(category?: Partial<Category>, parentId: string | null = nu
 }
 
 export function CategoryManagementPage() {
-  const { categories, products, createCategory, updateCategory, toggleCategoryStatus, moveCategory } = useWarehouseStore()
+  const { categories, products, createCategory, updateCategory, toggleCategoryStatus, moveCategory } = useWarehouseStore(useShallow(warehouseSelectors.catalog))
   const [selectedId, setSelectedId] = useState(categories[0]?.id ?? '')
   const [isCreating, setIsCreating] = useState(false)
   const [isDetailOpen, setIsDetailOpen] = useState(false)

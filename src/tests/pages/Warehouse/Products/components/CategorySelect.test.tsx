@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
-import { CategorySelect } from '@/components/warehouse/CategorySelect'
+import { CategorySelect } from '@/pages/Warehouse/Products/components/CategorySelect'
 import type { Category } from '@/types/category.type'
 
 const base = { description: '', sortOrder: 1, createdAt: '', updatedAt: '' } as const

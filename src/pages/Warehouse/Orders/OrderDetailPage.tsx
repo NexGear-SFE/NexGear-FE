@@ -1,20 +1,23 @@
 import { AlertTriangle, ArrowLeft, CheckCircle2, MapPin, PackageCheck, ScanLine, Truck } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useShallow } from 'zustand/react/shallow'
 import { DataState } from '@/components/warehouse/DataState'
 import { ProgressStepper } from '@/components/warehouse/ProgressStepper'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
 import { WarehousePageHeader } from '@/components/warehouse/WarehousePageHeader'
 import { ROUTES, warehouseInventoryDetailPath, warehouseProductDetailPath, warehouseReceiptDetailPath } from '@/constants/routes'
-import { useWarehouseStore } from '@/stores/warehouseStore'
-import { formatCurrency, formatDate, getAvailableStock } from '@/utils/formatters'
+import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
+import { formatCurrency } from '@/utils/formatCurrency'
+import { formatDate } from '@/utils/formatDate'
+import { getAvailableStock } from '@/utils/inventory'
 import { getOrderProgressIndex, orderStateLabels, validateParcel } from '@/utils/warehouseOrder'
 
 const PICKUP_ADDRESS = '123 Lý Thường Kiệt, Quận 10, TP.HCM'
 
 export function OrderDetailPage() {
   const { orderId = '' } = useParams()
-  const store = useWarehouseStore()
+  const store = useWarehouseStore(useShallow(warehouseSelectors.orders))
   const order = store.orders.find((item) => item.id === orderId)
   const [selectedSerialIds, setSelectedSerialIds] = useState<string[]>([])
   const [packingStep, setPackingStep] = useState(0)
