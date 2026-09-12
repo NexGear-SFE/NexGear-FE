@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Zap, ArrowRight, ChevronRight, CheckCircle2 } from 'lucide-react'
 import type { Product } from '@/types/product.type'
-import { ProductCard } from '@/components/ProductCard'
-import { TrustBadges } from '@/components/TrustBadges'
-import { CategorySidebar } from '@/components/CategorySidebar'
-import { QuickAccess } from '@/components/QuickAccess'
-import { TechNews } from '@/components/TechNews'
+import { ProductCard } from '@/components/customer/ProductCard'
+import { TrustBadges } from '@/components/customer/TrustBadges'
+import { CategorySidebar } from '@/components/customer/CategorySidebar'
+import { QuickAccess } from '@/components/customer/QuickAccess'
+import { TechNews } from '@/components/customer/TechNews'
 import { Button } from '@/components/ui/Button'
 import { mockPcProducts, mockLaptopProducts, mockGearProducts } from '@/mocks/product.mock'
 
@@ -78,9 +78,18 @@ export const HomePage = () => {
 
           {/* Hero Section */}
           <div className="lg:col-span-3">
-            <div className="bg-[#040004] text-white rounded-[8px] p-8 md:p-12 relative overflow-hidden border border-zinc-800 shadow-md h-full flex flex-col justify-center">
+            <div className="bg-[#040004] text-white rounded-[8px] p-8 md:p-12 relative overflow-hidden border border-zinc-800 shadow-md h-full flex flex-col justify-center min-h-[360px]">
+              {/* Background Image & Gradient Overlay */}
+              <img
+                src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80"
+                alt="Gaming Setup Banner"
+                className="absolute inset-0 w-full h-full object-cover object-right opacity-40 transition-transform duration-700 hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#040004] via-[#040004]/90 to-transparent z-0" />
+
+              {/* Banner Content */}
               <div className="max-w-2xl relative z-10 space-y-4">
-                <span className="inline-flex items-center gap-1.5 bg-[#E30019]/10 border border-[#E30019]/30 text-[#E30019] text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider">
+                <span className="inline-flex items-center gap-1.5 bg-[#E30019]/10 border border-[#E30019]/30 text-[#E30019] text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider backdrop-blur-sm">
                   <Zap className="w-3.5 h-3.5" /> GAMING GEAR & COMPONENTS 2025
                 </span>
                 <h1 className="text-3xl md:text-5xl font-bold font-heading tracking-tight leading-tight">
@@ -97,7 +106,7 @@ export const HomePage = () => {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="border-zinc-700 text-white hover:border-white hover:text-white"
+                    className="border-zinc-700 text-white hover:border-white hover:text-white backdrop-blur-sm"
                     onClick={() => {
                       const el = document.getElementById('pc-banchay')
                       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })

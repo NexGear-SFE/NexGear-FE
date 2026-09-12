@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom'
-import { Header } from '@/components/Header/Header'
-import { Footer } from '@/components/Footer/Footer'
-import { SupportWidget } from '@/components/SupportWidget'
-import { CartDrawer } from '@/components/Cart/CartDrawer'
+import { Header } from '@/components/customer/Header/Header'
+import { Footer } from '@/components/customer/Footer/Footer'
+import { SupportWidget } from '@/components/customer/SupportWidget'
+import { CartDrawer } from '@/components/customer/Cart/CartDrawer'
 
 export const MainLayout = () => {
   return (
