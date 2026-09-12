@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { VariantMatrixEditor, type VariantDraft } from '@/pages/Warehouse/Products/components/VariantMatrixEditor'
 
-const defaultVariant: VariantDraft = { sku: 'ASU-G16', skuSource: 'AUTO', optionValues: [], barcode: '', gtin: '', purchasePrice: 0, serialTracking: false, reorderLevel: 0, status: 'ACTIVE', skuLocked: false }
+const defaultVariant: VariantDraft = { sku: 'ASU-G16', skuSource: 'AUTO', optionValues: [], barcode: '', gtin: '', serialTracking: false, reorderLevel: 0, status: 'ACTIVE', skuLocked: false }
 
 function Harness({ initial = [defaultVariant], onAudit = vi.fn() }: { initial?: VariantDraft[]; onAudit?: (action: 'MANUAL_OVERRIDE' | 'REGENERATE' | 'DEACTIVATE', sku: string) => void }) {
   const [variants, setVariants] = useState(initial)
@@ -41,12 +41,10 @@ describe('VariantMatrixEditor', () => {
     expect(screen.getByText(/chưa có cấu hình/i)).toBeInTheDocument()
   })
 
-  it('stores purchase price and switches tracking for unlocked SKUs', async () => {
+  it('switches tracking for unlocked SKUs', async () => {
     const user = userEvent.setup()
     render(<Harness />)
-    await user.type(screen.getByLabelText('Giá nhập 1'), '12500000')
     await user.click(screen.getByRole('radio', { name: /theo từng serial/i }))
-    expect(screen.getByText(/12\.500\.000/)).toBeInTheDocument()
     expect(screen.getByText('Theo serial')).toBeInTheDocument()
   })
 
@@ -62,7 +60,7 @@ describe('VariantMatrixEditor', () => {
   })
 
   it('prevents changing the configuration mode for a locked SKU', () => {
-    render(<Harness initial={[{ ...defaultVariant, purchasePrice: 100000, skuLocked: true }]} />)
+    render(<Harness initial={[{ ...defaultVariant, skuLocked: true }]} />)
     expect(screen.getByRole('radio', { name: /tự ghép từng cấu hình/i })).toBeDisabled()
     expect(screen.getByLabelText('SKU 1')).toBeDisabled()
   })

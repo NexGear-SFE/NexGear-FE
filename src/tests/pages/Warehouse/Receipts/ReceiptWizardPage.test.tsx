@@ -26,8 +26,10 @@ describe('ReceiptWizardPage', () => {
     expect(screen.getByText('Đã thêm SKU vào phiếu.')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /tiếp tục/i }))
 
-    expect(screen.getByLabelText('Giá nhập')).toHaveValue(40000000)
+    expect(screen.getByLabelText('Giá nhập')).toHaveValue(0)
     expect(screen.getByRole('button', { name: /tiếp tục/i })).toBeDisabled()
+    await user.clear(screen.getByLabelText('Giá nhập'))
+    await user.type(screen.getByLabelText('Giá nhập'), '40000000')
     await user.click(screen.getByRole('button', { name: /nhập \/ quét serial/i }))
     await user.type(screen.getByLabelText(/quét hoặc paste serial/i), 'SERIAL-TEST-NEW')
     await user.click(screen.getByRole('button', { name: 'Lưu serial' }))

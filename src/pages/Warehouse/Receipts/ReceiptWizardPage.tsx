@@ -60,8 +60,7 @@ export function ReceiptWizardPage() {
   const addVariant = (variantId: string) => {
     const duplicateIndex = lines.findIndex((line) => line.variantId === variantId)
     if (duplicateIndex >= 0) { setStep(2); setMessage('SKU đã có trong phiếu; hãy cập nhật dòng hiện có.'); return }
-    const variant = store.variants.find((item) => item.id === variantId)
-    setLines((current) => [...current, { id: crypto.randomUUID(), variantId, quantity: 1, unitCost: variant?.purchasePrice ?? 0, serials: [] }]); setSkuSelectorOpen(false); setMessage('Đã thêm SKU vào phiếu.')
+    setLines((current) => [...current, { id: crypto.randomUUID(), variantId, quantity: 1, unitCost: 0, serials: [] }]); setSkuSelectorOpen(false); setMessage('Đã thêm SKU vào phiếu.')
   }
   const requestConfirm = () => { const nextIssues = getReceiptValidationIssues(receipt, store.variants, store.serials); setIssues(nextIssues); if (nextIssues.length === 0) setConfirmOpen(true) }
   const focusIssue = (issue: string) => {

@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { ConfirmDialog } from '@/components/warehouse/ConfirmDialog'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
 import type { ProductVariant, VariantOption, VariantOptionValue } from '@/types/variant.type'
-import { formatCurrency } from '@/utils/formatCurrency'
 import { generateSkuPreview, normalizeSkuInput, normalizeSkuSegment } from '@/utils/generateSkuPreview'
 import { findDuplicateSkus } from '@/utils/skuRules'
 
@@ -38,7 +37,7 @@ function deriveOptions(variants: VariantDraft[]): VariantOption[] {
 function createDefaultVariant(brandCode: string, modelCode: string, serialTracking: boolean): VariantDraft {
   return {
     sku: generateSkuPreview(brandCode, modelCode, []), skuSource: 'AUTO', optionValues: [], barcode: '', gtin: '',
-    purchasePrice: 0, serialTracking, reorderLevel: 0, status: 'ACTIVE', skuLocked: false,
+    serialTracking, reorderLevel: 0, status: 'ACTIVE', skuLocked: false,
   }
 }
 
@@ -100,7 +99,7 @@ export function VariantMatrixEditor({ brandCode, existingSkus = [], modelCode, o
     }
     onChange([...variants, { ...createDefaultVariant(brandCode, modelCode, serialTracking), sku: generateSkuPreview(brandCode, modelCode, optionValues), optionValues }])
     setSelection({})
-    setMessage('Đã thêm cấu hình. Hãy nhập giá nhập và kiểm tra SKU bên dưới.')
+    setMessage('Đã thêm cấu hình. Hãy kiểm tra SKU bên dưới.')
   }
 
   function updateVariant(index: number, patch: Partial<VariantDraft>) {
@@ -153,7 +152,7 @@ export function VariantMatrixEditor({ brandCode, existingSkus = [], modelCode, o
     </fieldset>
 
     <section className="rounded-md border border-surface-400 bg-white">
-      <div className="border-b border-surface-400 p-4"><h2 className="font-heading text-lg font-semibold">{hasConfigurations ? '3. Danh sách cấu hình' : 'Thông tin SKU'}</h2><p className="mt-1 text-sm text-text-600">{variants.length} SKU · Giá nhập được lưu theo từng SKU.</p></div>
+      <div className="border-b border-surface-400 p-4"><h2 className="font-heading text-lg font-semibold">{hasConfigurations ? '3. Danh sách cấu hình' : 'Thông tin SKU'}</h2><p className="mt-1 text-sm text-text-600">{variants.length} SKU</p></div>
       {!variants.length && <p className="p-8 text-center text-sm text-text-600">Chưa có cấu hình. Hãy chọn thuộc tính ở trên để thêm.</p>}
       <div className="divide-y divide-surface-400">{variants.map((variant, index) => <VariantRow key={`${combinationKey(variant.optionValues)}-${index}`} variant={variant} index={index} hasConfigurations={hasConfigurations} collision={duplicateSkus.has(variant.sku)} onUpdate={(patch) => updateVariant(index, patch)} onAudit={onAudit} onDelete={() => setPendingDelete({ index, label: variant.optionValues.map((item) => `${item.option}: ${item.value}`).join(' · ') })} />)}</div>
     </section>
@@ -174,9 +173,8 @@ function VariantRow({ collision, hasConfigurations, index, onAudit, onDelete, on
   return <article className="grid gap-4 p-4 xl:grid-cols-[minmax(220px,1.2fr)_minmax(200px,1fr)_180px_160px_auto] xl:items-start">
     <div><strong className="text-sm">{label}</strong><span className="mt-2 block"><StatusBadge label={variant.serialTracking ? 'Theo serial' : 'Theo số lượng'} tone="info" /></span>{variant.skuLocked && <p className="mt-2 text-xs font-semibold text-warning-700">Đã khóa do có giao dịch kho</p>}</div>
     <label className="text-sm font-medium">SKU<input aria-label={`SKU ${index + 1}`} disabled={variant.skuLocked} value={variant.sku} onChange={(event) => { const sku = normalizeSkuInput(event.target.value); onUpdate({ sku, skuSource: 'MANUAL' }); onAudit?.('MANUAL_OVERRIDE', sku) }} onBlur={(event) => onUpdate({ sku: normalizeSkuSegment(event.target.value) })} className="input-gaming mt-2 w-full font-mono disabled:bg-surface-200" />{collision && <span className="mt-1 block text-xs text-error-700">SKU đã tồn tại.</span>}</label>
-    <label className="text-sm font-medium">Giá nhập<input aria-label={`Giá nhập ${index + 1}`} type="number" min="1" step="1000" value={variant.purchasePrice || ''} onChange={(event) => onUpdate({ purchasePrice: Number(event.target.value) })} className="input-gaming mt-2 w-full tabular-nums" placeholder="0" /><span className="mt-1 block text-xs text-text-600">{variant.purchasePrice > 0 ? formatCurrency(variant.purchasePrice) : 'Bắt buộc'}</span></label>
     <label className="text-sm font-medium">Sắp hết khi còn<input aria-label={`Ngưỡng sắp hết ${index + 1}`} type="number" min="0" step="1" value={variant.reorderLevel} onChange={(event) => onUpdate({ reorderLevel: Math.max(0, Number(event.target.value)) })} className="input-gaming mt-2 w-full tabular-nums" /></label>
     <div className="flex justify-end">{hasConfigurations && <button type="button" aria-label={`Xóa cấu hình ${index + 1}`} disabled={variant.skuLocked} onClick={onDelete} className="flex h-11 w-11 items-center justify-center rounded-sm border border-error-200 text-error-700 hover:bg-error-50 disabled:cursor-not-allowed disabled:opacity-40"><Trash2 className="h-4 w-4" /></button>}</div>
-    <details className="xl:col-span-5"><summary className="cursor-pointer py-2 text-sm font-semibold text-text-600">Thông tin nâng cao</summary><div className="mt-2 grid gap-3 rounded-sm bg-surface-100 p-4 sm:grid-cols-3"><label className="text-sm font-medium">Mã vạch<input value={variant.barcode ?? ''} onChange={(event) => onUpdate({ barcode: event.target.value })} className="input-gaming mt-2 w-full" /></label><label className="text-sm font-medium">GTIN<input value={variant.gtin ?? ''} onChange={(event) => onUpdate({ gtin: event.target.value })} className="input-gaming mt-2 w-full" /></label><label className="text-sm font-medium">Trạng thái<select value={variant.status} onChange={(event) => { const status = event.target.value as VariantDraft['status']; onUpdate({ status }); if (status === 'INACTIVE') onAudit?.('DEACTIVATE', variant.sku) }} className="input-gaming mt-2 w-full"><option value="ACTIVE">Đang dùng</option><option value="INACTIVE">Ngừng dùng</option></select></label></div></details>
+    <details className="xl:col-span-5"><summary className="cursor-pointer py-2 text-sm font-semibold text-text-600">Thông tin nâng cao</summary><div className="mt-2 grid gap-3 rounded-sm bg-surface-100 p-4 sm:grid-cols-3"><label className="text-sm font-medium">Mã vạch<input value={variant.barcode ?? ''} onChange={(event) => onUpdate({ barcode: event.target.value })} className="input-gaming mt-2 w-full" /></label><label className="text-sm font-medium">GTIN<input value={variant.gtin ?? ''} onChange={(event) => onUpdate({ gtin: event.target.value })} className="input-gaming mt-2 w-full" /></label><label className="text-sm font-medium">Trạng thái<select value={variant.status} onChange={(event) => { const status = event.target.value as VariantDraft['status']; onUpdate({ status }); if (status === 'INACTIVE') onAudit?.('DEACTIVATE', variant.sku) }} className="input-gaming mt-2 w-full"><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select></label></div></details>
   </article>
 }

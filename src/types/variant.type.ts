@@ -22,7 +22,6 @@ export interface ProductVariant {
   optionValues: VariantOptionValue[]
   barcode?: string
   gtin?: string
-  purchasePrice: number
   serialTracking: boolean
   reorderLevel: number
   status: VariantStatus

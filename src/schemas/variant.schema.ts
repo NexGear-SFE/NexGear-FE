@@ -7,7 +7,6 @@ export const variantSchema = z.object({
   sku: skuSchema,
   skuSource: z.enum(['AUTO', 'MANUAL']),
   optionValues: z.array(z.object({ option: z.string().min(1), optionCode: z.string().min(1).optional(), value: z.string().min(1), code: z.string().min(1) })),
-  purchasePrice: z.number().positive('Giá nhập phải lớn hơn 0'),
   serialTracking: z.boolean(),
   reorderLevel: z.number().int().min(0),
   status: z.enum(['ACTIVE', 'INACTIVE']),
