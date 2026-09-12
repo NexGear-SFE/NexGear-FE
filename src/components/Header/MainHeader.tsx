@@ -1,9 +1,12 @@
-import { useState } from 'react'
-import { Menu, Search, ShoppingCart } from 'lucide-react'
-import avatarImg from '@/assets/images/Avatar.jpg'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Menu, Search, ShoppingCart } from 'lucide-react';
+import { QuickLoginModal } from '@/components/Auth/QuickLoginModal';
 
 export const MainHeader = () => {
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <header className="bg-white border-b border-[#E0E0E0] py-3 sticky top-0 z-40 shadow-sm">
@@ -68,10 +71,11 @@ export const MainHeader = () => {
           {/* User Avatar Button */}
           <button
             type="button"
+            onClick={() => setIsLoginModalOpen(true)}
             className="flex items-center gap-2 border border-[#E0E0E0] text-[#040004] px-2.5 py-1.5 rounded-[4px] text-sm font-medium transition-mechanical hover:border-[#E30019] hover:text-[#E30019] cursor-pointer"
           >
             <img
-              src={avatarImg}
+              src="https://ui-avatars.com/api/?name=User&background=E30019&color=fff"
               alt="User Avatar"
               className="w-6 h-6 rounded-full object-cover border border-[#E0E0E0]"
             />
@@ -79,6 +83,23 @@ export const MainHeader = () => {
           </button>
         </div>
       </div>
+
+      {isLoginModalOpen && (
+        <QuickLoginModal
+          onClose={() => setIsLoginModalOpen(false)}
+          onGoRegister={() => {
+            // navigate('/register');
+            setIsLoginModalOpen(false);
+          }}
+          onGoFullLogin={() => {
+            // navigate('/login');
+            setIsLoginModalOpen(false);
+          }}
+          onTechLogin={() => {
+            navigate('/tech-staff');
+          }}
+        />
+      )}
     </header>
-  )
-}
+  );
+};
