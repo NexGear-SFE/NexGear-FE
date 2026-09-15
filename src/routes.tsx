@@ -17,6 +17,7 @@ import { ALLOWED_ROLES } from '@/constants/roles'
 
 import { CustomerAccountSettingsPage } from '@/pages/customer/AccountSettingsPage'
 import { OrderDetailPage } from '@/pages/customer/Order/OrderDetailPage'
+import { ProductDetailPage } from '@/pages/customer/Product/ProductDetailPage'
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: '/products/:slug',
+        element: <ProductDetailPage />,
       },
       {
         path: '/account/settings',

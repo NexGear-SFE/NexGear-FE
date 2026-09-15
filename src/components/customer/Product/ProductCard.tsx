@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Cpu, HardDrive, Monitor, ShoppingCart, ImageOff } from 'lucide-react'
 import type { Product } from '@/types/product.type'
 import { formatCurrency } from '@/utils/formatCurrency'
@@ -33,6 +34,8 @@ export const ProductCard = ({
     return <Monitor className="w-3.5 h-3.5 text-gray-500 shrink-0" />
   }
 
+  const productDetailUrl = `/products/${product.slug || product.id}`
+
   return (
     <div
       className={cn(
@@ -41,7 +44,7 @@ export const ProductCard = ({
       )}
     >
       {/* Product Image Area */}
-      <div className="w-full aspect-square bg-[#F4F5F7] rounded-[4px] flex items-center justify-center overflow-hidden relative">
+      <Link to={productDetailUrl} className="block w-full aspect-square bg-[#F4F5F7] rounded-[4px] flex items-center justify-center overflow-hidden relative group-hover:opacity-95">
         {/* Stock Status Tag */}
         <span className="absolute top-2 right-2 bg-white/95 backdrop-blur-sm border border-[#E0E0E0] text-[10px] font-semibold px-2 py-0.5 rounded-[2px] flex items-center gap-1 text-[#00A859] z-10">
           <span className="w-1.5 h-1.5 rounded-full bg-[#00A859]" />
@@ -61,7 +64,7 @@ export const ProductCard = ({
             className="w-full h-full object-contain p-2 transition-transform duration-200 group-hover:scale-105"
           />
         )}
-      </div>
+      </Link>
 
       {/* Product Details */}
       <div className="space-y-2 flex-1 flex flex-col justify-between">
@@ -69,9 +72,11 @@ export const ProductCard = ({
           <span className="text-[11px] font-mono font-semibold text-gray-500 uppercase tracking-wide">
             {product.category}
           </span>
-          <h3 className="font-semibold text-sm text-[#040004] leading-snug line-clamp-2 min-h-[40px]" title={product.name}>
-            {product.name}
-          </h3>
+          <Link to={productDetailUrl} className="block">
+            <h3 className="font-semibold text-sm text-[#040004] hover:text-[#E30019] transition-colors leading-snug line-clamp-2 min-h-[40px]" title={product.name}>
+              {product.name}
+            </h3>
+          </Link>
         </div>
 
         {/* Surface Specs Box */}
