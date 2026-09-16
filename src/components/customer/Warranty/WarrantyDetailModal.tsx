@@ -1,11 +1,5 @@
 import { X, ShieldCheck, CheckCircle2, Clock, Headphones, Wrench, XCircle } from 'lucide-react'
-import type { CustomerWarrantyRequest, CustomerWarrantyStatus } from '@/types/customerWarranty.type'
-
-interface WarrantyDetailModalProps {
-  request: CustomerWarrantyRequest | null
-  isOpen: boolean
-  onClose: () => void
-}
+import type { CustomerWarrantyStatus, WarrantyDetailModalProps } from '@/types/customerWarranty.type'
 
 export function WarrantyDetailModal({ request, isOpen, onClose }: WarrantyDetailModalProps) {
   if (!isOpen || !request) return null

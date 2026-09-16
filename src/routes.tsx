@@ -1,27 +1,45 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { ROUTES } from '@/constants';
+import { ALLOWED_ROLES } from '@/constants/roles';
+
+// Layouts
 import { MainLayout } from '@/layouts/MainLayout';
-import { AdminLayout } from '@/layouts/AdminLayout'
-import { HomePage } from '@/pages/customer/Home/HomePage';
+import { AdminLayout } from '@/layouts/AdminLayout';
 import { TechStaffLayout } from '@/layouts/TechStaffLayout';
+
+// Auth & Protection
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+
+// Customer Pages
+import { HomePage } from '@/pages/customer/Home/HomePage';
+import { ProductDetailPage } from '@/pages/customer/Product/ProductDetailPage';
+import { BlogListPage } from '@/pages/customer/Blog/BlogListPage';
+import { BlogDetailPage } from '@/pages/customer/Blog/BlogDetailPage';
+import { CustomerAccountSettingsPage } from '@/pages/customer/AccountSettingsPage';
+import { OrderDetailPage } from '@/pages/customer/Order/OrderDetailPage';
+
+// Auth Pages
+import { LoginPage } from '@/pages/auth/LoginPage';
+import { RegisterPage } from '@/pages/auth/RegisterPage';
+
+// Common Pages
+import { AccountSettingsPage } from '@/pages/common/AccountSettingsPage';
+import { NotFoundPage } from '@/pages/common/NotFoundPage';
+
+// Admin / Store Manager Pages
+import { BlogManagementPage } from '@/pages/admin/BlogManagementPage';
+
+// Tech Staff Pages
 import { TechStaffDashboard } from '@/pages/techstaff/Dashboard';
 import { SerialCheck } from '@/pages/techstaff/SerialCheck';
 import { Settings } from '@/pages/techstaff/Settings';
-import { BlogManagementPage } from '@/pages/admin/BlogManagementPage'
-import { AccountSettingsPage } from '@/pages/common/AccountSettingsPage'
-import { BlogListPage } from '@/pages/customer/Blog/BlogListPage'
-import { BlogDetailPage } from '@/pages/customer/Blog/BlogDetailPage'
-import { RegisterPage } from '@/pages/auth/RegisterPage'
-import { LoginPage } from '@/pages/auth/LoginPage'
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
-import { ALLOWED_ROLES } from '@/constants/roles'
-
-import { CustomerAccountSettingsPage } from '@/pages/customer/AccountSettingsPage'
-import { OrderDetailPage } from '@/pages/customer/Order/OrderDetailPage'
-import { ProductDetailPage } from '@/pages/customer/Product/ProductDetailPage'
 
 export const router = createBrowserRouter([
+  // ==========================================
+  // 1. CUSTOMER / PUBLIC ROUTES
+  // ==========================================
   {
-    path: '/',
+    path: ROUTES.HOME,
     element: <MainLayout />,
     children: [
       {
@@ -29,33 +47,49 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: '/products/:slug',
+        path: ROUTES.PRODUCT_DETAIL(),
         element: <ProductDetailPage />,
       },
       {
-        path: '/account/settings',
+        path: ROUTES.ACCOUNT.SETTINGS,
         element: <CustomerAccountSettingsPage />,
       },
       {
-        path: '/account/orders/:id',
+        path: ROUTES.ACCOUNT.ORDER_DETAIL(),
         element: <OrderDetailPage />,
       },
       {
-        path: '/account',
-        element: <Navigate to="/account/settings" replace />,
+        path: ROUTES.ACCOUNT.ROOT,
+        element: <Navigate to={ROUTES.ACCOUNT.SETTINGS} replace />,
       },
       {
-        path: '/blogs',
+        path: ROUTES.BLOGS,
         element: <BlogListPage />,
       },
       {
-        path: '/blogs/:id',
+        path: ROUTES.BLOG_DETAIL(),
         element: <BlogDetailPage />,
       },
     ],
   },
+
+  // ==========================================
+  // 2. AUTHENTICATION ROUTES
+  // ==========================================
   {
-    path: '/storemanager',
+    path: ROUTES.AUTH.LOGIN,
+    element: <LoginPage />,
+  },
+  {
+    path: ROUTES.AUTH.REGISTER,
+    element: <RegisterPage />,
+  },
+
+  // ==========================================
+  // 3. STORE MANAGER / ADMIN ROUTES
+  // ==========================================
+  {
+    path: ROUTES.STORE_MANAGER.ROOT,
     element: (
       <ProtectedRoute allowedRoles={ALLOWED_ROLES.STORE_MANAGER}>
         <AdminLayout />
@@ -64,7 +98,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/storemanager/blogs" replace />,
+        element: <Navigate to={ROUTES.STORE_MANAGER.BLOGS} replace />,
       },
       {
         path: 'blogs',
@@ -76,16 +110,12 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
+  // ==========================================
+  // 4. TECH STAFF ROUTES
+  // ==========================================
   {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/register',
-    element: <RegisterPage />,
-  },
-  {
-    path: '/tech-staff',
+    path: ROUTES.TECH_STAFF.ROOT,
     element: <TechStaffLayout />,
     children: [
       {
@@ -101,5 +131,17 @@ export const router = createBrowserRouter([
         element: <Settings />,
       },
     ],
+  },
+
+  // ==========================================
+  // 5. FALLBACK & 404 NOT FOUND ROUTES
+  // ==========================================
+  {
+    path: ROUTES.NOT_FOUND,
+    element: <NotFoundPage />,
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
   },
 ]);

@@ -1,14 +1,8 @@
 import { useState } from 'react'
 import { X, Check, ShieldCheck, Upload, ArrowRight, ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react'
 import { MOCK_ELIGIBLE_WARRANTY_PRODUCTS } from '@/mocks/customer/warranty.mock'
-import type { WarrantyEligibleProduct, CustomerWarrantyRequest } from '@/types/customerWarranty.type'
+import type { WarrantyEligibleProduct, CustomerWarrantyRequest, CreateWarrantyModalProps } from '@/types/customerWarranty.type'
 import { formatDate } from '@/utils/formatDate'
-
-interface CreateWarrantyModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onSubmitSuccess: (newRequest: CustomerWarrantyRequest) => void
-}
 
 export function CreateWarrantyModal({ isOpen, onClose, onSubmitSuccess }: CreateWarrantyModalProps) {
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1)

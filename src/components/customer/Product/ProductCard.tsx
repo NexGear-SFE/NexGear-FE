@@ -5,6 +5,7 @@ import type { Product } from '@/types/product.type'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/utils/cn'
+import { ROUTES } from '@/constants'
 
 export interface ProductCardProps {
   product: Product
@@ -34,7 +35,7 @@ export const ProductCard = ({
     return <Monitor className="w-3.5 h-3.5 text-gray-500 shrink-0" />
   }
 
-  const productDetailUrl = `/products/${product.slug || product.id}`
+  const productDetailUrl = ROUTES.PRODUCT_DETAIL(product.slug || product.id)
 
   return (
     <div

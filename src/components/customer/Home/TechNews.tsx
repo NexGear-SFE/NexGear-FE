@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ChevronRight, Clock, Play } from 'lucide-react'
 import { articles, type ArticleItem } from '@/mocks/customer/news.mock'
+import { ROUTES } from '@/constants'
 
 export type { ArticleItem }
 
@@ -14,7 +15,7 @@ export const TechNews = () => {
             Tin tức & Đánh giá
           </h2>
           <Link
-            to="/blogs"
+            to={ROUTES.BLOGS}
             className="inline-flex items-center gap-1 text-xs font-bold text-[#E30019] hover:underline cursor-pointer"
           >
             <span>Xem tất cả</span>
@@ -27,7 +28,7 @@ export const TechNews = () => {
           {articles.map((item) => (
             <Link
               key={item.id}
-              to={`/blogs/${item.id}`}
+              to={ROUTES.BLOG_DETAIL(item.id)}
               className="bg-white border border-[#E0E0E0] rounded-[8px] p-3 flex gap-4 items-center hover:border-[#E30019] transition-mechanical shadow-sm cursor-pointer group block"
             >
               {/* Thumbnail Image */}

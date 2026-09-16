@@ -1,20 +1,12 @@
 import { useState } from 'react'
 import { Plus, Search, ShieldCheck, Wrench, ChevronRight, Clock, CheckCircle2, AlertCircle, XCircle } from 'lucide-react'
-import type { CustomerWarrantyRequest, CustomerWarrantyStatus } from '@/types/customerWarranty.type'
-
-interface WarrantyRequestListProps {
-  requests: CustomerWarrantyRequest[]
-  onOpenCreateModal: () => void
-  onSelectRequest: (request: CustomerWarrantyRequest) => void
-}
-
-type FilterStatus = 'all' | 'processing' | 'completed' | 'rejected_or_cancelled'
+import type { CustomerWarrantyStatus, WarrantyRequestListProps, WarrantyFilterStatus } from '@/types/customerWarranty.type'
 
 export function WarrantyRequestList({ requests, onOpenCreateModal, onSelectRequest }: WarrantyRequestListProps) {
-  const [activeFilter, setActiveFilter] = useState<FilterStatus>('all')
+  const [activeFilter, setActiveFilter] = useState<WarrantyFilterStatus>('all')
   const [searchQuery, setSearchQuery] = useState('')
 
-  const filters: { key: FilterStatus; label: string }[] = [
+  const filters: { key: WarrantyFilterStatus; label: string }[] = [
     { key: 'all', label: 'Tất cả' },
     { key: 'processing', label: 'Đang xử lý' },
     { key: 'completed', label: 'Đã hoàn tất' },
