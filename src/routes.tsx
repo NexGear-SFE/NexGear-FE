@@ -3,17 +3,18 @@ import { MainLayout } from '@/layouts/MainLayout';
 import { AdminLayout } from '@/layouts/AdminLayout'
 import { HomePage } from '@/pages/customer/HomePage';
 import { TechStaffLayout } from '@/layouts/TechStaffLayout';
-import { TechStaffDashboard } from '@/pages/techstaff/Dashboard';
-import { SerialCheck } from '@/pages/techstaff/SerialCheck';
-import { Settings } from '@/pages/techstaff/Settings';
+import { TechStaffDashboard } from '@/pages/TechStaff/Dashboard';
+import { SerialCheck } from '@/pages/TechStaff/SerialCheck';
+import { Settings } from '@/pages/TechStaff/Settings';
 import { BlogManagementPage } from '@/pages/admin/BlogManagementPage'
+import { HomePageConfig } from '@/pages/admin/HomePageConfig'
 import { AccountSettingsPage } from '@/pages/common/AccountSettingsPage'
 import { BlogListPage } from '@/pages/customer/BlogListPage'
 import { BlogDetailPage } from '@/pages/customer/BlogDetailPage'
 
 import { RegisterPage } from '@/pages/auth/RegisterPage'
 import { LoginPage } from '@/pages/auth/LoginPage'
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
+import { ProtectedRoute } from '@/components/Auth/ProtectedRoute'
 import { ALLOWED_ROLES } from '@/constants/roles'
 
 export const router = createBrowserRouter([
@@ -53,7 +54,19 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/storemanager/blogs" replace />,
+        element: <Navigate to="/storemanager/home-content" replace />,
+      },
+      {
+        path: 'home-content',
+        element: <HomePageConfig />,
+      },
+      {
+        path: 'home-config',
+        element: <HomePageConfig />,
+      },
+      {
+        path: 'dashboard',
+        element: <Navigate to="/storemanager/home-content" replace />,
       },
       {
         path: 'blogs',

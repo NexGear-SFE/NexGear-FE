@@ -3,8 +3,8 @@ import { User, Settings as SettingsIcon } from "lucide-react";
 import { INITIAL_WARRANTY_PROVIDERS, type WarrantyProvider } from "@/mocks/techstaff/warranty.mock";
 import { TECH_STAFF_USER } from "@/mocks/techstaff/staff.mock";
 
-import { WarrantyTab } from "@/components/techstaff/WarrantyTab";
-import { SharedAccountSettings } from "@/components/common/SharedAccountSettings";
+import { WarrantyTab } from "@/components/TechStaff/WarrantyTab";
+import { SharedAccountSettings } from "@/components/Common/SharedAccountSettings";
 import type { UserProfile } from "@/types/account.type";
 
 type SettingsTab = "account" | "warranty";

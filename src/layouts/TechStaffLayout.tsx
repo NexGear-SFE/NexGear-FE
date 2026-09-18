@@ -12,9 +12,9 @@ import {
   IcTechHistory,
   IcTechSettings,
   IcTechBell,
-} from '@/components/common/Icons';
-import { AccountDropdown } from '@/components/common/AccountDropdown';
-import { SidebarUserWidget } from '@/components/common/SidebarUserWidget';
+} from '@/components/Common/Icons';
+import { AccountDropdown } from '@/components/Common/AccountDropdown';
+import { SidebarUserWidget } from '@/components/Common/SidebarUserWidget';
 import { useAuth } from '@/hooks/useAuth';
 
 // ─── Nav Configuration ────────────────────────────────────────────────────────

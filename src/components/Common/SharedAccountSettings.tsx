@@ -1,7 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import type { UserProfile } from "@/types/account.type";
-import { ProfileSection } from "@/components/common/ProfileSection";
-import { PasswordSection } from "@/components/common/PasswordSection";
+import { ProfileSection } from "@/components/Common/ProfileSection";
+import { PasswordSection } from "@/components/Common/PasswordSection";
 
 interface SharedAccountSettingsProps {
   user: UserProfile;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { INITIAL_WARRANTY_PROVIDERS, type WarrantyProvider } from "@/mocks/techstaff/warranty.mock";
-import { IcTechSearch } from "@/components/common/Icons";
+import { IcTechSearch } from "@/components/Common/Icons";
 import { SearchX, Inbox } from "lucide-react";
 
 export function SerialCheck() {

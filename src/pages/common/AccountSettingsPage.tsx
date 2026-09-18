@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { SharedAccountSettings } from '@/components/common/SharedAccountSettings';
+import { SharedAccountSettings } from '@/components/Common/SharedAccountSettings';
 import type { UserProfile } from '@/types/account.type';
 
 interface AccountSettingsPageProps {
