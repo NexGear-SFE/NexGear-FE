@@ -1,6 +1,9 @@
 import { useState } from 'react'
-import { Plus, Search, ShieldCheck, Wrench, ChevronRight, Clock, CheckCircle2, AlertCircle, XCircle } from 'lucide-react'
-import type { CustomerWarrantyRequest, CustomerWarrantyStatus } from '@/types/customerWarranty.type'
+import { Plus, Search, ShieldCheck, ChevronRight } from 'lucide-react'
+import type { CustomerWarrantyRequest } from '@/types/customerWarranty.type'
+import { WarrantyStatusBadge } from '@/components/customer/Warranty/WarrantyStatusBadge'
+
+type WarrantyFilterStatus = 'all' | 'processing' | 'completed' | 'rejected_or_cancelled'
 
 interface WarrantyRequestListProps {
   requests: CustomerWarrantyRequest[]
@@ -8,13 +11,11 @@ interface WarrantyRequestListProps {
   onSelectRequest: (request: CustomerWarrantyRequest) => void
 }
 
-type FilterStatus = 'all' | 'processing' | 'completed' | 'rejected_or_cancelled'
-
 export function WarrantyRequestList({ requests, onOpenCreateModal, onSelectRequest }: WarrantyRequestListProps) {
-  const [activeFilter, setActiveFilter] = useState<FilterStatus>('all')
+  const [activeFilter, setActiveFilter] = useState<WarrantyFilterStatus>('all')
   const [searchQuery, setSearchQuery] = useState('')
 
-  const filters: { key: FilterStatus; label: string }[] = [
+  const filters: { key: WarrantyFilterStatus; label: string }[] = [
     { key: 'all', label: 'Tất cả' },
     { key: 'processing', label: 'Đang xử lý' },
     { key: 'completed', label: 'Đã hoàn tất' },
@@ -43,61 +44,6 @@ export function WarrantyRequestList({ requests, onOpenCreateModal, onSelectReque
 
     return true
   })
-
-  const renderStatusBadge = (status: CustomerWarrantyStatus, label: string) => {
-    switch (status) {
-      case 'completed':
-        return (
-          <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            {label}
-          </span>
-        )
-      case 'repairing':
-      case 'waiting_parts':
-        return (
-          <span className="bg-orange-50 text-orange-700 border border-orange-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap">
-            <Wrench className="w-3.5 h-3.5" />
-            {label}
-          </span>
-        )
-      case 'inspecting':
-      case 'received':
-        return (
-          <span className="bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap">
-            <Clock className="w-3.5 h-3.5" />
-            {label}
-          </span>
-        )
-      case 'pending':
-        return (
-          <span className="bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap">
-            <Clock className="w-3.5 h-3.5" />
-            {label}
-          </span>
-        )
-      case 'rejected':
-        return (
-          <span className="bg-red-50 text-red-700 border border-red-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap">
-            <XCircle className="w-3.5 h-3.5" />
-            {label}
-          </span>
-        )
-      case 'cancelled':
-        return (
-          <span className="bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold px-3 py-1 rounded-[4px] inline-flex items-center gap-1.5 whitespace-nowrap">
-            <AlertCircle className="w-3.5 h-3.5" />
-            {label}
-          </span>
-        )
-      default:
-        return (
-          <span className="bg-gray-100 text-gray-700 text-xs font-bold px-3 py-1 rounded-[4px] whitespace-nowrap">
-            {label}
-          </span>
-        )
-    }
-  }
 
   return (
     <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 md:p-8 space-y-6 shadow-xs">
@@ -206,7 +152,7 @@ export function WarrantyRequestList({ requests, onOpenCreateModal, onSelectReque
                 </div>
 
                 <div className="shrink-0 self-start sm:self-center">
-                  {renderStatusBadge(req.status, req.statusLabel)}
+                  <WarrantyStatusBadge status={req.status} label={req.statusLabel} />
                 </div>
               </div>
 

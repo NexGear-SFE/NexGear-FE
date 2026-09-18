@@ -1,16 +1,8 @@
 import { Link } from 'react-router-dom'
-import { Package, ShieldCheck, User, ChevronRight, CheckCircle2, Truck, Clock, XCircle } from 'lucide-react'
-import type { Order } from '@/types/order.type'
-import type { CustomerTabKey } from '@/constants/customerAccount.constant'
+import { Package, ShieldCheck, User, ChevronRight } from 'lucide-react'
 import { formatCurrency } from '@/utils/formatCurrency'
-
-interface AccountOverviewTabProps {
-  userName?: string
-  orderCount: number
-  warrantyCount: number
-  recentOrders: Order[]
-  onTabChange: (tabKey: CustomerTabKey) => void
-}
+import { OrderStatusBadge } from '@/components/customer/Order/OrderStatusBadge'
+import type { AccountOverviewTabProps } from '@/types/account.type'
 
 export function AccountOverviewTab({
   userName,
@@ -19,46 +11,6 @@ export function AccountOverviewTab({
   recentOrders,
   onTabChange,
 }: AccountOverviewTabProps) {
-  const renderStatusBadge = (status: string) => {
-    switch (status) {
-      case 'delivered':
-        return (
-          <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            Đã giao
-          </span>
-        )
-      case 'shipping':
-        return (
-          <span className="bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs flex items-center gap-1">
-            <Truck className="w-3.5 h-3.5" />
-            Đang giao
-          </span>
-        )
-      case 'pending':
-      case 'confirmed':
-      case 'processing':
-        return (
-          <span className="bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5" />
-            Đang xử lý
-          </span>
-        )
-      case 'cancelled':
-        return (
-          <span className="bg-red-50 text-red-700 border border-red-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs flex items-center gap-1">
-            <XCircle className="w-3.5 h-3.5" />
-            Đã hủy
-          </span>
-        )
-      default:
-        return (
-          <span className="bg-gray-100 text-gray-700 text-xs font-bold px-3 py-1 rounded-[4px]">
-            {status}
-          </span>
-        )
-    }
-  }
 
   return (
     <div className="space-y-6 font-body">
@@ -228,7 +180,7 @@ export function AccountOverviewTab({
                 </div>
 
                 <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
-                  {renderStatusBadge(order.status)}
+                  <OrderStatusBadge status={order.status} label={order.statusLabel} />
 
                   <Link
                     to={`/account/orders/${order.id}`}

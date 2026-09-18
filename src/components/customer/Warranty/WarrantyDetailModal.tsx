@@ -1,5 +1,6 @@
-import { X, ShieldCheck, CheckCircle2, Clock, Headphones, Wrench, XCircle } from 'lucide-react'
-import type { CustomerWarrantyRequest, CustomerWarrantyStatus } from '@/types/customerWarranty.type'
+import { X, ShieldCheck, Headphones, CheckCircle2 } from 'lucide-react'
+import type { CustomerWarrantyRequest } from '@/types/customerWarranty.type'
+import { WarrantyStatusBadge } from '@/components/customer/Warranty/WarrantyStatusBadge'
 
 interface WarrantyDetailModalProps {
   request: CustomerWarrantyRequest | null
@@ -9,48 +10,6 @@ interface WarrantyDetailModalProps {
 
 export function WarrantyDetailModal({ request, isOpen, onClose }: WarrantyDetailModalProps) {
   if (!isOpen || !request) return null
-
-  const renderStatusBadge = (status: CustomerWarrantyStatus, label: string) => {
-    switch (status) {
-      case 'completed':
-        return (
-          <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            {label}
-          </span>
-        )
-      case 'repairing':
-      case 'waiting_parts':
-        return (
-          <span className="bg-orange-50 text-orange-700 border border-orange-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap">
-            <Wrench className="w-3.5 h-3.5" />
-            {label}
-          </span>
-        )
-      case 'inspecting':
-      case 'received':
-      case 'pending':
-        return (
-          <span className="bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap">
-            <Clock className="w-3.5 h-3.5" />
-            {label}
-          </span>
-        )
-      case 'rejected':
-        return (
-          <span className="bg-red-50 text-red-700 border border-red-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs inline-flex items-center gap-1.5 whitespace-nowrap">
-            <XCircle className="w-3.5 h-3.5" />
-            {label}
-          </span>
-        )
-      default:
-        return (
-          <span className="bg-gray-100 text-gray-700 text-xs font-bold px-3 py-1 rounded-[4px] whitespace-nowrap">
-            {label}
-          </span>
-        )
-    }
-  }
 
   return (
     <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 overflow-y-auto">
@@ -95,7 +54,7 @@ export function WarrantyDetailModal({ request, isOpen, onClose }: WarrantyDetail
           </div>
 
           <div className="shrink-0">
-            {renderStatusBadge(request.status, request.statusLabel)}
+            <WarrantyStatusBadge status={request.status} label={request.statusLabel} />
           </div>
         </div>
 
