@@ -1,17 +1,5 @@
 import { Laptop, Gamepad2, Monitor, Cpu, Package, HardDrive, Mic, Tv } from 'lucide-react'
-import type { ElementType } from 'react'
-
-export interface SubcategoryGroup {
-  title: string
-  items: string[]
-}
-
-export interface CategoryItem {
-  id: string
-  name: string
-  icon: ElementType
-  subgroups?: SubcategoryGroup[]
-}
+import type { CategoryItem } from '@/types/category.type'
 
 export const CATEGORIES_DATA: CategoryItem[] = [
   {

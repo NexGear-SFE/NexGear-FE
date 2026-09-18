@@ -1,4 +1,5 @@
-import { badges, type TrustBadgeItem } from '@/mocks/customer/trustBadge.mock'
+import { badges } from '@/mocks/customer/trustBadge.mock'
+import type { TrustBadgeItem } from '@/types/home.type'
 
 export type { TrustBadgeItem }
 

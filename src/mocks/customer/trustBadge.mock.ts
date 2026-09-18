@@ -1,10 +1,5 @@
 import { ShieldCheck, Zap, Shield, RefreshCw } from 'lucide-react'
-
-export interface TrustBadgeItem {
-  icon: typeof ShieldCheck
-  title: string
-  description: string
-}
+import type { TrustBadgeItem } from '@/types/home.type'
 
 export const badges: TrustBadgeItem[] = [
   {

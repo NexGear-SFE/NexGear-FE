@@ -63,3 +63,7 @@ export interface Order {
   totalAmount: number
   cancelReason?: string
 }
+
+export interface MyOrdersTabProps {
+  orders: Order[]
+}

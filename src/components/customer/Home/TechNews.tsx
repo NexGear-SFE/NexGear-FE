@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ChevronRight, Clock, Play } from 'lucide-react'
-import { articles, type ArticleItem } from '@/mocks/customer/news.mock'
+import { articles } from '@/mocks/customer/news.mock'
+import type { ArticleItem } from '@/types/news.type'
 
 export type { ArticleItem }
 
