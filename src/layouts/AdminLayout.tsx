@@ -12,8 +12,8 @@ import {
   ChevronDown,
   HelpCircle,
 } from 'lucide-react'
-import { AccountDropdown } from '@/components/Common/AccountDropdown'
-import { SidebarUserWidget } from '@/components/Common/SidebarUserWidget'
+import { AccountDropdown } from '@/components/common/AccountDropdown'
+import { SidebarUserWidget } from '@/components/common/SidebarUserWidget'
 import { QuickLoginModal } from '@/components/Auth/QuickLoginModal'
 import type { BlogPost } from '@/types/blog.type'
 

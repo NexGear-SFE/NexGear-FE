@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { MainLayout } from '@/layouts/MainLayout';
 import { AdminLayout } from '@/layouts/AdminLayout'
-import { HomePage } from '@/pages/customer/HomePage';
+import { HomePage } from '@/pages/customer/Home/HomePage';
 import { TechStaffLayout } from '@/layouts/TechStaffLayout';
 import { TechStaffDashboard } from '@/pages/TechStaff/Dashboard';
 import { SerialCheck } from '@/pages/TechStaff/SerialCheck';
@@ -9,13 +9,15 @@ import { Settings } from '@/pages/TechStaff/Settings';
 import { BlogManagementPage } from '@/pages/admin/BlogManagementPage'
 import { HomePageConfig } from '@/pages/admin/HomePageConfig'
 import { AccountSettingsPage } from '@/pages/common/AccountSettingsPage'
-import { BlogListPage } from '@/pages/customer/BlogListPage'
-import { BlogDetailPage } from '@/pages/customer/BlogDetailPage'
-
+import { BlogListPage } from '@/pages/customer/Blog/BlogListPage'
+import { BlogDetailPage } from '@/pages/customer/Blog/BlogDetailPage'
 import { RegisterPage } from '@/pages/auth/RegisterPage'
 import { LoginPage } from '@/pages/auth/LoginPage'
 import { ProtectedRoute } from '@/components/Auth/ProtectedRoute'
 import { ALLOWED_ROLES } from '@/constants/roles'
+
+import { CustomerAccountSettingsPage } from '@/pages/customer/AccountSettingsPage'
+import { OrderDetailPage } from '@/pages/customer/Order/OrderDetailPage'
 
 export const router = createBrowserRouter([
   {
@@ -26,20 +28,24 @@ export const router = createBrowserRouter([
         index: true,
         element: <HomePage />,
       },
-      // {
-      //   path: 'profile',
-      //   element: (
-      //     <ProtectedRoute allowedRoles={ALLOWED_ROLES.ALL}>
-      //       <UserProfilePage />
-      //     </ProtectedRoute>
-      //   ),
-      // },
       {
-        path: 'blogs',
+        path: '/account/settings',
+        element: <CustomerAccountSettingsPage />,
+      },
+      {
+        path: '/account/orders/:id',
+        element: <OrderDetailPage />,
+      },
+      {
+        path: '/account',
+        element: <Navigate to="/account/settings" replace />,
+      },
+      {
+        path: '/blogs',
         element: <BlogListPage />,
       },
       {
-        path: 'blogs/:id',
+        path: '/blogs/:id',
         element: <BlogDetailPage />,
       },
     ],

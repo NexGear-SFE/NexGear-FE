@@ -1,7 +1,10 @@
 /**
- * Format a number to Vietnamese Dong currency format.
- * Example: 4490000 -> "4.490.000đ"
+ * Formats a number into Vietnamese Dong (VND) currency string format.
+ * Example: 17890000 -> "17.890.000₫"
  */
-export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('vi-VN').format(amount) + 'đ'
+export function formatCurrency(amount: number): string {
+  if (isNaN(amount) || amount === null || amount === undefined) {
+    return '0₫'
+  }
+  return `${amount.toLocaleString('vi-VN')}₫`
 }
