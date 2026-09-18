@@ -1,6 +1,7 @@
 import type { CustomerWarrantyRequest, WarrantyEligibleProduct } from '@/types/customerWarranty.type'
 import type { ApiResponse } from '@/types/api.type'
 import { MOCK_CUSTOMER_WARRANTY_REQUESTS, MOCK_ELIGIBLE_WARRANTY_PRODUCTS } from '@/mocks/customer/warranty.mock'
+import { getTodayFormattedDate } from '@/utils/formatDate'
 
 
 export const warrantyApi = {
@@ -25,15 +26,16 @@ export const warrantyApi = {
   createWarrantyRequest: async (
     payload: Omit<CustomerWarrantyRequest, 'id' | 'requestCode' | 'createdAt' | 'status' | 'statusLabel' | 'timeline'>,
   ): Promise<ApiResponse<CustomerWarrantyRequest>> => {
+    const todayStr = getTodayFormattedDate()
     const newRequest: CustomerWarrantyRequest = {
       ...payload,
       id: `bh-${Date.now()}`,
       requestCode: `BH-2025-${Math.floor(1000 + Math.random() * 9000)}`,
       status: 'pending',
       statusLabel: 'Chờ tiếp nhận',
-      createdAt: new Date().toLocaleDateString('vi-VN'),
+      createdAt: todayStr,
       timeline: [
-        { title: 'Tạo yêu cầu', timestamp: new Date().toLocaleDateString('vi-VN'), completed: true, current: true },
+        { title: 'Tạo yêu cầu', timestamp: todayStr, completed: true, current: true },
         { title: 'Tiếp nhận thiết bị', completed: false, current: false },
         { title: 'Kiểm tra kỹ thuật', completed: false, current: false },
         { title: 'Xử lý & Sửa chữa', completed: false, current: false },

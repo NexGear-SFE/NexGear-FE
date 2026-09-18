@@ -8,6 +8,7 @@ import { BlogTable } from '@/components/admin/BlogTable'
 import { BlogEditorPage } from '@/pages/admin/BlogEditorPage'
 import type { AdminLayoutContext, ViewMode } from '@/layouts/AdminLayout'
 import { Plus, AlertTriangle } from 'lucide-react'
+import { getTodayFormattedDate } from '@/utils/formatDate'
 
 export const BlogManagementPage = () => {
   const context = useOutletContext<AdminLayoutContext | null>()
@@ -77,11 +78,7 @@ export const BlogManagementPage = () => {
     postData: Partial<BlogPost>,
     status: BlogStatus
   ) => {
-    const todayStr = new Date().toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    })
+    const todayStr = getTodayFormattedDate()
 
     if (editingPost) {
       // Update existing post
