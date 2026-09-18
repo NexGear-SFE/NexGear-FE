@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Camera, Check, Shield, AlertTriangle } from "lucide-react";
+import { Camera, Check, AlertTriangle } from "lucide-react";
 import type { UserProfile } from "@/types/account.type";
 
 interface ProfileSectionProps {
@@ -91,13 +91,7 @@ export function ProfileSection({ user }: ProfileSectionProps) {
             <span className="font-bold text-base text-[#040004]">
               {pName}
             </span>
-            <span className="bg-[#E30019] text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider inline-flex items-center gap-1">
-              <Shield className="w-3 h-3" /> {user.roleBadge}
-            </span>
           </div>
-          <p className="text-xs text-[#636363]">
-            {user.roleDescription}
-          </p>
           <button
             type="button"
             onClick={() => alert("Vui lòng chọn ảnh đại diện từ máy tính")}
@@ -165,20 +159,6 @@ export function ProfileSection({ user }: ProfileSectionProps) {
               <AlertTriangle size={14} /> {phoneError}
             </div>
           )}
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold text-[#040004] mb-1.5">
-            Vai trò
-          </label>
-          <div className="bg-slate-50 border border-[#E0E0E0] rounded-md p-2.5 flex items-center gap-2">
-            <span className="bg-[#E30019] text-white text-[10px] font-bold px-2 py-0.5 rounded">
-              {user.roleBadge}
-            </span>
-            <span className="text-xs font-semibold text-[#040004]">
-              {user.roleName}
-            </span>
-          </div>
         </div>
 
         {/* Footer Form */}

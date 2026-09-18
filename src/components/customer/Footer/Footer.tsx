@@ -1,4 +1,5 @@
-import { MapPin, Lock, CheckCircle, Star } from 'lucide-react'
+import { MapPin, Lock, CheckCircle, Star, Users } from 'lucide-react'
+import { FacebookIcon, TikTokIcon, YoutubeIcon } from '@/assets/icons'
 
 export const Footer = () => {
   return (
@@ -6,41 +7,47 @@ export const Footer = () => {
       <div className="max-w-7xl mx-auto px-4">
         {/* 4 Main Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-zinc-800 text-sm">
-          {/* Column 1: GearGo */}
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-8 h-8 bg-[#E30019] rounded-[4px] flex items-center justify-center text-white font-bold text-base tracking-tighter">
-                GG
-              </div>
-              <span className="font-bold text-lg text-white font-heading tracking-tight">
-                GearGo
-              </span>
+          {/* Column 1: Connect With Us */}
+          <div className="flex flex-col items-start gap-3">
+            {/* Title */}
+            <h3 className="font-bold text-white text-base font-heading">
+              Kết nối với chúng tôi
+            </h3>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-3">
+              <a
+                href="#facebook"
+                aria-label="Facebook"
+                className="w-10 h-10 rounded-full bg-zinc-800/90 border border-zinc-700 flex items-center justify-center text-gray-200 hover:bg-[#E30019] hover:text-white hover:border-[#E30019] transition-all cursor-pointer shadow-md"
+              >
+                <FacebookIcon className="w-4 h-4 fill-current" />
+              </a>
+
+              <a
+                href="#tiktok"
+                aria-label="TikTok"
+                className="w-10 h-10 rounded-full bg-zinc-800/90 border border-zinc-700 flex items-center justify-center text-gray-200 hover:bg-[#E30019] hover:text-white hover:border-[#E30019] transition-all cursor-pointer shadow-md"
+              >
+                <TikTokIcon className="w-4 h-4 fill-current" />
+              </a>
+
+              <a
+                href="#youtube"
+                aria-label="YouTube"
+                className="w-10 h-10 rounded-full bg-zinc-800/90 border border-zinc-700 flex items-center justify-center text-gray-200 hover:bg-[#E30019] hover:text-white hover:border-[#E30019] transition-all cursor-pointer shadow-md"
+              >
+                <YoutubeIcon className="w-4 h-4 fill-current" />
+              </a>
+
+              <a
+                href="#community"
+                aria-label="Cộng đồng"
+                className="w-10 h-10 rounded-full bg-zinc-800/90 border border-zinc-700 flex items-center justify-center text-gray-200 hover:bg-[#E30019] hover:text-white hover:border-[#E30019] transition-all cursor-pointer shadow-md"
+              >
+                <Users className="w-5 h-5" />
+              </a>
             </div>
-            <p className="text-xs text-gray-400 leading-relaxed mb-1">
-              Hệ thống bán lẻ thiết bị công nghệ, PC Gaming, linh kiện máy tính và phụ kiện cao cấp hàng đầu.
-            </p>
-            <ul className="space-y-2 text-xs text-gray-400">
-              <li>
-                <a href="#about" className="hover:text-white transition-mechanical">
-                  Giới thiệu công ty
-                </a>
-              </li>
-              <li>
-                <a href="#showrooms" className="hover:text-white transition-mechanical">
-                  Hệ thống showroom (12 chi nhánh)
-                </a>
-              </li>
-              <li>
-                <a href="#careers" className="hover:text-white transition-mechanical">
-                  Tuyển dụng nhân tài
-                </a>
-              </li>
-              <li>
-                <a href="#press" className="hover:text-white transition-mechanical">
-                  Báo chí & Truyền thông
-                </a>
-              </li>
-            </ul>
           </div>
 
           {/* Column 2: Policies */}
@@ -122,7 +129,7 @@ export const Footer = () => {
           {/* Left: Location & Copyright */}
           <div className="flex items-center gap-2 text-gray-400">
             <MapPin className="w-4 h-4 text-[#E30019]" />
-            <span>© 2025 GearGo. Bảo lưu mọi quyền.</span>
+            <span>© 2026 NexGear. Bảo lưu mọi quyền.</span>
           </div>
 
           {/* Right: Security Badges */}
