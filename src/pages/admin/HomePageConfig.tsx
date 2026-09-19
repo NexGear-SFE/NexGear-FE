@@ -1,6 +1,4 @@
-import React, { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
-import type { HomeContentTab } from '@/types/admin/homeContent.type'
+import React from 'react'
 import { TabNavigation } from '@/components/admin/home-config/TabNavigation'
 import { TrustBadgeForm } from '@/components/admin/home-config/TrustBadgeForm'
 import { FooterConfigTab } from '@/components/admin/footer-config/FooterConfigTab'
@@ -9,68 +7,27 @@ import { QuickAccessManager } from '@/components/admin/quick-access/QuickAccessM
 import { BannerTable } from '@/components/admin/homeContent/BannerTable'
 import { BannerModal } from '@/components/admin/homeContent/BannerModal'
 import { DeleteConfirmModal } from '@/components/admin/homeContent/DeleteConfirmModal'
-import { INITIAL_HERO_BANNERS } from '@/mocks/storemanager/homeContent.mock'
-import type { BannerItem, BannerFormData } from '@/types/admin/homeContent.type'
 import { Plus } from 'lucide-react'
-
-
+import { useHomePageConfig } from '@/hooks/useHomePageConfig'
 
 export const HomePageConfig: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
-
-  // State tab lấy từ tham số URL (defaults to 'commitments' as per trust badges requirement)
-  const activeTab = (searchParams.get('tab') as HomeContentTab) || 'commitments'
-
-  const handleTabChange = (tab: HomeContentTab) => {
-    setSearchParams({ tab })
-  }
-
-  // State danh sách banner cho tab hero
-  const [banners, setBanners] = useState<BannerItem[]>(INITIAL_HERO_BANNERS)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingBanner, setEditingBanner] = useState<BannerItem | null>(null)
-  const [deletingBanner, setDeletingBanner] = useState<BannerItem | null>(null)
-
-  const handleToggleVisibility = (id: string, isVisible: boolean) => {
-    setBanners((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, isVisible } : b))
-    )
-  }
-
-  const handleOpenAddModal = () => {
-    setEditingBanner(null)
-    setIsModalOpen(true)
-  }
-
-  const handleOpenEditModal = (banner: BannerItem) => {
-    setEditingBanner(banner)
-    setIsModalOpen(true)
-  }
-
-  const handleSaveBanner = (formData: BannerFormData) => {
-    if (editingBanner) {
-      setBanners((prev) =>
-        prev.map((b) => (b.id === editingBanner.id ? { ...b, ...formData } : b))
-      )
-    } else {
-      const newBanner: BannerItem = {
-        id: `banner-${Date.now()}`,
-        ...formData,
-      }
-      setBanners((prev) => [...prev, newBanner])
-    }
-  }
-
-  const handleDeleteClick = (banner: BannerItem) => {
-    setDeletingBanner(banner)
-  }
-
-  const handleConfirmDelete = () => {
-    if (deletingBanner) {
-      setBanners((prev) => prev.filter((b) => b.id !== deletingBanner.id))
-      setDeletingBanner(null)
-    }
-  }
+  const {
+    activeTab,
+    handleTabChange,
+    banners,
+    setBanners,
+    isModalOpen,
+    editingBanner,
+    deletingBanner,
+    setDeletingBanner,
+    handleToggleVisibility,
+    handleOpenAddModal,
+    handleOpenEditModal,
+    handleSaveBanner,
+    handleCloseModal,
+    handleDeleteClick,
+    handleConfirmDelete,
+  } = useHomePageConfig()
 
   return (
     <div className="space-y-6">
@@ -150,10 +107,7 @@ export const HomePageConfig: React.FC = () => {
         isOpen={isModalOpen}
         editingBanner={editingBanner}
         nextOrder={banners.length + 1}
-        onClose={() => {
-          setIsModalOpen(false)
-          setEditingBanner(null)
-        }}
+        onClose={handleCloseModal}
         onSave={handleSaveBanner}
       />
 
