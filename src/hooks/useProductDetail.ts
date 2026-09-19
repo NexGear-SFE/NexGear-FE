@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { productApi } from '@/apis/product.api'
-import type { Product, ProductDetail, ProductVariantOption } from '@/types/product.type'
+import type { Product, ProductDetail, ProductVariantOption } from '@/types/customer/product.type'
 import { cartStore } from '@/stores/cartStore'
 import { useAuth } from '@/hooks/useAuth'
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { KANBAN_COLUMNS, TICKETS } from '@/mocks/techstaff/ticket.mock';
 import { IcTechSearch } from '@/components/common/Icons';
-import type { KanbanStatus } from '@/types/ticket.type';
+import type { KanbanStatus } from '@/types/admin/ticket.type';
 import { KanbanTicketCard } from '@/components/techstaff/KanbanTicketCard';
 import { FileText, Zap, Wrench, MessageSquare, AlertCircle, CheckCircle2 } from 'lucide-react';
 

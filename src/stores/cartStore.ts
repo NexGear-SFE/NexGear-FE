@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react'
-import type { Product } from '@/types/product.type'
-import type { CartItem, CartState } from '@/types/cart.type'
+import type { Product } from '@/types/customer/product.type'
+import type { CartItem, CartState } from '@/types/customer/cart.type'
 import { mockPcProducts } from '@/mocks/customer/product.mock'
 
 const STORAGE_KEY = 'nexgear_cart_items'

@@ -1,4 +1,4 @@
-import type { User } from '@/types/auth.type'
+import type { User } from '@/types/common/auth.type'
 import { USER_ROLES } from '../../constants/roles'
 
 export const DEFAULT_MOCK_PASSWORD = '123456'

@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import type { ProductVariantSelectorProps } from '@/types/product.type'
+import type { ProductVariantSelectorProps } from '@/types/customer/product.type'
 
 export function ProductVariantSelector({
   variantGroups,

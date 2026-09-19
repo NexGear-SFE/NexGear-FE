@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Minus, Plus, ShoppingCart } from 'lucide-react'
-import type { ProductPurchaseActionsProps } from '@/types/product.type'
+import type { ProductPurchaseActionsProps } from '@/types/customer/product.type'
 
 export function ProductPurchaseActions({
   inStock,

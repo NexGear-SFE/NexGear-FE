@@ -1,4 +1,4 @@
-import type { TechStaffUser } from '@/types/staff.type';
+import type { TechStaffUser } from '@/types/admin/staff.type';
 
 export const TECH_STAFF_USER: TechStaffUser = {
   name: 'Nguyễn Văn Tuấn',

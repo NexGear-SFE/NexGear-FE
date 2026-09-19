@@ -1,5 +1,5 @@
 import React from 'react'
-import type { NavColumnLink, NavColumnLinkErrors } from '@/types/footerConfig'
+import type { NavColumnLink, NavColumnLinkErrors } from '@/types/admin/footerConfig.type'
 import { FOOTER_FIELD_PLACEHOLDERS } from '@/constants/footerConfigConstants'
 import { Trash2 } from 'lucide-react'
 

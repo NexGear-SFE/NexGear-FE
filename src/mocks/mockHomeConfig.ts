@@ -1,4 +1,4 @@
-import type { TrustBadge } from '@/types/homeConfig'
+import type { TrustBadge } from '@/types/admin/homeConfig.type'
 
 export const INITIAL_TRUST_BADGES: TrustBadge[] = [
   {

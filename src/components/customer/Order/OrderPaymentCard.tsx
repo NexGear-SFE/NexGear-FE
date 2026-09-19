@@ -1,5 +1,5 @@
 import { CreditCard, CheckCircle2, Clock } from 'lucide-react'
-import type { OrderPaymentCardProps } from '@/types/order.type'
+import type { OrderPaymentCardProps } from '@/types/customer/order.type'
 
 export function OrderPaymentCard({ paymentInfo }: OrderPaymentCardProps) {
   return (

@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import type { HomeContentTab } from '@/types/homeContent.type'
+import type { HomeContentTab } from '@/types/admin/homeContent.type'
 import { TabNavigation } from '@/components/admin/home-config/TabNavigation'
 import { TrustBadgeForm } from '@/components/admin/home-config/TrustBadgeForm'
 import { FooterConfigTab } from '@/components/admin/footer-config/FooterConfigTab'
 import { HomeProductsTab } from '@/components/admin/home-products/HomeProductsTab'
-import { QuickAccessManager } from '@/components/admin/homeContent/QuickAccessManager'
+import { QuickAccessManager } from '@/components/admin/quick-access/QuickAccessManager'
 import { BannerTable } from '@/components/admin/homeContent/BannerTable'
 import { BannerModal } from '@/components/admin/homeContent/BannerModal'
 import { DeleteConfirmModal } from '@/components/admin/homeContent/DeleteConfirmModal'
 import { INITIAL_HERO_BANNERS } from '@/mocks/storemanager/homeContent.mock'
-import type { BannerItem, BannerFormData } from '@/types/homeContent.type'
+import type { BannerItem, BannerFormData } from '@/types/admin/homeContent.type'
 import { Plus } from 'lucide-react'
 
 
@@ -18,14 +18,14 @@ import { Plus } from 'lucide-react'
 export const HomePageConfig: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  // Tab state derived from URL params (defaults to 'commitments' as per trust badges requirement)
+  // State tab lấy từ tham số URL (defaults to 'commitments' as per trust badges requirement)
   const activeTab = (searchParams.get('tab') as HomeContentTab) || 'commitments'
 
   const handleTabChange = (tab: HomeContentTab) => {
     setSearchParams({ tab })
   }
 
-  // Banners state for hero tab
+  // State danh sách banner cho tab hero
   const [banners, setBanners] = useState<BannerItem[]>(INITIAL_HERO_BANNERS)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingBanner, setEditingBanner] = useState<BannerItem | null>(null)

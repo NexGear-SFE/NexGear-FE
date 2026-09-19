@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import type { BlogPost, BlogFilterStatus, BlogStatus } from '@/types/blog.type'
+import type { BlogPost, BlogFilterStatus, BlogStatus } from '@/types/admin/blog.type'
 import { INITIAL_BLOG_POSTS } from '@/mocks/storemanager/blog.mock'
 import { BLOG_STATUS, BLOG_FILTER_STATUS } from '@/constants/blog'
-import { BlogFilterTabs } from '@/components/admin/BlogFilterTabs'
-import { BlogTable } from '@/components/admin/BlogTable'
+import { BlogFilterTabs } from '@/components/admin/blogs/BlogFilterTabs'
+import { BlogTable } from '@/components/admin/blogs/BlogTable'
 import { BlogEditorPage } from '@/pages/admin/BlogEditorPage'
 import type { AdminLayoutContext, ViewMode } from '@/layouts/AdminLayout'
 import { Plus, AlertTriangle } from 'lucide-react'
@@ -13,7 +13,7 @@ import { getTodayFormattedDate } from '@/utils/formatDate'
 export const BlogManagementPage = () => {
   const context = useOutletContext<AdminLayoutContext | null>()
 
-  // Internal state fallbacks if rendered outside AdminLayout context
+  // State nội bộ dự phòng nếu render ngoài AdminLayout context
   const [localViewMode, setLocalViewMode] = useState<ViewMode>('list')
   const [localEditingPost, setLocalEditingPost] = useState<BlogPost | null>(null)
 
@@ -25,10 +25,10 @@ export const BlogManagementPage = () => {
   const [posts, setPosts] = useState<BlogPost[]>(INITIAL_BLOG_POSTS)
   const [filterStatus, setFilterStatus] = useState<BlogFilterStatus>(BLOG_FILTER_STATUS.ALL)
 
-  // Delete modal state
+  // State cho Modal xóa
   const [deletingPostId, setDeletingPostId] = useState<string | null>(null)
 
-  // Calculated tab counts
+  // Tính số lượng cho từng tab
   const counts = useMemo(() => {
     const published = posts.filter((p) => p.status === BLOG_STATUS.PUBLISHED).length
     const draft = posts.filter((p) => p.status === BLOG_STATUS.DRAFT).length
@@ -39,7 +39,7 @@ export const BlogManagementPage = () => {
     }
   }, [posts])
 
-  // Filtered posts array according to tab filter
+  // Mảng bài viết đã lọc theo tab
   const filteredPosts = useMemo(() => {
     if (filterStatus === BLOG_FILTER_STATUS.PUBLISHED) {
       return posts.filter((p) => p.status === BLOG_STATUS.PUBLISHED)
@@ -50,7 +50,7 @@ export const BlogManagementPage = () => {
     return posts
   }, [posts, filterStatus])
 
-  // Handlers for Delete Modal
+  // Xử lý Modal xóa
   const handleDeleteClick = (id: string) => {
     setDeletingPostId(id)
   }
@@ -62,7 +62,7 @@ export const BlogManagementPage = () => {
     }
   }
 
-  // Handlers for Create/Edit View Switching
+  // Xử lý chuyển đổi giao diện Tạo mới/Chỉnh sửa
   const handleOpenAddView = () => {
     setEditingPost(null)
     setViewMode('create')
@@ -73,7 +73,7 @@ export const BlogManagementPage = () => {
     setViewMode('edit')
   }
 
-  // Save Blog Post Handler (Create or Update)
+  // Xử lý lưu bài viết (Tạo mới hoặc Cập nhật)
   const handleSaveBlog = (
     postData: Partial<BlogPost>,
     status: BlogStatus
@@ -81,7 +81,7 @@ export const BlogManagementPage = () => {
     const todayStr = getTodayFormattedDate()
 
     if (editingPost) {
-      // Update existing post
+      // Cập nhật bài viết hiện tại
       setPosts((prev) =>
         prev.map((p) =>
           p.id === editingPost.id
@@ -96,7 +96,7 @@ export const BlogManagementPage = () => {
         )
       )
     } else {
-      // Create new post
+      // Tạo bài viết mới
       const newPost: BlogPost = {
         id: String(Date.now()),
         title: postData.title || 'Bài viết mới',
@@ -113,7 +113,7 @@ export const BlogManagementPage = () => {
     setViewMode('list')
   }
 
-  // Render Full-page Editor View when viewMode is 'create' or 'edit'
+  // Render màn hình soạn thảo bài viết khi viewMode là create hoặc edit
   if (viewMode === 'create' || viewMode === 'edit') {
     return (
       <BlogEditorPage
@@ -128,7 +128,7 @@ export const BlogManagementPage = () => {
     )
   }
 
-  // Render Main Blog List View
+  // Render màn hình danh sách bài viết chính
   return (
     <div className="space-y-6">
       {/* 5.3 Khung Tiêu đề & Nút Thao tác */}

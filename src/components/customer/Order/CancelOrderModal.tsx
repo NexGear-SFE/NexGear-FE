@@ -1,4 +1,4 @@
-import type { CancelOrderModalProps } from '@/types/order.type'
+import type { CancelOrderModalProps } from '@/types/customer/order.type'
 
 export function CancelOrderModal({
   isOpen,

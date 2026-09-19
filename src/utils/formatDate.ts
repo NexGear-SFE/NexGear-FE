@@ -8,14 +8,14 @@ export function formatDate(dateInput?: string | Date | null): string {
   if (!dateInput) return ''
 
   if (typeof dateInput === 'string') {
-    // Check for YYYY-MM-DD pattern
+    // Kiểm tra định dạng YYYY-MM-DD
     const isoMatch = dateInput.match(/^(\d{4})-(\d{2})-(\d{2})/)
     if (isoMatch) {
       const [, year, month, day] = isoMatch
       return `${day}/${month}/${year}`
     }
 
-    // Check for DD/MM/YYYY pattern (already formatted)
+    // Kiểm tra định dạng DD/MM/YYYY (đã chuẩn hóa)
     if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateInput)) {
       return dateInput
     }

@@ -11,7 +11,7 @@ import { WarrantyDetailModal } from '@/components/customer/Warranty/WarrantyDeta
 
 import { MOCK_ORDERS } from '@/mocks/customer/order.mock'
 import { MOCK_CUSTOMER_WARRANTY_REQUESTS } from '@/mocks/customer/warranty.mock'
-import type { CustomerWarrantyRequest } from '@/types/customerWarranty.type'
+import type { CustomerWarrantyRequest } from '@/types/customer/customerWarranty.type'
 import {
   CUSTOMER_VALID_TABS,
   DEFAULT_CUSTOMER_TAB,
@@ -26,7 +26,7 @@ export function CustomerAccountSettingsPage() {
 
   const { user } = useAuth()
 
-  // Warranty Tab States
+  // State cho Tab bảo hành
   const [warrantyRequests, setWarrantyRequests] = useState<CustomerWarrantyRequest[]>(MOCK_CUSTOMER_WARRANTY_REQUESTS)
   const [isCreateWarrantyOpen, setIsCreateWarrantyOpen] = useState(false)
   const [selectedWarrantyDetail, setSelectedWarrantyDetail] = useState<CustomerWarrantyRequest | null>(null)

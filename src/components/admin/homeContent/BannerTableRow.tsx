@@ -1,6 +1,6 @@
 import React from 'react'
 import { GripVertical, Edit2, Trash2, ChevronUp, ChevronDown } from 'lucide-react'
-import type { BannerItem } from '@/types/homeContent.type'
+import type { BannerItem } from '@/types/admin/homeContent.type'
 import { ToggleSwitch } from './ToggleSwitch'
 import { formatCurrency } from '@/utils/formatCurrency'
 

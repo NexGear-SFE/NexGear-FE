@@ -1,20 +1,6 @@
 import React from 'react'
-import type {
-  CompanyInfo,
-  SocialLinks,
-  CompanyInfoErrors,
-  SocialLinksErrors,
-} from '@/types/footerConfig'
+import type { CompanySocialSectionProps } from '@/types/admin/footerConfig.type'
 import { FOOTER_FIELD_PLACEHOLDERS } from '@/constants/footerConfigConstants'
-
-interface CompanySocialSectionProps {
-  company: CompanyInfo
-  socials: SocialLinks
-  onCompanyChange: (field: keyof CompanyInfo, value: string) => void
-  onSocialChange: (field: keyof SocialLinks, value: string) => void
-  companyErrors?: CompanyInfoErrors
-  socialErrors?: SocialLinksErrors
-}
 
 export const CompanySocialSection: React.FC<CompanySocialSectionProps> = ({
   company,

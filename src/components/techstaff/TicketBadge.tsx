@@ -1,4 +1,4 @@
-import type { DeviceType } from '@/types/ticket.type';
+import type { DeviceType } from '@/types/admin/ticket.type';
 
 // Supported badge variants: device types + shortened ticket type labels
 type TicketBadgeVariant = DeviceType | 'BH' | 'DV';

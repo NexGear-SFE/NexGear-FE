@@ -1,5 +1,5 @@
-import type { Order } from '@/types/order.type'
-import type { ApiResponse } from '@/types/api.type'
+import type { Order } from '@/types/customer/order.type'
+import type { ApiResponse } from '@/types/common/api.type'
 import { MOCK_ORDERS } from '@/mocks/customer/order.mock'
 
 export const orderApi = {

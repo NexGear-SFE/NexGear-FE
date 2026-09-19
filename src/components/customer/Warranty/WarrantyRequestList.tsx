@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Plus, Search, ShieldCheck, ChevronRight } from 'lucide-react'
-import type { WarrantyRequestListProps, WarrantyFilterStatus } from '@/types/customerWarranty.type'
+import type { WarrantyRequestListProps, WarrantyFilterStatus } from '@/types/customer/customerWarranty.type'
 import { WarrantyStatusBadge } from '@/components/customer/Warranty/WarrantyStatusBadge'
 
 export function WarrantyRequestList({ requests, onOpenCreateModal, onSelectRequest }: WarrantyRequestListProps) {

@@ -1,4 +1,4 @@
-import type { BlogFilterStatus } from '@/types/blog.type'
+import type { BlogFilterStatus } from '@/types/admin/blog.type'
 import { BLOG_FILTER_STATUS } from '@/constants/blog'
 
 interface BlogFilterTabsProps {

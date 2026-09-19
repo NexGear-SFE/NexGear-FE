@@ -1,5 +1,5 @@
-import type { CustomerWarrantyRequest, WarrantyEligibleProduct } from '@/types/customerWarranty.type'
-import type { ApiResponse } from '@/types/api.type'
+import type { CustomerWarrantyRequest, WarrantyEligibleProduct } from '@/types/customer/customerWarranty.type'
+import type { ApiResponse } from '@/types/common/api.type'
 import { MOCK_CUSTOMER_WARRANTY_REQUESTS, MOCK_ELIGIBLE_WARRANTY_PRODUCTS } from '@/mocks/customer/warranty.mock'
 import { getTodayFormattedDate } from '@/utils/formatDate'
 

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, Package, ChevronRight } from 'lucide-react'
-import type { MyOrdersTabProps } from '@/types/order.type'
+import type { MyOrdersTabProps } from '@/types/customer/order.type'
 import { ORDER_STATUS_FILTERS, type OrderFilterStatus } from '@/constants/customerAccount.constant'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { OrderStatusBadge } from '@/components/customer/Order/OrderStatusBadge'

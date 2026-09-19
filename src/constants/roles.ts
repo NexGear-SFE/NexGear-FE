@@ -1,4 +1,4 @@
-import type { UserRole } from '@/types/auth.type'
+import type { UserRole } from '@/types/common/auth.type'
 
 export const USER_ROLES = {
   USER: 'USER',

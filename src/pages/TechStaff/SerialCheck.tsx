@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { INITIAL_WARRANTY_PROVIDERS } from "@/mocks/techstaff/warranty.mock";
-import type { WarrantyProvider } from "@/types/staff.type";
+import type { WarrantyProvider } from "@/types/admin/staff.type";
 import { IcTechSearch } from "@/components/common/Icons";
 import { SearchX, Inbox } from "lucide-react";
 

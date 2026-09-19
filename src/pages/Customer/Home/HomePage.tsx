@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Zap, ArrowRight, ChevronRight, CheckCircle2 } from 'lucide-react'
-import type { Product } from '@/types/product.type'
+import type { Product } from '@/types/customer/product.type'
 import { ProductCard } from '@/components/customer/Product/ProductCard'
 import { TrustBadges } from '@/components/customer/Home/TrustBadges'
 import { CategorySidebar } from '@/components/customer/Home/CategorySidebar'

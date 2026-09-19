@@ -1,5 +1,5 @@
-import type { Product, ProductCategory, ProductDetail } from '@/types/product.type'
-import type { ApiResponse } from '@/types/api.type'
+import type { Product, ProductCategory, ProductDetail } from '@/types/customer/product.type'
+import type { ApiResponse } from '@/types/common/api.type'
 import { mockPcProducts, mockLaptopProducts, mockGearProducts } from '@/mocks/customer/product.mock'
 import { MOCK_PRODUCT_DETAILS, generateFallbackProductDetail } from '@/mocks/customer/productDetail.mock'
 

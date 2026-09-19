@@ -1,5 +1,5 @@
 import { Package } from 'lucide-react'
-import type { OrderItemListProps } from '@/types/order.type'
+import type { OrderItemListProps } from '@/types/customer/order.type'
 import { formatCurrency } from '@/utils/formatCurrency'
 
 export function OrderItemList({ items }: OrderItemListProps) {

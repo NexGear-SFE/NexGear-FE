@@ -1,5 +1,5 @@
 import { Truck, User, Phone, MapPin } from 'lucide-react'
-import type { OrderShippingCardProps } from '@/types/order.type'
+import type { OrderShippingCardProps } from '@/types/customer/order.type'
 
 export function OrderShippingCard({ shippingInfo }: OrderShippingCardProps) {
   return (

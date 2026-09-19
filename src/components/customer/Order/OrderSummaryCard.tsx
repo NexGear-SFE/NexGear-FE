@@ -1,5 +1,5 @@
 import { formatCurrency } from '@/utils/formatCurrency'
-import type { OrderSummaryCardProps } from '@/types/order.type'
+import type { OrderSummaryCardProps } from '@/types/customer/order.type'
 
 export function OrderSummaryCard({
   subtotal,

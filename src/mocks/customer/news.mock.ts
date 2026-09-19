@@ -1,4 +1,4 @@
-import type { ArticleItem } from '@/types/news.type'
+import type { ArticleItem } from '@/types/customer/news.type'
 
 export const articles: ArticleItem[] = [
   {

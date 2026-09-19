@@ -1,4 +1,4 @@
-import type { ProductDetail } from '@/types/product.type'
+import type { ProductDetail } from '@/types/customer/product.type'
 
 export const MOCK_PRODUCT_DETAILS: Record<string, ProductDetail> = {
   // 1. Laptop Gaming ASUS ROG Strix G16 (id: laptop-1 or slug: laptop-gaming-asus-rog-strix-g16)

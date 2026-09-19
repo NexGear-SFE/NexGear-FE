@@ -1,5 +1,5 @@
 import React from 'react'
-import type { ContactInfo, ContactInfoErrors } from '@/types/footerConfig'
+import type { ContactInfo, ContactInfoErrors } from '@/types/admin/footerConfig.type'
 import { FOOTER_FIELD_PLACEHOLDERS } from '@/constants/footerConfigConstants'
 import { Phone, Mail, Globe, Clock } from 'lucide-react'
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { BlogPost, BlogStatus } from '@/types/blog.type'
+import type { BlogPost, BlogStatus } from '@/types/admin/blog.type'
 import { BLOG_STATUS } from '@/constants/blog'
 import {
   ArrowLeft,
@@ -29,7 +29,7 @@ interface BlogEditorPageProps {
   onCancel: () => void
 }
 
-// Utility to create slug from title
+// Tiện ích tạo chuỗi slug từ tiêu đề
 const slugify = (text: string) => {
   return text
     .toString()

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import type { TrustBadge, TrustBadgeErrors } from '@/types/homeConfig'
+import type { TrustBadge, TrustBadgeErrors } from '@/types/admin/homeConfig.type'
 import {
   BADGE_THEMES,
   TRUST_BADGE_PRESET_ICONS,

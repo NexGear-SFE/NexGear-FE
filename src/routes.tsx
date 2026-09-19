@@ -2,15 +2,15 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { ROUTES } from '@/constants';
 import { ALLOWED_ROLES } from '@/constants/roles';
 
-// Layouts
+// Khung bố cục giao diện
 import { MainLayout } from '@/layouts/MainLayout';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { TechStaffLayout } from '@/layouts/TechStaffLayout';
 
-// Auth & Protection
+// Xác thực & Bảo vệ tuyến đường
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
-// Customer Pages
+// Trang Khách hàng
 import { HomePage } from '@/pages/customer/Home/HomePage';
 import { ProductDetailPage } from '@/pages/customer/Product/ProductDetailPage';
 import { BlogListPage } from '@/pages/customer/Blog/BlogListPage';
@@ -18,26 +18,26 @@ import { BlogDetailPage } from '@/pages/customer/Blog/BlogDetailPage';
 import { CustomerAccountSettingsPage } from '@/pages/customer/AccountSettingsPage';
 import { OrderDetailPage } from '@/pages/customer/Order/OrderDetailPage';
 
-// Auth Pages
+// Trang Xác thực
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
 
-// Common Pages
+// Trang Dùng chung
 import { AccountSettingsPage } from '@/pages/common/AccountSettingsPage';
 import { NotFoundPage } from '@/pages/common/NotFoundPage';
 
-// Admin / Store Manager Pages
+// Trang Quản lý Cửa hàng
 import { BlogManagementPage } from '@/pages/admin/BlogManagementPage';
 import { HomePageConfig } from '@/pages/admin/HomePageConfig';
 
-// Tech Staff Pages
+// Trang Nhân viên Kỹ thuật
 import { TechStaffDashboard } from '@/pages/techstaff/Dashboard';
 import { SerialCheck } from '@/pages/techstaff/SerialCheck';
 import { Settings } from '@/pages/techstaff/Settings';
 
 export const router = createBrowserRouter([
   // ==========================================
-  // 1. CUSTOMER / PUBLIC ROUTES
+  // 1. ĐƯỜNG DẪN KHÁCH HÀNG / CÔNG KHẢI
   // ==========================================
   {
     path: ROUTES.HOME,
@@ -75,7 +75,7 @@ export const router = createBrowserRouter([
   },
 
   // ==========================================
-  // 2. AUTHENTICATION ROUTES
+  // 2. ĐƯỜNG DẪN XÁC THỰC TÀI KHOẢN
   // ==========================================
   {
     path: ROUTES.AUTH.LOGIN,
@@ -87,7 +87,7 @@ export const router = createBrowserRouter([
   },
 
   // ==========================================
-  // 3. STORE MANAGER / ADMIN ROUTES
+  // 3. ĐƯỜNG DẪN QUẢN LÝ CỬA HÀNG (STORE MANAGER / ADMIN)
   // ==========================================
   {
     path: ROUTES.STORE_MANAGER.ROOT,
@@ -99,7 +99,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/storemanager/home-content" replace />,
+        element: <Navigate to={ROUTES.STORE_MANAGER.HOME_CONTENT} replace />,
       },
       {
         path: 'home-content',
@@ -111,7 +111,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'dashboard',
-        element: <Navigate to="/storemanager/home-content" replace />,
+        element: <Navigate to={ROUTES.STORE_MANAGER.HOME_CONTENT} replace />,
       },
       {
         path: 'blogs',
@@ -125,7 +125,7 @@ export const router = createBrowserRouter([
   },
 
   // ==========================================
-  // 4. TECH STAFF ROUTES
+  // 4. ĐƯỜNG DẪN NHÂN VIÊN KỸ THUẬT
   // ==========================================
   {
     path: ROUTES.TECH_STAFF.ROOT,
@@ -147,7 +147,7 @@ export const router = createBrowserRouter([
   },
 
   // ==========================================
-  // 5. FALLBACK & 404 NOT FOUND ROUTES
+  // 5. ĐƯỜNG DẪN TRANG 404 KHÔNG TÌM THẤY TRANG
   // ==========================================
   {
     path: ROUTES.NOT_FOUND,

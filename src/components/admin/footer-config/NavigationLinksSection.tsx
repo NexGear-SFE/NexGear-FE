@@ -2,7 +2,7 @@ import React from 'react'
 import type {
   NavigationColumns,
   NavColumnLinkErrors,
-} from '@/types/footerConfig'
+} from '@/types/admin/footerConfig.type'
 import { NavItemRow } from '@/components/admin/footer-config/NavItemRow'
 import { Plus } from 'lucide-react'
 

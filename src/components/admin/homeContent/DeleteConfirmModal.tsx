@@ -1,6 +1,6 @@
 import React from 'react'
 import { AlertTriangle } from 'lucide-react'
-import type { BannerItem } from '@/types/homeContent.type'
+import type { BannerItem } from '@/types/admin/homeContent.type'
 
 interface DeleteConfirmModalProps {
   banner: BannerItem | null

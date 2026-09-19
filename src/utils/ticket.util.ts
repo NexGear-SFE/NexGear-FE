@@ -1,4 +1,4 @@
-import type { SlaStatus } from '@/types/ticket.type';
+import type { SlaStatus } from '@/types/admin/ticket.type';
 
 export function getSlaColorClass(s: SlaStatus): string {
   if (s === 'ok') return 'text-[#00A859]';

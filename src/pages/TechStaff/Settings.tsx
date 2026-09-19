@@ -2,11 +2,11 @@ import { useState } from "react";
 import { User, Settings as SettingsIcon } from "lucide-react";
 import { INITIAL_WARRANTY_PROVIDERS } from "@/mocks/techstaff/warranty.mock";
 import { TECH_STAFF_USER } from "@/mocks/techstaff/staff.mock";
-import type { WarrantyProvider } from "@/types/staff.type";
+import type { WarrantyProvider } from "@/types/admin/staff.type";
 
 import { WarrantyTab } from "@/components/techstaff/WarrantyTab";
 import { SharedAccountSettings } from "@/components/common/SharedAccountSettings";
-import type { UserProfile } from "@/types/account.type";
+import type { UserProfile } from "@/types/customer/account.type";
 
 type SettingsTab = "account" | "warranty";
 

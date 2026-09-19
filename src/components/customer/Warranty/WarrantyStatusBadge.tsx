@@ -1,5 +1,5 @@
 import { CheckCircle2, Clock, Wrench, XCircle, AlertCircle } from 'lucide-react'
-import type { WarrantyStatusBadgeProps } from '@/types/customerWarranty.type'
+import type { WarrantyStatusBadgeProps } from '@/types/customer/customerWarranty.type'
 import { cn } from '@/utils/cn'
 
 export function WarrantyStatusBadge({ status, label, className }: WarrantyStatusBadgeProps) {

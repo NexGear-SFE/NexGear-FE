@@ -1,16 +1,16 @@
 import { useState, useMemo } from 'react'
 import { Star, MessageSquare, ChevronLeft, ChevronRight } from 'lucide-react'
-import type { ProductReviewListProps } from '@/types/product.type'
+import type { ProductReviewListProps } from '@/types/customer/product.type'
 
 const REVIEWS_PER_PAGE = 3
 
 export function ProductReviewList({ reviews }: ProductReviewListProps) {
   const [currentPage, setCurrentPage] = useState(1)
 
-  // Sort reviews newest first (default descending order)
+  // Sắp xếp đánh giá mới nhất lên đầu
   const sortedReviews = useMemo(() => {
     return [...reviews].sort((a, b) => {
-      // Parse date DD/MM/YYYY
+      // Trích xuất ngày định dạng DD/MM/YYYY
       const parseDate = (dStr: string) => {
         const parts = dStr.split('/')
         if (parts.length === 3) {

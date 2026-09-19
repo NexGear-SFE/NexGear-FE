@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import type { UserProfile } from "@/types/account.type";
+import type { UserProfile } from "@/types/customer/account.type";
 import { ProfileSection } from "@/components/common/ProfileSection";
 import { PasswordSection } from "@/components/common/PasswordSection";
 

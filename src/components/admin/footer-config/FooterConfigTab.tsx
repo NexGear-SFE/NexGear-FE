@@ -10,7 +10,7 @@ import type {
   CompanyInfoErrors,
   SocialLinksErrors,
   NavColumnLinkErrors,
-} from '@/types/footerConfig'
+} from '@/types/admin/footerConfig.type'
 import { INITIAL_FOOTER_CONFIG } from '@/mocks/mockFooterConfig'
 import { CompanySocialSection } from '@/components/admin/footer-config/CompanySocialSection'
 import { NavigationLinksSection } from '@/components/admin/footer-config/NavigationLinksSection'

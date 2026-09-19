@@ -5,7 +5,7 @@ import type {
   SocialLinks,
   NavigationColumns,
   FooterConfigData,
-} from '@/types/footerConfig'
+} from '@/types/admin/footerConfig.type'
 
 export const DEFAULT_COMPANY_INFO: CompanyInfo = {
   name: 'CÔNG TY TNHH CÔNG NGHỆ GEARGO',

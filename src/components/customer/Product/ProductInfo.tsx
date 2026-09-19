@@ -1,5 +1,5 @@
 import { Star, ShieldCheck, Truck, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react'
-import type { ProductInfoProps } from '@/types/product.type'
+import type { ProductInfoProps } from '@/types/customer/product.type'
 import { formatCurrency } from '@/utils/formatCurrency'
 
 export function ProductInfo({ product, detail, currentPrice, currentSku, currentStock }: ProductInfoProps) {

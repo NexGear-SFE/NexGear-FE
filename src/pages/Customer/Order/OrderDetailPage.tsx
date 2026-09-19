@@ -20,7 +20,7 @@ export function OrderDetailPage() {
   const [cancelReasonInput, setCancelReasonInput] = useState('')
   const [toastMessage, setToastMessage] = useState<string | null>(null)
 
-  // Find order by ID or fallback to first order
+  // Tìm đơn hàng theo ID hoặc mặc định lấy đơn đầu tiên
   const order = MOCK_ORDERS.find((o) => o.id === id || o.orderCode === id) || MOCK_ORDERS[0]
 
   const handleReorder = () => {

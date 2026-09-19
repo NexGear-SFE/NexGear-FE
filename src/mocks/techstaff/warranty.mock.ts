@@ -1,4 +1,4 @@
-import type { WarrantyProvider } from '@/types/staff.type';
+import type { WarrantyProvider } from '@/types/admin/staff.type';
 
 export const INITIAL_WARRANTY_PROVIDERS: WarrantyProvider[] = [
   {

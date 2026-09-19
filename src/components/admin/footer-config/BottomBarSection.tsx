@@ -1,19 +1,8 @@
 import React from 'react'
-import type { PolicyLink, PolicyLinkErrors } from '@/types/footerConfig'
+import type { BottomBarSectionProps } from '@/types/admin/footerConfig.type'
 import { PolicyItemRow } from '@/components/admin/footer-config/PolicyItemRow'
 import { FOOTER_FIELD_PLACEHOLDERS } from '@/constants/footerConfigConstants'
 import { Plus } from 'lucide-react'
-
-interface BottomBarSectionProps {
-  copyright: string
-  onCopyrightChange: (value: string) => void
-  policyLinks: PolicyLink[]
-  onPolicyChange: (id: string, field: 'title' | 'url', value: string) => void
-  onAddPolicy: () => void
-  onDeletePolicy: (id: string) => void
-  copyrightError?: string
-  policyErrors?: Record<string, PolicyLinkErrors>
-}
 
 export const BottomBarSection: React.FC<BottomBarSectionProps> = ({
   copyright,

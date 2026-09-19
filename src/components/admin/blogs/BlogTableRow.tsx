@@ -1,4 +1,4 @@
-import type { BlogPost } from '@/types/blog.type'
+import type { BlogPost } from '@/types/admin/blog.type'
 import { BLOG_STATUS } from '@/constants/blog'
 import { FileText, Pencil, Trash2 } from 'lucide-react'
 

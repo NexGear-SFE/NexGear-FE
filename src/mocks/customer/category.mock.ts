@@ -1,5 +1,5 @@
 import { Laptop, Gamepad2, Monitor, Cpu, Package, HardDrive, Mic, Tv } from 'lucide-react'
-import type { CategoryItem } from '@/types/category.type'
+import type { CategoryItem } from '@/types/customer/category.type'
 
 export const CATEGORIES_DATA: CategoryItem[] = [
   {

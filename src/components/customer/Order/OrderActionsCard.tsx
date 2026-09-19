@@ -1,5 +1,5 @@
 import { RotateCcw, Truck, Headphones } from 'lucide-react'
-import type { OrderActionsCardProps } from '@/types/order.type'
+import type { OrderActionsCardProps } from '@/types/customer/order.type'
 
 export function OrderActionsCard({
   status,
