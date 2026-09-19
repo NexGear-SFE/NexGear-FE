@@ -96,7 +96,7 @@ const QuickAccessFormBody: React.FC<QuickAccessFormBodyProps> = ({
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className={`w-full px-3.5 py-2.5 text-sm border rounded-xl bg-white flex items-center justify-between text-left transition-all cursor-pointer ${
             isDropdownOpen
-              ? 'border-blue-500 ring-2 ring-blue-100'
+              ? 'border-red-500 ring-2 ring-red-100'
               : 'border-gray-200 hover:border-gray-300'
           }`}
         >
@@ -123,7 +123,7 @@ const QuickAccessFormBody: React.FC<QuickAccessFormBodyProps> = ({
             {/* Header / Option mặc định */}
             <div
               onClick={() => handleSelectPreset(null)}
-              className="bg-blue-600 text-white font-medium px-3.5 py-2.5 text-sm flex items-center justify-between cursor-pointer hover:bg-blue-700 transition-colors"
+              className="bg-red-600 text-white font-medium px-3.5 py-2.5 text-sm flex items-center justify-between cursor-pointer hover:bg-red-700 transition-colors"
             >
               <span>-- Chọn danh mục --</span>
               {!selectedPreset && <Check className="w-4 h-4 text-white" />}
@@ -139,17 +139,17 @@ const QuickAccessFormBody: React.FC<QuickAccessFormBodyProps> = ({
                     onClick={() => handleSelectPreset(preset)}
                     className={`px-3.5 py-2.5 text-sm flex items-center justify-between cursor-pointer transition-colors ${
                       isSelected
-                        ? 'bg-blue-50/80 text-blue-600 font-semibold'
+                        ? 'bg-red-50/80 text-red-600 font-semibold'
                         : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <span className={`${isSelected ? 'text-blue-600' : 'text-gray-500'}`}>
+                      <span className={`${isSelected ? 'text-red-600' : 'text-gray-500'}`}>
                         <QuickAccessIcon name={preset.icon} className="w-4 h-4" />
                       </span>
                       <span>{preset.label}</span>
                     </div>
-                    {isSelected && <Check className="w-4 h-4 text-blue-600" />}
+                    {isSelected && <Check className="w-4 h-4 text-red-600" />}
                   </div>
                 )
               })}
@@ -179,7 +179,7 @@ const QuickAccessFormBody: React.FC<QuickAccessFormBodyProps> = ({
         </button>
         <button
           type="submit"
-          className="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm cursor-pointer"
+          className="px-5 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm cursor-pointer"
         >
           {editingItem ? 'Lưu thay đổi' : 'Thêm truy cập nhanh'}
         </button>

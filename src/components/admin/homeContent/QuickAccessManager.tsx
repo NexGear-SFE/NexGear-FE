@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Plus, Edit2, Trash2, AlertTriangle, Check } from 'lucide-react'
+import { Plus, Edit2, Trash2, AlertTriangle, Check, ChevronUp, ChevronDown } from 'lucide-react'
 import type { QuickAccessItem, QuickAccessFormData } from '@/types/homeContent.type'
 import { INITIAL_QUICK_ACCESS_ITEMS } from '@/mocks/storemanager/homeContent.mock'
 import { QuickAccessIcon } from './QuickAccessIcon'
@@ -20,6 +20,35 @@ export const QuickAccessManager: React.FC = () => {
 
   // Sort items by order
   const sortedItems = [...items].sort((a, b) => a.order - b.order)
+
+  // Handlers for reordering (move up / down)
+  const handleMoveUp = (index: number) => {
+    if (index <= 0) return
+    const reordered = [...sortedItems]
+    const temp = reordered[index]
+    reordered[index] = reordered[index - 1]
+    reordered[index - 1] = temp
+
+    const updated = reordered.map((it, idx) => ({
+      ...it,
+      order: idx + 1,
+    }))
+    setItems(updated)
+  }
+
+  const handleMoveDown = (index: number) => {
+    if (index >= sortedItems.length - 1) return
+    const reordered = [...sortedItems]
+    const temp = reordered[index]
+    reordered[index] = reordered[index + 1]
+    reordered[index + 1] = temp
+
+    const updated = reordered.map((it, idx) => ({
+      ...it,
+      order: idx + 1,
+    }))
+    setItems(updated)
+  }
 
   // Handlers for Add / Edit
   const handleOpenAddModal = () => {
@@ -132,7 +161,7 @@ export const QuickAccessManager: React.FC = () => {
               <th scope="col" className="py-3 px-4 font-semibold w-[30%]">
                 ĐƯỜNG DẪN
               </th>
-              <th scope="col" className="py-3 px-4 font-semibold w-24 text-center">
+              <th scope="col" className="py-3 px-4 font-semibold w-28 text-center">
                 THỨ TỰ
               </th>
               <th scope="col" className="py-3 px-4 font-semibold w-32 text-right">
@@ -174,10 +203,34 @@ export const QuickAccessManager: React.FC = () => {
                   </td>
 
                   {/* Thứ tự */}
-                  <td className="py-3.5 px-4 text-center">
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-xs font-semibold text-gray-700">
-                      {item.order}
-                    </span>
+                  <td className="py-3.5 px-4 text-center whitespace-nowrap">
+                    <div className="inline-flex items-center justify-center gap-1.5">
+                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-xs font-semibold text-gray-700">
+                        {item.order}
+                      </span>
+                      <div className="flex flex-col gap-0.5">
+                        <button
+                          type="button"
+                          onClick={() => handleMoveUp(index)}
+                          disabled={index === 0}
+                          title="Di chuyển lên"
+                          aria-label={`Di chuyển ${item.label} lên`}
+                          className="p-0.5 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                        >
+                          <ChevronUp className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleMoveDown(index)}
+                          disabled={index === sortedItems.length - 1}
+                          title="Di chuyển xuống"
+                          aria-label={`Di chuyển ${item.label} xuống`}
+                          className="p-0.5 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                        >
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
                   </td>
 
                   {/* Thao tác */}

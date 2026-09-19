@@ -35,9 +35,6 @@ export const ShelfProductTable: React.FC<ShelfProductTableProps> = ({ products }
             <th className="py-3 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
               TỒN KHO
             </th>
-            <th className="py-3 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider min-w-[120px]">
-              ĐIỂM
-            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
@@ -91,29 +88,6 @@ export const ShelfProductTable: React.FC<ShelfProductTableProps> = ({ products }
                   />
                   <span>{product.stock} cái</span>
                 </span>
-              </td>
-
-              {/* Cột ĐIỂM */}
-              <td className="py-3.5 px-4">
-                <div className="flex items-center gap-2.5">
-                  <div className="flex-1 w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${product.scoreColor}`}
-                      style={{ width: `${Math.min(product.score, 100)}%` }}
-                    />
-                  </div>
-                  <span
-                    className={`text-xs font-bold ${
-                      product.score >= 95
-                        ? 'text-emerald-700'
-                        : product.score >= 90
-                        ? 'text-amber-600'
-                        : 'text-slate-600'
-                    }`}
-                  >
-                    {product.score}
-                  </span>
-                </div>
               </td>
             </tr>
           ))}

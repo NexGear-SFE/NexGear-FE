@@ -1,5 +1,5 @@
 import React from 'react'
-import { GripVertical, Edit2, Trash2 } from 'lucide-react'
+import { GripVertical, Edit2, Trash2, ChevronUp, ChevronDown } from 'lucide-react'
 import type { BannerItem } from '@/types/homeContent.type'
 import { ToggleSwitch } from './ToggleSwitch'
 import { formatCurrency } from '@/utils/formatCurrency'
@@ -13,6 +13,10 @@ interface BannerTableRowProps {
   onDragStart?: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void
   onDragOver?: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void
   onDrop?: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void
+  onMoveUp?: () => void
+  onMoveDown?: () => void
+  isFirst?: boolean
+  isLast?: boolean
 }
 
 export const BannerTableRow: React.FC<BannerTableRowProps> = ({
@@ -24,6 +28,10 @@ export const BannerTableRow: React.FC<BannerTableRowProps> = ({
   onDragStart,
   onDragOver,
   onDrop,
+  onMoveUp,
+  onMoveDown,
+  isFirst,
+  isLast,
 }) => {
   return (
     <tr
@@ -69,9 +77,39 @@ export const BannerTableRow: React.FC<BannerTableRowProps> = ({
 
       {/* Cột 3: Thứ tự */}
       <td className="py-4 px-4 whitespace-nowrap">
-        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-xs font-semibold text-gray-700">
-          {banner.order}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-xs font-semibold text-gray-700">
+            {banner.order}
+          </span>
+          <div className="flex flex-col gap-0.5">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onMoveUp?.()
+              }}
+              disabled={isFirst}
+              title="Di chuyển lên"
+              aria-label={`Di chuyển banner ${banner.title} lên`}
+              className="p-0.5 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer transition-colors"
+            >
+              <ChevronUp className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onMoveDown?.()
+              }}
+              disabled={isLast}
+              title="Di chuyển xuống"
+              aria-label={`Di chuyển banner ${banner.title} xuống`}
+              className="p-0.5 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer transition-colors"
+            >
+              <ChevronDown className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
       </td>
 
       {/* Cột 4: Hiển thị */}

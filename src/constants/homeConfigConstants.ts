@@ -1,5 +1,6 @@
 import type { HomeConfigTab, HomeConfigTabId, BadgeTheme } from '@/types/homeConfig'
 import {
+  icons,
   CheckCircle2,
   Zap,
   Wrench,
@@ -12,6 +13,28 @@ import {
   Star,
   Sparkles,
   PackageCheck,
+  BadgeCheck,
+  ShieldAlert,
+  Verified,
+  Package,
+  MapPin,
+  Send,
+  Box,
+  Cpu,
+  Monitor,
+  Laptop,
+  Gamepad2,
+  Keyboard,
+  Mouse,
+  HardDrive,
+  Flame,
+  Fan,
+  HeartHandshake,
+  CreditCard,
+  Percent,
+  Gift,
+  LifeBuoy,
+  Banknote,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -24,6 +47,8 @@ export const HOME_CONFIG_TABS: HomeConfigTab[] = [
 ]
 
 export const DEFAULT_HOME_CONFIG_TAB: HomeConfigTabId = 'commitments'
+
+export const LUCIDE_ICONS_LIBRARY_URL = 'https://lucide.dev/icons'
 
 export const BADGE_THEMES: Record<number, BadgeTheme> = {
   0: {
@@ -51,44 +76,60 @@ export const BADGE_THEMES: Record<number, BadgeTheme> = {
 export interface LucideIconOption {
   key: string
   name: string
+  category: 'warranty' | 'shipping' | 'tech' | 'service'
+  categoryLabel: string
   icon: LucideIcon
   emojiEquivalent?: string
 }
 
 export const TRUST_BADGE_PRESET_ICONS: LucideIconOption[] = [
-  { key: 'CheckCircle2', name: 'Check xanh', icon: CheckCircle2, emojiEquivalent: '✅' },
-  { key: 'Zap', name: 'Sấm sét', icon: Zap, emojiEquivalent: '⚡' },
-  { key: 'Wrench', name: 'Cờ lê', icon: Wrench, emojiEquivalent: '🔧' },
-  { key: 'RotateCcw', name: 'Đổi mới / Xoay vòng', icon: RotateCcw, emojiEquivalent: '🔄' },
-  { key: 'ShieldCheck', name: 'Bảo hành / Khiên', icon: ShieldCheck, emojiEquivalent: '🛡️' },
-  { key: 'Truck', name: 'Giao hàng', icon: Truck, emojiEquivalent: '🚚' },
-  { key: 'Clock', name: 'Thời gian 24/7', icon: Clock, emojiEquivalent: '⏰' },
-  { key: 'Headphones', name: 'Hỗ trợ kỹ thuật', icon: Headphones, emojiEquivalent: '🎧' },
-  { key: 'Award', name: 'Chứng nhận', icon: Award, emojiEquivalent: '🏆' },
-  { key: 'Star', name: 'Uy tín / Đánh giá', icon: Star, emojiEquivalent: '⭐' },
-  { key: 'Sparkles', name: 'Chất lượng cao', icon: Sparkles, emojiEquivalent: '✨' },
-  { key: 'PackageCheck', name: 'Hàng nguyên seal', icon: PackageCheck, emojiEquivalent: '📦' },
+  // 1. Bảo hành & Cam kết uy tín
+  { key: 'ShieldCheck', name: 'Bảo hành chính hãng', category: 'warranty', categoryLabel: 'Bảo hành & Uy tín', icon: ShieldCheck, emojiEquivalent: '🛡️' },
+  { key: 'BadgeCheck', name: 'Chính hãng 100%', category: 'warranty', categoryLabel: 'Bảo hành & Uy tín', icon: BadgeCheck },
+  { key: 'CheckCircle2', name: 'Cam kết chất lượng', category: 'warranty', categoryLabel: 'Bảo hành & Uy tín', icon: CheckCircle2, emojiEquivalent: '✅' },
+  { key: 'Award', name: 'Top thương hiệu', category: 'warranty', categoryLabel: 'Bảo hành & Uy tín', icon: Award, emojiEquivalent: '🏆' },
+  { key: 'Sparkles', name: 'Hàng tuyển chọn', category: 'warranty', categoryLabel: 'Bảo hành & Uy tín', icon: Sparkles, emojiEquivalent: '✨' },
+  { key: 'Star', name: 'Đánh giá 5 sao', category: 'warranty', categoryLabel: 'Bảo hành & Uy tín', icon: Star, emojiEquivalent: '⭐' },
+  { key: 'ShieldAlert', name: 'Bảo hiểm toàn diện', category: 'warranty', categoryLabel: 'Bảo hành & Uy tín', icon: ShieldAlert },
+  { key: 'Verified', name: 'Chứng thực ủy quyền', category: 'warranty', categoryLabel: 'Bảo hành & Uy tín', icon: Verified },
+
+  // 2. Giao hàng & Đổi trả
+  { key: 'Truck', name: 'Giao hàng hỏa tốc', category: 'shipping', categoryLabel: 'Vận chuyển & Đổi trả', icon: Truck, emojiEquivalent: '🚚' },
+  { key: 'PackageCheck', name: 'Hàng nguyên seal', category: 'shipping', categoryLabel: 'Vận chuyển & Đổi trả', icon: PackageCheck, emojiEquivalent: '📦' },
+  { key: 'RotateCcw', name: '1 đổi 1 30 ngày', category: 'shipping', categoryLabel: 'Vận chuyển & Đổi trả', icon: RotateCcw, emojiEquivalent: '🔄' },
+  { key: 'Package', name: 'Đóng gói chuẩn quy cách', category: 'shipping', categoryLabel: 'Vận chuyển & Đổi trả', icon: Package },
+  { key: 'Clock', name: 'Phục vụ 24/7', category: 'shipping', categoryLabel: 'Vận chuyển & Đổi trả', icon: Clock, emojiEquivalent: '⏰' },
+  { key: 'MapPin', name: 'Giao toàn quốc', category: 'shipping', categoryLabel: 'Vận chuyển & Đổi trả', icon: MapPin },
+  { key: 'Send', name: 'Giao siêu tốc 2h', category: 'shipping', categoryLabel: 'Vận chuyển & Đổi trả', icon: Send },
+  { key: 'Box', name: 'Bảo vệ kiện hàng', category: 'shipping', categoryLabel: 'Vận chuyển & Đổi trả', icon: Box },
+
+  // 3. Linh kiện & Gaming Gear (Domain NexGear)
+  { key: 'Cpu', name: 'Linh kiện cao cấp', category: 'tech', categoryLabel: 'Công nghệ & Gear', icon: Cpu },
+  { key: 'Monitor', name: 'Màn hình Gaming 240Hz', category: 'tech', categoryLabel: 'Công nghệ & Gear', icon: Monitor, emojiEquivalent: '🖥️' },
+  { key: 'Laptop', name: 'Laptop Gaming RTX', category: 'tech', categoryLabel: 'Công nghệ & Gear', icon: Laptop, emojiEquivalent: '💻' },
+  { key: 'Gamepad2', name: 'Gear chiến game', category: 'tech', categoryLabel: 'Công nghệ & Gear', icon: Gamepad2, emojiEquivalent: '🎮' },
+  { key: 'Keyboard', name: 'Bàn phím cơ Custom', category: 'tech', categoryLabel: 'Công nghệ & Gear', icon: Keyboard, emojiEquivalent: '⌨️' },
+  { key: 'Mouse', name: 'Chuột Esports siêu nhẹ', category: 'tech', categoryLabel: 'Công nghệ & Gear', icon: Mouse, emojiEquivalent: '🖱️' },
+  { key: 'HardDrive', name: 'Ổ cứng SSD Gen4/Gen5', category: 'tech', categoryLabel: 'Công nghệ & Gear', icon: HardDrive },
+  { key: 'Zap', name: 'Tốc độ xử lý đỉnh cao', category: 'tech', categoryLabel: 'Công nghệ & Gear', icon: Zap, emojiEquivalent: '⚡' },
+  { key: 'Flame', name: 'Hiệu năng cực đỉnh', category: 'tech', categoryLabel: 'Công nghệ & Gear', icon: Flame, emojiEquivalent: '🔥' },
+  { key: 'Fan', name: 'Tản nhiệt tối ưu', category: 'tech', categoryLabel: 'Công nghệ & Gear', icon: Fan },
+
+  // 4. CSKH & Dịch vụ hỗ trợ
+  { key: 'Headphones', name: 'Tư vấn kỹ thuật', category: 'service', categoryLabel: 'Dịch vụ & CSKH', icon: Headphones, emojiEquivalent: '🎧' },
+  { key: 'Wrench', name: 'Lắp ráp theo yêu cầu', category: 'service', categoryLabel: 'Dịch vụ & CSKH', icon: Wrench, emojiEquivalent: '🔧' },
+  { key: 'HeartHandshake', name: 'Tận tâm chu đáo', category: 'service', categoryLabel: 'Dịch vụ & CSKH', icon: HeartHandshake },
+  { key: 'CreditCard', name: 'Trả góp 0% tiện lợi', category: 'service', categoryLabel: 'Dịch vụ & CSKH', icon: CreditCard },
+  { key: 'Percent', name: 'Ưu đãi thành viên', category: 'service', categoryLabel: 'Dịch vụ & CSKH', icon: Percent },
+  { key: 'Gift', name: 'Quà tặng hấp dẫn', category: 'service', categoryLabel: 'Dịch vụ & CSKH', icon: Gift, emojiEquivalent: '🎁' },
+  { key: 'LifeBuoy', name: 'Cứu hộ phần mềm', category: 'service', categoryLabel: 'Dịch vụ & CSKH', icon: LifeBuoy },
+  { key: 'Banknote', name: 'Cam kết giá tốt', category: 'service', categoryLabel: 'Dịch vụ & CSKH', icon: Banknote },
 ]
 
 /**
- * Mapping from icon key / name / emoji to LucideIcon component
+ * Mapping from emoji shortcuts to Lucide icon components
  */
-export const LUCIDE_ICON_MAP: Record<string, LucideIcon> = {
-  // Direct Lucide names
-  CheckCircle2,
-  Zap,
-  Wrench,
-  RotateCcw,
-  ShieldCheck,
-  Truck,
-  Clock,
-  Headphones,
-  Award,
-  Star,
-  Sparkles,
-  PackageCheck,
-
-  // Emoji shortcuts to Lucide icons
+export const EMOJI_ICON_MAP: Record<string, LucideIcon> = {
   '✅': CheckCircle2,
   '⚡': Zap,
   '🔧': Wrench,
@@ -101,30 +142,78 @@ export const LUCIDE_ICON_MAP: Record<string, LucideIcon> = {
   '⭐': Star,
   '✨': Sparkles,
   '📦': PackageCheck,
+  '🔥': Flame,
+  '🎁': Gift,
+  '🖥️': Monitor,
+  '💻': Laptop,
+  '⌨️': Keyboard,
+  '🖱️': Mouse,
+  '🎮': Gamepad2,
 }
 
 /**
- * Resolve an icon string (Lucide name or emoji) to a LucideIcon.
- * If not found in map, falls back to CheckCircle2 or matches case-insensitively.
+ * Helper to convert kebab-case, snake_case or regular text into PascalCase.
+ * Examples: "shield-check" -> "ShieldCheck", "cpu" -> "Cpu", "gamepad-2" -> "Gamepad2"
+ */
+export const toPascalCase = (str: string): string => {
+  return str
+    .trim()
+    .replace(/[-_ ]+([a-zA-Z0-9])/g, (_, char) => char.toUpperCase())
+    .replace(/^[a-z]/, (char) => char.toUpperCase())
+}
+
+/**
+ * Check if an icon name exists in the full Lucide React library.
+ * Returns the resolved canonical name and component if valid, or null otherwise.
+ */
+export const getLucideIconIfValid = (
+  iconInput: string
+): { name: string; icon: LucideIcon } | null => {
+  const trimmed = iconInput.trim()
+  if (!trimmed) return null
+
+  // 1. Check emoji
+  if (EMOJI_ICON_MAP[trimmed]) {
+    const foundPreset = TRUST_BADGE_PRESET_ICONS.find((p) => p.emojiEquivalent === trimmed)
+    return {
+      name: foundPreset ? foundPreset.key : trimmed,
+      icon: EMOJI_ICON_MAP[trimmed],
+    }
+  }
+
+  const iconRegistry = icons as unknown as Record<string, LucideIcon | undefined>
+
+  // 2. Direct PascalCase lookup
+  const pascalName = toPascalCase(trimmed)
+  if (iconRegistry[pascalName]) {
+    return { name: pascalName, icon: iconRegistry[pascalName]! }
+  }
+
+  // 3. Exact raw lookup
+  if (iconRegistry[trimmed]) {
+    return { name: trimmed, icon: iconRegistry[trimmed]! }
+  }
+
+  // 4. Case-insensitive lookup across all Lucide icons
+  const cleanLower = trimmed.toLowerCase().replace(/[-_ ]/g, '')
+  const foundKey = Object.keys(icons).find(
+    (key) => key.toLowerCase().replace(/[-_ ]/g, '') === cleanLower
+  )
+  if (foundKey && iconRegistry[foundKey]) {
+    return { name: foundKey, icon: iconRegistry[foundKey]! }
+  }
+
+  return null
+}
+
+/**
+ * Resolve an icon string (Lucide name, kebab-case, or emoji) to a LucideIcon.
+ * If not found in the full Lucide library, safely falls back to CheckCircle2.
  */
 export const resolveLucideIcon = (iconInput: string): LucideIcon => {
-  const trimmed = iconInput.trim()
-  if (!trimmed) {
-    return CheckCircle2
-  }
-
-  // Exact match
-  if (LUCIDE_ICON_MAP[trimmed]) {
-    return LUCIDE_ICON_MAP[trimmed]
-  }
-
-  // Case-insensitive match for Lucide names
-  const lower = trimmed.toLowerCase()
-  const foundKey = Object.keys(LUCIDE_ICON_MAP).find(
-    (k) => k.toLowerCase() === lower
-  )
-  if (foundKey) {
-    return LUCIDE_ICON_MAP[foundKey]
+  const matched = getLucideIconIfValid(iconInput)
+  if (matched) {
+    return matched.icon
   }
 
   return CheckCircle2

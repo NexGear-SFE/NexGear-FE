@@ -45,18 +45,46 @@ export const BannerTable: React.FC<BannerTableProps> = ({
     setDraggedIndex(null)
   }
 
+  const handleMoveUp = (index: number) => {
+    if (index <= 0) return
+    const updated = [...banners]
+    const temp = updated[index]
+    updated[index] = updated[index - 1]
+    updated[index - 1] = temp
+
+    const reindexed = updated.map((item, idx) => ({
+      ...item,
+      order: idx + 1,
+    }))
+    onReorderBanners(reindexed)
+  }
+
+  const handleMoveDown = (index: number) => {
+    if (index >= banners.length - 1) return
+    const updated = [...banners]
+    const temp = updated[index]
+    updated[index] = updated[index + 1]
+    updated[index + 1] = temp
+
+    const reindexed = updated.map((item, idx) => ({
+      ...item,
+      order: idx + 1,
+    }))
+    onReorderBanners(reindexed)
+  }
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-left border-collapse min-w-[700px]">
         <thead>
           <tr className="bg-gray-50/75 text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100">
-            <th scope="col" className="py-3 px-4 font-semibold w-[42%]">
+            <th scope="col" className="py-3 px-4 font-semibold w-[40%]">
               TIÊU ĐỀ BANNER
             </th>
             <th scope="col" className="py-3 px-4 font-semibold w-[18%]">
               GIÁ NỔI BẬT
             </th>
-            <th scope="col" className="py-3 px-4 font-semibold w-[10%]">
+            <th scope="col" className="py-3 px-4 font-semibold w-[12%]">
               THỨ TỰ
             </th>
             <th scope="col" className="py-3 px-4 font-semibold w-[12%]">
@@ -80,6 +108,10 @@ export const BannerTable: React.FC<BannerTableProps> = ({
                 onDragStart={handleDragStart}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
+                onMoveUp={() => handleMoveUp(index)}
+                onMoveDown={() => handleMoveDown(index)}
+                isFirst={index === 0}
+                isLast={index === banners.length - 1}
               />
             ))
           ) : (
