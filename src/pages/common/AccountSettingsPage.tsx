@@ -1,10 +1,7 @@
-import { useNavigate } from 'react-router-dom';
-import { SharedAccountSettings } from '@/components/common/SharedAccountSettings';
-import type { UserProfile } from '@/types/customer/account.type';
-
-interface AccountSettingsPageProps {
-  onBack?: () => void;
-}
+import { useNavigate } from 'react-router-dom'
+import { SharedAccountSettings } from '@/components/common/SharedAccountSettings'
+import type { UserProfile } from '@/types/customer/account.type'
+import type { AccountSettingsPageProps } from '@/types/common/accountSettings.type'
 
 export const AccountSettingsPage = ({ onBack }: AccountSettingsPageProps) => {
   const navigate = useNavigate();

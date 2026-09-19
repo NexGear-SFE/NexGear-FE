@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { BlogPost, BlogStatus } from '@/types/admin/blog.type'
+import type { BlogEditorPageProps } from '@/types/admin/blogEditor.type'
 import { BLOG_STATUS } from '@/constants/blog'
 import {
   ArrowLeft,
@@ -21,13 +21,6 @@ import {
   Check,
   Save,
 } from 'lucide-react'
-
-interface BlogEditorPageProps {
-  mode: 'create' | 'edit'
-  initialPost?: BlogPost | null
-  onSave: (postData: Partial<BlogPost>, status: BlogStatus) => void
-  onCancel: () => void
-}
 
 // Tiện ích tạo chuỗi slug từ tiêu đề
 const slugify = (text: string) => {

@@ -17,15 +17,9 @@ import { AccountDropdown } from '@/components/common/AccountDropdown'
 import { SidebarUserWidget } from '@/components/common/SidebarUserWidget'
 import { QuickLoginModal } from '@/components/auth/QuickLoginModal'
 import type { BlogPost } from '@/types/admin/blog.type'
+import type { ViewMode, AdminLayoutContext } from '@/types/admin/layout.type'
 
-export type ViewMode = 'list' | 'create' | 'edit' | 'settings'
-
-export interface AdminLayoutContext {
-  viewMode: ViewMode
-  setViewMode: (mode: ViewMode) => void
-  editingPost: BlogPost | null
-  setEditingPost: (post: BlogPost | null) => void
-}
+export type { ViewMode, AdminLayoutContext }
 
 export const AdminLayout = () => {
   const location = useLocation()

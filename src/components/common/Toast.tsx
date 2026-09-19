@@ -1,17 +1,7 @@
 import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react'
+import type { ToastType, ToastMessage, ToastItemProps } from '@/types/common/toast.type'
 
-export type ToastType = 'success' | 'error' | 'info'
-
-export interface ToastMessage {
-  id: string
-  type: ToastType
-  message: string
-}
-
-interface ToastItemProps {
-  toast: ToastMessage
-  onClose: (id: string) => void
-}
+export type { ToastType, ToastMessage, ToastItemProps }
 
 export const ToastItem = ({ toast, onClose }: ToastItemProps) => {
   const getIcon = () => {
