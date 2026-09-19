@@ -1,6 +1,7 @@
 import React from 'react'
 import type { CompanySocialSectionProps } from '@/types/admin/footerConfig.type'
 import { FOOTER_FIELD_PLACEHOLDERS } from '@/constants/footerConfigConstants'
+import { FacebookIcon, InstagramIcon, TikTokIcon, YoutubeIcon } from '@/assets/icons'
 
 export const CompanySocialSection: React.FC<CompanySocialSectionProps> = ({
   company,
@@ -80,10 +81,10 @@ export const CompanySocialSection: React.FC<CompanySocialSectionProps> = ({
             {/* Facebook */}
             <div className="flex items-center gap-2.5">
               <div
-                className="w-7 h-7 rounded-md bg-[#1877F2] text-white font-bold text-xs flex items-center justify-center shrink-0 select-none shadow-xs"
+                className="w-7 h-7 rounded-md bg-[#1877F2] text-white flex items-center justify-center shrink-0 select-none shadow-xs"
                 title="Facebook"
               >
-                F
+                <FacebookIcon className="w-3.5 h-3.5 fill-current" />
               </div>
               <div className="flex-1">
                 <input
@@ -104,10 +105,10 @@ export const CompanySocialSection: React.FC<CompanySocialSectionProps> = ({
             {/* Instagram */}
             <div className="flex items-center gap-2.5">
               <div
-                className="w-7 h-7 rounded-md bg-[#E1306C] text-white font-bold text-[11px] flex items-center justify-center shrink-0 select-none shadow-xs"
+                className="w-7 h-7 rounded-md bg-[#E1306C] text-white flex items-center justify-center shrink-0 select-none shadow-xs"
                 title="Instagram"
               >
-                IG
+                <InstagramIcon className="w-3.5 h-3.5" />
               </div>
               <div className="flex-1">
                 <input
@@ -128,10 +129,10 @@ export const CompanySocialSection: React.FC<CompanySocialSectionProps> = ({
             {/* YouTube */}
             <div className="flex items-center gap-2.5">
               <div
-                className="w-7 h-7 rounded-md bg-[#FF0000] text-white font-bold text-[11px] flex items-center justify-center shrink-0 select-none shadow-xs"
+                className="w-7 h-7 rounded-md bg-[#FF0000] text-white flex items-center justify-center shrink-0 select-none shadow-xs"
                 title="YouTube"
               >
-                YT
+                <YoutubeIcon className="w-3.5 h-3.5 fill-current" />
               </div>
               <div className="flex-1">
                 <input
@@ -152,10 +153,10 @@ export const CompanySocialSection: React.FC<CompanySocialSectionProps> = ({
             {/* TikTok */}
             <div className="flex items-center gap-2.5">
               <div
-                className="w-7 h-7 rounded-md bg-[#000000] text-white font-bold text-[11px] flex items-center justify-center shrink-0 select-none shadow-xs"
+                className="w-7 h-7 rounded-md bg-[#000000] text-white flex items-center justify-center shrink-0 select-none shadow-xs"
                 title="TikTok"
               >
-                TT
+                <TikTokIcon className="w-3.5 h-3.5 fill-current" />
               </div>
               <div className="flex-1">
                 <input
