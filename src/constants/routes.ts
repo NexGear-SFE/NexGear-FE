@@ -35,6 +35,13 @@ export const ROUTES = {
      CONTACT: '/storemanager/contact',
      BLOGS: '/storemanager/blogs',
      SETTINGS: '/storemanager/settings',
+     SUB_PATHS: {
+       HOME_CONTENT: 'home-content',
+       HOME_CONFIG: 'home-config',
+       DASHBOARD: 'dashboard',
+       BLOGS: 'blogs',
+       SETTINGS: 'settings',
+     },
    },
  
    // Đường dẫn Nhân viên kỹ thuật
@@ -43,5 +50,9 @@ export const ROUTES = {
      DASHBOARD: '/tech-staff',
      SERIAL: '/tech-staff/serial',
      SETTINGS: '/tech-staff/settings',
+     SUB_PATHS: {
+       SERIAL: 'serial',
+       SETTINGS: 'settings',
+     },
    },
  } as const

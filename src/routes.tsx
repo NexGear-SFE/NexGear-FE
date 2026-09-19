@@ -102,23 +102,23 @@ export const router = createBrowserRouter([
         element: <Navigate to={ROUTES.STORE_MANAGER.HOME_CONTENT} replace />,
       },
       {
-        path: 'home-content',
+        path: ROUTES.STORE_MANAGER.SUB_PATHS.HOME_CONTENT,
         element: <HomePageConfig />,
       },
       {
-        path: 'home-config',
+        path: ROUTES.STORE_MANAGER.SUB_PATHS.HOME_CONFIG,
         element: <HomePageConfig />,
       },
       {
-        path: 'dashboard',
+        path: ROUTES.STORE_MANAGER.SUB_PATHS.DASHBOARD,
         element: <Navigate to={ROUTES.STORE_MANAGER.HOME_CONTENT} replace />,
       },
       {
-        path: 'blogs',
+        path: ROUTES.STORE_MANAGER.SUB_PATHS.BLOGS,
         element: <BlogManagementPage />,
       },
       {
-        path: 'settings',
+        path: ROUTES.STORE_MANAGER.SUB_PATHS.SETTINGS,
         element: <AccountSettingsPage />,
       },
     ],
@@ -136,11 +136,11 @@ export const router = createBrowserRouter([
         element: <TechStaffDashboard />,
       },
       {
-        path: 'serial',
+        path: ROUTES.TECH_STAFF.SUB_PATHS.SERIAL,
         element: <SerialCheck />,
       },
       {
-        path: 'settings',
+        path: ROUTES.TECH_STAFF.SUB_PATHS.SETTINGS,
         element: <Settings />,
       },
     ],
