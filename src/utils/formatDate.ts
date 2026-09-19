@@ -32,3 +32,24 @@ export function formatDate(dateInput?: string | Date | null): string {
 
   return `${day}/${month}/${year}`
 }
+
+/**
+ * Formats a date string or Date object into 'dd/mm/yyyy HH:MM' format.
+ */
+export function formatDateTime(dateInput?: string | Date | null): string {
+  const dateObj = dateInput ? (typeof dateInput === 'string' ? new Date(dateInput) : dateInput) : new Date()
+  const validDate = isNaN(dateObj.getTime()) ? new Date() : dateObj
+
+  const dateStr = formatDate(validDate)
+  const hours = String(validDate.getHours()).padStart(2, '0')
+  const minutes = String(validDate.getMinutes()).padStart(2, '0')
+
+  return `${dateStr} ${hours}:${minutes}`
+}
+
+/**
+ * Returns today's date formatted as 'dd/mm/yyyy'.
+ */
+export function getTodayFormattedDate(): string {
+  return formatDate(new Date())
+}

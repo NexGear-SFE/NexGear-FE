@@ -1,13 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, Package, ChevronRight } from 'lucide-react'
-import type { Order } from '@/types/order.type'
+import type { MyOrdersTabProps } from '@/types/order.type'
 import { ORDER_STATUS_FILTERS, type OrderFilterStatus } from '@/constants/customerAccount.constant'
 import { formatCurrency } from '@/utils/formatCurrency'
-
-interface MyOrdersTabProps {
-  orders: Order[]
-}
+import { OrderStatusBadge } from '@/components/customer/Order/OrderStatusBadge'
 
 export function MyOrdersTab({ orders }: MyOrdersTabProps) {
   const [orderFilter, setOrderFilter] = useState<OrderFilterStatus>('all')
@@ -38,49 +35,6 @@ export function MyOrdersTab({ orders }: MyOrdersTabProps) {
 
     return true
   })
-
-  const renderStatusBadge = (status: string) => {
-    switch (status) {
-      case 'delivered':
-        return (
-          <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs">
-            Đã giao
-          </span>
-        )
-      case 'shipping':
-        return (
-          <span className="bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs">
-            Đang giao
-          </span>
-        )
-      case 'pending':
-      case 'confirmed':
-      case 'processing':
-        return (
-          <span className="bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs">
-            Đang xử lý
-          </span>
-        )
-      case 'cancelled':
-        return (
-          <span className="bg-red-50 text-red-700 border border-red-200 text-xs font-bold px-3 py-1 rounded-[4px] shadow-xs">
-            Đã hủy
-          </span>
-        )
-      case 'returned':
-        return (
-          <span className="bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold px-3 py-1 rounded-[4px]">
-            Trả hàng
-          </span>
-        )
-      default:
-        return (
-          <span className="bg-gray-100 text-gray-700 text-xs font-bold px-3 py-1 rounded-[4px]">
-            {status}
-          </span>
-        )
-    }
-  }
 
   return (
     <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 md:p-8 space-y-6 shadow-xs font-body">
@@ -177,7 +131,7 @@ export function MyOrdersTab({ orders }: MyOrdersTabProps) {
 
                 {/* Right: Status Badge & View Detail Button */}
                 <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
-                  {renderStatusBadge(order.status)}
+                  <OrderStatusBadge status={order.status} label={order.statusLabel} />
 
                   <Link
                     to={`/account/orders/${order.id}`}

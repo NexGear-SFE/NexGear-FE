@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { X, Check, ShieldCheck, Upload, ArrowRight, ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react'
 import { MOCK_ELIGIBLE_WARRANTY_PRODUCTS } from '@/mocks/customer/warranty.mock'
 import type { WarrantyEligibleProduct, CustomerWarrantyRequest, CreateWarrantyModalProps } from '@/types/customerWarranty.type'
-import { formatDate } from '@/utils/formatDate'
+import { formatDate, formatDateTime, getTodayFormattedDate } from '@/utils/formatDate'
 
 export function CreateWarrantyModal({ isOpen, onClose, onSubmitSuccess }: CreateWarrantyModalProps) {
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1)
@@ -66,12 +66,12 @@ export function CreateWarrantyModal({ isOpen, onClose, onSubmitSuccess }: Create
       images: uploadedFiles.length > 0 ? uploadedFiles : [selectedProduct.image],
       status: 'pending',
       statusLabel: 'Chờ tiếp nhận',
-      createdAt: new Date().toLocaleDateString('vi-VN'),
+      createdAt: getTodayFormattedDate(),
       expectedCompletionDate: 'Đang cập nhật...',
       timeline: [
         {
           title: 'Chờ tiếp nhận',
-          timestamp: `${new Date().toLocaleDateString('vi-VN')} ${new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}`,
+          timestamp: formatDateTime(),
           completed: true,
           current: true,
         },

@@ -28,6 +28,7 @@ import { NotFoundPage } from '@/pages/common/NotFoundPage';
 
 // Admin / Store Manager Pages
 import { BlogManagementPage } from '@/pages/admin/BlogManagementPage';
+import { HomePageConfig } from '@/pages/admin/HomePageConfig';
 
 // Tech Staff Pages
 import { TechStaffDashboard } from '@/pages/techstaff/Dashboard';
@@ -98,7 +99,19 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to={ROUTES.STORE_MANAGER.BLOGS} replace />,
+        element: <Navigate to="/storemanager/home-content" replace />,
+      },
+      {
+        path: 'home-content',
+        element: <HomePageConfig />,
+      },
+      {
+        path: 'home-config',
+        element: <HomePageConfig />,
+      },
+      {
+        path: 'dashboard',
+        element: <Navigate to="/storemanager/home-content" replace />,
       },
       {
         path: 'blogs',

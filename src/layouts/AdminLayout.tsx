@@ -34,6 +34,9 @@ export const AdminLayout = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const isSettingsPage = location.pathname.startsWith('/storemanager/settings')
+  const isHomeContentPage =
+    location.pathname.startsWith('/storemanager/home-content') ||
+    location.pathname.startsWith('/storemanager/dashboard')
 
   const handleOpenSettings = () => {
     navigate('/storemanager/settings')
@@ -45,7 +48,7 @@ export const AdminLayout = () => {
   }
 
   const navItems = [
-    { label: 'Trang chủ & Banner', path: '/storemanager/dashboard', icon: LayoutDashboard },
+    { label: 'Trang chủ & Banner', path: '/storemanager/home-content', icon: LayoutDashboard },
     { label: 'Danh mục & Hãng', path: '/storemanager/categories', icon: Layers },
     { label: 'Quản lý Sản phẩm', path: '/storemanager/products', icon: Package },
     { label: 'Liên hệ & Chat Widget', path: '/storemanager/contact', icon: MessageSquare },
@@ -53,7 +56,6 @@ export const AdminLayout = () => {
       label: 'Tin tức & Blog',
       path: '/storemanager/blogs',
       icon: Newspaper,
-      isActive: true,
       onClick: handleNavigateToBlogs,
     },
   ]
@@ -87,8 +89,7 @@ export const AdminLayout = () => {
               {navItems.map((item) => {
                 const Icon = item.icon
                 const active =
-                  !isSettingsPage &&
-                  (item.isActive || location.pathname.startsWith(item.path))
+                  !isSettingsPage && location.pathname.startsWith(item.path)
 
                 return (
                   <Link
@@ -131,6 +132,10 @@ export const AdminLayout = () => {
               {isSettingsPage ? (
                 <span className="text-[#040004] font-semibold">
                   Cài đặt tài khoản
+                </span>
+              ) : isHomeContentPage ? (
+                <span className="text-[#040004] font-semibold">
+                  Quản lý Trang chủ
                 </span>
               ) : (
                 <>

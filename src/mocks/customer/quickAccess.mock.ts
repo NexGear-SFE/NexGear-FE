@@ -1,11 +1,5 @@
 import { Monitor, Gamepad2, Tv, Keyboard, Mouse, Headphones, Armchair, HardDrive } from 'lucide-react'
-
-export interface QuickCategoryItem {
-  id: string
-  title: string
-  icon: typeof Monitor
-  targetId: string
-}
+import type { QuickCategoryItem } from '@/types/home.type'
 
 export const quickCategories: QuickCategoryItem[] = [
   { id: 'pc-gaming', title: 'PC Gaming', icon: Monitor, targetId: 'pc-banchay' },

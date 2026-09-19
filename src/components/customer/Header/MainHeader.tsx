@@ -5,7 +5,8 @@ import logoImg from '@/assets/images/Avatar.jpg'
 import { useCartCount, cartStore } from '@/stores/cartStore'
 import { useAuth } from '@/hooks/useAuth'
 import { AccountDropdown } from '@/components/common/AccountDropdown'
-import { CATEGORIES_DATA, type CategoryItem } from '@/mocks/customer/category.mock'
+import { CATEGORIES_DATA } from '@/mocks/customer/category.mock'
+import type { CategoryItem, SubcategoryGroup } from '@/types/category.type'
 
 export const MainHeader = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -234,13 +235,13 @@ export const MainHeader = () => {
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                  {hoveredCategory.subgroups?.map((group, gIdx) => (
+                  {hoveredCategory.subgroups?.map((group: SubcategoryGroup, gIdx: number) => (
                     <div key={gIdx} className="space-y-2.5">
                       <h4 className="font-bold text-xs text-slate-900 border-b border-gray-100 pb-1.5 font-heading">
                         {group.title}
                       </h4>
                       <ul className="space-y-1.5">
-                        {group.items.map((item, iIdx) => (
+                        {group.items.map((item: string, iIdx: number) => (
                           <li key={iIdx}>
                             <button
                               type="button"

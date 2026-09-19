@@ -37,13 +37,17 @@ export function QuickLoginModal({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isLoginModalOpen, closeLoginModal, onClose]);
 
-  // Prevent background scrolling
+  // Prevent background scrolling only when modal is open
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, []);
+    if (isLoginModalOpen && !isAuthenticated) {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = 'unset';
+      };
+    }
+    document.body.style.overflow = 'unset';
+  }, [isLoginModalOpen, isAuthenticated]);
+
 
   if (!isLoginModalOpen || isAuthenticated) return null;
 

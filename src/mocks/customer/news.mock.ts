@@ -1,11 +1,4 @@
-export interface ArticleItem {
-  id: string
-  title: string
-  badge: string
-  badgeColor: string
-  readTime: string
-  image: string
-}
+import type { ArticleItem } from '@/types/news.type'
 
 export const articles: ArticleItem[] = [
   {

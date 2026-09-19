@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react'
 import { Outlet, useLocation, ScrollRestoration } from 'react-router-dom'
 import { Header } from '@/components/customer/Header/Header'
