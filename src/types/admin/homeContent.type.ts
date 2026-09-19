@@ -52,7 +52,7 @@ export interface BannerModalProps {
 export interface BannerFormBodyProps {
   formData: BannerFormData
   errors: Record<string, string>
-  onChangeField: (field: keyof BannerFormData, value: any) => void
+  onChangeField: (field: keyof BannerFormData, value: BannerFormData[keyof BannerFormData]) => void
   onClose: () => void
   onSave: (data: BannerFormData) => void
   isEditing: boolean

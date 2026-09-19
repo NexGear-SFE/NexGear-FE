@@ -32,7 +32,7 @@ export interface BadgeTheme {
 
 export interface TabNavigationProps {
   activeTab: HomeConfigTabId | string
-  onTabChange: (tabId: any) => void
+  onTabChange: (tabId: HomeConfigTabId) => void
 }
 
 export interface TrustBadgeFormProps {

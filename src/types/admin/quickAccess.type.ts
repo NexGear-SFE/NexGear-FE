@@ -13,7 +13,7 @@ export interface QuickAccessModalProps {
 export interface QuickAccessFormBodyProps {
   formData: QuickAccessFormData
   errors: Record<string, string>
-  onChangeField: (field: keyof QuickAccessFormData, value: any) => void
+  onChangeField: (field: keyof QuickAccessFormData, value: QuickAccessFormData[keyof QuickAccessFormData]) => void
   onClose: () => void
   onSave: (data: QuickAccessFormData) => void
   isEditing: boolean
