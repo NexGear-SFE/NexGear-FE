@@ -1,12 +1,6 @@
 import { useState } from 'react'
 import { Minus, Plus, ShoppingCart } from 'lucide-react'
-
-interface ProductPurchaseActionsProps {
-  inStock: boolean
-  maxStock: number
-  onAddToCart: (quantity: number) => void
-  onBuyNow: (quantity: number) => void
-}
+import type { ProductPurchaseActionsProps } from '@/types/product.type'
 
 export function ProductPurchaseActions({
   inStock,

@@ -1,9 +1,5 @@
 import { ShieldCheck, RotateCcw, Truck, Headphones } from 'lucide-react'
-import type { ProductHighlight } from '@/types/product.type'
-
-interface ProductHighlightsProps {
-  highlights: ProductHighlight[]
-}
+import type { ProductHighlightsProps } from '@/types/product.type'
 
 export function ProductHighlights({ highlights }: ProductHighlightsProps) {
   if (!highlights || highlights.length === 0) return null

@@ -95,3 +95,56 @@ export interface ProductDetail {
   reviews: ProductReview[]
 }
 
+export interface ProductCardProps {
+  product: Product
+  onAddToCart?: (product: Product) => void
+  className?: string
+}
+
+export interface ProductInfoProps {
+  product: Product
+  detail: ProductDetail
+  currentPrice?: number
+  currentSku?: string
+  currentStock?: number
+}
+
+export interface ProductImageGalleryProps {
+  images: ProductImage[]
+  productName: string
+}
+
+export interface ProductDescriptionProps {
+  sections: ProductDescriptionSection[]
+}
+
+export interface ProductSpecificationsProps {
+  groups: ProductSpecificationGroup[]
+}
+
+export interface ProductReviewSummaryProps {
+  summary: ProductRatingSummary
+}
+
+export interface ProductReviewListProps {
+  reviews: ProductReview[]
+}
+
+export interface ProductPurchaseActionsProps {
+  inStock: boolean
+  maxStock: number
+  onAddToCart: (quantity: number) => void
+  onBuyNow: (quantity: number) => void
+}
+
+export interface ProductVariantSelectorProps {
+  variantGroups: ProductVariantGroup[]
+  selectedOptions: Record<string, ProductVariantOption>
+  onSelectOption: (groupId: string, option: ProductVariantOption) => void
+}
+
+export interface ProductHighlightsProps {
+  highlights: ProductHighlight[]
+}
+
+

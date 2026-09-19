@@ -1,12 +1,6 @@
 import { CheckCircle2, Clock, Wrench, XCircle, AlertCircle } from 'lucide-react'
-import type { CustomerWarrantyStatus } from '@/types/customerWarranty.type'
+import type { WarrantyStatusBadgeProps } from '@/types/customerWarranty.type'
 import { cn } from '@/utils/cn'
-
-export interface WarrantyStatusBadgeProps {
-  status: CustomerWarrantyStatus | string
-  label?: string
-  className?: string
-}
 
 export function WarrantyStatusBadge({ status, label, className }: WarrantyStatusBadgeProps) {
   switch (status) {

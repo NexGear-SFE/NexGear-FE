@@ -1,17 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Cpu, HardDrive, Monitor, ShoppingCart, ImageOff } from 'lucide-react'
-import type { Product } from '@/types/product.type'
+import type { ProductCardProps } from '@/types/product.type'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/utils/cn'
 import { ROUTES } from '@/constants'
-
-export interface ProductCardProps {
-  product: Product
-  onAddToCart?: (product: Product) => void
-  className?: string
-}
 
 export const ProductCard = ({
   product,

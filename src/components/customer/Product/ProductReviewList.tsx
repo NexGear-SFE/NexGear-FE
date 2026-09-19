@@ -1,10 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Star, MessageSquare, ChevronLeft, ChevronRight } from 'lucide-react'
-import type { ProductReview } from '@/types/product.type'
-
-interface ProductReviewListProps {
-  reviews: ProductReview[]
-}
+import type { ProductReviewListProps } from '@/types/product.type'
 
 const REVIEWS_PER_PAGE = 3
 

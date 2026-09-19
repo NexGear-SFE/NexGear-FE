@@ -1,11 +1,5 @@
 import { Check } from 'lucide-react'
-import type { ProductVariantGroup, ProductVariantOption } from '@/types/product.type'
-
-interface ProductVariantSelectorProps {
-  variantGroups: ProductVariantGroup[]
-  selectedOptions: Record<string, ProductVariantOption>
-  onSelectOption: (groupId: string, option: ProductVariantOption) => void
-}
+import type { ProductVariantSelectorProps } from '@/types/product.type'
 
 export function ProductVariantSelector({
   variantGroups,

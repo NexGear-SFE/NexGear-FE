@@ -1,10 +1,6 @@
 import { useState } from 'react'
 import { FileText, ChevronDown, ChevronUp } from 'lucide-react'
-import type { ProductDescriptionSection } from '@/types/product.type'
-
-interface ProductDescriptionProps {
-  sections: ProductDescriptionSection[]
-}
+import type { ProductDescriptionProps } from '@/types/product.type'
 
 export function ProductDescription({ sections }: ProductDescriptionProps) {
   const [isExpanded, setIsExpanded] = useState(false)

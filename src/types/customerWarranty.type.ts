@@ -72,3 +72,10 @@ export interface WarrantyRequestListProps {
   onOpenCreateModal: () => void
   onSelectRequest: (request: CustomerWarrantyRequest) => void
 }
+
+export interface WarrantyStatusBadgeProps {
+  status: CustomerWarrantyStatus | string
+  label?: string
+  className?: string
+}
+

@@ -1,9 +1,5 @@
 import { Star } from 'lucide-react'
-import type { ProductRatingSummary } from '@/types/product.type'
-
-interface ProductReviewSummaryProps {
-  summary: ProductRatingSummary
-}
+import type { ProductReviewSummaryProps } from '@/types/product.type'
 
 export function ProductReviewSummary({ summary }: ProductReviewSummaryProps) {
   const { average, totalReviews, distribution } = summary

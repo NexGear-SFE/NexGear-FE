@@ -1,9 +1,5 @@
 import { Truck, User, Phone, MapPin } from 'lucide-react'
-import type { ShippingInfo } from '@/types/order.type'
-
-export interface OrderShippingCardProps {
-  shippingInfo: ShippingInfo
-}
+import type { OrderShippingCardProps } from '@/types/order.type'
 
 export function OrderShippingCard({ shippingInfo }: OrderShippingCardProps) {
   return (

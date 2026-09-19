@@ -1,11 +1,5 @@
 import { CheckCircle2, AlertCircle } from 'lucide-react'
-import type { OrderStatus, OrderTimelineStep } from '@/types/order.type'
-
-export interface OrderTimelineProps {
-  status: OrderStatus
-  cancelReason?: string
-  timeline: OrderTimelineStep[]
-}
+import type { OrderTimelineProps } from '@/types/order.type'
 
 export function OrderTimeline({ status, cancelReason, timeline }: OrderTimelineProps) {
   if (status === 'cancelled') {

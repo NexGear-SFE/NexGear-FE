@@ -1,10 +1,6 @@
 import { useState } from 'react'
 import { SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react'
-import type { ProductSpecificationGroup } from '@/types/product.type'
-
-interface ProductSpecificationsProps {
-  groups: ProductSpecificationGroup[]
-}
+import type { ProductSpecificationsProps } from '@/types/product.type'
 
 export function ProductSpecifications({ groups }: ProductSpecificationsProps) {
   const [isExpanded, setIsExpanded] = useState(false)

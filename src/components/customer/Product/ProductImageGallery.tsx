@@ -1,11 +1,6 @@
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight, ImageOff } from 'lucide-react'
-import type { ProductImage } from '@/types/product.type'
-
-interface ProductImageGalleryProps {
-  images: ProductImage[]
-  productName: string
-}
+import type { ProductImageGalleryProps } from '@/types/product.type'
 
 export function ProductImageGallery({ images, productName }: ProductImageGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0)
