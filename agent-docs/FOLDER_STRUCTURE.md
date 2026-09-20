@@ -78,7 +78,7 @@ src/
 
 ### `src/pages/`
 - **Nhiệm vụ:** Màn hình hoàn chỉnh gắn liền với từng đường dẫn (Route).
-- **Cấu trúc:** Mỗi trang có thể tạo thư mục riêng nếu cần tách sub-components chỉ thuộc riêng trang đó (`pages/Home/`, `pages/ProductDetail/`, `pages/Cart/`, `pages/Checkout/`).
+- **Cấu trúc:** Mỗi trang có thể tạo thư mục riêng nếu cần tách sub-components chỉ thuộc riêng trang đó (`pages/home/`, `pages/product/`, `pages/cart/`, `pages/checkout/`).
 - **Nhiệm vụ chính:** Lắp ráp UI components, sử dụng custom hooks, gọi stores/APIs.
 
 ### `src/providers/`

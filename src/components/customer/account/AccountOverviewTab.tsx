@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Package, ShieldCheck, User, ChevronRight } from 'lucide-react'
 import { formatCurrency } from '@/utils/formatCurrency'
-import { OrderStatusBadge } from '@/components/customer/Order/OrderStatusBadge'
+import { OrderStatusBadge } from '@/components/customer/order/OrderStatusBadge'
 import type { AccountOverviewTabProps } from '@/types/customer/account.type'
 
 export function AccountOverviewTab({

@@ -4,14 +4,14 @@ import { ChevronRight, CheckCircle2 } from 'lucide-react'
 import { MOCK_ORDERS } from '@/mocks/customer/order.mock'
 import { orderApi } from '@/apis/order.api'
 
-import { OrderHeader } from '@/components/customer/Order/OrderHeader'
-import { OrderTimeline } from '@/components/customer/Order/OrderTimeline'
-import { OrderItemList } from '@/components/customer/Order/OrderItemList'
-import { OrderShippingCard } from '@/components/customer/Order/OrderShippingCard'
-import { OrderPaymentCard } from '@/components/customer/Order/OrderPaymentCard'
-import { OrderSummaryCard } from '@/components/customer/Order/OrderSummaryCard'
-import { OrderActionsCard } from '@/components/customer/Order/OrderActionsCard'
-import { CancelOrderModal } from '@/components/customer/Order/CancelOrderModal'
+import { OrderHeader } from '@/components/customer/order/OrderHeader'
+import { OrderTimeline } from '@/components/customer/order/OrderTimeline'
+import { OrderItemList } from '@/components/customer/order/OrderItemList'
+import { OrderShippingCard } from '@/components/customer/order/OrderShippingCard'
+import { OrderPaymentCard } from '@/components/customer/order/OrderPaymentCard'
+import { OrderSummaryCard } from '@/components/customer/order/OrderSummaryCard'
+import { OrderActionsCard } from '@/components/customer/order/OrderActionsCard'
+import { CancelOrderModal } from '@/components/customer/order/CancelOrderModal'
 
 export function OrderDetailPage() {
   const { id } = useParams<{ id: string }>()

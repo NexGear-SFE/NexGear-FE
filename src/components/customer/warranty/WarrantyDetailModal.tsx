@@ -1,6 +1,6 @@
 import { X, ShieldCheck, Headphones, CheckCircle2 } from 'lucide-react'
 import type { WarrantyDetailModalProps } from '@/types/customer/customerWarranty.type'
-import { WarrantyStatusBadge } from '@/components/customer/Warranty/WarrantyStatusBadge'
+import { WarrantyStatusBadge } from '@/components/customer/warranty/WarrantyStatusBadge'
 
 export function WarrantyDetailModal({ request, isOpen, onClose }: WarrantyDetailModalProps) {
   if (!isOpen || !request) return null

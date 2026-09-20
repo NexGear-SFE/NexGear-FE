@@ -9,6 +9,7 @@ export const ROUTES = {
    BLOGS: '/blogs',
    BLOG_DETAIL: (id: string = ':id') => `/blogs/${id}`,
    NOT_FOUND: '/404',
+   UNDER_DEVELOPMENT: '/under-development',
  
    // Đường dẫn Xác thực tài khoản
    AUTH: {

@@ -11,12 +11,12 @@ import { TechStaffLayout } from '@/layouts/TechStaffLayout';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 // Trang Khách hàng
-import { HomePage } from '@/pages/customer/Home/HomePage';
-import { ProductDetailPage } from '@/pages/customer/Product/ProductDetailPage';
-import { BlogListPage } from '@/pages/customer/Blog/BlogListPage';
-import { BlogDetailPage } from '@/pages/customer/Blog/BlogDetailPage';
+import { HomePage } from '@/pages/customer/home/HomePage';
+import { ProductDetailPage } from '@/pages/customer/product/ProductDetailPage';
+import { BlogListPage } from '@/pages/customer/blog/BlogListPage';
+import { BlogDetailPage } from '@/pages/customer/blog/BlogDetailPage';
 import { CustomerAccountSettingsPage } from '@/pages/customer/AccountSettingsPage';
-import { OrderDetailPage } from '@/pages/customer/Order/OrderDetailPage';
+import { OrderDetailPage } from '@/pages/customer/order/OrderDetailPage';
 
 // Trang Xác thực
 import { LoginPage } from '@/pages/auth/LoginPage';
@@ -25,6 +25,7 @@ import { RegisterPage } from '@/pages/auth/RegisterPage';
 // Trang Dùng chung
 import { AccountSettingsPage } from '@/pages/common/AccountSettingsPage';
 import { NotFoundPage } from '@/pages/common/NotFoundPage';
+import { UnderDevelopmentPage } from '@/pages/common/UnderDevelopmentPage';
 
 // Trang Quản lý Cửa hàng
 import { BlogManagementPage } from '@/pages/admin/BlogManagementPage';
@@ -147,8 +148,12 @@ export const router = createBrowserRouter([
   },
 
   // ==========================================
-  // 5. ĐƯỜNG DẪN TRANG 404 KHÔNG TÌM THẤY TRANG
+  // 5. ĐƯỜNG DẪN TÍNH NĂNG ĐANG PHÁT TRIỂN & 404
   // ==========================================
+  {
+    path: ROUTES.UNDER_DEVELOPMENT,
+    element: <UnderDevelopmentPage />,
+  },
   {
     path: ROUTES.NOT_FOUND,
     element: <NotFoundPage />,

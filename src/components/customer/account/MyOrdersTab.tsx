@@ -4,7 +4,7 @@ import { Search, Package, ChevronRight } from 'lucide-react'
 import type { MyOrdersTabProps } from '@/types/customer/order.type'
 import { ORDER_STATUS_FILTERS, type OrderFilterStatus } from '@/constants/customerAccount.constant'
 import { formatCurrency } from '@/utils/formatCurrency'
-import { OrderStatusBadge } from '@/components/customer/Order/OrderStatusBadge'
+import { OrderStatusBadge } from '@/components/customer/order/OrderStatusBadge'
 
 export function MyOrdersTab({ orders }: MyOrdersTabProps) {
   const [orderFilter, setOrderFilter] = useState<OrderFilterStatus>('all')

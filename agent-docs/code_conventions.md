@@ -45,6 +45,7 @@
 
 ### Bắt buộc (MUST)
 - **React Components & Files:** MUST dùng **PascalCase** cho tên component và tên file (ví dụ: `ProductCard.tsx`, `CartDrawer.tsx`).
+- **Thư mục (Directories):** Tất cả các tên thư mục nằm trong `src/` MUST dùng chữ viết thường (**lowercase** hoặc **kebab-case** nếu có từ ghép như `home-content`, `footer-config`, `quick-access`). KHÔNG dùng PascalCase hoặc CamelCase cho tên thư mục.
 - **Biến, Hàm, Utils, API files:** MUST dùng **camelCase** (ví dụ: `formatCurrency.ts`, `product.api.ts`, `calculateTotal`).
 - **Custom Hooks:** MUST bắt đầu bằng tiền tố `use` theo chuẩn **camelCase** (ví dụ: `useDebounce.ts`, `useCartStore.ts`).
 - **Sự kiện Handler:** Props nhận callback handler SHOULD có tiền tố `on` (ví dụ: `onClick`, `onSelectCategory`); hàm xử lý sự kiện trong component SHOULD có tiền tố `handle` (ví dụ: `handleClick`, `handleSubmit`).
@@ -54,7 +55,16 @@
 
 ---
 
-## 5. Quy tắc Styling (Tailwind CSS)
+## 5. Quy tắc Định tuyến & Route Constants (Routing Conventions)
+
+### Bắt buộc (MUST)
+- **Khai báo Tập trung:** Tất cả các URL paths toàn ứng dụng MUST được định nghĩa tập trung trong `src/constants/routes.ts` dưới dạng đối tượng `ROUTES`.
+- **Quản lý Sub-paths:** Các tuyến đường con của một nhóm layout (Admin/Store Manager, Tech Staff, Customer Account) MUST khai báo sub-paths tương đối trong `SUB_PATHS` của nhóm đó trong `routes.ts`.
+- **Cấm Magic Strings trong Router:** Bảng định tuyến `src/routes.tsx` KHÔNG ĐƯỢC viết chuỗi cứng trực tiếp cho thuộc tính `path` mà MUST sử dụng hằng số từ `ROUTES` (ví dụ: `path: ROUTES.STORE_MANAGER.SUB_PATHS.HOME_CONTENT`).
+
+---
+
+## 6. Quy tắc Styling (Tailwind CSS)
 
 ### Bắt buộc (MUST)
 - **Utility Classes:** MUST sử dụng Tailwind CSS cho layout, spacing và styling thông thường.
@@ -65,7 +75,7 @@
 
 ---
 
-## 6. Xử lý Lỗi & Trạng thái UI (Error Handling & Loading States)
+## 7. Xử lý Lỗi & Trạng thái UI (Error Handling & Loading States)
 
 ### Bắt buộc (MUST)
 - **Async Error Handling:** Mọi thao tác bất đồng bộ (gọi API) MUST có cơ chế bắt lỗi (`try...catch` hoặc interceptor error handler).
@@ -76,7 +86,7 @@
 
 ---
 
-## 7. Quy trình Kiểm tra Code trước khi Hoàn thành (Working Checklist)
+## 8. Quy trình Kiểm tra Code trước khi Hoàn thành (Working Checklist)
 
 Trước khi coi công việc đã hoàn tất, lập trình viên/AI Agent MUST thực hiện:
 1. Xác định đúng file/folder sở hữu logic theo [`agent-docs/FOLDER_STRUCTURE.md`](./FOLDER_STRUCTURE.md).
@@ -86,3 +96,4 @@ Trước khi coi công việc đã hoàn tất, lập trình viên/AI Agent MUST
    npm run lint
    npm run build
    ```
+
