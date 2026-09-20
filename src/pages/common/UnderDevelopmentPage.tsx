@@ -10,7 +10,7 @@ export function UnderDevelopmentPage({ featureName }: UnderDevelopmentPageProps)
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#F4F5F7] flex flex-col items-center justify-center p-6 text-center select-none font-body">
+    <div className="min-h-[60vh] py-8 sm:py-12 flex flex-col items-center justify-center p-6 text-center select-none font-body">
       <div className="max-w-lg w-full bg-white rounded-2xl p-8 sm:p-12 border border-[#E0E0E0] shadow-xl flex flex-col items-center relative overflow-hidden">
         {/* Top Accent Stripe */}
         <div className="w-full h-2 bg-[#E30019] absolute top-0 left-0 right-0" />

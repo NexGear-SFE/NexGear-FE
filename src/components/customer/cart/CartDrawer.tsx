@@ -1,12 +1,16 @@
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ShoppingCart, X, Minus, Plus, Trash2, ShoppingBag } from 'lucide-react'
 import { useCartState, useCartTotal, useCartCount, cartStore } from '@/stores/cartStore'
 import { formatCurrency } from '@/utils/formatCurrency'
+import { ROUTES } from '@/constants'
 
 export const CartDrawer = () => {
+  const navigate = useNavigate()
   const { items, isDrawerOpen } = useCartState()
   const totalCount = useCartCount()
   const totalPrice = useCartTotal()
+
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -147,7 +151,7 @@ export const CartDrawer = () => {
                 type="button"
                 onClick={() => {
                   cartStore.closeDrawer()
-                  // Navigate to checkout or cart page
+                  navigate(ROUTES.CART)
                 }}
                 className="w-full bg-[#E30019] hover:bg-[#cc0016] text-white font-bold py-3.5 px-4 rounded-[6px] flex items-center justify-center gap-2 shadow-md transition-all text-sm cursor-pointer"
               >

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { ChevronDown, Hammer } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { TECH_STAFF_USER } from '@/mocks/techstaff/staff.mock';
 import type { TechNav } from '@/types/admin/staff.type';
 import {
@@ -49,7 +49,6 @@ const NAV_LABELS: Record<TechNav, string> = {
 export function TechStaffLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [devModalOpen, setDevModalOpen] = useState(false);
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const { user } = useAuth();
 
@@ -79,19 +78,12 @@ export function TechStaffLayout() {
         <nav className="flex-1 py-3 flex flex-col gap-0.5 px-3">
           {NAV_ITEMS.map(({ key, path, label, Icon }) => {
             const isActive = key === activeNav;
-            const isImplemented = ['dashboard', 'serial', 'settings'].includes(key);
             
             return (
               <button
                 key={key}
                 type="button"
-                onClick={() => {
-                  if (isImplemented) {
-                    navigate(path);
-                  } else {
-                    setDevModalOpen(true);
-                  }
-                }}
+                onClick={() => navigate(path)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-md text-body-sm transition-mechanical w-full text-left ${
                   isActive
                     ? 'bg-[var(--error-50)] text-[var(--brand-500)] font-semibold'
@@ -184,35 +176,7 @@ export function TechStaffLayout() {
           <Outlet />
         </div>
       </main>
-
-      {/* ── Feature in Development Modal ── */}
-      {devModalOpen && (
-        <>
-          <div
-            onClick={() => setDevModalOpen(false)}
-            className="fixed inset-0 z-[300] bg-black/65 backdrop-blur-[4px]"
-          />
-          <div className="fixed inset-0 z-[301] flex items-center justify-center p-5 pointer-events-none">
-            <div className="bg-white border border-[var(--surface-400)] rounded-2xl p-8 w-full max-w-[360px] shadow-[0_24px_64px_rgba(0,0,0,0.6)] text-center animate-[fade-in_200ms_ease-out] pointer-events-auto">
-              <div className="w-16 h-16 rounded-2xl bg-[var(--brand-50)] text-[var(--brand-500)] flex items-center justify-center mx-auto mb-5">
-                <Hammer size={32} strokeWidth={1.5} />
-              </div>
-              <h3 className="m-0 mb-2 text-[18px] font-bold text-[var(--text-900)] font-heading">
-                Đang phát triển
-              </h3>
-              <p className="m-0 mb-6 text-[13.5px] text-[var(--text-600)] font-body leading-[1.6]">
-                Tính năng này hiện đang trong giai đoạn phát triển và sẽ sớm được ra mắt trong các phiên bản tiếp theo.
-              </p>
-              <button
-                onClick={() => setDevModalOpen(false)}
-                className="btn-primary w-full"
-              >
-                Đã hiểu
-              </button>
-            </div>
-          </div>
-        </>
-      )}
     </div>
   );
 }
+

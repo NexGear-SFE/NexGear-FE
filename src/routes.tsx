@@ -72,6 +72,14 @@ export const router = createBrowserRouter([
         path: ROUTES.BLOG_DETAIL(),
         element: <BlogDetailPage />,
       },
+      {
+        path: ROUTES.CART,
+        element: <UnderDevelopmentPage featureName="Giỏ hàng & Thanh toán" />,
+      },
+      {
+        path: ROUTES.CHECKOUT,
+        element: <UnderDevelopmentPage featureName="Thanh toán" />,
+      },
     ],
   },
 
@@ -115,6 +123,18 @@ export const router = createBrowserRouter([
         element: <Navigate to={ROUTES.STORE_MANAGER.HOME_CONTENT} replace />,
       },
       {
+        path: ROUTES.STORE_MANAGER.SUB_PATHS.CATEGORIES,
+        element: <UnderDevelopmentPage featureName="Danh mục & Hãng" />,
+      },
+      {
+        path: ROUTES.STORE_MANAGER.SUB_PATHS.PRODUCTS,
+        element: <UnderDevelopmentPage featureName="Quản lý Sản phẩm" />,
+      },
+      {
+        path: ROUTES.STORE_MANAGER.SUB_PATHS.CONTACT,
+        element: <UnderDevelopmentPage featureName="Liên hệ & Chat Widget" />,
+      },
+      {
         path: ROUTES.STORE_MANAGER.SUB_PATHS.BLOGS,
         element: <BlogManagementPage />,
       },
@@ -137,8 +157,20 @@ export const router = createBrowserRouter([
         element: <TechStaffDashboard />,
       },
       {
+        path: ROUTES.TECH_STAFF.SUB_PATHS.WARRANTY,
+        element: <UnderDevelopmentPage featureName="Dịch vụ / Bảo hành" />,
+      },
+      {
         path: ROUTES.TECH_STAFF.SUB_PATHS.SERIAL,
         element: <SerialCheck />,
+      },
+      {
+        path: ROUTES.TECH_STAFF.SUB_PATHS.REPORTS,
+        element: <UnderDevelopmentPage featureName="Báo cáo" />,
+      },
+      {
+        path: ROUTES.TECH_STAFF.SUB_PATHS.HISTORY,
+        element: <UnderDevelopmentPage featureName="Lịch sử" />,
       },
       {
         path: ROUTES.TECH_STAFF.SUB_PATHS.SETTINGS,
@@ -163,3 +195,4 @@ export const router = createBrowserRouter([
     element: <NotFoundPage />,
   },
 ]);
+
