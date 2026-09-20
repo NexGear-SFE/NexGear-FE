@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { X, Upload, Image as ImageIcon, Trash2, Link as LinkIcon, AlertCircle } from 'lucide-react'
-import type { BannerItem, BannerFormData } from '@/types/homeContent.type'
+import type { BannerItem, BannerFormData } from '@/types/admin/homeContent.type'
 import { ToggleSwitch } from './ToggleSwitch'
 
 interface BannerModalProps {

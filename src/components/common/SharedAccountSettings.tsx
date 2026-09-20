@@ -1,13 +1,7 @@
 import { ArrowLeft } from "lucide-react";
-import type { UserProfile } from "@/types/account.type";
 import { ProfileSection } from "@/components/common/ProfileSection";
 import { PasswordSection } from "@/components/common/PasswordSection";
-
-interface SharedAccountSettingsProps {
-  user: UserProfile;
-  onBack?: () => void;
-  pageTitle?: string;
-}
+import type { SharedAccountSettingsProps } from "@/types/common/accountSettings.type";
 
 export function SharedAccountSettings({ user, onBack, pageTitle = "Cài đặt tài khoản" }: SharedAccountSettingsProps) {
   return (

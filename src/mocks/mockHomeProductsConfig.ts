@@ -1,4 +1,4 @@
-import type { HomeProductsConfigData } from '@/types/homeProductsConfig'
+import type { HomeProductsConfigData } from '@/types/admin/homeProductsConfig.type'
 
 export const MOCK_HOME_PRODUCTS_CONFIG: HomeProductsConfigData = {
   syncTime: '03/09/2026 · 06:00',

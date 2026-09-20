@@ -1,16 +1,8 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft, Headphones } from 'lucide-react'
-import type { OrderStatus } from '@/types/order.type'
+import type { OrderHeaderProps } from '@/types/customer/order.type'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { OrderStatusBadge } from './OrderStatusBadge'
-
-export interface OrderHeaderProps {
-  orderCode: string
-  createdAt: string
-  totalAmount: number
-  status: OrderStatus
-  statusLabel?: string
-}
 
 export function OrderHeader({
   orderCode,

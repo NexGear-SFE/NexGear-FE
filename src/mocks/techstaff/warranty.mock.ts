@@ -1,12 +1,4 @@
-export type WarrantyProvider = {
-  id: string;
-  name: string;
-  pageName: string;
-  url: string;
-  active: boolean;
-  color: string;
-  bg: string;
-};
+import type { WarrantyProvider } from '@/types/admin/staff.type';
 
 export const INITIAL_WARRANTY_PROVIDERS: WarrantyProvider[] = [
   {

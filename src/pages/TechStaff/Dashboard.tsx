@@ -1,38 +1,18 @@
-import { useState } from 'react';
-import { KANBAN_COLUMNS, TICKETS } from '@/mocks/techstaff/ticket.mock';
+import { KANBAN_COLUMNS } from '@/mocks/techstaff/ticket.mock';
 import { IcTechSearch } from '@/components/common/Icons';
-import type { KanbanStatus } from '@/types/ticket.type';
 import { KanbanTicketCard } from '@/components/techstaff/KanbanTicketCard';
 import { FileText, Zap, Wrench, MessageSquare, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { useTechStaffDashboard } from '@/hooks/useTechStaffDashboard';
 
 export function TechStaffDashboard() {
-  const [searchQ, setSearchQ] = useState("")
-  const [kpiFilter, setKpiFilter] = useState<string | null>(null)
-
-  const filteredTickets = TICKETS.filter((t) => {
-    const matchSearch =
-      searchQ === "" ||
-      t.device.toLowerCase().includes(searchQ.toLowerCase()) ||
-      t.customer.toLowerCase().includes(searchQ.toLowerCase()) ||
-      t.id.toLowerCase().includes(searchQ.toLowerCase()) ||
-      t.serialNumber.toLowerCase().includes(searchQ.toLowerCase())
-    const matchKpi =
-      kpiFilter === null ||
-      (kpiFilter === "needs_attention" &&
-        (t.slaStatus === "overdue" ||
-          t.slaStatus === "due_today" ||
-          t.status === "needs_inspection" ||
-          t.status === "waiting_customer")) ||
-      (kpiFilter === "in_progress" &&
-        (t.status === "repairing" || t.status === "checking_warranty")) ||
-      (kpiFilter === "waiting_customer" && t.status === "waiting_customer") ||
-      (kpiFilter === "overdue" && t.slaStatus === "overdue") ||
-      (kpiFilter === "completed" && t.status === "completed")
-    return matchSearch && matchKpi
-  })
-
-  const getColumnTickets = (status: KanbanStatus) =>
-    filteredTickets.filter((t) => t.status === status)
+  const {
+    searchQ,
+    setSearchQ,
+    kpiFilter,
+    setKpiFilter,
+    getColumnTickets,
+    kpiCounts,
+  } = useTechStaffDashboard();
 
   return (
     <div className="flex-1 overflow-hidden flex flex-col bg-[#F4F5F7] h-full">
@@ -66,33 +46,11 @@ export function TechStaffDashboard() {
 
         {/* KPI cards — clickable to filter board */}
         {(() => {
-          const needsAttention = TICKETS.filter(
-            (t) =>
-              t.slaStatus === "overdue" ||
-              t.slaStatus === "due_today" ||
-              t.status === "needs_inspection" ||
-              t.status === "waiting_customer",
-          ).length
-          const inProgress = TICKETS.filter(
-            (t) =>
-              t.status === "repairing" ||
-              t.status === "checking_warranty",
-          ).length
-          const waitingCust = TICKETS.filter(
-            (t) => t.status === "waiting_customer",
-          ).length
-          const overdue = TICKETS.filter(
-            (t) => t.slaStatus === "overdue",
-          ).length
-          const completed = TICKETS.filter(
-            (t) => t.status === "completed",
-          ).length
-          
           const kpis = [
             {
               key: null,
               label: "Tổng ticket",
-              value: TICKETS.length,
+              value: kpiCounts.total,
               color: "#1E88E5",
               accent: "rgba(30,136,229,0.08)",
               Icon: FileText,
@@ -101,7 +59,7 @@ export function TechStaffDashboard() {
             {
               key: "needs_attention",
               label: "Cần xử lý",
-              value: needsAttention,
+              value: kpiCounts.needsAttention,
               color: "#FB8C00",
               accent: "rgba(251,140,0,0.10)",
               Icon: Zap,
@@ -110,7 +68,7 @@ export function TechStaffDashboard() {
             {
               key: "in_progress",
               label: "Đang xử lý",
-              value: inProgress,
+              value: kpiCounts.inProgress,
               color: "#8B5CF6",
               accent: "rgba(139,92,246,0.10)",
               Icon: Wrench,
@@ -119,7 +77,7 @@ export function TechStaffDashboard() {
             {
               key: "waiting_customer",
               label: "Chờ khách",
-              value: waitingCust,
+              value: kpiCounts.waitingCustomer,
               color: "#FB8C00",
               accent: "rgba(251,140,0,0.10)",
               Icon: MessageSquare,
@@ -128,7 +86,7 @@ export function TechStaffDashboard() {
             {
               key: "overdue",
               label: "Quá hạn SLA",
-              value: overdue,
+              value: kpiCounts.overdue,
               color: "#E30019",
               accent: "rgba(227,0,25,0.08)",
               Icon: AlertCircle,
@@ -137,7 +95,7 @@ export function TechStaffDashboard() {
             {
               key: "completed",
               label: "Hoàn thành",
-              value: completed,
+              value: kpiCounts.completed,
               color: "#00A859",
               accent: "rgba(0,168,89,0.10)",
               Icon: CheckCircle2,

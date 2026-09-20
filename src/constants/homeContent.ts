@@ -1,4 +1,4 @@
-import type { HomeContentTab } from '@/types/homeContent.type'
+import type { HomeContentTab } from '@/types/admin/homeContent.type'
 import {
   Monitor,
   Laptop,

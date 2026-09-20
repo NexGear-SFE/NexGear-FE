@@ -6,3 +6,13 @@ export interface TechStaffUser {
   role: string;
   avatar: string;
 }
+
+export interface WarrantyProvider {
+  id: string;
+  name: string;
+  pageName: string;
+  url: string;
+  active: boolean;
+  color: string;
+  bg: string;
+}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { TicketCard, SlaStatus } from '@/types/ticket.type';
+import type { TicketCard, SlaStatus } from '@/types/admin/ticket.type';
 import { getSlaLabel } from '@/utils/ticket.util';
 import { Hammer } from 'lucide-react';
 

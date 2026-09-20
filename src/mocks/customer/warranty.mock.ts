@@ -1,4 +1,4 @@
-import type { CustomerWarrantyRequest, WarrantyEligibleProduct } from '@/types/customerWarranty.type'
+import type { CustomerWarrantyRequest, WarrantyEligibleProduct } from '@/types/customer/customerWarranty.type'
 
 export const MOCK_CUSTOMER_WARRANTY_REQUESTS: CustomerWarrantyRequest[] = [
   {

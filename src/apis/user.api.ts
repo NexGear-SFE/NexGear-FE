@@ -1,5 +1,5 @@
-import type { UserProfile } from '@/types/account.type'
-import type { ApiResponse } from '@/types/api.type'
+import type { UserProfile } from '@/types/customer/account.type'
+import type { ApiResponse } from '@/types/common/api.type'
 import { DEFAULT_CUSTOMER_PROFILE } from '@/constants/customerAccount.constant'
 
 export const userApi = {

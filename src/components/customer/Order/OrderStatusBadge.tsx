@@ -1,12 +1,6 @@
 import { CheckCircle2, Clock, Truck, XCircle, AlertCircle, RotateCcw } from 'lucide-react'
-import type { OrderStatus } from '@/types/order.type'
+import type { OrderStatusBadgeProps } from '@/types/customer/order.type'
 import { cn } from '@/utils/cn'
-
-export interface OrderStatusBadgeProps {
-  status: OrderStatus | string
-  label?: string
-  className?: string
-}
 
 export function OrderStatusBadge({ status, label, className }: OrderStatusBadgeProps) {
   switch (status) {

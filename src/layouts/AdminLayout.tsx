@@ -12,19 +12,14 @@ import {
   ChevronDown,
   HelpCircle,
 } from 'lucide-react'
+import { ROUTES } from '@/constants'
 import { AccountDropdown } from '@/components/common/AccountDropdown'
 import { SidebarUserWidget } from '@/components/common/SidebarUserWidget'
-import { QuickLoginModal } from '@/components/Auth/QuickLoginModal'
-import type { BlogPost } from '@/types/blog.type'
+import { QuickLoginModal } from '@/components/auth/QuickLoginModal'
+import type { BlogPost } from '@/types/admin/blog.type'
+import type { ViewMode, AdminLayoutContext } from '@/types/admin/layout.type'
 
-export type ViewMode = 'list' | 'create' | 'edit' | 'settings'
-
-export interface AdminLayoutContext {
-  viewMode: ViewMode
-  setViewMode: (mode: ViewMode) => void
-  editingPost: BlogPost | null
-  setEditingPost: (post: BlogPost | null) => void
-}
+export type { ViewMode, AdminLayoutContext }
 
 export const AdminLayout = () => {
   const location = useLocation()
@@ -33,13 +28,13 @@ export const AdminLayout = () => {
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-  const isSettingsPage = location.pathname.startsWith('/storemanager/settings')
+  const isSettingsPage = location.pathname.startsWith(ROUTES.STORE_MANAGER.SETTINGS)
   const isHomeContentPage =
-    location.pathname.startsWith('/storemanager/home-content') ||
-    location.pathname.startsWith('/storemanager/dashboard')
+    location.pathname.startsWith(ROUTES.STORE_MANAGER.HOME_CONTENT) ||
+    location.pathname.startsWith(ROUTES.STORE_MANAGER.DASHBOARD)
 
   const handleOpenSettings = () => {
-    navigate('/storemanager/settings')
+    navigate(ROUTES.STORE_MANAGER.SETTINGS)
   }
 
   const handleNavigateToBlogs = () => {
@@ -48,13 +43,13 @@ export const AdminLayout = () => {
   }
 
   const navItems = [
-    { label: 'Trang chủ & Banner', path: '/storemanager/home-content', icon: LayoutDashboard },
-    { label: 'Danh mục & Hãng', path: '/storemanager/categories', icon: Layers },
-    { label: 'Quản lý Sản phẩm', path: '/storemanager/products', icon: Package },
-    { label: 'Liên hệ & Chat Widget', path: '/storemanager/contact', icon: MessageSquare },
+    { label: 'Trang chủ & Banner', path: ROUTES.STORE_MANAGER.HOME_CONTENT, icon: LayoutDashboard },
+    { label: 'Danh mục & Hãng', path: ROUTES.STORE_MANAGER.CATEGORIES, icon: Layers },
+    { label: 'Quản lý Sản phẩm', path: ROUTES.STORE_MANAGER.PRODUCTS, icon: Package },
+    { label: 'Liên hệ & Chat Widget', path: ROUTES.STORE_MANAGER.CONTACT, icon: MessageSquare },
     {
       label: 'Tin tức & Blog',
-      path: '/storemanager/blogs',
+      path: ROUTES.STORE_MANAGER.BLOGS,
       icon: Newspaper,
       onClick: handleNavigateToBlogs,
     },
@@ -115,7 +110,7 @@ export const AdminLayout = () => {
           </div>
         </div>
 
-        <SidebarUserWidget settingsPath="/storemanager/settings" />
+        <SidebarUserWidget settingsPath={ROUTES.STORE_MANAGER.SETTINGS} />
       </aside>
 
       {/* Main Container */}
@@ -140,7 +135,7 @@ export const AdminLayout = () => {
               ) : (
                 <>
                   <Link
-                    to="/storemanager/blogs"
+                    to={ROUTES.STORE_MANAGER.BLOGS}
                     onClick={handleNavigateToBlogs}
                     className="text-[#040004] font-semibold hover:underline"
                   >

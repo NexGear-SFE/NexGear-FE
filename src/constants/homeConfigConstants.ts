@@ -1,4 +1,4 @@
-import type { HomeConfigTab, HomeConfigTabId, BadgeTheme } from '@/types/homeConfig'
+import type { HomeConfigTab, HomeConfigTabId, BadgeTheme } from '@/types/admin/homeConfig.type'
 import {
   icons,
   CheckCircle2,

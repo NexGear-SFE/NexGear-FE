@@ -1,15 +1,7 @@
 import { useState } from 'react'
 import { Plus, Search, ShieldCheck, ChevronRight } from 'lucide-react'
-import type { CustomerWarrantyRequest } from '@/types/customerWarranty.type'
+import type { WarrantyRequestListProps, WarrantyFilterStatus } from '@/types/customer/customerWarranty.type'
 import { WarrantyStatusBadge } from '@/components/customer/Warranty/WarrantyStatusBadge'
-
-type WarrantyFilterStatus = 'all' | 'processing' | 'completed' | 'rejected_or_cancelled'
-
-interface WarrantyRequestListProps {
-  requests: CustomerWarrantyRequest[]
-  onOpenCreateModal: () => void
-  onSelectRequest: (request: CustomerWarrantyRequest) => void
-}
 
 export function WarrantyRequestList({ requests, onOpenCreateModal, onSelectRequest }: WarrantyRequestListProps) {
   const [activeFilter, setActiveFilter] = useState<WarrantyFilterStatus>('all')

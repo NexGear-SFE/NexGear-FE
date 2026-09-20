@@ -1,4 +1,4 @@
-import type { KanbanStatus, TicketCard } from '@/types/ticket.type';
+import type { KanbanStatus, TicketCard } from '@/types/admin/ticket.type';
 
 export const KANBAN_COLUMNS: {
   key: KanbanStatus;

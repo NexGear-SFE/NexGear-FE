@@ -3,7 +3,6 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ChevronRight, CheckCircle2 } from 'lucide-react'
 import { MOCK_ORDERS } from '@/mocks/customer/order.mock'
 import { orderApi } from '@/apis/order.api'
-import { cartStore } from '@/stores/cartStore'
 
 import { OrderHeader } from '@/components/customer/Order/OrderHeader'
 import { OrderTimeline } from '@/components/customer/Order/OrderTimeline'
@@ -21,26 +20,13 @@ export function OrderDetailPage() {
   const [cancelReasonInput, setCancelReasonInput] = useState('')
   const [toastMessage, setToastMessage] = useState<string | null>(null)
 
-  // Find order by ID or fallback to first order
+  // Tìm đơn hàng theo ID hoặc mặc định lấy đơn đầu tiên
   const order = MOCK_ORDERS.find((o) => o.id === id || o.orderCode === id) || MOCK_ORDERS[0]
 
   const handleReorder = () => {
-    order.items.forEach((item) => {
-      cartStore.addItem(
-        {
-          id: item.id,
-          name: item.name,
-          slug: item.sku.toLowerCase(),
-          price: item.price,
-          image: item.image,
-          category: 'pc',
-          specs: [],
-          inStock: true,
-        },
-        item.quantity
-      )
-    })
-    cartStore.openDrawer()
+    if (order.items.length === 1) {
+      navigate(`/products/${order.items[0].id}`)
+    }
   }
 
   const showNotification = (msg: string) => {
@@ -115,7 +101,6 @@ export function OrderDetailPage() {
             <OrderSummaryCard
               subtotal={order.subtotal}
               shippingFee={order.shippingFee}
-              discountFee={order.discountFee}
               totalAmount={order.totalAmount}
               itemCount={totalItemCount}
             />
@@ -123,6 +108,7 @@ export function OrderDetailPage() {
             <OrderActionsCard
               status={order.status}
               trackingCode={order.shippingInfo.trackingCode}
+              itemCount={order.items.length}
               onReorder={handleReorder}
               onOpenCancelModal={() => setShowCancelModal(true)}
               onShowNotification={showNotification}

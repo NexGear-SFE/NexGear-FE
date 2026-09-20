@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import type { CategoryToggle, HomeProductsConfigData } from '@/types/homeProductsConfig'
+import type { CategoryToggle, HomeProductsConfigData } from '@/types/admin/homeProductsConfig.type'
 import { MOCK_HOME_PRODUCTS_CONFIG } from '@/mocks/mockHomeProductsConfig'
 import {
   HOME_PRODUCTS_INFO_TEXT,

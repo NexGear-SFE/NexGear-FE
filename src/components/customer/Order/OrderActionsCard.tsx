@@ -1,37 +1,32 @@
 import { RotateCcw, Truck, Headphones } from 'lucide-react'
-import type { OrderStatus } from '@/types/order.type'
-
-export interface OrderActionsCardProps {
-  status: OrderStatus
-  trackingCode?: string
-  onReorder: () => void
-  onOpenCancelModal: () => void
-  onShowNotification: (msg: string) => void
-}
+import type { OrderActionsCardProps } from '@/types/customer/order.type'
 
 export function OrderActionsCard({
   status,
   trackingCode,
+  itemCount,
   onReorder,
   onOpenCancelModal,
   onShowNotification,
 }: OrderActionsCardProps) {
   return (
-    <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-xs space-y-3">
+    <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-xs space-y-3 font-body">
       <h3 className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">
         Thao tác với đơn hàng
       </h3>
 
       {status === 'delivered' && (
         <>
-          <button
-            type="button"
-            onClick={onReorder}
-            className="w-full bg-[#E30019] hover:bg-[#cc0016] text-white font-bold py-3 px-4 rounded-[6px] flex items-center justify-center gap-2 text-xs md:text-sm transition-all shadow-sm cursor-pointer"
-          >
-            <RotateCcw className="w-4 h-4" />
-            <span>Mua lại đơn hàng này</span>
-          </button>
+          {itemCount === 1 && (
+            <button
+              type="button"
+              onClick={onReorder}
+              className="w-full bg-[#E30019] hover:bg-[#cc0016] text-white font-bold py-3 px-4 rounded-[6px] flex items-center justify-center gap-2 text-xs md:text-sm transition-all shadow-sm cursor-pointer"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>Mua lại đơn hàng</span>
+            </button>
+          )}
 
           <button
             type="button"
@@ -64,14 +59,14 @@ export function OrderActionsCard({
         </button>
       )}
 
-      {status === 'cancelled' && (
+      {status === 'cancelled' && itemCount === 1 && (
         <button
           type="button"
           onClick={onReorder}
           className="w-full bg-[#E30019] hover:bg-[#cc0016] text-white font-bold py-3 px-4 rounded-[6px] flex items-center justify-center gap-2 text-xs md:text-sm transition-all shadow-sm cursor-pointer"
         >
           <RotateCcw className="w-4 h-4" />
-          <span>Đặt lại sản phẩm này</span>
+          <span>Mua lại đơn hàng</span>
         </button>
       )}
 

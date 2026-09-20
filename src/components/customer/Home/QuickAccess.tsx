@@ -1,5 +1,5 @@
 import { quickCategories, brandPartners } from '@/mocks/customer/quickAccess.mock'
-import type { QuickCategoryItem } from '@/types/home.type'
+import type { QuickCategoryItem } from '@/types/customer/home.type'
 
 export type { QuickCategoryItem }
 

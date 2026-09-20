@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { ChevronRight } from 'lucide-react'
 import { CATEGORIES_DATA } from '@/mocks/customer/category.mock'
-import type { CategoryItem, SubcategoryGroup } from '@/types/category.type'
+import type { CategoryItem, SubcategoryGroup } from '@/types/customer/category.type'
 
 export type { CategoryItem, SubcategoryGroup }
 

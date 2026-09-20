@@ -6,7 +6,7 @@ import { useCartCount, cartStore } from '@/stores/cartStore'
 import { useAuth } from '@/hooks/useAuth'
 import { AccountDropdown } from '@/components/common/AccountDropdown'
 import { CATEGORIES_DATA } from '@/mocks/customer/category.mock'
-import type { CategoryItem, SubcategoryGroup } from '@/types/category.type'
+import type { CategoryItem, SubcategoryGroup } from '@/types/customer/category.type'
 
 export const MainHeader = () => {
   const [searchQuery, setSearchQuery] = useState('')

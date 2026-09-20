@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { X, ChevronDown, Check, AlertCircle } from 'lucide-react'
-import type { QuickAccessItem, QuickAccessFormData } from '@/types/homeContent.type'
+import type { QuickAccessItem, QuickAccessFormData } from '@/types/admin/homeContent.type'
 import { QUICK_ACCESS_CATEGORY_PRESETS, type CategoryPreset } from '@/constants/homeContent'
 import { QuickAccessIcon } from './QuickAccessIcon'
 

@@ -52,3 +52,30 @@ export interface WarrantyEligibleProduct {
   isEligible: boolean
   ineligibilityReason?: string
 }
+
+export type WarrantyFilterStatus = 'all' | 'processing' | 'completed' | 'rejected_or_cancelled'
+
+export interface CreateWarrantyModalProps {
+  isOpen: boolean
+  onClose: () => void
+  onSubmitSuccess: (newRequest: CustomerWarrantyRequest) => void
+}
+
+export interface WarrantyDetailModalProps {
+  request: CustomerWarrantyRequest | null
+  isOpen: boolean
+  onClose: () => void
+}
+
+export interface WarrantyRequestListProps {
+  requests: CustomerWarrantyRequest[]
+  onOpenCreateModal: () => void
+  onSelectRequest: (request: CustomerWarrantyRequest) => void
+}
+
+export interface WarrantyStatusBadgeProps {
+  status: CustomerWarrantyStatus | string
+  label?: string
+  className?: string
+}
+

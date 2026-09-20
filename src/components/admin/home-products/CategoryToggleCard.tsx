@@ -1,5 +1,5 @@
 import React from 'react'
-import type { CategoryToggle } from '@/types/homeProductsConfig'
+import type { CategoryToggle } from '@/types/admin/homeProductsConfig.type'
 import { CategoryIcon } from '@/constants/homeProductsConstants'
 
 interface CategoryToggleCardProps {

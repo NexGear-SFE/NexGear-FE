@@ -1,10 +1,6 @@
 import { Package } from 'lucide-react'
-import type { OrderItem } from '@/types/order.type'
+import type { OrderItemListProps } from '@/types/customer/order.type'
 import { formatCurrency } from '@/utils/formatCurrency'
-
-export interface OrderItemListProps {
-  items: OrderItem[]
-}
 
 export function OrderItemList({ items }: OrderItemListProps) {
   return (

@@ -16,18 +16,18 @@ import {
 export const RegisterPage = () => {
   const navigate = useNavigate()
 
-  // Form states
+  // State của Form
   const [fullName, setFullName] = useState('')
   const [emailOrPhone, setEmailOrPhone] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [agreeTerms, setAgreeTerms] = useState(false)
 
-  // Toggle password visibility
+  // Chuyển đổi trạng thái ẩn/hiện mật khẩu
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  // Feedback states
+  // State phản hồi người dùng
   const [errorMsg, setErrorMsg] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
 
@@ -35,7 +35,7 @@ export const RegisterPage = () => {
     e.preventDefault()
     setErrorMsg('')
 
-    // Client validation
+    // Kiểm tra hợp lệ phía Client
     if (!fullName.trim()) {
       setErrorMsg('Vui lòng nhập Họ và tên!')
       return
@@ -66,7 +66,7 @@ export const RegisterPage = () => {
       return
     }
 
-    // Simulated registration success
+    // Mô phỏng đăng ký thành công
     setIsSuccess(true)
     setTimeout(() => {
       navigate('/login')

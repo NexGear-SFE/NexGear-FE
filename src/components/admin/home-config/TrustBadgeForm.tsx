@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import type { TrustBadge, TrustBadgeErrors } from '@/types/homeConfig'
+import type { TrustBadge, TrustBadgeErrors } from '@/types/admin/homeConfig.type'
 import { INITIAL_TRUST_BADGES } from '@/mocks/mockHomeConfig'
 import { TrustBadgeItem } from '@/components/admin/home-config/TrustBadgeItem'
 import { useToast } from '@/hooks/useToast'

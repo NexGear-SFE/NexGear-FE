@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Camera, Check, AlertTriangle } from "lucide-react";
-import type { UserProfile } from "@/types/account.type";
+import type { UserProfile } from "@/types/customer/account.type";
 
 interface ProfileSectionProps {
   user: UserProfile;

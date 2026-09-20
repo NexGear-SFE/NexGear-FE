@@ -1,5 +1,5 @@
 import React from 'react'
-import type { ShelfProduct } from '@/types/homeProductsConfig'
+import type { ShelfProduct } from '@/types/admin/homeProductsConfig.type'
 import { formatVND } from '@/constants/homeProductsConstants'
 
 interface ShelfProductTableProps {

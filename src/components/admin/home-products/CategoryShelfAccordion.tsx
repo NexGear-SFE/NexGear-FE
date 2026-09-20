@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import type { CategoryToggle, ShelfProduct } from '@/types/homeProductsConfig'
+import type { CategoryToggle, ShelfProduct } from '@/types/admin/homeProductsConfig.type'
 import { ShelfProductTable } from '@/components/admin/home-products/ShelfProductTable'
 import { CategoryIcon } from '@/constants/homeProductsConstants'
 import { ChevronDown, ChevronUp } from 'lucide-react'

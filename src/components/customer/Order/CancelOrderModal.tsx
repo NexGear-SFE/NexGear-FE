@@ -1,11 +1,4 @@
-export interface CancelOrderModalProps {
-  isOpen: boolean
-  orderCode: string
-  reasonInput: string
-  onChangeReason: (val: string) => void
-  onClose: () => void
-  onConfirmCancel: () => void
-}
+import type { CancelOrderModalProps } from '@/types/customer/order.type'
 
 export function CancelOrderModal({
   isOpen,

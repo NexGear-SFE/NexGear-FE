@@ -1,4 +1,4 @@
-import type { BlogPost } from '@/types/blog.type'
+import type { BlogPost } from '@/types/admin/blog.type'
 import { BlogTableRow } from './BlogTableRow'
 import { Newspaper } from 'lucide-react'
 

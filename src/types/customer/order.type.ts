@@ -67,3 +67,62 @@ export interface Order {
 export interface MyOrdersTabProps {
   orders: Order[]
 }
+
+export interface CancelOrderModalProps {
+  isOpen: boolean
+  orderCode: string
+  reasonInput: string
+  onChangeReason: (val: string) => void
+  onClose: () => void
+  onConfirmCancel: () => void
+}
+
+export interface OrderActionsCardProps {
+  status: OrderStatus
+  trackingCode?: string
+  itemCount: number
+  singleProductId?: string
+  onReorder: () => void
+  onOpenCancelModal: () => void
+  onShowNotification: (msg: string) => void
+}
+
+export interface OrderHeaderProps {
+  orderCode: string
+  createdAt: string
+  totalAmount: number
+  status: OrderStatus
+  statusLabel: string
+}
+
+export interface OrderItemListProps {
+  items: OrderItem[]
+}
+
+export interface OrderPaymentCardProps {
+  paymentInfo: PaymentInfo
+}
+
+export interface OrderShippingCardProps {
+  shippingInfo: ShippingInfo
+}
+
+export interface OrderStatusBadgeProps {
+  status: OrderStatus | string
+  label?: string
+  className?: string
+}
+
+export interface OrderSummaryCardProps {
+  subtotal: number
+  shippingFee: number
+  totalAmount: number
+  itemCount: number
+}
+
+export interface OrderTimelineProps {
+  status: OrderStatus
+  cancelReason?: string
+  timeline: OrderTimelineStep[]
+}
+

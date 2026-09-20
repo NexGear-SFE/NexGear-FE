@@ -1,4 +1,4 @@
-import type { BannerItem, QuickAccessItem } from '@/types/homeContent.type'
+import type { BannerItem, QuickAccessItem } from '@/types/admin/homeContent.type'
 
 export const INITIAL_HERO_BANNERS: BannerItem[] = [
   {

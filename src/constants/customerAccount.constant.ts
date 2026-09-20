@@ -1,4 +1,4 @@
-import type { UserProfile } from '@/types/account.type'
+import type { UserProfile } from '@/types/customer/account.type'
 
 export type CustomerTabKey = 'overview' | 'orders' | 'warranty' | 'profile'
 

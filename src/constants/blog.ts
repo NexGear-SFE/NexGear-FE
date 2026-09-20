@@ -1,4 +1,4 @@
-import type { BlogStatus, BlogFilterStatus } from '@/types/blog.type'
+import type { BlogStatus, BlogFilterStatus } from '@/types/admin/blog.type'
 
 export const BLOG_STATUS = {
   PUBLISHED: 'published',

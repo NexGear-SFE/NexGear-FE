@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, Package, ChevronRight } from 'lucide-react'
-import type { MyOrdersTabProps } from '@/types/order.type'
+import type { MyOrdersTabProps } from '@/types/customer/order.type'
 import { ORDER_STATUS_FILTERS, type OrderFilterStatus } from '@/constants/customerAccount.constant'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { OrderStatusBadge } from '@/components/customer/Order/OrderStatusBadge'
@@ -120,6 +120,10 @@ export function MyOrdersTab({ orders }: MyOrdersTabProps) {
                     </h3>
 
                     <div className="flex items-center gap-2 text-xs text-gray-500 font-mono flex-wrap">
+                      <span className="font-bold text-gray-900 bg-slate-100 px-2 py-0.5 rounded text-[11px] border border-slate-200">
+                        Mã: {order.orderCode}
+                      </span>
+                      <span>·</span>
                       <span>{order.createdAt}</span>
                       <span>·</span>
                       <span className="font-bold text-[#E30019]">

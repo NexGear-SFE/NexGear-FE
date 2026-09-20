@@ -1,4 +1,4 @@
-import type { FooterConfigData } from '@/types/footerConfig'
+import type { FooterConfigData } from '@/types/admin/footerConfig.type'
 import { DEFAULT_FOOTER_CONFIG } from '@/constants/footerConfigConstants'
 
 export const INITIAL_FOOTER_CONFIG: FooterConfigData = {

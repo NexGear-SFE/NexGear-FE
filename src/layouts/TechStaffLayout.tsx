@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, Hammer } from 'lucide-react';
 import { TECH_STAFF_USER } from '@/mocks/techstaff/staff.mock';
-import type { TechNav } from '@/types/staff.type';
+import type { TechNav } from '@/types/admin/staff.type';
 import {
   IcTechMenu,
   IcTechDash,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Plus, Edit2, Trash2, AlertTriangle, Check, ChevronUp, ChevronDown } from 'lucide-react'
-import type { QuickAccessItem, QuickAccessFormData } from '@/types/homeContent.type'
+import type { QuickAccessItem, QuickAccessFormData } from '@/types/admin/homeContent.type'
 import { INITIAL_QUICK_ACCESS_ITEMS } from '@/mocks/storemanager/homeContent.mock'
 import { QuickAccessIcon } from './QuickAccessIcon'
 import { QuickAccessModal } from './QuickAccessModal'
@@ -87,7 +87,7 @@ export const QuickAccessManager: React.FC = () => {
     }
   }
 
-  // Footer Actions: Cancel and Save Changes
+  // Thao tác ở phần châns: Cancel and Save Changes
   const handleCancelChanges = () => {
     setItems(savedBaseline)
   }
