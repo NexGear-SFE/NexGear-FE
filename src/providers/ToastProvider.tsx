@@ -2,7 +2,9 @@ import { useState, useCallback } from 'react'
 import type { ReactNode } from 'react'
 import { ToastItem } from '@/components/common/Toast'
 import type { ToastMessage, ToastType } from '@/components/common/Toast'
-import { ToastContext } from '@/contexts/ToastContext'
+import { ToastContext } from '@/providers/ToastContext'
+
+
 
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
   const [toasts, setToasts] = useState<ToastMessage[]>([])

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Eye, EyeOff, Check, AlertTriangle, X } from "lucide-react";
+import type { ForgotStep } from "@/types/common/auth.type";
 
-type ForgotStep = "email" | "otp" | "reset" | "done";
 
 function PwInput({
   label,

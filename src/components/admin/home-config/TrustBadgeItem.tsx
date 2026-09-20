@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react'
-import type { TrustBadge, TrustBadgeErrors } from '@/types/admin/homeConfig.type'
+import type { TrustBadge, TrustBadgeErrors, IconCategoryFilter } from '@/types/admin/homeConfig.type'
+
 import {
   BADGE_THEMES,
   TRUST_BADGE_PRESET_ICONS,
@@ -33,8 +34,6 @@ const DynamicLucideIcon: React.FC<DynamicLucideIconProps> = ({ icon, className }
   const iconComponent = resolveLucideIcon(icon)
   return React.createElement(iconComponent, { className })
 }
-
-type IconCategoryFilter = 'all' | 'warranty' | 'shipping' | 'tech' | 'service'
 
 export const TrustBadgeItem: React.FC<TrustBadgeItemProps> = ({
   badge,

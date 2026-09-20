@@ -18,14 +18,7 @@ import { SidebarUserWidget } from '@/components/common/SidebarUserWidget';
 import { useAuth } from '@/hooks/useAuth';
 
 // ─── Nav Configuration ────────────────────────────────────────────────────────
-type NavItem = {
-  key: TechNav;
-  path: string;
-  label: string;
-  Icon: React.ComponentType;
-};
-
-const NAV_ITEMS: NavItem[] = [
+const NAV_ITEMS: TechNavItem[] = [
   { key: 'dashboard', path: '/tech-staff', label: 'Bảng điều khiển', Icon: IcTechDash },
   { key: 'warranty', path: '/tech-staff/warranty', label: 'Dịch vụ / Bảo hành', Icon: IcTechWarranty },
   { key: 'serial', path: '/tech-staff/serial', label: 'Kiểm tra Serial', Icon: IcTechSerial },

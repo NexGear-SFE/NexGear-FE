@@ -6,7 +6,11 @@ export type HomeConfigTabId =
   | 'products'
   | 'footer'
 
+export type IconCategoryFilter = 'all' | 'warranty' | 'shipping' | 'tech' | 'service'
+
 export interface HomeConfigTab {
+
+
   id: HomeConfigTabId
   label: string
 }

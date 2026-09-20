@@ -17,9 +17,12 @@ export interface LoginPayload {
   rememberMe?: boolean
 }
 
+export type ForgotStep = 'email' | 'otp' | 'reset' | 'done'
+
 export interface AuthState {
   user: User | null
   token: string | null
   isAuthenticated: boolean
   isLoading: boolean
 }
+
