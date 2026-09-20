@@ -201,7 +201,7 @@
   font-size: 0.875rem;
   transition: background-color 100ms ease-out, transform 100ms ease-out, box-shadow 100ms ease-out;
   display: inline-flex;
-  items-center: center;
+  align-items: center;
   justify-content: center;
   gap: 0.5rem;
   cursor: pointer;
@@ -231,7 +231,7 @@
   font-size: 0.875rem;
   transition: background-color 100ms ease-out, transform 100ms ease-out;
   display: inline-flex;
-  items-center: center;
+  align-items: center;
   justify-content: center;
   gap: 0.5rem;
   cursor: pointer;
@@ -257,7 +257,7 @@
   font-size: 0.875rem;
   transition: border-color 100ms ease-out, color 100ms ease-out, transform 100ms ease-out;
   display: inline-flex;
-  items-center: center;
+  align-items: center;
   justify-content: center;
   gap: 0.5rem;
   cursor: pointer;
@@ -307,4 +307,19 @@
   border-color: var(--error-700);
   background-color: var(--error-50);
   color: var(--error-700);
+}
+
+/* ==========================================================================
+   KEYFRAME ANIMATIONS
+   ========================================================================== */
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
