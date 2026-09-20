@@ -1,5 +1,0 @@
-export * from './product.mock'
-export * from './category.mock'
-export * from './quickAccess.mock'
-export * from './news.mock'
-export * from './trustBadge.mock'
