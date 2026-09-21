@@ -191,7 +191,7 @@ export const TrustBadgeItem: React.FC<TrustBadgeItemProps> = ({
                           { id: 'all', label: 'Tất cả' },
                           { id: 'warranty', label: 'Bảo hành' },
                           { id: 'shipping', label: 'Vận chuyển' },
-                          { id: 'tech', label: 'Tech & Gear' },
+                          { id: 'tech', label: 'Công nghệ' },
                           { id: 'service', label: 'Dịch vụ' },
                         ] as const
                       ).map((cat) => (

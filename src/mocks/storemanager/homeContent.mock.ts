@@ -4,7 +4,7 @@ export const INITIAL_HERO_BANNERS: BannerItem[] = [
   {
     id: 'banner-1',
     title: 'Razer BlackWidow V4 Pro',
-    specs: 'Green Switches · Per-key RGB · Wireless',
+    specs: 'Switch Xanh · Đèn RGB từng phím · Kết nối không dây',
     price: 4490000,
     order: 1,
     isVisible: true,
@@ -12,7 +12,7 @@ export const INITIAL_HERO_BANNERS: BannerItem[] = [
   {
     id: 'banner-2',
     title: 'ASUS ROG Zephyrus G16',
-    specs: 'RTX 4080 · 240Hz OLED · 16" · 14 cores',
+    specs: 'RTX 4080 · Màn hình OLED 240Hz · 16 inch · 14 nhân',
     price: 54990000,
     order: 2,
     isVisible: true,
@@ -20,7 +20,7 @@ export const INITIAL_HERO_BANNERS: BannerItem[] = [
   {
     id: 'banner-3',
     title: 'Logitech G Pro X Superlight 2',
-    specs: 'HERO 25K · 60g · Wireless · LIGHTFORCE',
+    specs: 'Cảm biến HERO 25K · Siêu nhẹ 60g · Kết nối không dây',
     price: 2890000,
     order: 3,
     isVisible: false,

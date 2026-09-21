@@ -39,10 +39,6 @@ export const CategoryShelfAccordion: React.FC<CategoryShelfAccordionProps> = ({
           <span className="bg-slate-100 text-slate-600 text-xs px-2.5 py-0.5 rounded-full font-medium">
             {products.length} sản phẩm
           </span>
-
-          <span className="bg-blue-50 text-blue-600 border border-blue-200 text-[11px] px-2.5 py-0.5 rounded-full font-semibold tracking-wider">
-            AUTO–ALGORITHM
-          </span>
         </div>
 
         <button

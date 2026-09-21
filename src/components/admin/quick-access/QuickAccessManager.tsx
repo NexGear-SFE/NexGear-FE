@@ -107,7 +107,7 @@ export const QuickAccessManager: React.FC = () => {
       {/* Tiêu đề Section */}
       <div className="flex items-center justify-between">
         <h2 className="border-l-4 border-red-600 pl-3 font-bold text-gray-900 text-base">
-          | 2. Truy cập nhanh (Quick Access Pills)
+          2. Truy cập nhanh
         </h2>
         <span className="text-xs text-gray-400">
           {items.length} danh mục hiển thị

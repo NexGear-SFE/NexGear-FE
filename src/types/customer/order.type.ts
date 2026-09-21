@@ -17,6 +17,7 @@ export interface OrderItem {
   quantity: number
   image: string
   variant?: string
+  slug?: string
 }
 
 export interface ShippingInfo {

@@ -32,8 +32,8 @@ export const HomeConfigSubNav: React.FC<HomeConfigSubNavProps> = ({
               onClick={() => onTabChange(tab.key)}
               className={`text-sm transition-all duration-150 cursor-pointer ${
                 isActive
-                  ? 'bg-white shadow-sm text-gray-900 font-semibold rounded-xl px-4 py-2'
-                  : 'text-gray-500 hover:text-gray-800 px-4 py-2 font-medium rounded-xl'
+                  ? 'bg-[#E30019] shadow-sm text-white font-bold rounded-xl px-4 py-2'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/60 px-4 py-2 font-medium rounded-xl'
               }`}
             >
               {tab.label}

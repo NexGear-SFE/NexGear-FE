@@ -263,7 +263,7 @@ const BannerFormBody: React.FC<BannerFormBodyProps> = ({
         </label>
         <input
           type="text"
-          placeholder="VD: Green Switches · Per-key RGB · Wireless"
+          placeholder="VD: Switch Xanh · Đèn RGB từng phím · Kết nối không dây"
           value={formData.specs}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, specs: e.target.value }))

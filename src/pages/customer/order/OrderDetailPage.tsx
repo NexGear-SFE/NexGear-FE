@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ChevronRight, CheckCircle2 } from 'lucide-react'
 import { MOCK_ORDERS } from '@/mocks/customer/order.mock'
 import { orderApi } from '@/apis/order.api'
+import { ROUTES } from '@/constants'
 
 import { OrderHeader } from '@/components/customer/order/OrderHeader'
 import { OrderTimeline } from '@/components/customer/order/OrderTimeline'
@@ -25,7 +26,8 @@ export function OrderDetailPage() {
 
   const handleReorder = () => {
     if (order.items.length === 1) {
-      navigate(`/products/${order.items[0].id}`)
+      const targetSlug = order.items[0].slug || order.items[0].id
+      navigate(ROUTES.PRODUCT_DETAIL(targetSlug))
     }
   }
 

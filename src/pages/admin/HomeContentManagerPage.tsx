@@ -110,7 +110,7 @@ export const HomeContentManagerPage: React.FC = () => {
           {/* Tiêu đề nhóm */}
           <div className="mb-6 flex items-center justify-between">
             <h2 className="border-l-4 border-red-600 pl-3 font-bold text-gray-900 text-base">
-              Quản lý Hero Banner / Promo Slider
+              Quản lý Banner trang chủ & Khuyến mãi
             </h2>
             <span className="text-xs text-gray-400">
               {banners.length} banner đang được cấu hình
