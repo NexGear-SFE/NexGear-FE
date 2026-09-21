@@ -12,6 +12,8 @@ import {
 } from 'lucide-react'
 import { PasswordField } from '@/components/common/PasswordField'
 
+import avatarImg from '@/assets/images/Avatar.jpg'
+
 export const RegisterPage = () => {
   const navigate = useNavigate()
 
@@ -69,7 +71,7 @@ export const RegisterPage = () => {
   }
 
   const handleHelpClick = () => {
-    alert('Tổng đài hỗ trợ thành viên GearGo:\nHotline: 1800 9999 (Miễn phí, 8h00 - 21h30 hằng ngày)')
+    alert('Tổng đài hỗ trợ thành viên NexGear:\nHotline: 1800 9999 (Miễn phí, 8h00 - 21h30 hằng ngày)')
   }
 
   return (
@@ -91,12 +93,12 @@ export const RegisterPage = () => {
         {/* Top Section: Logo Header */}
         <div className="relative z-10">
           <Link to="/" className="inline-flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-bold text-[#E30019] text-xl shadow-md font-heading group-hover:scale-105 transition-transform">
-              GG
+            <div className="w-10 h-10 bg-white rounded-lg overflow-hidden flex items-center justify-center font-bold text-[#E30019] text-xl shadow-md font-heading group-hover:scale-105 transition-transform">
+              <img src={avatarImg} alt="NexGear Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <span className="font-bold text-2xl tracking-tight text-white font-heading block leading-none">
-                GearGo
+                NexGear
               </span>
               <span className="text-[10px] uppercase font-bold tracking-widest text-white/70 block mt-1 font-body">
                 GAMING STORE
@@ -119,7 +121,7 @@ export const RegisterPage = () => {
 
           {/* Subtitle Description */}
           <p className="font-body text-white/80 text-sm leading-relaxed mb-8">
-            Đăng ký tài khoản để tận hưởng toàn bộ quyền lợi dành riêng cho thành viên GearGo.
+            Đăng ký tài khoản để tận hưởng toàn bộ quyền lợi dành riêng cho thành viên NexGear.
           </p>
 
           {/* 4 Feature List Items */}

@@ -58,7 +58,7 @@ export const HomePageConfig: React.FC = () => {
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mt-6">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="border-l-4 border-red-600 pl-3 font-bold text-slate-900 text-base">
-              Quản lý Banner trang chủ & Khuyến mãi
+              1. Quản lý Banner trang chủ & Khuyến mãi
             </h2>
             <span className="text-xs text-slate-400">
               {banners.length} banner đang được cấu hình

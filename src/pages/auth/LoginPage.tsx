@@ -12,16 +12,22 @@ import {
 import { PasswordField } from '@/components/common/PasswordField'
 import { useAuth } from '@/hooks/useAuth'
 
-export const LoginPage = () => {
-  const { login } = useAuth()
-  const navigate = useNavigate()
+import avatarImg from '@/assets/images/Avatar.jpg'
 
+export const LoginPage = () => {
+  const navigate = useNavigate()
+  const { login } = useAuth()
+
+  // State của Form
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [rememberMe, setRememberMe] = useState(true)
-  const [errorMsg, setErrorMsg] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
 
-  const handleSubmit = (e: FormEvent) => {
+  // State phản hồi người dùng
+  const [errorMsg, setErrorMsg] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setErrorMsg('')
 
@@ -35,11 +41,20 @@ export const LoginPage = () => {
       return
     }
 
-    const result = login({ email, password, rememberMe })
-    if (result.success && result.user) {
-      navigate(result.user.redirectPath)
-    } else if (result.error) {
-      setErrorMsg(result.error)
+    setIsLoading(true)
+
+    try {
+      const res = await login({ email, password, rememberMe })
+      setIsLoading(false)
+
+      if (res.success && res.user) {
+        navigate(res.user.redirectPath)
+      } else {
+        setErrorMsg(res.error || 'Tài khoản hoặc mật khẩu không chính xác!')
+      }
+    } catch {
+      setIsLoading(false)
+      setErrorMsg('Đã có lỗi xảy ra. Vui lòng thử lại sau!')
     }
   }
 
@@ -53,12 +68,12 @@ export const LoginPage = () => {
   }
 
   const handleHelpClick = () => {
-    alert('Tổng đài hỗ trợ thành viên GearGo:\nHotline: 1800 9999 (Miễn phí, 8h00 - 21h30 hằng ngày)')
+    alert('Tổng đài hỗ trợ thành viên NexGear:\nHotline: 1800 9999 (Miễn phí, 8h00 - 21h30 hằng ngày)')
   }
 
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#F4F5F7]">
-      {/* 1. CỘT TRÁI: BANNER THƯƠNG HIỆU & QUYỀN LỢI (~35% - 40% W) */}
+      {/* 3.1. CỘT TRÁI: BANNER THƯƠNG HIỆU & QUYỀN LỢI (~35% - 40% W) */}
       <div className="w-full lg:w-[38%] xl:w-[35%] bg-[#B30014] p-8 sm:p-10 lg:p-14 flex flex-col justify-between text-white relative overflow-hidden shrink-0">
         {/* Background Mechanical Circles Vector Graphic Pattern */}
         <div className="absolute inset-0 pointer-events-none opacity-15 overflow-hidden">
@@ -75,12 +90,12 @@ export const LoginPage = () => {
         {/* Top Section: Logo Header */}
         <div className="relative z-10">
           <Link to="/" className="inline-flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-bold text-[#E30019] text-xl shadow-md font-heading group-hover:scale-105 transition-transform">
-              GG
+            <div className="w-10 h-10 bg-white rounded-lg overflow-hidden flex items-center justify-center font-bold text-[#E30019] text-xl shadow-md font-heading group-hover:scale-105 transition-transform">
+              <img src={avatarImg} alt="NexGear Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <span className="font-bold text-2xl tracking-tight text-white font-heading block leading-none">
-                GearGo
+                NexGear
               </span>
               <span className="text-[10px] uppercase font-bold tracking-widest text-white/70 block mt-1 font-body">
                 GAMING STORE
@@ -103,7 +118,7 @@ export const LoginPage = () => {
 
           {/* Subtitle Description */}
           <p className="font-body text-white/80 text-sm leading-relaxed mb-8">
-            Đăng ký tài khoản để tận hưởng toàn bộ quyền lợi dành riêng cho thành viên GearGo.
+            Đăng nhập tài khoản để tận hưởng toàn bộ quyền lợi dành riêng cho thành viên NexGear.
           </p>
 
           {/* 4 Feature List Items */}
@@ -260,8 +275,14 @@ export const LoginPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn-primary w-full py-3.5 text-base mt-6 shadow-sm font-semibold rounded-[4px] bg-[#E30019] hover:bg-[#B30014] cursor-pointer"
+              disabled={isLoading}
+              className={`btn-primary w-full py-3.5 text-base mt-6 shadow-sm font-semibold rounded-[4px] bg-[#E30019] hover:bg-[#B30014] cursor-pointer flex items-center justify-center gap-2 ${
+                isLoading ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
             >
+              {isLoading && (
+                <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              )}
               Đăng nhập
             </button>
 

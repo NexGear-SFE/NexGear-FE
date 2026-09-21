@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Menu, Search, ShoppingCart, User, X, ChevronRight } from 'lucide-react'
-import logoImg from '@/assets/images/Avatar.jpg'
+import logoImg from '@/assets/images/logo.png'
 import { useCartCount, cartStore } from '@/stores/cartStore'
 import { useAuth } from '@/hooks/useAuth'
 import { AccountDropdown } from '@/components/common/AccountDropdown'
@@ -71,7 +71,7 @@ export const MainHeader = () => {
           <img
             src={logoImg}
             alt="NexGear Logo"
-            className="h-11 sm:h-12 md:h-14 w-auto object-contain group-hover:scale-105 transition-transform"
+            className="h-12 sm:h-14 md:h-16 w-auto object-contain group-hover:scale-105 transition-transform"
           />
         </a>
 
