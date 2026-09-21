@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ChevronRight, CheckCircle2, MessageSquare, Home } from 'lucide-react'
+import { ChevronRight, MessageSquare, Home } from 'lucide-react'
 import { useProductDetail } from '@/hooks/useProductDetail'
 import { ProductDetailSkeleton } from '@/components/common/ProductDetailSkeleton'
 import { NotFoundPage } from '@/pages/common/NotFoundPage'
@@ -26,7 +26,6 @@ export function ProductDetailPage() {
     loading,
     productData,
     selectedVariantOptions,
-    toastMessage,
     currentPrice,
     currentSku,
     currentStock,
@@ -50,14 +49,6 @@ export function ProductDetailPage() {
 
   return (
     <div className="bg-[#F4F5F7] min-h-screen py-6 md:py-8 font-body relative">
-      {/* Thông báo nổi thêm vào giỏ hàng */}
-      {toastMessage && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#040004] text-white px-5 py-3 rounded-[8px] border border-[#E30019] shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-200">
-          <CheckCircle2 className="w-5 h-5 text-[#00A859] shrink-0" />
-          <span className="text-xs sm:text-sm font-semibold">{toastMessage}</span>
-        </div>
-      )}
-
       <div className="max-w-7xl mx-auto px-4 space-y-8">
         {/* A. Thanh điều hướng Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs text-gray-500 font-medium overflow-x-auto no-scrollbar">

@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ChevronRight, CheckCircle2 } from 'lucide-react'
-import { MOCK_ORDERS } from '@/mocks/customer/order.mock'
+import { ChevronRight } from 'lucide-react'
 import { orderApi } from '@/apis/order.api'
+import { useToast } from '@/hooks/useToast'
 import { ROUTES } from '@/constants'
+import type { Order } from '@/types/customer/order.type'
 
 import { OrderHeader } from '@/components/customer/order/OrderHeader'
 import { OrderTimeline } from '@/components/customer/order/OrderTimeline'
@@ -17,12 +18,47 @@ import { CancelOrderModal } from '@/components/customer/order/CancelOrderModal'
 export function OrderDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { success, info } = useToast()
+  const [order, setOrder] = useState<Order | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
   const [showCancelModal, setShowCancelModal] = useState(false)
   const [cancelReasonInput, setCancelReasonInput] = useState('')
-  const [toastMessage, setToastMessage] = useState<string | null>(null)
 
-  // Tìm đơn hàng theo ID hoặc mặc định lấy đơn đầu tiên
-  const order = MOCK_ORDERS.find((o) => o.id === id || o.orderCode === id) || MOCK_ORDERS[0]
+  useEffect(() => {
+    let isMounted = true
+    orderApi.getOrderById(id).then((res) => {
+      if (isMounted) {
+        if (res.success && res.data) {
+          setOrder(res.data)
+        } else {
+          setOrder(null)
+        }
+        setLoading(false)
+      }
+    })
+    return () => {
+      isMounted = false
+    }
+  }, [id])
+
+  if (loading) {
+    return (
+      <div className="bg-[#F4F5F7] min-h-screen py-10 font-body flex items-center justify-center">
+        <div className="text-gray-500 text-sm font-medium">Đang tải thông tin đơn hàng...</div>
+      </div>
+    )
+  }
+
+  if (!order) {
+    return (
+      <div className="bg-[#F4F5F7] min-h-screen py-10 font-body flex flex-col items-center justify-center space-y-4">
+        <div className="text-gray-700 font-semibold text-lg">Không tìm thấy đơn hàng</div>
+        <Link to={`${ROUTES.ACCOUNT.SETTINGS}?tab=orders`} className="text-[#E30019] hover:underline text-sm font-medium">
+          Quay lại danh sách đơn hàng
+        </Link>
+      </div>
+    )
+  }
 
   const handleReorder = () => {
     if (order.items.length === 1) {
@@ -32,14 +68,13 @@ export function OrderDetailPage() {
   }
 
   const showNotification = (msg: string) => {
-    setToastMessage(msg)
-    setTimeout(() => setToastMessage(null), 3000)
+    info(msg)
   }
 
   const handleConfirmCancel = async () => {
     const res = await orderApi.cancelOrder(order.id, cancelReasonInput)
     if (res.success) {
-      showNotification('Đã gửi yêu cầu hủy đơn hàng thành công!')
+      success('Đã gửi yêu cầu hủy đơn hàng thành công!')
       setShowCancelModal(false)
       setTimeout(() => {
         navigate(`${ROUTES.ACCOUNT.SETTINGS}?tab=orders`)
@@ -51,14 +86,6 @@ export function OrderDetailPage() {
 
   return (
     <div className="bg-[#F4F5F7] min-h-screen py-6 md:py-10 font-body relative">
-      {/* Thông báo Toast */}
-      {toastMessage && (
-        <div className="fixed top-6 right-6 z-50 bg-[#040004] text-white px-5 py-3 rounded-[8px] border border-[#E30019] shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-200">
-          <CheckCircle2 className="w-5 h-5 text-[#00A859] shrink-0" />
-          <span className="text-xs font-semibold">{toastMessage}</span>
-        </div>
-      )}
-
       <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
         {/* A. Thanh điều hướng Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs md:text-sm text-gray-600 font-medium">
@@ -131,3 +158,4 @@ export function OrderDetailPage() {
     </div>
   )
 }
+

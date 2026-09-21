@@ -4,16 +4,17 @@ import { productApi } from '@/apis/product.api'
 import type { Product, ProductDetail, ProductVariantOption } from '@/types/customer/product.type'
 import { cartStore } from '@/stores/cartStore'
 import { useAuth } from '@/hooks/useAuth'
+import { useToast } from '@/hooks/useToast'
 
 export function useProductDetail() {
   const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
   const { isAuthenticated, openLoginModal } = useAuth()
+  const { success, info } = useToast()
 
   const [loading, setLoading] = useState(true)
   const [productData, setProductData] = useState<{ product: Product; detail: ProductDetail } | null>(null)
   const [selectedVariantOptions, setSelectedVariantOptions] = useState<Record<string, ProductVariantOption>>({})
-  const [toastMessage, setToastMessage] = useState<string | null>(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -51,11 +52,8 @@ export function useProductDetail() {
   }, [slug])
 
   const showToast = useCallback((message: string) => {
-    setToastMessage(message)
-    setTimeout(() => {
-      setToastMessage(null)
-    }, 3000)
-  }, [])
+    info(message)
+  }, [info])
 
   // Resolve current price, SKU, and stock based on selected variant options
   const resolveVariantDetails = useCallback(() => {
@@ -91,9 +89,9 @@ export function useProductDetail() {
       }
 
       cartStore.addItem(productToAdd, quantity)
-      showToast(`Đã thêm ${quantity} x ${productData.product.name} vào giỏ hàng thành công!`)
+      success(`Đã thêm ${quantity} x ${productData.product.name} vào giỏ hàng thành công!`)
     },
-    [productData, resolveVariantDetails, showToast]
+    [productData, resolveVariantDetails, success]
   )
 
   const handleBuyNow = useCallback(
@@ -125,7 +123,6 @@ export function useProductDetail() {
     loading,
     productData,
     selectedVariantOptions,
-    toastMessage,
     currentPrice,
     currentSku,
     currentStock,

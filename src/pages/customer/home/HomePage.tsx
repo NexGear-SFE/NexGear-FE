@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Zap, ArrowRight, ChevronRight, CheckCircle2 } from 'lucide-react'
+import { Zap, ArrowRight, ChevronRight } from 'lucide-react'
 import type { Product } from '@/types/customer/product.type'
 import { ProductCard } from '@/components/customer/product/ProductCard'
 import { TrustBadges } from '@/components/customer/home/TrustBadges'
@@ -9,9 +9,11 @@ import { TechNews } from '@/components/customer/home/TechNews'
 import { Button } from '@/components/ui/Button'
 import { mockPcProducts, mockLaptopProducts, mockGearProducts } from '@/mocks/customer/product.mock'
 
+import { useToast } from '@/hooks/useToast'
 import { cartStore } from '@/stores/cartStore'
 
 export const HomePage = () => {
+  const { success } = useToast()
   const [activePcFilter, setActivePcFilter] = useState('all')
   const [activeLaptopFilter, setActiveLaptopFilter] = useState('all')
   const [activeGearFilter, setActiveGearFilter] = useState('all')
@@ -29,14 +31,9 @@ export const HomePage = () => {
     }
   }, [])
 
-  const [addedToast, setAddedToast] = useState<string | null>(null)
-
   const handleAddToCart = (product: Product) => {
     cartStore.addItem(product)
-    setAddedToast(product.name)
-    setTimeout(() => {
-      setAddedToast(null)
-    }, 3000)
+    success(`Đã thêm ${product.name} vào giỏ hàng thành công!`)
   }
 
   const handleSelectSidebarCategory = (catId: string) => {
@@ -298,16 +295,6 @@ export const HomePage = () => {
         {/* Phần Tin tức công nghệ & Đánh giá */}
         <TechNews />
       </div>
-
-      {/* Thông báo nổi Thêm vào giỏ hàng thành công */}
-      {addedToast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#040004] text-white px-5 py-3 rounded-[8px] border border-[#E30019] shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-200">
-          <CheckCircle2 className="w-5 h-5 text-[#00A859] shrink-0" />
-          <span className="text-xs font-semibold">
-            Đã thêm <strong className="text-white font-bold">{addedToast}</strong> vào giỏ hàng thành công!
-          </span>
-        </div>
-      )}
     </div>
   )
 }
