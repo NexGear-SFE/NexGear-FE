@@ -42,6 +42,9 @@ export type PasswordFieldProps = {
   placeholder?: string
   error?: string
   autoComplete?: string
+  required?: boolean
+  className?: string
+  inputClassName?: string
 }
 
 export type QuickLoginModalProps = {

@@ -6,12 +6,11 @@ import {
   ShieldCheck,
   Truck,
   Headphones,
-  Eye,
-  EyeOff,
   ArrowLeft,
   HelpCircle,
   CheckCircle2,
 } from 'lucide-react'
+import { PasswordField } from '@/components/common/PasswordField'
 
 export const RegisterPage = () => {
   const navigate = useNavigate()
@@ -22,10 +21,6 @@ export const RegisterPage = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [agreeTerms, setAgreeTerms] = useState(false)
-
-  // Chuyển đổi trạng thái ẩn/hiện mật khẩu
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   // State phản hồi người dùng
   const [errorMsg, setErrorMsg] = useState('')
@@ -269,54 +264,24 @@ export const RegisterPage = () => {
               </div>
 
               {/* Field 3: Password */}
-              <div>
-                <label htmlFor="register-password" className="block text-sm font-semibold text-[#040004] mb-1.5">
-                  Mật khẩu <span className="text-[#E30019]">*</span>
-                </label>
-                <div className="relative flex items-center">
-                  <input
-                    id="register-password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Tối thiểu 8 ký tự"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="input-gaming w-full pr-11 py-3 px-4 text-sm sm:text-base font-medium"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                    className="absolute right-3 text-gray-400 hover:text-gray-700 transition-mechanical cursor-pointer p-1"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
+              <PasswordField
+                id="register-password"
+                label="Mật khẩu"
+                required
+                placeholder="Tối thiểu 8 ký tự"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
 
               {/* Field 4: Confirm Password */}
-              <div>
-                <label htmlFor="register-confirm-password" className="block text-sm font-semibold text-[#040004] mb-1.5">
-                  Nhập lại mật khẩu <span className="text-[#E30019]">*</span>
-                </label>
-                <div className="relative flex items-center">
-                  <input
-                    id="register-confirm-password"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Nhập lại mật khẩu"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="input-gaming w-full pr-11 py-3 px-4 text-sm sm:text-base font-medium"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                    className="absolute right-3 text-gray-400 hover:text-gray-700 transition-mechanical cursor-pointer p-1"
-                  >
-                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
+              <PasswordField
+                id="register-confirm-password"
+                label="Nhập lại mật khẩu"
+                required
+                placeholder="Nhập lại mật khẩu"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
 
               {/* Terms & Conditions Checkbox */}
               <div className="pt-1">

@@ -12,7 +12,7 @@ import type {
   NavColumnLinkErrors,
   FooterConfigTabProps,
 } from '@/types/admin/footerConfig.type'
-import { INITIAL_FOOTER_CONFIG } from '@/mocks/mockFooterConfig'
+import { INITIAL_FOOTER_CONFIG } from '@/mocks/storemanager/footerConfig.mock'
 import { CompanySocialSection } from '@/components/admin/footer-config/CompanySocialSection'
 import { NavigationLinksSection } from '@/components/admin/footer-config/NavigationLinksSection'
 import { ContactInfoSection } from '@/components/admin/footer-config/ContactInfoSection'

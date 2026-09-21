@@ -8,6 +8,8 @@ import { AccountDropdown } from '@/components/common/AccountDropdown'
 import { CATEGORIES_DATA } from '@/mocks/customer/category.mock'
 import type { CategoryItem, SubcategoryGroup } from '@/types/customer/category.type'
 
+import { ROUTES } from '@/constants/routes'
+
 export const MainHeader = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [isCategoryActive, setIsCategoryActive] = useState(false)
@@ -154,9 +156,9 @@ export const MainHeader = () => {
                 isOpen={isDropdownOpen}
                 onClose={() => setIsDropdownOpen(false)}
                 onOpenSettings={() => {
-                  if (user?.role === 'STORE_MANAGER') navigate('/storemanager/settings')
-                  else if (user?.role === 'TECH_STAFF') navigate('/tech-staff/settings')
-                  else navigate('/account/settings')
+                  if (user?.role === 'STORE_MANAGER') navigate(ROUTES.STORE_MANAGER.SETTINGS)
+                  else if (user?.role === 'TECH_STAFF') navigate(ROUTES.TECH_STAFF.SETTINGS)
+                  else navigate(ROUTES.ACCOUNT.SETTINGS)
                 }}
               />
             </div>

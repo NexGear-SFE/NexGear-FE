@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { TECH_STAFF_USER } from '@/mocks/techstaff/staff.mock';
-import type { TechNav } from '@/types/admin/staff.type';
 import {
   IcTechMenu,
   IcTechDash,
@@ -15,6 +14,7 @@ import {
 } from '@/components/common/Icons';
 import { AccountDropdown } from '@/components/common/AccountDropdown';
 import { SidebarUserWidget } from '@/components/common/SidebarUserWidget';
+import type { TechNav, TechNavItem } from '@/types/admin/staff.type';
 import { useAuth } from '@/hooks/useAuth';
 
 // ─── Cấu hình Menu Điều Hướng ────────────────────────────────────────────────
@@ -46,9 +46,9 @@ export function TechStaffLayout() {
   const { user } = useAuth();
 
   // Xác định menu đang active dựa vào URL path
-  const activeNav = NAV_ITEMS.find((item) => 
+  const activeNav: TechNav = (NAV_ITEMS.find((item) => 
     item.path !== '/tech-staff' ? location.pathname.startsWith(item.path) : location.pathname === item.path
-  )?.key || 'dashboard';
+  )?.key || 'dashboard') as TechNav;
 
   return (
     <div className="min-h-screen bg-[var(--surface-200)] flex">

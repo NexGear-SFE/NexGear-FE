@@ -3,14 +3,13 @@ import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   ArrowLeft,
-  Eye,
-  EyeOff,
   Tag,
   ShieldCheck,
   Truck,
   Headphones,
   HelpCircle,
 } from 'lucide-react'
+import { PasswordField } from '@/components/common/PasswordField'
 import { useAuth } from '@/hooks/useAuth'
 
 export const LoginPage = () => {
@@ -19,7 +18,6 @@ export const LoginPage = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(true)
   const [errorMsg, setErrorMsg] = useState('')
 
@@ -226,29 +224,14 @@ export const LoginPage = () => {
             </div>
 
             {/* Field 2: Password */}
-            <div>
-              <label htmlFor="login-password" className="block text-sm font-semibold text-[#040004] mb-1.5">
-                Mật khẩu <span className="text-[#E30019]">*</span>
-              </label>
-              <div className="relative flex items-center">
-                <input
-                  id="login-password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Nhập mật khẩu"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="input-gaming w-full pr-11 py-3 px-4 text-sm sm:text-base font-medium"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                  className="absolute right-3 text-gray-400 hover:text-gray-700 transition-mechanical cursor-pointer p-1"
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
+            <PasswordField
+              id="login-password"
+              label="Mật khẩu"
+              required
+              placeholder="Nhập mật khẩu"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
             {/* Remember Me & Forgot Password */}
             <div className="flex items-center justify-between pt-1">

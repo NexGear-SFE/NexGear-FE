@@ -42,7 +42,7 @@ export function OrderDetailPage() {
       showNotification('Đã gửi yêu cầu hủy đơn hàng thành công!')
       setShowCancelModal(false)
       setTimeout(() => {
-        navigate('/account/settings?tab=orders')
+        navigate(`${ROUTES.ACCOUNT.SETTINGS}?tab=orders`)
       }, 1200)
     }
   }
@@ -62,11 +62,11 @@ export function OrderDetailPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
         {/* A. Thanh điều hướng Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs md:text-sm text-gray-600 font-medium">
-          <Link to="/" className="hover:text-[#E30019] transition-colors">
+          <Link to={ROUTES.HOME} className="hover:text-[#E30019] transition-colors">
             Trang chủ
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
-          <Link to="/account/settings?tab=orders" className="hover:text-[#E30019] transition-colors">
+          <Link to={`${ROUTES.ACCOUNT.SETTINGS}?tab=orders`} className="hover:text-[#E30019] transition-colors">
             Đơn hàng của tôi
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-gray-400" />

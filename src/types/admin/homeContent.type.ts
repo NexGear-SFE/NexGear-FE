@@ -93,6 +93,8 @@ export type HomeConfigSubNavProps = {
 export type ToggleSwitchProps = {
   checked: boolean
   onChange: (checked: boolean) => void
+  disabled?: boolean
+  id?: string
   ariaLabel?: string
   label?: string
 }

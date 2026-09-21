@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { ArrowLeft, Headphones } from 'lucide-react'
 import type { OrderHeaderProps } from '@/types/customer/order.type'
 import { formatCurrency } from '@/utils/formatCurrency'
+import { ROUTES } from '@/constants/routes'
 import { OrderStatusBadge } from './OrderStatusBadge'
 
 export function OrderHeader({
@@ -15,7 +16,7 @@ export function OrderHeader({
     <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div className="space-y-1.5">
         <Link
-          to="/account/settings?tab=orders"
+          to={`${ROUTES.ACCOUNT.SETTINGS}?tab=orders`}
           className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-gray-600 hover:text-[#E30019] transition-colors mb-1"
         >
           <ArrowLeft className="w-4 h-4" />

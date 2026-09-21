@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Settings, LogOut, Shield, Package } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { ROUTES } from '@/constants/routes'
 
 type AccountDropdownProps = {
   isOpen: boolean
@@ -44,7 +45,7 @@ export const AccountDropdown = ({
   const handleLogout = () => {
     onClose()
     logout()
-    navigate('/')
+    navigate(ROUTES.HOME)
   }
 
   const handleOrdersClick = () => {
@@ -52,7 +53,7 @@ export const AccountDropdown = ({
     if (onOpenOrders) {
       onOpenOrders()
     } else {
-      navigate('/account/settings?tab=orders')
+      navigate(`${ROUTES.ACCOUNT.SETTINGS}?tab=orders`)
     }
   }
 

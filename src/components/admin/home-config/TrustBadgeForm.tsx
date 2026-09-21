@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import type { TrustBadge, TrustBadgeErrors, TrustBadgeFormProps } from '@/types/admin/homeConfig.type'
-import { INITIAL_TRUST_BADGES } from '@/mocks/mockHomeConfig'
+import { INITIAL_TRUST_BADGES } from '@/mocks/storemanager/homeConfig.mock'
 import { TrustBadgeItem } from '@/components/admin/home-config/TrustBadgeItem'
 import { useToast } from '@/hooks/useToast'
 import { RotateCcw, Check } from 'lucide-react'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import type { CategoryToggle, HomeProductsTabProps } from '@/types/admin/homeProductsConfig.type'
-import { MOCK_HOME_PRODUCTS_CONFIG } from '@/mocks/mockHomeProductsConfig'
+import { MOCK_HOME_PRODUCTS_CONFIG } from '@/mocks/storemanager/homeProductsConfig.mock'
 import {
   HOME_PRODUCTS_INFO_TEXT,
   HOME_PRODUCTS_SUBTITLE,
