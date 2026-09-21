@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { User, UserRole } from './auth.type'
 
 export type UnderDevelopmentPageProps = {
@@ -8,6 +9,7 @@ export type UnderDevelopmentPageProps = {
 }
 
 export type ProtectedRouteProps = {
+  children?: ReactNode
   allowedRoles?: UserRole[]
 }
 
