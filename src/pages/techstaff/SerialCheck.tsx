@@ -5,7 +5,7 @@ import { IcTechSearch } from "@/components/common/Icons";
 import { SearchX, Inbox } from "lucide-react";
 
 export function SerialCheck() {
-  // Using local state for now until global state is implemented
+  // Tạm thời dùng local state cho đến khi tích hợp global state
   const [providers] = useState<WarrantyProvider[]>(INITIAL_WARRANTY_PROVIDERS);
   const [brandSearch, setBrandSearch] = useState("");
 
@@ -19,7 +19,7 @@ export function SerialCheck() {
   return (
     <div className="flex-1 overflow-y-auto p-8 bg-[var(--surface-200)] min-h-0">
       <div className="max-w-[800px] mx-auto">
-        {/* ── Page Header ── */}
+        {/* ── Tiêu đề trang ── */}
         <div className="mb-7">
           <h1 className="text-[24px] text-[var(--text-900)] m-0 font-heading font-bold">
             Kiểm tra Serial
@@ -30,7 +30,7 @@ export function SerialCheck() {
           </p>
         </div>
 
-        {/* ── Brand Search (chỉ hiện khi có > 4 nhà cung cấp active) ── */}
+        {/* ── Tìm kiếm thương hiệu (chỉ hiện khi có > 4 nhà cung cấp active) ── */}
         {activeBrands.length > 4 && (
           <div className="relative mb-5">
             <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-600)] pointer-events-none">
@@ -45,7 +45,7 @@ export function SerialCheck() {
           </div>
         )}
 
-        {/* ── Brand Grid / Empty States ── */}
+        {/* ── Danh sách thương hiệu / Trạng thái trống ── */}
         {BRANDS.length === 0 ? (
           <EmptyState activeBrandsCount={activeBrands.length} />
         ) : (
@@ -75,7 +75,7 @@ function BrandCard({ brand: b }: BrandCardProps) {
         (e.currentTarget as HTMLDivElement).style.borderColor = "#E0E0E0";
       }}
     >
-      {/* Brand Logo Badge */}
+      {/* Logo thương hiệu */}
       <div
         className="w-[72px] h-[72px] rounded-2xl flex items-center justify-center shrink-0"
         style={{
@@ -91,7 +91,7 @@ function BrandCard({ brand: b }: BrandCardProps) {
         </span>
       </div>
 
-      {/* Brand Info */}
+      {/* Thông tin thương hiệu */}
       <div className="text-center flex-1">
         <div className="text-[15px] font-bold text-[var(--text-900)] font-heading">
           {b.name}
@@ -104,7 +104,7 @@ function BrandCard({ brand: b }: BrandCardProps) {
         </div>
       </div>
 
-      {/* CTA Link */}
+      {/* Liên kết tra cứu */}
       <a
         href={b.url}
         target="_blank"

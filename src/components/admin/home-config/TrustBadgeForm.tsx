@@ -1,14 +1,9 @@
 import React, { useState } from 'react'
-import type { TrustBadge, TrustBadgeErrors } from '@/types/admin/homeConfig.type'
+import type { TrustBadge, TrustBadgeErrors, TrustBadgeFormProps } from '@/types/admin/homeConfig.type'
 import { INITIAL_TRUST_BADGES } from '@/mocks/mockHomeConfig'
 import { TrustBadgeItem } from '@/components/admin/home-config/TrustBadgeItem'
 import { useToast } from '@/hooks/useToast'
 import { RotateCcw, Check } from 'lucide-react'
-
-interface TrustBadgeFormProps {
-  initialData?: TrustBadge[]
-  onSave?: (badges: TrustBadge[]) => void
-}
 
 export const TrustBadgeForm: React.FC<TrustBadgeFormProps> = ({
   initialData = INITIAL_TRUST_BADGES,

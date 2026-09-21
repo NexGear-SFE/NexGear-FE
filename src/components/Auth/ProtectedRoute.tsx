@@ -1,13 +1,8 @@
-import type { ReactNode } from 'react'
+
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
-import type { UserRole } from '@/types/common/auth.type'
 import { ROUTES } from '@/constants'
-
-interface ProtectedRouteProps {
-  children: ReactNode
-  allowedRoles?: UserRole[]
-}
+import type { ProtectedRouteProps } from '@/types/common/ui.type'
 
 export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
   const { user, isAuthenticated, openLoginModal } = useAuth()

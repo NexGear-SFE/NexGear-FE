@@ -127,7 +127,7 @@ export const TRUST_BADGE_PRESET_ICONS: LucideIconOption[] = [
 ]
 
 /**
- * Mapping from emoji shortcuts to Lucide icon components
+ * Ánh xách từ biểu tượng emoji sang Lucide icon component tương ứng
  */
 export const EMOJI_ICON_MAP: Record<string, LucideIcon> = {
   '✅': CheckCircle2,
@@ -152,8 +152,8 @@ export const EMOJI_ICON_MAP: Record<string, LucideIcon> = {
 }
 
 /**
- * Helper to convert kebab-case, snake_case or regular text into PascalCase.
- * Examples: "shield-check" -> "ShieldCheck", "cpu" -> "Cpu", "gamepad-2" -> "Gamepad2"
+ * Hàm hỗ trợ chuyển đổi chuỗi dạng kebab-case, snake_case hoặc văn bản thường thành PascalCase.
+ * Ví dụ: "shield-check" -> "ShieldCheck", "cpu" -> "Cpu", "gamepad-2" -> "Gamepad2"
  */
 export const toPascalCase = (str: string): string => {
   return str
@@ -163,8 +163,8 @@ export const toPascalCase = (str: string): string => {
 }
 
 /**
- * Check if an icon name exists in the full Lucide React library.
- * Returns the resolved canonical name and component if valid, or null otherwise.
+ * Kiểm tra xem tên icon có tồn tại trong thư viện Lucide React hay không.
+ * Trả về tên chuẩn định dạng và component nếu hợp lệ, ngược lại trả về null.
  */
 export const getLucideIconIfValid = (
   iconInput: string
@@ -172,7 +172,7 @@ export const getLucideIconIfValid = (
   const trimmed = iconInput.trim()
   if (!trimmed) return null
 
-  // 1. Check emoji
+  // 1. Kiểm tra nếu là emoji
   if (EMOJI_ICON_MAP[trimmed]) {
     const foundPreset = TRUST_BADGE_PRESET_ICONS.find((p) => p.emojiEquivalent === trimmed)
     return {
@@ -183,18 +183,18 @@ export const getLucideIconIfValid = (
 
   const iconRegistry = icons as unknown as Record<string, LucideIcon | undefined>
 
-  // 2. Direct PascalCase lookup
+  // 2. Tra cứu trực tiếp theo dạng PascalCase
   const pascalName = toPascalCase(trimmed)
   if (iconRegistry[pascalName]) {
     return { name: pascalName, icon: iconRegistry[pascalName]! }
   }
 
-  // 3. Exact raw lookup
+  // 3. Tra cứu khớp chính xác tên gốc
   if (iconRegistry[trimmed]) {
     return { name: trimmed, icon: iconRegistry[trimmed]! }
   }
 
-  // 4. Case-insensitive lookup across all Lucide icons
+  // 4. Tra cứu không phân biệt hoa thường trong toàn bộ thư viện Lucide
   const cleanLower = trimmed.toLowerCase().replace(/[-_ ]/g, '')
   const foundKey = Object.keys(icons).find(
     (key) => key.toLowerCase().replace(/[-_ ]/g, '') === cleanLower
@@ -207,8 +207,8 @@ export const getLucideIconIfValid = (
 }
 
 /**
- * Resolve an icon string (Lucide name, kebab-case, or emoji) to a LucideIcon.
- * If not found in the full Lucide library, safely falls back to CheckCircle2.
+ * Tìm kiếm component LucideIcon dựa trên chuỗi tên (tên Lucide, kebab-case, hoặc emoji).
+ * Nếu không tìm thấy trong thư viện Lucide, tự động fallback an toàn về CheckCircle2.
  */
 export const resolveLucideIcon = (iconInput: string): LucideIcon => {
   const matched = getLucideIconIfValid(iconInput)

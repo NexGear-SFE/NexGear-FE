@@ -1,12 +1,5 @@
 import React from 'react'
-
-interface ToggleSwitchProps {
-  checked: boolean
-  onChange: (checked: boolean) => void
-  disabled?: boolean
-  id?: string
-  ariaLabel?: string
-}
+import type { ToggleSwitchProps } from '@/types/admin/homeContent.type'
 
 export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   checked,

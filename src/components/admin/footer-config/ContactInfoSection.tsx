@@ -1,13 +1,7 @@
 import React from 'react'
-import type { ContactInfo, ContactInfoErrors } from '@/types/admin/footerConfig.type'
+import type { ContactInfoSectionProps } from '@/types/admin/footerConfig.type'
 import { FOOTER_FIELD_PLACEHOLDERS } from '@/constants/footerConfigConstants'
 import { Phone, Mail, Globe, Clock } from 'lucide-react'
-
-interface ContactInfoSectionProps {
-  contact: ContactInfo
-  onChange: (field: keyof ContactInfo, value: string) => void
-  errors?: ContactInfoErrors
-}
 
 export const ContactInfoSection: React.FC<ContactInfoSectionProps> = ({
   contact,

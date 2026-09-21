@@ -1,26 +1,7 @@
 import React from 'react'
-import type {
-  NavigationColumns,
-  NavColumnLinkErrors,
-} from '@/types/admin/footerConfig.type'
+import type { NavigationLinksSectionProps } from '@/types/admin/footerConfig.type'
 import { NavItemRow } from '@/components/admin/footer-config/NavItemRow'
 import { Plus } from 'lucide-react'
-
-interface NavigationLinksSectionProps {
-  navColumns: NavigationColumns
-  onLinkChange: (
-    column: 'left' | 'right',
-    id: string,
-    field: 'label' | 'url',
-    value: string
-  ) => void
-  onAddLink: (column: 'left' | 'right') => void
-  onDeleteLink: (column: 'left' | 'right', id: string) => void
-  errors?: {
-    left?: Record<string, NavColumnLinkErrors>
-    right?: Record<string, NavColumnLinkErrors>
-  }
-}
 
 export const NavigationLinksSection: React.FC<NavigationLinksSectionProps> = ({
   navColumns,

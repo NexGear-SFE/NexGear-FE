@@ -1,22 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { X, Upload, Image as ImageIcon, Trash2, Link as LinkIcon, AlertCircle } from 'lucide-react'
-import type { BannerItem, BannerFormData } from '@/types/admin/homeContent.type'
+import type { BannerFormData, BannerModalProps, BannerFormBodyProps } from '@/types/admin/homeContent.type'
 import { ToggleSwitch } from './ToggleSwitch'
-
-interface BannerModalProps {
-  isOpen: boolean
-  editingBanner: BannerItem | null
-  nextOrder: number
-  onClose: () => void
-  onSave: (data: BannerFormData) => void
-}
-
-interface BannerFormBodyProps {
-  editingBanner: BannerItem | null
-  nextOrder: number
-  onClose: () => void
-  onSave: (data: BannerFormData) => void
-}
 
 const BannerFormBody: React.FC<BannerFormBodyProps> = ({
   editingBanner,

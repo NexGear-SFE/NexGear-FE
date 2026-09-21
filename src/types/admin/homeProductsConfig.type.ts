@@ -24,24 +24,23 @@ export interface HomeProductsConfigData {
   shelves: Record<string, ShelfProduct[]>
 }
 
-export interface CategoryShelfAccordionProps {
+export type CategoryShelfAccordionProps = {
   category: CategoryToggle
   products: ShelfProduct[]
-  onRemoveProduct?: (productId: string) => void
+  defaultOpen?: boolean
 }
 
-export interface CategoryToggleCardProps {
+export type CategoryToggleCardProps = {
   category: CategoryToggle
   onToggle: (id: string, enabled: boolean) => void
 }
 
-export interface HomeProductsTabProps {
+export type HomeProductsTabProps = {
   initialData?: HomeProductsConfigData
-  onSave?: (data: HomeProductsConfigData) => void
+  onSave?: (categories: CategoryToggle[]) => void
 }
 
-export interface ShelfProductTableProps {
+export type ShelfProductTableProps = {
   products: ShelfProduct[]
-  onRemoveProduct?: (productId: string) => void
 }
 

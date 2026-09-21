@@ -1,4 +1,5 @@
 import React from 'react'
+import type { QuickAccessIconProps } from '@/types/admin/quickAccess.type'
 import {
   Monitor,
   Laptop,
@@ -36,11 +37,6 @@ const ICON_MAP: Record<string, LucideIcon> = {
   '🖱️': Mouse,
   '🎮': Gamepad2,
   '🪑': Armchair,
-}
-
-interface QuickAccessIconProps {
-  name: string
-  className?: string
 }
 
 export const QuickAccessIcon: React.FC<QuickAccessIconProps> = ({

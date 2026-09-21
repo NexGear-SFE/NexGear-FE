@@ -17,7 +17,7 @@ import { AccountDropdown } from '@/components/common/AccountDropdown';
 import { SidebarUserWidget } from '@/components/common/SidebarUserWidget';
 import { useAuth } from '@/hooks/useAuth';
 
-// ─── Nav Configuration ────────────────────────────────────────────────────────
+// ─── Cấu hình Menu Điều Hướng ────────────────────────────────────────────────
 const NAV_ITEMS: TechNavItem[] = [
   { key: 'dashboard', path: '/tech-staff', label: 'Bảng điều khiển', Icon: IcTechDash },
   { key: 'warranty', path: '/tech-staff/warranty', label: 'Dịch vụ / Bảo hành', Icon: IcTechWarranty },
@@ -27,7 +27,7 @@ const NAV_ITEMS: TechNavItem[] = [
   { key: 'settings', path: '/tech-staff/settings', label: 'Cài đặt', Icon: IcTechSettings },
 ];
 
-// Maps active nav key to its breadcrumb display label
+// Ánh xá khóa menu active với nhãn hiển thị thanh điều hướng (Breadcrumb)
 const NAV_LABELS: Record<TechNav, string> = {
   dashboard: 'Dashboard',
   warranty: 'Dịch vụ / Bảo hành',
@@ -37,7 +37,7 @@ const NAV_LABELS: Record<TechNav, string> = {
   settings: 'Cài đặt',
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// ─── Component Chính ──────────────────────────────────────────────────────────
 
 export function TechStaffLayout() {
   const location = useLocation();
@@ -45,7 +45,7 @@ export function TechStaffLayout() {
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const { user } = useAuth();
 
-  // Derive active nav from path
+  // Xác định menu đang active dựa vào URL path
   const activeNav = NAV_ITEMS.find((item) => 
     item.path !== '/tech-staff' ? location.pathname.startsWith(item.path) : location.pathname === item.path
   )?.key || 'dashboard';

@@ -36,12 +36,12 @@ export function ProductDetailPage() {
     showToast,
   } = useProductDetail()
 
-  // 1. Loading Skeleton State
+  // 1. Trạng thái khung xương chờ tải
   if (loading) {
     return <ProductDetailSkeleton />
   }
 
-  // 2. Product Not Found 404 State
+  // 2. Trạng thái không tìm thấy sản phẩm (404)
   if (!productData) {
     return <NotFoundPage />
   }
@@ -50,7 +50,7 @@ export function ProductDetailPage() {
 
   return (
     <div className="bg-[#F4F5F7] min-h-screen py-6 md:py-8 font-body relative">
-      {/* Floating Add-to-Cart Toast */}
+      {/* Thông báo nổi thêm vào giỏ hàng */}
       {toastMessage && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#040004] text-white px-5 py-3 rounded-[8px] border border-[#E30019] shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-200">
           <CheckCircle2 className="w-5 h-5 text-[#00A859] shrink-0" />
@@ -59,7 +59,7 @@ export function ProductDetailPage() {
       )}
 
       <div className="max-w-7xl mx-auto px-4 space-y-8">
-        {/* A. Breadcrumb Navigation */}
+        {/* A. Thanh điều hướng Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs text-gray-500 font-medium overflow-x-auto no-scrollbar">
           <Link to="/" className="hover:text-[#E30019] transition-colors flex items-center gap-1 shrink-0">
             <Home className="w-3.5 h-3.5" />
@@ -73,15 +73,15 @@ export function ProductDetailPage() {
           <span className="text-gray-900 font-semibold truncate">{product.name}</span>
         </nav>
 
-        {/* B. Overview Section: Two-column Desktop Layout */}
+        {/* B. Phần tổng quan sản phẩm: Bố cục 2 cột */}
         <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 md:p-8 shadow-xs">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left Column: Product Image Gallery (5 cols) */}
+            {/* Cột trái: Bộ sưu tập hình ảnh sản phẩm (5 cột) */}
             <div className="lg:col-span-5">
               <ProductImageGallery images={detail.images} productName={product.name} />
             </div>
 
-            {/* Right Column: Product Purchasing Panel (7 cols) */}
+            {/* Cột phải: Bảng mua hàng & thông tin sản phẩm (7 cột) */}
             <div className="lg:col-span-7 space-y-6">
               <ProductInfo
                 product={product}
@@ -111,17 +111,17 @@ export function ProductDetailPage() {
           </div>
         </div>
 
-        {/* C. Product Description Section */}
+        {/* C. Phần mô tả chi tiết sản phẩm */}
         {detail.descriptionSections && detail.descriptionSections.length > 0 && (
           <ProductDescription sections={detail.descriptionSections} />
         )}
 
-        {/* D. Technical Specifications Section */}
+        {/* D. Phần thông số kỹ thuật */}
         {detail.specificationGroups && detail.specificationGroups.length > 0 && (
           <ProductSpecifications groups={detail.specificationGroups} />
         )}
 
-        {/* E. Product Reviews & Ratings Section */}
+        {/* E. Phần đánh giá & nhận xét từ khách hàng */}
         <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 sm:p-8 space-y-6 shadow-xs">
           <div className="flex items-center justify-between pb-3 border-b border-gray-100">
             <div className="flex items-center gap-2">

@@ -1,12 +1,6 @@
 import React from 'react'
 import { AlertTriangle } from 'lucide-react'
-import type { BannerItem } from '@/types/admin/homeContent.type'
-
-interface DeleteConfirmModalProps {
-  banner: BannerItem | null
-  onClose: () => void
-  onConfirm: () => void
-}
+import type { DeleteConfirmModalProps } from '@/types/admin/homeContent.type'
 
 export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
   banner,

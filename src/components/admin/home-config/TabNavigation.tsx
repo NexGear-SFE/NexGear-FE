@@ -1,12 +1,7 @@
 import React from 'react'
 import { HomeConfigSubNav } from '@/components/admin/home-content/HomeConfigSubNav'
 import type { HomeContentTab } from '@/types/admin/homeContent.type'
-import type { HomeConfigTabId } from '@/types/admin/homeConfig.type'
-
-export interface TabNavigationProps {
-  activeTab: HomeContentTab | HomeConfigTabId
-  onTabChange: (tab: HomeContentTab) => void
-}
+import type { TabNavigationProps } from '@/types/admin/homeConfig.type'
 
 export const TabNavigation: React.FC<TabNavigationProps> = ({
   activeTab,

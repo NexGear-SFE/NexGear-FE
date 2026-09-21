@@ -1,23 +1,8 @@
 import React from 'react'
 import { GripVertical, Edit2, Trash2, ChevronUp, ChevronDown } from 'lucide-react'
-import type { BannerItem } from '@/types/admin/homeContent.type'
+import type { BannerTableRowProps } from '@/types/admin/homeContent.type'
 import { ToggleSwitch } from './ToggleSwitch'
 import { formatCurrency } from '@/utils/formatCurrency'
-
-interface BannerTableRowProps {
-  banner: BannerItem
-  index: number
-  onToggleVisibility: (id: string, isVisible: boolean) => void
-  onEdit: (banner: BannerItem) => void
-  onDelete: (banner: BannerItem) => void
-  onDragStart?: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void
-  onDragOver?: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void
-  onDrop?: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void
-  onMoveUp?: () => void
-  onMoveDown?: () => void
-  isFirst?: boolean
-  isLast?: boolean
-}
 
 export const BannerTableRow: React.FC<BannerTableRowProps> = ({
   banner,

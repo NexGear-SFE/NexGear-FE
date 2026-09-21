@@ -1,14 +1,8 @@
 import React, { useState } from 'react'
-import type { CategoryToggle, ShelfProduct } from '@/types/admin/homeProductsConfig.type'
+import type { CategoryShelfAccordionProps } from '@/types/admin/homeProductsConfig.type'
 import { ShelfProductTable } from '@/components/admin/home-products/ShelfProductTable'
 import { CategoryIcon } from '@/constants/homeProductsConstants'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-
-interface CategoryShelfAccordionProps {
-  category: CategoryToggle
-  products: ShelfProduct[]
-  defaultOpen?: boolean
-}
 
 export const CategoryShelfAccordion: React.FC<CategoryShelfAccordionProps> = ({
   category,

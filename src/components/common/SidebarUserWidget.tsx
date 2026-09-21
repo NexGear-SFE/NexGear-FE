@@ -2,8 +2,8 @@ import { Settings } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
-interface SidebarUserWidgetProps {
-  settingsPath: string;
+type SidebarUserWidgetProps = {
+  settingsPath: string
 }
 
 export function SidebarUserWidget({ settingsPath }: SidebarUserWidgetProps) {

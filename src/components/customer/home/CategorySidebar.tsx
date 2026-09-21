@@ -5,7 +5,7 @@ import type { CategoryItem, SubcategoryGroup } from '@/types/customer/category.t
 
 export type { CategoryItem, SubcategoryGroup }
 
-interface CategorySidebarProps {
+type CategorySidebarProps = {
   activeCategoryId?: string
   onSelectCategory?: (categoryId: string) => void
 }

@@ -1,12 +1,6 @@
-import type { BlogPost } from '@/types/admin/blog.type'
+import type { BlogTableRowProps } from '@/types/admin/blog.type'
 import { BLOG_STATUS } from '@/constants/blog'
 import { FileText, Pencil, Trash2 } from 'lucide-react'
-
-interface BlogTableRowProps {
-  post: BlogPost
-  onEdit: (post: BlogPost) => void
-  onDelete: (id: string) => void
-}
 
 export const BlogTableRow = ({ post, onEdit, onDelete }: BlogTableRowProps) => {
   const isPublished = post.status === BLOG_STATUS.PUBLISHED

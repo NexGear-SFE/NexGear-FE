@@ -1,10 +1,6 @@
 import React from 'react'
-import type { ShelfProduct } from '@/types/admin/homeProductsConfig.type'
+import type { ShelfProductTableProps } from '@/types/admin/homeProductsConfig.type'
 import { formatVND } from '@/constants/homeProductsConstants'
-
-interface ShelfProductTableProps {
-  products: ShelfProduct[]
-}
 
 export const ShelfProductTable: React.FC<ShelfProductTableProps> = ({ products }) => {
   if (!products || products.length === 0) {

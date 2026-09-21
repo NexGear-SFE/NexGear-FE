@@ -34,30 +34,25 @@ export interface BadgeTheme {
   borderColor: string
 }
 
-export interface TabNavigationProps {
-  activeTab: HomeConfigTabId | string
-  onTabChange: (tabId: HomeConfigTabId) => void
+export type TabNavigationProps = {
+  activeTab: import('./homeContent.type').HomeContentTab | HomeConfigTabId
+  onTabChange: (tab: import('./homeContent.type').HomeContentTab) => void
 }
 
-export interface TrustBadgeFormProps {
-  initialBadges?: TrustBadge[]
+export type TrustBadgeFormProps = {
+  initialData?: TrustBadge[]
   onSave?: (badges: TrustBadge[]) => void
 }
 
-export interface TrustBadgeItemProps {
+export type TrustBadgeItemProps = {
   badge: TrustBadge
   index: number
-  theme: BadgeTheme
-  totalCount: number
-  onChangeField: (id: number | string, field: keyof TrustBadge, value: string) => void
-  onMoveUp: (index: number) => void
-  onMoveDown: (index: number) => void
-  onDelete: (id: number | string) => void
+  onChange: (id: number | string, field: keyof TrustBadge, value: string) => void
   errors?: TrustBadgeErrors
 }
 
-export interface DynamicLucideIconProps {
-  name: string
+export type DynamicLucideIconProps = {
+  icon: string
   className?: string
 }
 

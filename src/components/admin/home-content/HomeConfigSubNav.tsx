@@ -1,11 +1,6 @@
 import React from 'react'
-import type { HomeContentTab } from '@/types/admin/homeContent.type'
+import type { HomeConfigSubNavProps } from '@/types/admin/homeContent.type'
 import { HOME_CONTENT_TABS } from '@/constants/homeContent'
-
-interface HomeConfigSubNavProps {
-  activeTab: HomeContentTab
-  onTabChange: (tab: HomeContentTab) => void
-}
 
 export const HomeConfigSubNav: React.FC<HomeConfigSubNavProps> = ({
   activeTab,

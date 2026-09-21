@@ -20,7 +20,7 @@ export const HOME_PRODUCTS_SUBTITLE =
   'Chọn danh mục nào sẽ xuất hiện trên trang chủ. Mỗi danh mục được bật sẽ hiển thị shelf sản phẩm tự động bên dưới.'
 
 /**
- * Mapping of category icons using Lucide React
+ * Bảng ánh xách icon danh mục sử dụng Lucide React
  */
 export const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
   Laptop,
@@ -34,7 +34,7 @@ export const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
   HardDrive,
   Speaker,
 
-  // Support emoji fallbacks mapped to Lucide icons
+  // Hỗ trợ fallback dạng biểu tượng emoji sang Lucide icon
   '💻': Laptop,
   '⌨️': Keyboard,
   '🖱️': Mouse,
@@ -70,7 +70,7 @@ export const CategoryIcon: React.FC<{ icon: string; className?: string }> = ({
 }
 
 /**
- * Format number to Vietnamese Currency (VND)
+ * Định dạng số tiền thành Chuỗi tiền tệ Việt Nam (VNĐ)
  */
 export const formatVND = (amount: number): string => {
   return new Intl.NumberFormat('vi-VN', {

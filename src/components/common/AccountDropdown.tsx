@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Settings, LogOut, Shield, Package } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 
-interface AccountDropdownProps {
+type AccountDropdownProps = {
   isOpen: boolean
   onClose: () => void
   onOpenSettings: () => void

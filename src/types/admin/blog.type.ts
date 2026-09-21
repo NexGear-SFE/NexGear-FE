@@ -17,7 +17,7 @@ export interface BlogPost {
 
 export type BlogFilterStatus = 'all' | 'published' | 'draft'
 
-export interface BlogFilterTabsProps {
+export type BlogFilterTabsProps = {
   activeFilter: BlogFilterStatus
   onFilterChange: (filter: BlogFilterStatus) => void
   counts: {
@@ -27,13 +27,13 @@ export interface BlogFilterTabsProps {
   }
 }
 
-export interface BlogTableProps {
+export type BlogTableProps = {
   posts: BlogPost[]
-  onEdit: (post: BlogPost) => void
-  onDelete: (id: string) => void
+  onEditPost: (post: BlogPost) => void
+  onDeletePost: (id: string) => void
 }
 
-export interface BlogTableRowProps {
+export type BlogTableRowProps = {
   post: BlogPost
   onEdit: (post: BlogPost) => void
   onDelete: (id: string) => void

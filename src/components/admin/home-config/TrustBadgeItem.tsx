@@ -1,6 +1,9 @@
 import React, { useState, useMemo } from 'react'
-import type { TrustBadge, TrustBadgeErrors, IconCategoryFilter } from '@/types/admin/homeConfig.type'
-
+import type {
+  IconCategoryFilter,
+  TrustBadgeItemProps,
+  DynamicLucideIconProps,
+} from '@/types/admin/homeConfig.type'
 import {
   BADGE_THEMES,
   TRUST_BADGE_PRESET_ICONS,
@@ -17,18 +20,6 @@ import {
   AlertCircle,
   Sparkles,
 } from 'lucide-react'
-
-interface TrustBadgeItemProps {
-  badge: TrustBadge
-  index: number
-  onChange: (id: number | string, field: keyof TrustBadge, value: string) => void
-  errors?: TrustBadgeErrors
-}
-
-interface DynamicLucideIconProps {
-  icon: string
-  className?: string
-}
 
 const DynamicLucideIcon: React.FC<DynamicLucideIconProps> = ({ icon, className }) => {
   const iconComponent = resolveLucideIcon(icon)

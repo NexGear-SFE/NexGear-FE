@@ -32,7 +32,7 @@ export function Settings() {
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden min-h-0 bg-[#F4F5F7]">
-      {/* ── TOP TABS ── */}
+      {/* ── TAB ĐẦU TRANG ── */}
       <div className="flex items-center gap-2 px-8 pt-6 pb-0 bg-white border-b border-[#E0E0E0] shrink-0">
         {SECTION_TABS.map((t) => {
           const isActive = tab === t.key;
@@ -56,7 +56,7 @@ export function Settings() {
         })}
       </div>
 
-      {/* ── RIGHT CONTENT ── */}
+      {/* ── NỘI DUNG CHÍNH ── */}
       <div className="flex-1 overflow-y-auto py-8 px-8 lg:px-12 bg-white">
         {tab === "account" && (
           <div className="max-w-[1000px] mx-auto">
@@ -71,8 +71,8 @@ export function Settings() {
                 Quản lý thông tin và bảo mật tài khoản của bạn.
               </p>
             </div>
-            {/* The SharedAccountSettings has its own grid, which we want to use here */}
-            {/* We will omit the onBack to hide the "Cài đặt tài khoản" header since we render our own above */}
+            {/* Component SharedAccountSettings có bố cục riêng được sử dụng ở đây */}
+            {/* Bỏ qua onBack để ẩn tiêu đề "Cài đặt tài khoản" vì đã hiển thị ở trên */}
             <div className="-mt-6">
               <SharedAccountSettings user={techStaffUser} />
             </div>

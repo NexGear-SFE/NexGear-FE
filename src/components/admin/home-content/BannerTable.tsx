@@ -1,15 +1,7 @@
 import React, { useState } from 'react'
-import type { BannerItem } from '@/types/admin/homeContent.type'
+import type { BannerTableProps } from '@/types/admin/homeContent.type'
 import { BannerTableRow } from './BannerTableRow'
 import { Image as ImageIcon } from 'lucide-react'
-
-interface BannerTableProps {
-  banners: BannerItem[]
-  onToggleVisibility: (id: string, isVisible: boolean) => void
-  onEditBanner: (banner: BannerItem) => void
-  onDeleteBanner: (banner: BannerItem) => void
-  onReorderBanners: (reordered: BannerItem[]) => void
-}
 
 export const BannerTable: React.FC<BannerTableProps> = ({
   banners,

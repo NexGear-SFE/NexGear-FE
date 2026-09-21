@@ -51,7 +51,7 @@ export function OrderDetailPage() {
 
   return (
     <div className="bg-[#F4F5F7] min-h-screen py-6 md:py-10 font-body relative">
-      {/* Toast Notification */}
+      {/* Thông báo Toast */}
       {toastMessage && (
         <div className="fixed top-6 right-6 z-50 bg-[#040004] text-white px-5 py-3 rounded-[8px] border border-[#E30019] shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-200">
           <CheckCircle2 className="w-5 h-5 text-[#00A859] shrink-0" />
@@ -60,7 +60,7 @@ export function OrderDetailPage() {
       )}
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
-        {/* A. Breadcrumb */}
+        {/* A. Thanh điều hướng Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs md:text-sm text-gray-600 font-medium">
           <Link to="/" className="hover:text-[#E30019] transition-colors">
             Trang chủ
@@ -73,7 +73,7 @@ export function OrderDetailPage() {
           <span className="text-gray-900 font-semibold truncate">Chi tiết đơn hàng {order.orderCode}</span>
         </nav>
 
-        {/* B. Order Header */}
+        {/* B. Đầu trang đơn hàng */}
         <OrderHeader
           orderCode={order.orderCode}
           createdAt={order.createdAt}
@@ -82,23 +82,23 @@ export function OrderDetailPage() {
           statusLabel={order.statusLabel}
         />
 
-        {/* C. Order Status Timeline */}
+        {/* C. Dòng thời gian trạng thái đơn hàng */}
         <OrderTimeline
           status={order.status}
           cancelReason={order.cancelReason}
           timeline={order.timeline}
         />
 
-        {/* D. Main Content (2-Column Grid) */}
+        {/* D. Nội dung chính (Lưới 2 cột) */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* LEFT COLUMN (2/3 width) */}
+          {/* CỘT TRÁI (chiếm 2/3 chiều rộng) */}
           <div className="lg:col-span-2 space-y-6">
             <OrderItemList items={order.items} />
             <OrderShippingCard shippingInfo={order.shippingInfo} />
             <OrderPaymentCard paymentInfo={order.paymentInfo} />
           </div>
 
-          {/* RIGHT COLUMN (1/3 width) */}
+          {/* CỘT PHẢI (chiếm 1/3 chiều rộng) */}
           <div className="space-y-6">
             <OrderSummaryCard
               subtotal={order.subtotal}

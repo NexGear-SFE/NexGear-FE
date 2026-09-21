@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Home, Hammer, Headphones } from 'lucide-react';
 import { ROUTES } from '@/constants';
 
-interface UnderDevelopmentPageProps {
-  featureName?: string;
+type UnderDevelopmentPageProps = {
+  featureName?: string
 }
 
 export function UnderDevelopmentPage({ featureName }: UnderDevelopmentPageProps) {

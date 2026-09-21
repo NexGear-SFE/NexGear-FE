@@ -56,7 +56,7 @@ export const HomePage = () => {
 
   return (
     <div className="py-8 relative">
-      {/* Translucent Backdrop Overlay when Category is focused */}
+      {/* Màn phủ nền mờ khi danh mục sản phẩm được chọn */}
       {isOverlayActive && (
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-30 transition-opacity duration-200"
@@ -65,21 +65,21 @@ export const HomePage = () => {
       )}
 
       <div className="max-w-7xl mx-auto px-4 space-y-12 relative">
-        {/* Category Sidebar & Hero Banner Section */}
+        {/* Phần Danh mục bên và Hero Banner */}
         <section
           id="category-section"
           className={`grid grid-cols-1 lg:grid-cols-4 gap-6 items-stretch scroll-mt-24 transition-all duration-300 relative ${isOverlayActive ? 'z-40' : ''
             }`}
         >
-          {/* Category Sidebar */}
+          {/* Thanh danh mục bên */}
           <div className={`lg:col-span-1 relative transition-all duration-300 ${isOverlayActive ? 'z-40 ring-2 ring-[#E30019] rounded-[8px] shadow-2xl' : ''}`}>
             <CategorySidebar onSelectCategory={handleSelectSidebarCategory} />
           </div>
 
-          {/* Hero Section */}
+          {/* Hero Banner chính */}
           <div className="lg:col-span-3">
             <div className="bg-[#040004] text-white rounded-[8px] p-8 md:p-12 relative overflow-hidden border border-zinc-800 shadow-md h-full flex flex-col justify-center min-h-[360px]">
-              {/* Background Image & Gradient Overlay */}
+              {/* Hình nền & Màn phủ chuyển màu */}
               <img
                 src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80"
                 alt="Gaming Setup Banner"
@@ -87,7 +87,7 @@ export const HomePage = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-r from-[#040004] via-[#040004]/90 to-transparent z-0" />
 
-              {/* Banner Content */}
+              {/* Nội dung Banner */}
               <div className="max-w-2xl relative z-10 space-y-4">
                 <span className="inline-flex items-center gap-1.5 bg-[#E30019]/10 border border-[#E30019]/30 text-[#E30019] text-xs font-semibold px-3 py-1 rounded-[4px] uppercase tracking-wider backdrop-blur-sm">
                   <Zap className="w-3.5 h-3.5" /> GAMING GEAR & COMPONENTS 2025
@@ -120,10 +120,10 @@ export const HomePage = () => {
           </div>
         </section>
 
-        {/* 4 Trust Badges Section */}
+        {/* Phần 4 Cam kết & Tiện ích */}
         <TrustBadges />
 
-        {/* Quick Access Categories & Official Brand Partners */}
+        {/* Truy cập nhanh & Thương hiệu đối tác */}
         <QuickAccess />
 
         {/* SECTION 1: PC BÁN CHẠY */}
@@ -135,7 +135,7 @@ export const HomePage = () => {
               </h2>
             </div>
 
-            {/* Filter Chips & View All Collections Link */}
+            {/* Các nút lọc chip & Liên kết Xem tất cả */}
             <div className="flex items-center gap-3 flex-wrap justify-between md:justify-end w-full md:w-auto">
               <div className="flex items-center gap-2 flex-wrap">
                 <Button
@@ -295,11 +295,11 @@ export const HomePage = () => {
           </div>
         </section>
 
-        {/* News, Reviews & Featured Video Section */}
+        {/* Phần Tin tức công nghệ & Đánh giá */}
         <TechNews />
       </div>
 
-      {/* Floating Add to Cart Toast Notification */}
+      {/* Thông báo nổi Thêm vào giỏ hàng thành công */}
       {addedToast && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#040004] text-white px-5 py-3 rounded-[8px] border border-[#E30019] shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-200">
           <CheckCircle2 className="w-5 h-5 text-[#00A859] shrink-0" />

@@ -1,12 +1,6 @@
-import type { BlogPost } from '@/types/admin/blog.type'
+import type { BlogTableProps } from '@/types/admin/blog.type'
 import { BlogTableRow } from './BlogTableRow'
 import { Newspaper } from 'lucide-react'
-
-interface BlogTableProps {
-  posts: BlogPost[]
-  onEditPost: (post: BlogPost) => void
-  onDeletePost: (id: string) => void
-}
 
 export const BlogTable = ({
   posts,

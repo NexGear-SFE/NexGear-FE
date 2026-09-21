@@ -1,16 +1,7 @@
 import React from 'react'
-import type { PolicyLink, PolicyLinkErrors } from '@/types/admin/footerConfig.type'
+import type { PolicyItemRowProps } from '@/types/admin/footerConfig.type'
 import { FOOTER_FIELD_PLACEHOLDERS } from '@/constants/footerConfigConstants'
 import { Trash2 } from 'lucide-react'
-
-interface PolicyItemRowProps {
-  policy: PolicyLink
-  index: number
-  onChange: (id: string, field: 'title' | 'url', value: string) => void
-  onDelete: (id: string) => void
-  errors?: PolicyLinkErrors
-  isDeleteDisabled?: boolean
-}
 
 export const PolicyItemRow: React.FC<PolicyItemRowProps> = ({
   policy,

@@ -53,7 +53,7 @@ export function CustomerAccountSettingsPage() {
   return (
     <div className="bg-[#F4F5F7] min-h-screen py-6 md:py-8 font-body">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
-        {/* Horizontal Navigation Tabs */}
+        {/* Thanh tab điều hướng ngang */}
         <div className="bg-white rounded-xl border border-[#E0E0E0] p-2 flex items-center gap-2 overflow-x-auto no-scrollbar shadow-xs">
           {tabs.map((t) => {
             const isActive = activeTab === t.key
@@ -75,9 +75,9 @@ export function CustomerAccountSettingsPage() {
           })}
         </div>
 
-        {/* Tab Contents */}
+        {/* Nội dung của Tab */}
         <div>
-          {/* 1. OVERVIEW TAB */}
+          {/* 1. TAB TỔNG QUAN */}
           {activeTab === 'overview' && (
             <AccountOverviewTab
               userName={user?.name}
@@ -88,10 +88,10 @@ export function CustomerAccountSettingsPage() {
             />
           )}
 
-          {/* 2. MY ORDERS TAB */}
+          {/* 2. TAB ĐƠN HÀNG CỦA TÔI */}
           {activeTab === 'orders' && <MyOrdersTab orders={MOCK_ORDERS} />}
 
-          {/* 3. WARRANTY TAB */}
+          {/* 3. TAB BẢO HÀNH */}
           {activeTab === 'warranty' && (
             <>
               <WarrantyRequestList
@@ -112,7 +112,7 @@ export function CustomerAccountSettingsPage() {
             </>
           )}
 
-          {/* 4. PERSONAL PROFILE TAB */}
+          {/* 4. TAB THÔNG TIN CÁ NHÂN */}
           {activeTab === 'profile' && (
             <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 md:p-8 shadow-xs">
               <div className="mb-6">

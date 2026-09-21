@@ -16,7 +16,7 @@ export function TechStaffDashboard() {
 
   return (
     <div className="flex-1 overflow-hidden flex flex-col bg-[#F4F5F7] h-full">
-      {/* Page title bar */}
+      {/* Thanh tiêu đề trang */}
       <div className="pt-5 px-6 shrink-0">
         <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
           <div>
@@ -29,7 +29,7 @@ export function TechStaffDashboard() {
           </div>
 
           <div className="flex items-center gap-2.5 flex-wrap">
-            {/* Search */}
+            {/* Ô tìm kiếm */}
             <div className="relative">
               <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9E9E9E] flex">
                 <IcTechSearch />
@@ -44,7 +44,7 @@ export function TechStaffDashboard() {
           </div>
         </div>
 
-        {/* KPI cards — clickable to filter board */}
+        {/* Thẻ chỉ số KPI — nhấp để lọc bảng Kanban */}
         {(() => {
           const kpis = [
             {
@@ -153,7 +153,7 @@ export function TechStaffDashboard() {
         })()}
       </div>
 
-      {/* ── KANBAN ── */}
+      {/* ── BẢNG KANBAN ── */}
       <div className="flex-1 overflow-x-auto overflow-y-hidden px-6 pb-6 flex gap-3 items-start">
         {KANBAN_COLUMNS.map((col) => {
           const colTickets = getColumnTickets(col.key)
@@ -162,7 +162,7 @@ export function TechStaffDashboard() {
               key={col.key}
               className="w-[268px] min-w-[268px] flex flex-col bg-white border border-[#E0E0E0] rounded-lg overflow-hidden shrink-0 max-h-[calc(100vh-295px)]"
             >
-              {/* Column header */}
+              {/* Tiêu đề cột */}
               <div className="py-2.5 px-[13px] border-b border-black/5 shrink-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-[7px]">
@@ -190,7 +190,7 @@ export function TechStaffDashboard() {
                 </div>
               </div>
 
-              {/* Cards scroll area */}
+              {/* Vùng cuộn danh sách thẻ */}
               <div className="flex-1 overflow-y-auto p-2 flex flex-col gap-2">
                 {colTickets.length === 0 ? (
                   <div className="text-center py-7 px-3 text-[#9E9E9E] text-[11px]">
