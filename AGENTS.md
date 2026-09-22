@@ -1,86 +1,104 @@
 # AGENTS.md
 
-Welcome to **NexGear-SFE**. This file is the primary entry point and operational guide for AI Coding Agents working on this codebase.
+Welcome to **NexGear-SFE**. This document serves as the primary operational guide and baseline reference for AI Coding Agents working on this repository.
 
 ---
 
-## 1. Project Overview & Context
+## 1. Project Overview & Current Baseline Status
 
-NexGear-SFE is an e-commerce for tech equipment, gaming PCs, components, and gear (inspired by models like GearVN). The project prioritizes high-performance category browsing, precise technical specification filtering, smooth cart management, and a seamless checkout experience.
+NexGear-SFE is a Frontend-only e-commerce application for tech equipment, gaming PCs, components, and gear (inspired by models like GearVN).
 
-### Core Stack Reality
-- **Core UI:** React (`^19.2.8`) with Functional Components & React Hooks
+> [!IMPORTANT]
+> **Frontend-Only Reality:** Backend services are currently **NOT** implemented. Data access layers in `src/apis/` operate as asynchronous abstractions over structured domain mock data in `src/mocks/`. Real HTTP client calls (Axios/fetch), token refresh handlers, and backend endpoints are **DEFERRED** until real backend services exist.
+
+### Core Tech Stack Baseline
+- **UI Framework:** React (`^19.2.8`) with Functional Components & React Hooks
 - **Language:** TypeScript (`~6.0.2`, strict mode enabled, no `any`)
 - **Bundler & Build Tool:** Vite (`^8.2.2`)
-- **Styling:** Tailwind CSS
-- **Data & State Management Architecture:** Modular domain APIs (`src/apis/`), client stores (`src/stores/`), utility helpers (`src/utils/`)
+- **Styling:** Tailwind CSS & Custom CSS Variables (`src/index.css`)
+- **Routing:** React Router (`^7.2.0`) with centralized route constants (`src/constants/routes.ts`)
+- **Global Toast System:** Unified `useToast()` hook (`src/hooks/useToast.ts`) backed by `ToastProvider` (`src/providers/ToastProvider.tsx`)
+- **Cart State Management:** Custom Pub-Sub store (`src/stores/cartStore.ts`) using React's `useSyncExternalStore`
+- **Domain Mock Data:** Categorized under `src/mocks/` (`customer/`, `storemanager/`, `techstaff/`, `auth/`)
 
 ---
 
 ## 2. AI Working Principles
 
-When contributing to NexGear-SFE, AI agents MUST strictly adhere to the following principles:
+AI Coding Agents MUST strictly adhere to the following operational rules:
 
-1. **Inspect Existing Implementations First:** Before creating new files, functions, or abstractions, thoroughly inspect the workspace for existing utility functions, hooks, or components.
-2. **Reuse Existing Patterns & Abstractions:** Always reuse existing code patterns established in the repository. Do not invent duplicate abstractions or competing state/API patterns.
-3. **No Unnecessary Changes:** Keep edits strictly focused on the requested task. Do not refactor unrelated code, modify formatting of untouched lines, or introduce unrequested libraries.
-4. **No Speculation or Fabricated Rules:** Do not invent backend business rules, missing API endpoints, or unverified data structures. If information is missing, document it explicitly or state assumptions clearly.
-5. **Prefer Minimal & Targeted Changes:** Satisfy requirements with the smallest, most maintainable diff possible.
-6. **Preserve Established Contracts:** Do not break existing function signatures, component props, or shared data types.
+1. **Source of Truth First:** Treat active source code as the absolute source of truth. Never assume patterns that do not exist in code.
+2. **Inspect & Reuse Existing Patterns:** Thoroughly inspect existing code before creating new files or helper utilities. Always reuse existing hooks, components, and constants.
+3. **Frontend-Only Scope:** Do NOT create Axios clients, fake HTTP servers, backend endpoints, or authentication refresh tokens.
+4. **No Unrequested Redesign or Libraries:** Maintain current UI/UX designs, colors (`#E30019`), typography, and layout. Do NOT install new dependencies (Zustand, Redux, Axios) without explicit user authorization.
+5. **Preserve Component Contracts:** Do not break existing component props, function signatures, or shared TypeScript interfaces.
+6. **No Speculation:** Do not invent non-existent backend APIs or business rules. If details are missing, document them or ask for clarification.
 
 ---
 
 ## 3. Single Source of Truth & Documentation Navigation
 
-Each documentation topic has ONE canonical owner. AI agents MUST reference the canonical document rather than creating or duplicating rules:
+Each documentation topic has ONE canonical owner. AI agents MUST reference the corresponding file:
 
 | Topic / Domain | Canonical Documentation File |
 |---|---|
-| AI Behavior & Guidance | [`AGENTS.md`](./AGENTS.md) |
+| AI Behavior & Rules | [`AGENTS.md`](./AGENTS.md) |
 | Developer & Git Workflow | [`CONTRIBUTING.md`](./CONTRIBUTING.md) |
-| Coding Standards & Conventions | [`agent-docs/CODE_CONVENTIONS.md`](./agent-docs/CODE_CONVENTIONS.md) |
-| File Placement & Directory Responsibilities | [`agent-docs/FOLDER_STRUCTURE.md`](./agent-docs/FOLDER_STRUCTURE.md) |
+| Coding Standards & Conventions | [`agent-docs/code_conventions.md`](./agent-docs/code_conventions.md) |
+| File Placement & Directory Structure | [`agent-docs/FOLDER_STRUCTURE.md`](./agent-docs/FOLDER_STRUCTURE.md) |
 | System & State Architecture | [`agent-docs/ARCHITECTURE.md`](./agent-docs/ARCHITECTURE.md) |
-| API & HTTP Data Fetching | [`agent-docs/API_CONVENTIONS.md`](./agent-docs/API_CONVENTIONS.md) |
-| UI/UX Guidelines & Design System | [`agent-docs/UI_UX_GUIDELINES.md`](./agent-docs/UI_UX_GUIDELINES.md) |
-| Testing Strategy & Guide | [`agent-docs/testing.md`](./agent-docs/testing.md) |
+| API & Data Access Abstraction | [`agent-docs/API_CONVENTIONS.md`](./agent-docs/API_CONVENTIONS.md) |
+| UI/UX Guidelines & Design Tokens | [`agent-docs/UI_UX_GUIDELINES.md`](./agent-docs/UI_UX_GUIDELINES.md) |
+| Testing & Validation Strategy | [`agent-docs/testing.md`](./agent-docs/testing.md) |
+| Project Getting Started | [`README.md`](./README.md) |
 
 ---
 
 ## 4. Progressive Disclosure Rules
 
-To maintain high performance and efficiency, AI agents should read ONLY the documentation relevant to the current task:
+AI agents should read ONLY the documentation relevant to the current task:
 
-### For UI / Frontend Component Tasks
+### For UI / Component Tasks
 1. [`AGENTS.md`](./AGENTS.md)
 2. [`agent-docs/FOLDER_STRUCTURE.md`](./agent-docs/FOLDER_STRUCTURE.md)
-3. [`agent-docs/CODE_CONVENTIONS.md`](./agent-docs/CODE_CONVENTIONS.md)
+3. [`agent-docs/code_conventions.md`](./agent-docs/code_conventions.md)
 4. [`agent-docs/UI_UX_GUIDELINES.md`](./agent-docs/UI_UX_GUIDELINES.md)
 
-### For API & Data Fetching Tasks
+### For API & Data Access Tasks
 1. [`AGENTS.md`](./AGENTS.md)
 2. [`agent-docs/ARCHITECTURE.md`](./agent-docs/ARCHITECTURE.md)
 3. [`agent-docs/API_CONVENTIONS.md`](./agent-docs/API_CONVENTIONS.md)
-4. [`agent-docs/CODE_CONVENTIONS.md`](./agent-docs/CODE_CONVENTIONS.md)
 
 ### For State Management & Store Tasks
 1. [`AGENTS.md`](./AGENTS.md)
 2. [`agent-docs/ARCHITECTURE.md`](./agent-docs/ARCHITECTURE.md)
 3. [`agent-docs/FOLDER_STRUCTURE.md`](./agent-docs/FOLDER_STRUCTURE.md)
-4. [`agent-docs/CODE_CONVENTIONS.md`](./agent-docs/CODE_CONVENTIONS.md)
 
-### For Testing Tasks
+### For Git / Workflow Tasks
 1. [`AGENTS.md`](./AGENTS.md)
-2. [`agent-docs/testing.md`](./agent-docs/testing.md)
-3. [`agent-docs/CODE_CONVENTIONS.md`](./agent-docs/CODE_CONVENTIONS.md)
+2. [`CONTRIBUTING.md`](./CONTRIBUTING.md)
 
 ---
 
-## 5. Execution & Verification Checklist
+## 5. Required Verification Workflow
 
-After writing code or implementing changes, AI agents MUST execute the following verification steps before marking a task complete:
+After making any code modifications, AI agents MUST execute the exact baseline verification suite:
+
 ```bash
+npx tsc --noEmit
 npm run lint
 npm run build
 ```
-Ensure zero TypeScript compilation errors and zero ESLint warnings exist.
+
+Ensure **zero** TypeScript compilation errors, **zero** ESLint errors/warnings, and a successful production build.
+
+---
+
+## 6. Git & Smart Commit Rules
+
+When instructed to commit changes, follow Jira Smart Commit syntax:
+
+- **Commit Message Format:** `NXG-[id] #[status] [description]`
+  - Example: `NXG-1 #in-progress Phase 4: Final architecture cleanup and documentation alignment`
+- **Status Keywords:** `#in-progress`, `#review`, `#done`
+- **Explicit File Staging:** Stage ONLY modified task files. Never use indiscriminate `git add .` unless explicitly requested.

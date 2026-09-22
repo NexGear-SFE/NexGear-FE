@@ -1,60 +1,76 @@
 # NexGear-SFE
 
-Hệ thống giao diện thương mại điện tử chuyên cung cấp thiết bị công nghệ, linh kiện máy tính, PC Gaming và phụ kiện cao cấp (lấy cảm hứng từ mô hình GearVN).
+Hệ thống giao diện thương mại điện tử Frontend chuyên cung cấp thiết bị công nghệ, linh kiện máy tính, PC Gaming và phụ kiện cao cấp (lấy cảm hứng từ mô hình GearVN).
 
 ---
 
-## 🚀 Công nghệ sử dụng
-* **Core:** [React 18+](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-* **Bundler & Build Tool:** [Vite](https://vitejs.dev/)
-* **Routing:** [React Router](https://reactrouter.com/)
-* **HTTP Client:** [Axios](https://axios-http.com/)
-* **State Management:** Zustand / Redux Toolkit
-* **Validation:** Zod
+## 🚀 Công nghệ sử dụng (Technology Stack)
+
+* **Core Framework:** [React 19](https://react.dev/) (`^19.2.8`) + [TypeScript](https://www.typescriptlang.org/) (`~6.0.2`)
+* **Bundler & Build Tool:** [Vite](https://vitejs.dev/) (`^8.2.2`)
+* **Styling:** [Tailwind CSS](https://tailwindcss.com/) + Custom CSS Tokens (`src/index.css`)
+* **Routing:** [React Router](https://reactrouter.com/) (`^7.2.0`) với hệ thống Route Constants tập trung (`src/constants/routes.ts`)
+* **Icons:** [Lucide React](https://lucide.dev/) (`^0.479.0`)
+* **State Management:** Custom Pub-Sub Store (`src/stores/cartStore.ts`) với `useSyncExternalStore` & React Context (`AuthContext`, `ToastContext`)
+* **Data Access Layer:** Asynchronous Mock API Abstraction Layer (`src/apis/`) bọc dữ liệu mock phân vùng theo domain (`src/mocks/`)
+
+> [!NOTE]
+> **Trạng thái kết nối Backend:** Dự án hiện tại ở giai đoạn **Frontend-Only**. HTTP Client (Axios) và kết nối API thật đang được hoãn (DEFERRED) cho đến khi Backend microservices chính thức triển khai.
 
 ---
 
-## 📁 Hướng dẫn cấu trúc & Quy định
-Trước khi bắt đầu viết code, toàn bộ thành viên nhóm **bắt buộc** phải đọc kỹ các tài liệu chuẩn hóa sau:
-1. 📖 [Hướng dẫn cấu trúc thư mục (agent-docs/FOLDER_STRUCTURE.md)](./agent-docs/FOLDER_STRUCTURE.md) - Định vị nơi đặt file chính xác.
-2. 🤝 [Quy định đóng góp & Quy trình Git (CONTRIBUTING.md)](./CONTRIBUTING.md) - Tiêu chuẩn nhánh, commit và review code.
+## 📁 Tài liệu Hướng dẫn & Quy định Dự án
+
+Trước khi bắt đầu đóng góp mã nguồn, toàn bộ thành viên nhóm và AI Coding Agents BẮT BỘC đọc kỹ các tài liệu chuẩn hóa sau:
+
+1. 📖 [Hướng dẫn dành cho AI Agents (`AGENTS.md`)](./AGENTS.md) — Nguyên tắc cốt lõi và thứ tự tra cứu tài liệu.
+2. 🤝 [Quy trình Git & Jira (`CONTRIBUTING.md`)](./CONTRIBUTING.md) — Tiêu chuẩn đặt tên nhánh, Jira Smart Commit và quy trình PR.
+3. 📁 [Cấu trúc Thư mục (`agent-docs/FOLDER_STRUCTURE.md`)](./agent-docs/FOLDER_STRUCTURE.md) — Định vị vị trí đặt file chuẩn xác.
+4. 💻 [Quy chuẩn Mã nguồn (`agent-docs/code_conventions.md`)](./agent-docs/code_conventions.md) — Tiêu chuẩn viết code React & TypeScript.
+5. 🏗️ [Kiến trúc Hệ thống (`agent-docs/ARCHITECTURE.md`)](./agent-docs/ARCHITECTURE.md) — Luồng dữ liệu và phân tầng ứng dụng.
+6. 🔌 [Chuẩn Tương tác API (`agent-docs/API_CONVENTIONS.md`)](./agent-docs/API_CONVENTIONS.md) — Cấu trúc Data Access Layer trên Mock Data.
+7. 🎨 [Quy chuẩn UI/UX (`agent-docs/UI_UX_GUIDELINES.md`)](./agent-docs/UI_UX_GUIDELINES.md) — Design tokens và giao diện cơ khí sắc nét.
+8. 🧪 [Hướng dẫn Kiểm thử (`agent-docs/testing.md`)](./agent-docs/testing.md) — Bộ lệnh validation baseline.
 
 ---
 
-## 🛠️ Cài đặt & Khởi chạy dự án
+## 🛠️ Cài đặt & Khởi chạy Dự án
 
 ```bash
 # 1. Clone repo về máy
 git clone <URL_REPO_NEXGEAR_SFE>
 cd NexGear-SFE
 
-# 2. Cài đặt các thư viện cần thiết
+# 2. Cài đặt các gói phụ thuộc
 npm install
 
-# 3. Tạo file cấu hình môi trường
-cp .env.example .env.local
-
-# 4. Chạy môi trường phát triển (Dev)
+# 3. Khởi chạy máy chủ phát triển (Dev)
 npm run dev
 
-# 5. Kiểm tra build sản phẩm
+# 4. Kiểm tra TypeScript & Linting
+npx tsc --noEmit
+npm run lint
+
+# 5. Kiểm tra Build sản phẩm
 npm run build
 ```
 
 ---
 
 ## 📂 Path Aliases
-Dự án sử dụng path alias `@/` trỏ đến thư mục `src/` để tránh các đường dẫn tương đối dài dòng:
+
+Dự án cấu hình Path Alias `@/` trỏ trực tiếp về thư mục `src/`:
 
 ```typescript
-// ✅ Đúng
-import { Button } from '@/components'
+// ✅ Chuẩn (Dùng Path Alias)
+import { ProductCard } from '@/components/customer/product/ProductCard'
+import { ROUTES } from '@/constants/routes'
 
-// ❌ Tránh
-import { Button } from '../../../components'
+// ❌ Tránh (Đường dẫn tương đối dài dòng)
+import { ProductCard } from '../../../components/customer/product/ProductCard'
 ```
 
 ---
 
-## 👥 Thành viên nhóm phát triển
-Dự án được xây dựng bởi đội ngũ Frontend NexGear-SFE (4 thành viên).
+## 👥 Đội ngũ Phát triển
+Dự án được xây dựng và duy trì bởi đội ngũ Frontend Architect & Developers NexGear-SFE.

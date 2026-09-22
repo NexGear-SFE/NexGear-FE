@@ -1,23 +1,40 @@
-# CHUẨN TƯƠNG TÁC API (API CONVENTIONS)
+# CHUẨN TƯƠNG TÁC DỮ LIỆU & API (API CONVENTIONS)
 
-**Dự án:** NexGear-SFE
+**Dự án:** NexGear-SFE  
 **Vị trí tài liệu:** `agent-docs/API_CONVENTIONS.md`  
-**Vai trò:** Single Source of Truth duy nhất quy định cấu trúc gọi API, quản lý HTTP Client, định dạng Request/Response và xử lý lỗi tập trung cho toàn bộ ứng dụng Frontend.
+**Vai trò:** Single Source of Truth duy nhất quy định cấu trúc Data Access Layer, định dạng Response/Request, tổ chức Mock Data và định hướng kết nối Backend trong tương lai cho ứng dụng Frontend.
 
 ---
 
-## 1. Mô hình Kiến trúc API (API Layer Architecture)
+## 1. Trạng thái Kiến trúc Dữ liệu Hiện tại (Frontend-Only Baseline)
 
-Toàn bộ các yêu cầu gửi request HTTP tới backend microservices MUST được tổ chức tập trung, tuyệt đối không phân tán trong các React Component UI.
+Dự án **NexGear-SFE** hiện tại ở giai đoạn **Frontend-Only** (chưa có kết nối Backend thật).
+
+> [!IMPORTANT]
+> **Data Access Layer Abstraction:** Toàn bộ dữ liệu được truy xuất thông qua các hàm bất đồng bộ tại `src/apis/` bọc dữ liệu mock tại `src/mocks/`. Cấu hình HTTP Client (Axios) và các HTTP request thật được **tạm hoãn (DEFERRED)** cho đến khi dịch vụ Backend chính thức được triển khai.
+
+Sơ đồ truy xuất dữ liệu hiện tại:
 
 ```text
 React Component / Custom Hook
          │
          ▼
-src/apis/<domain>.api.ts (ví dụ: product.api.ts)
+src/apis/<domain>.api.ts (ví dụ: order.api.ts, product.api.ts)
          │
          ▼
-src/lib/axios.ts (Axios Instance với Interceptors & BaseURL)
+src/mocks/<domain>/ (Mock Data phân vùng theo domain)
+```
+
+Sơ đồ truy xuất dữ liệu TƯƠNG LAI (khi có Backend):
+
+```text
+React Component / Custom Hook
+         │
+         ▼
+src/apis/<domain>.api.ts
+         │
+         ▼
+src/lib/axios.ts (Axios Client - DEFERRED)
          │
          ▼
 Backend RESTful Microservices API
@@ -25,44 +42,29 @@ Backend RESTful Microservices API
 
 ---
 
-## 2. Tổ chức Thư mục & Domain Modules (`src/apis/`)
+## 2. Tổ chức Thư mục & Domain Modules (`src/apis/` & `src/mocks/`)
 
-Các hàm gọi API MUST được nhóm theo từng domain nghiệp vụ tương ứng với backend dịch vụ:
+Các hàm truy xuất dữ liệu MUST được nhóm theo từng domain nghiệp vụ tập trung tại `src/apis/`:
 
-- `src/apis/auth.api.ts`: API Đăng nhập, Đăng ký, Refresh Token, Đăng xuất.
-- `src/apis/product.api.ts`: API Lấy danh sách sản phẩm, chi tiết sản phẩm, bộ lọc thông số kỹ thuật.
-- `src/apis/cart.api.ts`: API Thêm, sửa, xóa items trong giỏ hàng, đồng bộ giỏ hàng.
-- `src/apis/order.api.ts`: API Tạo đơn hàng, tra cứu lịch sử đơn hàng.
-- `src/apis/user.api.ts`: API Lấy thông tin cá nhân, cập nhật thông tin cá nhân.
-
+- `src/apis/order.api.ts`: Hàm lấy danh sách đơn hàng (`getOrders`), chi tiết đơn hàng (`getOrderById`), gửi yêu cầu hủy đơn (`cancelOrder`) làm việc trên `src/mocks/customer/order.mock.ts`.
+- `src/apis/product.api.ts`: Hàm lấy danh sách sản phẩm, chi tiết sản phẩm làm việc trên `src/mocks/customer/product.mock.ts`.
+- `src/apis/warranty.api.ts`: Hàm lấy và cập nhật thông tin bảo hành làm việc trên `src/mocks/customer/warranty.mock.ts` & `src/mocks/techstaff/warranty.mock.ts`.
 
 ---
 
-## 3. Cấu hình HTTP Client (`src/lib/axios.ts`)
+## 3. Quy định Chuẩn hóa Response Types (`ApiResponse<T>`)
 
-Mọi lời gọi API MUST sử dụng Axios Client Instance được khởi tạo tập trung tại `src/lib/axios.ts`:
-
-- **Base URL:** Đọc từ biến môi trường `import.meta.env.VITE_API_BASE_URL`.
-- **Headers:** Tự động đính kèm `Content-Type: application/json`.
-- **Auth Interceptor:** Tự động gắn header `Authorization: Bearer <token>` nếu có token khả dụng trong bộ nhớ/storage.
-- **Error Interceptor:** Bắt các mã lỗi HTTP chung (401 Unauthorized, 403 Forbidden, 500 Internal Error) để xử lý tập trung (ví dụ: redirect về trang đăng nhập hoặc tự động refresh token).
-
----
-
-## 4. Quy định Chuẩn hóa Request / Response Types (`src/types/`)
-
-### 4.1. Struct Response Chuẩn (`ApiResponse<T>`)
-Mọi hàm API MUST trả về Promise chứa kiểu dữ liệu phản hồi được định nghĩa tại `src/types/api.type.ts`:
+Mọi hàm API trong `src/apis/` MUST là hàm bất đồng bộ (`async`) trả về `Promise<ApiResponse<T>>` với định nghĩa tại `src/types/common/api.type.ts`:
 
 ```typescript
-export type ApiResponse<T> = {
+export interface ApiResponse<T> {
   success: boolean
   message: string
   data: T
   statusCode: number
 }
 
-export type PaginatedResponse<T> = {
+export interface PaginatedResponse<T> {
   items: T[]
   meta: {
     page: number
@@ -73,32 +75,43 @@ export type PaginatedResponse<T> = {
 }
 ```
 
-### 4.2. Quy ước Đặt tên Hàm API
-- **Lấy dữ liệu:** Dùng tiền tố `get` (ví dụ: `getProducts`, `getProductBySlug`).
-- **Tạo mới:** Dùng tiền tố `create` (ví dụ: `createOrder`).
-- **Cập nhật:** Dùng tiền tố `update` (ví dụ: `updateCartItem`).
-- **Xóa:** Dùng tiền tố `delete` hoặc `remove` (ví dụ: `removeCartItem`).
+### Ví dụ Implementation chuẩn tại `src/apis/order.api.ts`:
+```typescript
+import type { Order } from '@/types/customer/order.type'
+import type { ApiResponse } from '@/types/common/api.type'
+import { MOCK_ORDERS } from '@/mocks/customer/order.mock'
+
+export const orderApi = {
+  getOrderById: async (id?: string): Promise<ApiResponse<Order | null>> => {
+    const found = id
+      ? MOCK_ORDERS.find((o) => o.id === id || o.orderCode === id)
+      : MOCK_ORDERS[0]
+    const targetOrder = found || MOCK_ORDERS[0]
+
+    return {
+      success: Boolean(targetOrder),
+      message: targetOrder ? 'Lấy chi tiết đơn hàng thành công' : 'Không tìm thấy đơn hàng',
+      data: targetOrder || null,
+      statusCode: targetOrder ? 200 : 404,
+    }
+  },
+}
+```
 
 ---
 
-## 5. Quy trình Xử lý Lỗi & UI States
+## 4. Quy ước Đặt tên Hàm API (Naming Conventions)
 
-### 5.1. Xử lý Lỗi Async
-Trong Custom Hooks hoặc Page khi gọi hàm API:
-- MUST bọc lời gọi trong khối `try...catch`.
-- Bắt lỗi API error response từ Axios và hiển thị thông báo lỗi thân thiện qua Toast/Notification UI.
-
-### 5.2. Loading States
-- UI MUST hiển thị trạng thái `isLoading` khi request đang được thực thi để ngăn người dùng bấm lặp lại (double submit).
+- **Lấy dữ liệu danh sách:** Dùng tiền tố `get` + số nhiều (ví dụ: `getOrders`, `getProducts`).
+- **Lấy chi tiết:** Dùng tiền tố `get` + `ById` hoặc `BySlug` (ví dụ: `getOrderById`, `getProductBySlug`).
+- **Tạo mới:** Dùng tiền tố `create` (ví dụ: `createOrder`, `createWarrantyRequest`).
+- **Cập nhật:** Dùng tiền tố `update` (ví dụ: `updateCartItem`, `updateStatus`).
+- **Xóa / Hủy:** Dùng tiền tố `cancel`, `delete` hoặc `remove` (ví dụ: `cancelOrder`, `removeCartItem`).
 
 ---
 
-## 6. Hiện trạng Mã nguồn & Ghi chú Đánh giá (Implementation Reality)
+## 5. Quy tắc cho Lập trình viên & AI Agents
 
-### Current Implementation
-- Thư mục `src/apis/` và `src/lib/` đã được thiết lập trong cấu trúc thư mục với file khởi tạo sẵn sàng.
-- Dự án chuẩn bị tích hợp gói `axios` cho việc giao tiếp microservices theo định hướng thiết kế.
-
-### Ghi chú điểm kết nối Backend (Unknowns)
-- Các endpoint cụ thể (URL routes backend), cấu trúc chi tiết của Token Refresh payload chưa được xác định cố định từ mã nguồn Frontend ở giai đoạn này.
-- **Quy tắc:** Lập trình viên khi kết nối backend cụ thể MUST khai báo endpoint trong `src/constants/` hoặc file `.env.example`.
+1. **KHÔNG tạo HTTP Request giả:** Tuyệt đối không tự ý khởi tạo `axios.get()`, `fetch()` hay tạo mock HTTP server giả lập trong thời điểm hiện tại.
+2. **Tách rời Page khỏi Mock Data:** Component UI và Page KHÔNG ĐƯỢC import trực tiếp các biến mock (như `MOCK_ORDERS`) nếu đã có hàm abstraction tương ứng trong `src/apis/`.
+3. **Giữ nguyên Async Contract:** Các hàm API MUST trả về `Promise` để khi thay thế nguồn mock bằng Backend thật sau này, giao diện Page không phải sửa đổi code.
