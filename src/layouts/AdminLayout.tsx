@@ -15,7 +15,7 @@ import {
 import { ROUTES } from '@/constants'
 import { AccountDropdown } from '@/components/common/AccountDropdown'
 import { SidebarUserWidget } from '@/components/common/SidebarUserWidget'
-import { QuickLoginModal } from '@/components/auth/QuickLoginModal'
+import { QuickLoginModal } from '@/components/Auth/QuickLoginModal'
 import type { BlogPost } from '@/types/admin/blog.type'
 import type { ViewMode, AdminLayoutContext } from '@/types/admin/layout.type'
 

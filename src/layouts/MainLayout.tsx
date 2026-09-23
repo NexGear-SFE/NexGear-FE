@@ -5,7 +5,7 @@ import { Header } from '@/components/customer/Header/Header'
 import { Footer } from '@/components/customer/Footer/Footer'
 import { SupportWidget } from '@/components/customer/Home/SupportWidget'
 import { CartDrawer } from '@/components/customer/Cart/CartDrawer'
-import { QuickLoginModal } from '@/components/auth/QuickLoginModal'
+import { QuickLoginModal } from '@/components/Auth/QuickLoginModal'
 
 export const MainLayout = () => {
   const { pathname } = useLocation()

@@ -1,0 +1,79 @@
+name: CI Pipeline NexGear
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main, staging]
+
+jobs:
+  # JOB 1: Kiểm tra chuẩn code (ESLint) và kiểu dữ liệu (TypeScript)
+  code-quality:
+    name: Code Quality (Lint & Type Check)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+
+      - name: Install dependencies cleanly
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Type Check (TypeScript)
+        run: npx tsc -b --noEmit
+
+  # JOB 2: Chạy kiểm thử tự động trên ma trận Node từ 20.x đến 24.x
+  unit-test:
+    name: Unit Test (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x, 24.x]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies cleanly
+        run: npm ci
+
+      - name: Run Tests with Coverage
+        run: npm test -- --coverage --passWithNoTests
+
+  # JOB 3: Quét lỗ hổng bảo mật và Build ứng dụng Production
+  build-and-audit:
+    name: Security Audit & Production Build
+    needs: [code-quality, unit-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'npm'
+
+      - name: Install dependencies cleanly
+        run: npm ci
+
+      - name: Security Vulnerability Audit
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Build Application
+        run: npm run build
