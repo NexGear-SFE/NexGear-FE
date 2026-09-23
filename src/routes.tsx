@@ -8,7 +8,7 @@ import { AdminLayout } from '@/layouts/AdminLayout';
 import { TechStaffLayout } from '@/layouts/TechStaffLayout';
 
 // Xác thực & Bảo vệ tuyến đường
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { ProtectedRoute } from '@/components/Auth/ProtectedRoute';
 
 // Trang Khách hàng
 import { HomePage } from '@/pages/customer/Home/HomePage';
