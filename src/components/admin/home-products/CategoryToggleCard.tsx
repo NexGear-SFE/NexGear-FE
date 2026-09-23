@@ -1,11 +1,6 @@
 import React from 'react'
-import type { CategoryToggle } from '@/types/admin/homeProductsConfig.type'
+import type { CategoryToggleCardProps } from '@/types/admin/homeProductsConfig.type'
 import { CategoryIcon } from '@/constants/homeProductsConstants'
-
-interface CategoryToggleCardProps {
-  category: CategoryToggle
-  onToggle: (id: string, enabled: boolean) => void
-}
 
 export const CategoryToggleCard: React.FC<CategoryToggleCardProps> = ({
   category,

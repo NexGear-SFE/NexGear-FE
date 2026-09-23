@@ -12,13 +12,16 @@ export const orderApi = {
     }
   },
 
-  getOrderById: async (id: string): Promise<ApiResponse<Order | null>> => {
-    const found = MOCK_ORDERS.find((o) => o.id === id || o.orderCode === id) || null
+  getOrderById: async (id?: string): Promise<ApiResponse<Order | null>> => {
+    const found = id
+      ? MOCK_ORDERS.find((o) => o.id === id || o.orderCode === id)
+      : MOCK_ORDERS[0]
+    const targetOrder = found || MOCK_ORDERS[0]
     return {
-      success: Boolean(found),
-      message: found ? 'Lấy chi tiết đơn hàng thành công' : 'Không tìm thấy đơn hàng',
-      data: found,
-      statusCode: found ? 200 : 404,
+      success: Boolean(targetOrder),
+      message: targetOrder ? 'Lấy chi tiết đơn hàng thành công' : 'Không tìm thấy đơn hàng',
+      data: targetOrder || null,
+      statusCode: targetOrder ? 200 : 404,
     }
   },
 

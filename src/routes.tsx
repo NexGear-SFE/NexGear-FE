@@ -11,12 +11,12 @@ import { TechStaffLayout } from '@/layouts/TechStaffLayout';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 // Trang Khách hàng
-import { HomePage } from '@/pages/customer/Home/HomePage';
-import { ProductDetailPage } from '@/pages/customer/Product/ProductDetailPage';
-import { BlogListPage } from '@/pages/customer/Blog/BlogListPage';
-import { BlogDetailPage } from '@/pages/customer/Blog/BlogDetailPage';
+import { HomePage } from '@/pages/customer/home/HomePage';
+import { ProductDetailPage } from '@/pages/customer/product/ProductDetailPage';
+import { BlogListPage } from '@/pages/customer/blog/BlogListPage';
+import { BlogDetailPage } from '@/pages/customer/blog/BlogDetailPage';
 import { CustomerAccountSettingsPage } from '@/pages/customer/AccountSettingsPage';
-import { OrderDetailPage } from '@/pages/customer/Order/OrderDetailPage';
+import { OrderDetailPage } from '@/pages/customer/order/OrderDetailPage';
 
 // Trang Xác thực
 import { LoginPage } from '@/pages/auth/LoginPage';
@@ -25,6 +25,7 @@ import { RegisterPage } from '@/pages/auth/RegisterPage';
 // Trang Dùng chung
 import { AccountSettingsPage } from '@/pages/common/AccountSettingsPage';
 import { NotFoundPage } from '@/pages/common/NotFoundPage';
+import { UnderDevelopmentPage } from '@/pages/common/UnderDevelopmentPage';
 
 // Trang Quản lý Cửa hàng
 import { BlogManagementPage } from '@/pages/admin/BlogManagementPage';
@@ -71,6 +72,14 @@ export const router = createBrowserRouter([
         path: ROUTES.BLOG_DETAIL(),
         element: <BlogDetailPage />,
       },
+      {
+        path: ROUTES.CART,
+        element: <UnderDevelopmentPage featureName="Giỏ hàng & Thanh toán" />,
+      },
+      {
+        path: ROUTES.CHECKOUT,
+        element: <UnderDevelopmentPage featureName="Thanh toán" />,
+      },
     ],
   },
 
@@ -114,6 +123,18 @@ export const router = createBrowserRouter([
         element: <Navigate to={ROUTES.STORE_MANAGER.HOME_CONTENT} replace />,
       },
       {
+        path: ROUTES.STORE_MANAGER.SUB_PATHS.CATEGORIES,
+        element: <UnderDevelopmentPage featureName="Danh mục & Hãng" />,
+      },
+      {
+        path: ROUTES.STORE_MANAGER.SUB_PATHS.PRODUCTS,
+        element: <UnderDevelopmentPage featureName="Quản lý Sản phẩm" />,
+      },
+      {
+        path: ROUTES.STORE_MANAGER.SUB_PATHS.CONTACT,
+        element: <UnderDevelopmentPage featureName="Liên hệ & Chat Widget" />,
+      },
+      {
         path: ROUTES.STORE_MANAGER.SUB_PATHS.BLOGS,
         element: <BlogManagementPage />,
       },
@@ -136,8 +157,20 @@ export const router = createBrowserRouter([
         element: <TechStaffDashboard />,
       },
       {
+        path: ROUTES.TECH_STAFF.SUB_PATHS.WARRANTY,
+        element: <UnderDevelopmentPage featureName="Dịch vụ / Bảo hành" />,
+      },
+      {
         path: ROUTES.TECH_STAFF.SUB_PATHS.SERIAL,
         element: <SerialCheck />,
+      },
+      {
+        path: ROUTES.TECH_STAFF.SUB_PATHS.REPORTS,
+        element: <UnderDevelopmentPage featureName="Báo cáo" />,
+      },
+      {
+        path: ROUTES.TECH_STAFF.SUB_PATHS.HISTORY,
+        element: <UnderDevelopmentPage featureName="Lịch sử" />,
       },
       {
         path: ROUTES.TECH_STAFF.SUB_PATHS.SETTINGS,
@@ -147,8 +180,12 @@ export const router = createBrowserRouter([
   },
 
   // ==========================================
-  // 5. ĐƯỜNG DẪN TRANG 404 KHÔNG TÌM THẤY TRANG
+  // 5. ĐƯỜNG DẪN TÍNH NĂNG ĐANG PHÁT TRIỂN & 404
   // ==========================================
+  {
+    path: ROUTES.UNDER_DEVELOPMENT,
+    element: <UnderDevelopmentPage />,
+  },
   {
     path: ROUTES.NOT_FOUND,
     element: <NotFoundPage />,
@@ -158,3 +195,4 @@ export const router = createBrowserRouter([
     element: <NotFoundPage />,
   },
 ]);
+

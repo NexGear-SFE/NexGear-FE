@@ -1,26 +1,7 @@
 import React from 'react'
-import type {
-  NavigationColumns,
-  NavColumnLinkErrors,
-} from '@/types/admin/footerConfig.type'
+import type { NavigationLinksSectionProps } from '@/types/admin/footerConfig.type'
 import { NavItemRow } from '@/components/admin/footer-config/NavItemRow'
 import { Plus } from 'lucide-react'
-
-interface NavigationLinksSectionProps {
-  navColumns: NavigationColumns
-  onLinkChange: (
-    column: 'left' | 'right',
-    id: string,
-    field: 'label' | 'url',
-    value: string
-  ) => void
-  onAddLink: (column: 'left' | 'right') => void
-  onDeleteLink: (column: 'left' | 'right', id: string) => void
-  errors?: {
-    left?: Record<string, NavColumnLinkErrors>
-    right?: Record<string, NavColumnLinkErrors>
-  }
-}
 
 export const NavigationLinksSection: React.FC<NavigationLinksSectionProps> = ({
   navColumns,
@@ -35,7 +16,7 @@ export const NavigationLinksSection: React.FC<NavigationLinksSectionProps> = ({
       <div className="flex items-center mb-4">
         <span className="w-1 h-5 bg-red-600 rounded-full inline-block mr-2" />
         <h3 className="font-semibold text-slate-900 text-base">
-          2. Cột điều hướng (Links)
+          2. Cột điều hướng
         </h3>
       </div>
 
@@ -70,7 +51,7 @@ export const NavigationLinksSection: React.FC<NavigationLinksSectionProps> = ({
           <button
             type="button"
             onClick={() => onAddLink('left')}
-            className="border border-dashed border-slate-300 text-slate-600 hover:text-slate-900 hover:border-slate-400 text-xs font-medium px-3.5 py-2 rounded-lg mt-3 flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="border border-dashed border-red-500 text-red-600 hover:bg-red-50 font-medium text-xs px-3.5 py-2 rounded-xl mt-3 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Thêm mục mới</span>
@@ -107,7 +88,7 @@ export const NavigationLinksSection: React.FC<NavigationLinksSectionProps> = ({
           <button
             type="button"
             onClick={() => onAddLink('right')}
-            className="border border-dashed border-slate-300 text-slate-600 hover:text-slate-900 hover:border-slate-400 text-xs font-medium px-3.5 py-2 rounded-lg mt-3 flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="border border-dashed border-red-500 text-red-600 hover:bg-red-50 font-medium text-xs px-3.5 py-2 rounded-xl mt-3 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Thêm mục mới</span>

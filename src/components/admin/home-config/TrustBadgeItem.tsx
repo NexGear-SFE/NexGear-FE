@@ -1,5 +1,9 @@
 import React, { useState, useMemo } from 'react'
-import type { TrustBadge, TrustBadgeErrors } from '@/types/admin/homeConfig.type'
+import type {
+  IconCategoryFilter,
+  TrustBadgeItemProps,
+  DynamicLucideIconProps,
+} from '@/types/admin/homeConfig.type'
 import {
   BADGE_THEMES,
   TRUST_BADGE_PRESET_ICONS,
@@ -17,24 +21,10 @@ import {
   Sparkles,
 } from 'lucide-react'
 
-interface TrustBadgeItemProps {
-  badge: TrustBadge
-  index: number
-  onChange: (id: number | string, field: keyof TrustBadge, value: string) => void
-  errors?: TrustBadgeErrors
-}
-
-interface DynamicLucideIconProps {
-  icon: string
-  className?: string
-}
-
 const DynamicLucideIcon: React.FC<DynamicLucideIconProps> = ({ icon, className }) => {
   const iconComponent = resolveLucideIcon(icon)
   return React.createElement(iconComponent, { className })
 }
-
-type IconCategoryFilter = 'all' | 'warranty' | 'shipping' | 'tech' | 'service'
 
 export const TrustBadgeItem: React.FC<TrustBadgeItemProps> = ({
   badge,
@@ -192,7 +182,7 @@ export const TrustBadgeItem: React.FC<TrustBadgeItemProps> = ({
                           { id: 'all', label: 'Tất cả' },
                           { id: 'warranty', label: 'Bảo hành' },
                           { id: 'shipping', label: 'Vận chuyển' },
-                          { id: 'tech', label: 'Tech & Gear' },
+                          { id: 'tech', label: 'Công nghệ' },
                           { id: 'service', label: 'Dịch vụ' },
                         ] as const
                       ).map((cat) => (

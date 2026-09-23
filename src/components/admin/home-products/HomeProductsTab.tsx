@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import type { CategoryToggle, HomeProductsConfigData } from '@/types/admin/homeProductsConfig.type'
-import { MOCK_HOME_PRODUCTS_CONFIG } from '@/mocks/mockHomeProductsConfig'
+import type { CategoryToggle, HomeProductsTabProps } from '@/types/admin/homeProductsConfig.type'
+import { MOCK_HOME_PRODUCTS_CONFIG } from '@/mocks/storemanager/homeProductsConfig.mock'
 import {
   HOME_PRODUCTS_INFO_TEXT,
   HOME_PRODUCTS_SUBTITLE,
@@ -9,11 +9,6 @@ import { CategoryToggleCard } from '@/components/admin/home-products/CategoryTog
 import { CategoryShelfAccordion } from '@/components/admin/home-products/CategoryShelfAccordion'
 import { useToast } from '@/hooks/useToast'
 import { Check, RotateCcw, Info } from 'lucide-react'
-
-interface HomeProductsTabProps {
-  initialData?: HomeProductsConfigData
-  onSave?: (categories: CategoryToggle[]) => void
-}
 
 export const HomeProductsTab: React.FC<HomeProductsTabProps> = ({
   initialData = MOCK_HOME_PRODUCTS_CONFIG,

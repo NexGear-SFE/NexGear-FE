@@ -2,7 +2,7 @@ import type { QuickAccessItem, QuickAccessFormData } from './homeContent.type'
 
 export type { QuickAccessItem, QuickAccessFormData }
 
-export interface QuickAccessModalProps {
+export type QuickAccessModalProps = {
   isOpen: boolean
   editingItem: QuickAccessItem | null
   nextOrder: number
@@ -10,16 +10,14 @@ export interface QuickAccessModalProps {
   onSave: (data: QuickAccessFormData) => void
 }
 
-export interface QuickAccessFormBodyProps {
-  formData: QuickAccessFormData
-  errors: Record<string, string>
-  onChangeField: (field: keyof QuickAccessFormData, value: QuickAccessFormData[keyof QuickAccessFormData]) => void
+export type QuickAccessFormBodyProps = {
+  editingItem: QuickAccessItem | null
+  nextOrder: number
   onClose: () => void
   onSave: (data: QuickAccessFormData) => void
-  isEditing: boolean
 }
 
-export interface QuickAccessIconProps {
+export type QuickAccessIconProps = {
   name: string
   className?: string
 }

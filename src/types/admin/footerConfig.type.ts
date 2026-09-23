@@ -84,7 +84,7 @@ export interface FooterConfigErrors {
   policyLinks?: Record<string, PolicyLinkErrors>
 }
 
-export interface BottomBarSectionProps {
+export type BottomBarSectionProps = {
   copyright: string
   onCopyrightChange: (value: string) => void
   policyLinks: PolicyLink[]
@@ -95,7 +95,7 @@ export interface BottomBarSectionProps {
   policyErrors?: Record<string, PolicyLinkErrors>
 }
 
-export interface CompanySocialSectionProps {
+export type CompanySocialSectionProps = {
   company: CompanyInfo
   socials: SocialLinks
   onCompanyChange: (field: keyof CompanyInfo, value: string) => void
@@ -104,37 +104,48 @@ export interface CompanySocialSectionProps {
   socialErrors?: SocialLinksErrors
 }
 
-export interface ContactInfoSectionProps {
+export type ContactInfoSectionProps = {
   contact: ContactInfo
-  onChangeContact: (field: keyof ContactInfo, value: string) => void
-  errors?: FooterConfigErrors
+  onChange: (field: keyof ContactInfo, value: string) => void
+  errors?: ContactInfoErrors
 }
 
-export interface FooterConfigTabProps {
-  initialConfig?: FooterConfigData
-  onSave?: (config: FooterConfigData) => void
+export type FooterConfigTabProps = {
+  initialData?: FooterConfigData
+  onSave?: (data: FooterConfigData) => void
 }
 
-export interface NavigationLinksSectionProps {
+export type NavigationLinksSectionProps = {
   navColumns: NavigationColumns
-  onAddLink: (col: 'left' | 'right') => void
-  onUpdateLink: (col: 'left' | 'right', id: string, field: keyof NavColumnLink, value: string) => void
-  onRemoveLink: (col: 'left' | 'right', id: string) => void
-  errors?: FooterConfigErrors
+  onLinkChange: (
+    column: 'left' | 'right',
+    id: string,
+    field: 'label' | 'url',
+    value: string
+  ) => void
+  onAddLink: (column: 'left' | 'right') => void
+  onDeleteLink: (column: 'left' | 'right', id: string) => void
+  errors?: {
+    left?: Record<string, NavColumnLinkErrors>
+    right?: Record<string, NavColumnLinkErrors>
+  }
 }
 
-export interface NavItemRowProps {
+export type NavItemRowProps = {
   item: NavColumnLink
-  column: 'left' | 'right'
-  onUpdate: (col: 'left' | 'right', id: string, field: keyof NavColumnLink, value: string) => void
-  onRemove: (col: 'left' | 'right', id: string) => void
+  index: number
+  onChange: (id: string, field: 'label' | 'url', value: string) => void
+  onDelete: (id: string) => void
   errors?: NavColumnLinkErrors
+  isDeleteDisabled?: boolean
 }
 
-export interface PolicyItemRowProps {
-  item: PolicyLink
-  onUpdate: (id: string, field: keyof PolicyLink, value: string) => void
-  onRemove: (id: string) => void
+export type PolicyItemRowProps = {
+  policy: PolicyLink
+  index: number
+  onChange: (id: string, field: 'title' | 'url', value: string) => void
+  onDelete: (id: string) => void
   errors?: PolicyLinkErrors
+  isDeleteDisabled?: boolean
 }
 

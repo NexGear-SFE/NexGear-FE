@@ -55,6 +55,50 @@ export const AdminLayout = () => {
     },
   ]
 
+  const renderBreadcrumbContent = () => {
+    if (isSettingsPage) {
+      return <span className="text-[#040004] font-semibold">Cài đặt tài khoản</span>
+    }
+    if (isHomeContentPage) {
+      return <span className="text-[#040004] font-semibold">Quản lý Trang chủ</span>
+    }
+    if (location.pathname.startsWith(ROUTES.STORE_MANAGER.CATEGORIES)) {
+      return <span className="text-[#040004] font-semibold">Danh mục & Hãng</span>
+    }
+    if (location.pathname.startsWith(ROUTES.STORE_MANAGER.PRODUCTS)) {
+      return <span className="text-[#040004] font-semibold">Quản lý Sản phẩm</span>
+    }
+    if (location.pathname.startsWith(ROUTES.STORE_MANAGER.CONTACT)) {
+      return <span className="text-[#040004] font-semibold">Liên hệ & Chat Widget</span>
+    }
+    if (location.pathname.startsWith(ROUTES.STORE_MANAGER.BLOGS)) {
+      return (
+        <>
+          <Link
+            to={ROUTES.STORE_MANAGER.BLOGS}
+            onClick={handleNavigateToBlogs}
+            className="text-[#040004] font-semibold hover:underline"
+          >
+            blogs
+          </Link>
+          {viewMode === 'create' && (
+            <>
+              <ChevronRight className="w-3 h-3 text-slate-400" />
+              <span className="text-[#E30019] font-semibold">Tạo bài viết</span>
+            </>
+          )}
+          {viewMode === 'edit' && (
+            <>
+              <ChevronRight className="w-3 h-3 text-slate-400" />
+              <span className="text-[#E30019] font-semibold">Chỉnh sửa bài viết</span>
+            </>
+          )}
+        </>
+      )
+    }
+    return <span className="text-[#040004] font-semibold">Bảng quản trị</span>
+  }
+
   return (
     <div className="flex min-h-screen bg-[#F4F5F7]">
       {/* 5.1 Sidebar (Bên trái) */}
@@ -124,43 +168,10 @@ export const AdminLayout = () => {
               <span>storemanager</span>
               <ChevronRight className="w-3 h-3 text-slate-400" />
 
-              {isSettingsPage ? (
-                <span className="text-[#040004] font-semibold">
-                  Cài đặt tài khoản
-                </span>
-              ) : isHomeContentPage ? (
-                <span className="text-[#040004] font-semibold">
-                  Quản lý Trang chủ
-                </span>
-              ) : (
-                <>
-                  <Link
-                    to={ROUTES.STORE_MANAGER.BLOGS}
-                    onClick={handleNavigateToBlogs}
-                    className="text-[#040004] font-semibold hover:underline"
-                  >
-                    blogs
-                  </Link>
-                  {viewMode === 'create' && (
-                    <>
-                      <ChevronRight className="w-3 h-3 text-slate-400" />
-                      <span className="text-[#E30019] font-semibold">
-                        Tạo bài viết
-                      </span>
-                    </>
-                  )}
-                  {viewMode === 'edit' && (
-                    <>
-                      <ChevronRight className="w-3 h-3 text-slate-400" />
-                      <span className="text-[#E30019] font-semibold">
-                        Chỉnh sửa bài viết
-                      </span>
-                    </>
-                  )}
-                </>
-              )}
+              {renderBreadcrumbContent()}
             </div>
           </div>
+
 
           {/* Bên phải: Notification Bell & User Profile Dropdown */}
           <div className="flex items-center gap-3 relative">

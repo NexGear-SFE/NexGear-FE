@@ -1,15 +1,5 @@
-import type { BlogFilterStatus } from '@/types/admin/blog.type'
+import type { BlogFilterStatus, BlogFilterTabsProps } from '@/types/admin/blog.type'
 import { BLOG_FILTER_STATUS } from '@/constants/blog'
-
-interface BlogFilterTabsProps {
-  activeFilter: BlogFilterStatus
-  onFilterChange: (filter: BlogFilterStatus) => void
-  counts: {
-    all: number
-    published: number
-    draft: number
-  }
-}
 
 export const BlogFilterTabs = ({
   activeFilter,

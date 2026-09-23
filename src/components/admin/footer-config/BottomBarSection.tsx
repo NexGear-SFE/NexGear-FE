@@ -20,7 +20,7 @@ export const BottomBarSection: React.FC<BottomBarSectionProps> = ({
       <div className="flex items-center mb-4">
         <span className="w-1 h-5 bg-red-600 rounded-full inline-block mr-2" />
         <h3 className="font-semibold text-slate-900 text-base">
-          4. Bản quyền & Dưới cùng (Bottom Bar)
+          4. Bản quyền & Dưới cùng
         </h3>
       </div>
 
@@ -38,11 +38,10 @@ export const BottomBarSection: React.FC<BottomBarSectionProps> = ({
           value={copyright}
           onChange={(e) => onCopyrightChange(e.target.value)}
           placeholder={FOOTER_FIELD_PLACEHOLDERS.copyright}
-          className={`w-full rounded-lg border text-sm px-3.5 py-2.5 transition outline-none ${
-            copyrightError
+          className={`w-full rounded-lg border text-sm px-3.5 py-2.5 transition outline-none ${copyrightError
               ? 'border-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500 bg-red-50/20 text-slate-800'
               : 'border-slate-200 focus:border-red-500 focus:ring-1 focus:ring-red-500 text-slate-800'
-          }`}
+            }`}
         />
         {copyrightError && (
           <p className="text-xs text-red-500 mt-1">{copyrightError}</p>
@@ -53,7 +52,7 @@ export const BottomBarSection: React.FC<BottomBarSectionProps> = ({
       <div className="pt-2 border-t border-slate-100">
         <div className="flex items-center justify-between mt-2 mb-2">
           <label className="block text-xs text-slate-600 font-medium">
-            Policy Links
+            Liên kết chính sách
           </label>
           <span className="text-[11px] text-slate-400">
             {policyLinks.length} liên kết chính sách
@@ -79,7 +78,7 @@ export const BottomBarSection: React.FC<BottomBarSectionProps> = ({
         <button
           type="button"
           onClick={onAddPolicy}
-          className="border border-dashed border-slate-300 text-slate-600 hover:text-slate-900 hover:border-slate-400 text-xs font-medium px-3.5 py-2 rounded-lg mt-3 flex items-center gap-1.5 transition-colors cursor-pointer"
+          className="border border-dashed border-red-500 text-red-600 hover:bg-red-50 font-medium text-xs px-3.5 py-2 rounded-xl mt-3 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>Thêm chính sách</span>

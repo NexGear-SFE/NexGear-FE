@@ -41,7 +41,7 @@ export interface QuickAccessFormData {
   order: number
 }
 
-export interface BannerModalProps {
+export type BannerModalProps = {
   isOpen: boolean
   editingBanner: BannerItem | null
   nextOrder: number
@@ -49,48 +49,53 @@ export interface BannerModalProps {
   onSave: (data: BannerFormData) => void
 }
 
-export interface BannerFormBodyProps {
-  formData: BannerFormData
-  errors: Record<string, string>
-  onChangeField: (field: keyof BannerFormData, value: BannerFormData[keyof BannerFormData]) => void
+export type BannerFormBodyProps = {
+  editingBanner: BannerItem | null
+  nextOrder: number
   onClose: () => void
   onSave: (data: BannerFormData) => void
-  isEditing: boolean
 }
 
-export interface BannerTableProps {
+export type BannerTableProps = {
   banners: BannerItem[]
   onToggleVisibility: (id: string, isVisible: boolean) => void
   onEditBanner: (banner: BannerItem) => void
   onDeleteBanner: (banner: BannerItem) => void
-  onReorderBanners?: (banners: BannerItem[]) => void
+  onReorderBanners: (reordered: BannerItem[]) => void
 }
 
-export interface BannerTableRowProps {
+export type BannerTableRowProps = {
   banner: BannerItem
   index: number
-  totalCount: number
   onToggleVisibility: (id: string, isVisible: boolean) => void
-  onEditBanner: (banner: BannerItem) => void
-  onDeleteBanner: (banner: BannerItem) => void
-  onMoveUp?: (index: number) => void
-  onMoveDown?: (index: number) => void
+  onEdit: (banner: BannerItem) => void
+  onDelete: (banner: BannerItem) => void
+  onDragStart?: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void
+  onDragOver?: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void
+  onDrop?: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void
+  onMoveUp?: () => void
+  onMoveDown?: () => void
+  isFirst?: boolean
+  isLast?: boolean
 }
 
-export interface DeleteConfirmModalProps {
+export type DeleteConfirmModalProps = {
   banner: BannerItem | null
   onClose: () => void
   onConfirm: () => void
 }
 
-export interface HomeConfigSubNavProps {
+export type HomeConfigSubNavProps = {
   activeTab: HomeContentTab
   onTabChange: (tab: HomeContentTab) => void
 }
 
-export interface ToggleSwitchProps {
+export type ToggleSwitchProps = {
   checked: boolean
   onChange: (checked: boolean) => void
+  disabled?: boolean
+  id?: string
+  ariaLabel?: string
   label?: string
 }
 

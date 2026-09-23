@@ -142,7 +142,7 @@ export const BlogManagementPage = () => {
           </p>
         </div>
 
-        {/* Primary CTA Button */}
+        {/* Nút Thao tác chính */}
         <button
           type="button"
           onClick={handleOpenAddView}
@@ -167,7 +167,7 @@ export const BlogManagementPage = () => {
         onDeletePost={handleDeleteClick}
       />
 
-      {/* MODAL: Confirmation Delete Popup */}
+      {/* MODAL: Hộp thoại xác nhận xóa */}
       {deletingPostId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
           <div className="bg-white border border-[#E0E0E0] rounded-md shadow-xl max-w-md w-full p-6 space-y-4 animate-in fade-in zoom-in-95 duration-100">

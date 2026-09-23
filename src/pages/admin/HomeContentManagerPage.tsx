@@ -4,10 +4,10 @@ import { Plus } from 'lucide-react'
 import type { BannerItem, BannerFormData, HomeContentTab } from '@/types/admin/homeContent.type'
 import { DEFAULT_HOME_TAB } from '@/constants/homeContent'
 import { INITIAL_HERO_BANNERS } from '@/mocks/storemanager/homeContent.mock'
-import { HomeConfigSubNav } from '@/components/admin/homeContent/HomeConfigSubNav'
-import { BannerTable } from '@/components/admin/homeContent/BannerTable'
-import { BannerModal } from '@/components/admin/homeContent/BannerModal'
-import { DeleteConfirmModal } from '@/components/admin/homeContent/DeleteConfirmModal'
+import { HomeConfigSubNav } from '@/components/admin/home-content/HomeConfigSubNav'
+import { BannerTable } from '@/components/admin/home-content/BannerTable'
+import { BannerModal } from '@/components/admin/home-content/BannerModal'
+import { DeleteConfirmModal } from '@/components/admin/home-content/DeleteConfirmModal'
 import { QuickAccessManager } from '@/components/admin/quick-access/QuickAccessManager'
 import { TrustBadgeForm } from '@/components/admin/home-config/TrustBadgeForm'
 import { FooterConfigTab } from '@/components/admin/footer-config/FooterConfigTab'
@@ -17,22 +17,22 @@ import { HomeProductsTab } from '@/components/admin/home-products/HomeProductsTa
 export const HomeContentManagerPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  // Tab state directly derived from URL query params: ?tab=hero
+  // Trạng thái tab lấy trực tiếp từ tham số URL: ?tab=hero
   const activeTab = (searchParams.get('tab') as HomeContentTab) || DEFAULT_HOME_TAB
 
   const handleTabChange = (tab: HomeContentTab) => {
     setSearchParams({ tab })
   }
 
-  // Banners state
+  // Trạng thái danh sách banner
   const [banners, setBanners] = useState<BannerItem[]>(INITIAL_HERO_BANNERS)
 
-  // Modal states
+  // Trạng thái các modal
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingBanner, setEditingBanner] = useState<BannerItem | null>(null)
   const [deletingBanner, setDeletingBanner] = useState<BannerItem | null>(null)
 
-  // Toggle isVisible
+  // Bật/tắt trạng thái hiển thị
   const handleToggleVisibility = (id: string, isVisible: boolean) => {
     setBanners((prev) =>
       prev.map((banner) =>
@@ -41,22 +41,22 @@ export const HomeContentManagerPage: React.FC = () => {
     )
   }
 
-  // Open add modal
+  // Mở modal thêm mới
   const handleOpenAddModal = () => {
     setEditingBanner(null)
     setIsModalOpen(true)
   }
 
-  // Open edit modal
+  // Mở modal chỉnh sửa
   const handleOpenEditModal = (banner: BannerItem) => {
     setEditingBanner(banner)
     setIsModalOpen(true)
   }
 
-  // Save banner (create or update)
+  // Lưu banner (thêm mới hoặc cập nhật)
   const handleSaveBanner = (formData: BannerFormData) => {
     if (editingBanner) {
-      // Update
+      // Cập nhật
       setBanners((prev) =>
         prev.map((b) =>
           b.id === editingBanner.id
@@ -65,7 +65,7 @@ export const HomeContentManagerPage: React.FC = () => {
         )
       )
     } else {
-      // Create new
+      // Thêm mới
       const newBanner: BannerItem = {
         id: `banner-${Date.now()}`,
         ...formData,
@@ -74,7 +74,7 @@ export const HomeContentManagerPage: React.FC = () => {
     }
   }
 
-  // Delete handlers
+  // Hàm xử lý xóa
   const handleDeleteClick = (banner: BannerItem) => {
     setDeletingBanner(banner)
   }
@@ -110,7 +110,7 @@ export const HomeContentManagerPage: React.FC = () => {
           {/* Tiêu đề nhóm */}
           <div className="mb-6 flex items-center justify-between">
             <h2 className="border-l-4 border-red-600 pl-3 font-bold text-gray-900 text-base">
-              Quản lý Hero Banner / Promo Slider
+              Quản lý Banner trang chủ & Khuyến mãi
             </h2>
             <span className="text-xs text-gray-400">
               {banners.length} banner đang được cấu hình

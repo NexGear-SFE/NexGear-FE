@@ -14,6 +14,7 @@ export const MOCK_ORDERS: Order[] = [
     items: [
       {
         id: 'item-1',
+        slug: 'laptop-gaming-asus-rog-strix-g16',
         name: 'Laptop ASUS ROG Zephyrus G14 2024',
         sku: 'ASUS-G14-2024',
         price: 42990000,
@@ -62,6 +63,7 @@ export const MOCK_ORDERS: Order[] = [
     items: [
       {
         id: 'item-2',
+        slug: 'pc-gvn-asus-rog-i7-14700f-rtx-4070ti',
         name: 'PC GVN Intel i7-14700F / VGA RTX 5070Ti (DDR5)',
         sku: 'GVN-I7-5070TI',
         price: 72990000,
@@ -109,6 +111,7 @@ export const MOCK_ORDERS: Order[] = [
     items: [
       {
         id: 'item-3a',
+        slug: 'ban-phim-co-akko-3098b',
         name: 'Bàn phím cơ Akko 3098B Multi-modes Wireless Mech Keyboard',
         sku: 'AKKO-3098B-PINK',
         price: 2450000,
@@ -118,6 +121,7 @@ export const MOCK_ORDERS: Order[] = [
       },
       {
         id: 'item-3b',
+        slug: 'chuot-logitech-g-pro-x-superlight-2',
         name: 'Chuột Logitech G Pro X Superlight 2 Wireless Gaming Mouse',
         sku: 'LOGI-SUPERLIGHT-2',
         price: 3590000,
@@ -161,6 +165,7 @@ export const MOCK_ORDERS: Order[] = [
     items: [
       {
         id: 'item-4',
+        slug: 'tai-nghe-hyperx-cloud-iii-wireless',
         name: 'Tai nghe Sony WH-1000XM5 Wireless Noise Canceling',
         sku: 'SONY-XM5-BLK',
         price: 8490000,
@@ -209,6 +214,7 @@ export const MOCK_ORDERS: Order[] = [
     items: [
       {
         id: 'item-5',
+        slug: 'pc-gvn-intel-i5-12400f-rtx-3050',
         name: 'Màn hình LG UltraGear 27GP850-B 165Hz IPS 1ms Gaming',
         sku: 'LG-27GP850-B',
         price: 7200000,

@@ -4,7 +4,9 @@ import type { User, LoginPayload } from '@/types/common/auth.type'
 import { MOCK_USERS } from '@/mocks/auth/auth.mock'
 import { STORAGE_KEYS } from '@/constants/storageKeys'
 import { useToast } from '@/hooks/useToast'
-import { AuthContext } from '@/contexts/AuthContext'
+import { AuthContext } from '@/providers/AuthContext'
+
+
 
 const getInitialUser = (): User | null => {
   try {

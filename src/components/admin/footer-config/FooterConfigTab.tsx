@@ -10,19 +10,15 @@ import type {
   CompanyInfoErrors,
   SocialLinksErrors,
   NavColumnLinkErrors,
+  FooterConfigTabProps,
 } from '@/types/admin/footerConfig.type'
-import { INITIAL_FOOTER_CONFIG } from '@/mocks/mockFooterConfig'
+import { INITIAL_FOOTER_CONFIG } from '@/mocks/storemanager/footerConfig.mock'
 import { CompanySocialSection } from '@/components/admin/footer-config/CompanySocialSection'
 import { NavigationLinksSection } from '@/components/admin/footer-config/NavigationLinksSection'
 import { ContactInfoSection } from '@/components/admin/footer-config/ContactInfoSection'
 import { BottomBarSection } from '@/components/admin/footer-config/BottomBarSection'
 import { useToast } from '@/hooks/useToast'
 import { Check, RotateCcw } from 'lucide-react'
-
-interface FooterConfigTabProps {
-  initialData?: FooterConfigData
-  onSave?: (data: FooterConfigData) => void
-}
 
 export const FooterConfigTab: React.FC<FooterConfigTabProps> = ({
   initialData = INITIAL_FOOTER_CONFIG,

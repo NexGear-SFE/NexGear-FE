@@ -1,16 +1,7 @@
 import React from 'react'
-import type { NavColumnLink, NavColumnLinkErrors } from '@/types/admin/footerConfig.type'
+import type { NavItemRowProps } from '@/types/admin/footerConfig.type'
 import { FOOTER_FIELD_PLACEHOLDERS } from '@/constants/footerConfigConstants'
 import { Trash2 } from 'lucide-react'
-
-interface NavItemRowProps {
-  item: NavColumnLink
-  index: number
-  onChange: (id: string, field: 'label' | 'url', value: string) => void
-  onDelete: (id: string) => void
-  errors?: NavColumnLinkErrors
-  isDeleteDisabled?: boolean
-}
 
 export const NavItemRow: React.FC<NavItemRowProps> = ({
   item,

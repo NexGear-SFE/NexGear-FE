@@ -1,14 +1,9 @@
 import React, { useState } from 'react'
-import type { TrustBadge, TrustBadgeErrors } from '@/types/admin/homeConfig.type'
-import { INITIAL_TRUST_BADGES } from '@/mocks/mockHomeConfig'
+import type { TrustBadge, TrustBadgeErrors, TrustBadgeFormProps } from '@/types/admin/homeConfig.type'
+import { INITIAL_TRUST_BADGES } from '@/mocks/storemanager/homeConfig.mock'
 import { TrustBadgeItem } from '@/components/admin/home-config/TrustBadgeItem'
 import { useToast } from '@/hooks/useToast'
 import { RotateCcw, Check } from 'lucide-react'
-
-interface TrustBadgeFormProps {
-  initialData?: TrustBadge[]
-  onSave?: (badges: TrustBadge[]) => void
-}
 
 export const TrustBadgeForm: React.FC<TrustBadgeFormProps> = ({
   initialData = INITIAL_TRUST_BADGES,
@@ -107,7 +102,7 @@ export const TrustBadgeForm: React.FC<TrustBadgeFormProps> = ({
         <div className="flex items-center">
           <span className="w-1 h-5 bg-red-600 inline-block mr-2 rounded-full" />
           <h2 className="font-semibold text-slate-900 text-lg">
-            3. Cam kết & Tiện ích (Trust Badges)
+            3. Cam kết & Tiện ích
           </h2>
         </div>
         <span className="text-xs text-slate-500 hidden sm:inline-block">

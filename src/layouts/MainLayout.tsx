@@ -1,10 +1,10 @@
 
 import { useEffect } from 'react'
 import { Outlet, useLocation, ScrollRestoration } from 'react-router-dom'
-import { Header } from '@/components/customer/Header/Header'
-import { Footer } from '@/components/customer/Footer/Footer'
-import { SupportWidget } from '@/components/customer/Home/SupportWidget'
-import { CartDrawer } from '@/components/customer/Cart/CartDrawer'
+import { Header } from '@/components/customer/header/Header'
+import { Footer } from '@/components/customer/footer/Footer'
+import { SupportWidget } from '@/components/customer/home/SupportWidget'
+import { CartDrawer } from '@/components/customer/cart/CartDrawer'
 import { QuickLoginModal } from '@/components/auth/QuickLoginModal'
 
 export const MainLayout = () => {

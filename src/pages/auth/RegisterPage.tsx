@@ -6,12 +6,13 @@ import {
   ShieldCheck,
   Truck,
   Headphones,
-  Eye,
-  EyeOff,
   ArrowLeft,
   HelpCircle,
   CheckCircle2,
 } from 'lucide-react'
+import { PasswordField } from '@/components/common/PasswordField'
+
+import avatarImg from '@/assets/images/Avatar.jpg'
 
 export const RegisterPage = () => {
   const navigate = useNavigate()
@@ -22,10 +23,6 @@ export const RegisterPage = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [agreeTerms, setAgreeTerms] = useState(false)
-
-  // Chuyển đổi trạng thái ẩn/hiện mật khẩu
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   // State phản hồi người dùng
   const [errorMsg, setErrorMsg] = useState('')
@@ -74,7 +71,7 @@ export const RegisterPage = () => {
   }
 
   const handleHelpClick = () => {
-    alert('Tổng đài hỗ trợ thành viên GearGo:\nHotline: 1800 9999 (Miễn phí, 8h00 - 21h30 hằng ngày)')
+    alert('Tổng đài hỗ trợ thành viên NexGear:\nHotline: 1800 9999 (Miễn phí, 8h00 - 21h30 hằng ngày)')
   }
 
   return (
@@ -96,12 +93,12 @@ export const RegisterPage = () => {
         {/* Top Section: Logo Header */}
         <div className="relative z-10">
           <Link to="/" className="inline-flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-bold text-[#E30019] text-xl shadow-md font-heading group-hover:scale-105 transition-transform">
-              GG
+            <div className="w-10 h-10 bg-white rounded-lg overflow-hidden flex items-center justify-center font-bold text-[#E30019] text-xl shadow-md font-heading group-hover:scale-105 transition-transform">
+              <img src={avatarImg} alt="NexGear Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <span className="font-bold text-2xl tracking-tight text-white font-heading block leading-none">
-                GearGo
+                NexGear
               </span>
               <span className="text-[10px] uppercase font-bold tracking-widest text-white/70 block mt-1 font-body">
                 GAMING STORE
@@ -124,7 +121,7 @@ export const RegisterPage = () => {
 
           {/* Subtitle Description */}
           <p className="font-body text-white/80 text-sm leading-relaxed mb-8">
-            Đăng ký tài khoản để tận hưởng toàn bộ quyền lợi dành riêng cho thành viên GearGo.
+            Đăng ký tài khoản để tận hưởng toàn bộ quyền lợi dành riêng cho thành viên NexGear.
           </p>
 
           {/* 4 Feature List Items */}
@@ -269,54 +266,24 @@ export const RegisterPage = () => {
               </div>
 
               {/* Field 3: Password */}
-              <div>
-                <label htmlFor="register-password" className="block text-sm font-semibold text-[#040004] mb-1.5">
-                  Mật khẩu <span className="text-[#E30019]">*</span>
-                </label>
-                <div className="relative flex items-center">
-                  <input
-                    id="register-password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Tối thiểu 8 ký tự"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="input-gaming w-full pr-11 py-3 px-4 text-sm sm:text-base font-medium"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                    className="absolute right-3 text-gray-400 hover:text-gray-700 transition-mechanical cursor-pointer p-1"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
+              <PasswordField
+                id="register-password"
+                label="Mật khẩu"
+                required
+                placeholder="Tối thiểu 8 ký tự"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
 
               {/* Field 4: Confirm Password */}
-              <div>
-                <label htmlFor="register-confirm-password" className="block text-sm font-semibold text-[#040004] mb-1.5">
-                  Nhập lại mật khẩu <span className="text-[#E30019]">*</span>
-                </label>
-                <div className="relative flex items-center">
-                  <input
-                    id="register-confirm-password"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Nhập lại mật khẩu"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="input-gaming w-full pr-11 py-3 px-4 text-sm sm:text-base font-medium"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                    className="absolute right-3 text-gray-400 hover:text-gray-700 transition-mechanical cursor-pointer p-1"
-                  >
-                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
+              <PasswordField
+                id="register-confirm-password"
+                label="Nhập lại mật khẩu"
+                required
+                placeholder="Nhập lại mật khẩu"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
 
               {/* Terms & Conditions Checkbox */}
               <div className="pt-1">

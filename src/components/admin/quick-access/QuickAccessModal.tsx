@@ -1,23 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { X, ChevronDown, Check, AlertCircle } from 'lucide-react'
-import type { QuickAccessItem, QuickAccessFormData } from '@/types/admin/homeContent.type'
+import type { QuickAccessFormData } from '@/types/admin/homeContent.type'
+import type { QuickAccessModalProps, QuickAccessFormBodyProps } from '@/types/admin/quickAccess.type'
 import { QUICK_ACCESS_CATEGORY_PRESETS, type CategoryPreset } from '@/constants/homeContent'
 import { QuickAccessIcon } from './QuickAccessIcon'
-
-interface QuickAccessModalProps {
-  isOpen: boolean
-  editingItem: QuickAccessItem | null
-  nextOrder: number
-  onClose: () => void
-  onSave: (data: QuickAccessFormData) => void
-}
-
-interface QuickAccessFormBodyProps {
-  editingItem: QuickAccessItem | null
-  nextOrder: number
-  onClose: () => void
-  onSave: (data: QuickAccessFormData) => void
-}
 
 const QuickAccessFormBody: React.FC<QuickAccessFormBodyProps> = ({
   editingItem,

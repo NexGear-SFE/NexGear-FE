@@ -1,22 +1,17 @@
 import { useSyncExternalStore } from 'react'
 import type { Product } from '@/types/customer/product.type'
 import type { CartItem, CartState } from '@/types/customer/cart.type'
-import { mockPcProducts } from '@/mocks/customer/product.mock'
-
-const STORAGE_KEY = 'nexgear_cart_items'
+import { STORAGE_KEYS } from '@/constants/storageKeys'
 
 const loadInitialItems = (): CartItem[] => {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY)
+    const saved = localStorage.getItem(STORAGE_KEYS.CART_ITEMS)
     if (saved) {
       const parsed = JSON.parse(saved)
       if (Array.isArray(parsed)) return parsed
     }
   } catch (e) {
     console.error('Failed to load cart from localStorage:', e)
-  }
-  if (mockPcProducts && mockPcProducts.length > 0) {
-    return [{ product: mockPcProducts[0], quantity: 1 }]
   }
   return []
 }
@@ -34,7 +29,7 @@ const notify = () => {
 
 const saveItems = (items: CartItem[]) => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+    localStorage.setItem(STORAGE_KEYS.CART_ITEMS, JSON.stringify(items))
   } catch (e) {
     console.error('Failed to save cart to localStorage:', e)
   }
