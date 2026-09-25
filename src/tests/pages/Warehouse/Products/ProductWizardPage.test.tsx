@@ -15,12 +15,10 @@ describe('ProductWizardPage', () => {
     expect(screen.getByRole('button', { name: /tiếp tục/i })).toBeDisabled()
 
     await user.type(screen.getByLabelText('Tên sản phẩm'), 'ROG Test Product')
-    await user.type(screen.getByLabelText('Product code'), 'PTEST')
-    await user.type(screen.getByLabelText('Model code'), 'MODEL1')
+    await user.type(screen.getByLabelText(/model code/i), 'MODEL1')
     const brandInput = container.querySelector<HTMLInputElement>('input[list="brand-list"]')
     expect(brandInput).not.toBeNull()
     await user.type(brandInput!, 'ASUS')
-    await user.type(screen.getByLabelText('Brand code'), 'ASU')
     await user.click(screen.getByRole('button', { name: /danh mục: chọn danh mục/i }))
     await user.click(screen.getByRole('option', { name: /Laptop Gaming/i }))
     await user.click(screen.getByRole('button', { name: /tiếp tục/i }))

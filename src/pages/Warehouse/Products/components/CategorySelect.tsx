@@ -60,7 +60,34 @@ export function CategorySelect({ categories, error, isLoading = false, label = '
       <div id="category-options" role="listbox" className="mt-2 max-h-64 overflow-y-auto">
         {isLoading && <p role="status" className="p-4 text-center text-sm text-text-600">Đang tải danh mục…</p>}
         {!isLoading && error && <div className="p-4 text-center text-sm text-error-700"><p>{error}</p>{onRefresh && <button type="button" className="btn-outlined mt-3" onClick={onRefresh}><RefreshCw className="h-4 w-4" /> Thử lại</button>}</div>}
-        {!isLoading && !error && options.map((option, index) => <button id={`category-option-${option.id}`} role="option" aria-selected={option.id === value} type="button" key={option.id} onMouseEnter={() => setActiveIndex(index)} onClick={() => choose(option.id)} className={cn('flex min-h-11 w-full items-center gap-2 rounded-sm px-3 text-left text-sm', activeIndex === index && 'bg-surface-200', option.id === value && 'text-brand-500')}><span className="min-w-0 flex-1"><span className="block font-medium">{option.name}</span><span className="block truncate text-xs text-text-600">{option.breadcrumb}</span></span>{option.id === value && <Check className="h-4 w-4" />}</button>)}
+        {!isLoading && !error && options.map((option, index) => {
+          const isParent = categories.some((c) => c.parentId === option.id && c.status === 'ACTIVE')
+          return (
+            <button
+              id={`category-option-${option.id}`}
+              role="option"
+              aria-selected={option.id === value}
+              disabled={isParent}
+              type="button"
+              key={option.id}
+              onMouseEnter={() => !isParent && setActiveIndex(index)}
+              onClick={() => !isParent && choose(option.id)}
+              className={cn(
+                'flex min-h-11 w-full items-center gap-2 rounded-sm px-3 text-left text-sm',
+                isParent ? 'opacity-40 cursor-not-allowed bg-surface-100' : (activeIndex === index && 'bg-surface-200'),
+                option.id === value && 'text-brand-500 font-semibold'
+              )}
+            >
+              <span className="min-w-0 flex-1">
+                <span className="block font-medium">
+                  {option.name} {isParent && <span className="text-[11px] font-normal text-text-600">(Danh mục cha)</span>}
+                </span>
+                <span className="block truncate text-xs text-text-600">{option.breadcrumb}</span>
+              </span>
+              {option.id === value && <Check className="h-4 w-4" />}
+            </button>
+          )
+        })}
         {!isLoading && !error && options.length === 0 && <div className="p-4 text-center text-sm text-text-600"><p>Không tìm thấy danh mục hoạt động.</p><Link to={ROUTES.warehouseCategories} className="btn-outlined mt-3"><FolderPlus className="h-4 w-4" /> Quản lý danh mục</Link>{onRefresh && <button type="button" className="mt-3 block w-full text-xs font-semibold text-brand-500" onClick={onRefresh}>Làm mới danh sách</button>}</div>}
       </div>
     </div>}

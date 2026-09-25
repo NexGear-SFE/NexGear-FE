@@ -106,7 +106,90 @@ export function ProductWizardPage() {
     <WarehousePageHeader eyebrow="Danh mục sản phẩm" title={existing ? `Chỉnh sửa ${existing.name}` : 'Tạo sản phẩm'} description="Hoàn thành từng bước để tạo đúng những SKU thực tế đang nhập và bán." actions={<button type="button" className="btn-outlined" onClick={() => isDirty ? setShowLeaveDialog(true) : navigate(ROUTES.warehouseProducts)}><ArrowLeft className="h-4 w-4" /> Danh sách</button>} />
     <div className="sticky top-20 z-10 rounded-md border border-surface-400 bg-white p-3 shadow-clay-sm"><ProgressStepper steps={steps} currentStep={step} errorStep={errorStep} /></div>
     <section ref={formSectionRef} className="card-gaming p-5 md:p-7">
-      {step === 0 && <div className="grid gap-4 md:grid-cols-2"><Field label="Tên sản phẩm"><input value={product.name} onChange={(event) => { const previousSlug = normalizeSkuSegment(product.name).toLowerCase(); updateProduct('name', event.target.value); if (!product.slug || product.slug === previousSlug) setProduct((current) => ({ ...current, slug: normalizeSkuSegment(event.target.value).toLowerCase() })) }} className="input-gaming mt-2 w-full" /></Field><Field label="Product code"><input value={product.productCode} onChange={(event) => updateProduct('productCode', normalizeSkuSegment(event.target.value))} className="input-gaming mt-2 w-full" /></Field><Field label="Model code"><input value={product.modelCode} onChange={(event) => updateProduct('modelCode', event.target.value)} className="input-gaming mt-2 w-full" /></Field><Field label="Slug"><input value={product.slug} onChange={(event) => updateProduct('slug', event.target.value)} className="input-gaming mt-2 w-full" /></Field><Field label="Thương hiệu"><input value={product.brand} onChange={(event) => updateProduct('brand', event.target.value)} className="input-gaming mt-2 w-full" list="brand-list" /><datalist id="brand-list"><option>ASUS</option><option>MSI</option><option>Logitech</option><option>Corsair</option><option>Samsung</option></datalist></Field><Field label="Brand code"><input value={product.brandCode} onChange={(event) => updateProduct('brandCode', normalizeSkuSegment(event.target.value).replaceAll('-', ''))} className="input-gaming mt-2 w-full" /></Field><CategorySelect categories={categories} value={product.categoryId} onChange={(value) => updateProduct('categoryId', value)} /><Field label="Đơn vị"><input value={product.unit} onChange={(event) => updateProduct('unit', event.target.value)} className="input-gaming mt-2 w-full" /></Field><Field label="Xuất xứ"><input value={product.origin} onChange={(event) => updateProduct('origin', event.target.value)} className="input-gaming mt-2 w-full" /></Field><Field label="Bảo hành (tháng)"><input type="number" min="0" value={product.warrantyMonths} onChange={(event) => updateProduct('warrantyMonths', Number(event.target.value))} className="input-gaming mt-2 w-full" /></Field><Field label="Khối lượng (gram)"><input type="number" min="0" value={product.weightGrams} onChange={(event) => updateProduct('weightGrams', Number(event.target.value))} className="input-gaming mt-2 w-full" /></Field><Field label="Trạng thái"><select value={product.status} onChange={(event) => updateProduct('status', event.target.value as ProductFormValues['status'])} className="input-gaming mt-2 w-full"><option value="DRAFT">Draft</option><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select></Field><Field label="Kích thước D × R × C (mm)"><div className="mt-2 grid grid-cols-3 gap-2">{(['lengthMm', 'widthMm', 'heightMm'] as const).map((key) => <input key={key} aria-label={key} type="number" min="0" value={product.dimensions[key]} onChange={(event) => updateProduct('dimensions', { ...product.dimensions, [key]: Number(event.target.value) })} className="input-gaming w-full" />)}</div></Field><Field label="Mô tả vận hành" wide><textarea value={product.shortDescription} onChange={(event) => updateProduct('shortDescription', event.target.value)} rows={4} className="input-gaming mt-2 w-full" /></Field></div>}
+      {step === 0 && <div className="grid gap-4 md:grid-cols-2">
+        <Field label="Tên sản phẩm">
+          <input value={product.name} onChange={(event) => { const previousSlug = normalizeSkuSegment(product.name).toLowerCase(); updateProduct('name', event.target.value); if (!product.slug || product.slug === previousSlug) setProduct((current) => ({ ...current, slug: normalizeSkuSegment(event.target.value).toLowerCase() })) }} className="input-gaming mt-2 w-full" />
+        </Field>
+        <Field label="Model code (Mã dòng máy)">
+          <input value={product.modelCode} onChange={(event) => updateProduct('modelCode', event.target.value)} className="input-gaming mt-2 w-full" placeholder="VD: G16, GPX2, K70..." />
+        </Field>
+        <Field label="Slug">
+          <input value={product.slug} onChange={(event) => updateProduct('slug', event.target.value)} className="input-gaming mt-2 w-full" />
+        </Field>
+        <Field label="Thương hiệu">
+          <input
+            value={product.brand}
+            onChange={(event) => {
+              const brandVal = event.target.value
+              updateProduct('brand', brandVal)
+              const knownBrandCodes: Record<string, string> = {
+                ASUS: 'ASU',
+                MSI: 'MSI',
+                Logitech: 'LOG',
+                Corsair: 'COR',
+                Samsung: 'SAM',
+                LG: 'LG',
+              }
+              const derivedBrandCode = knownBrandCodes[brandVal] || normalizeSkuSegment(brandVal).replaceAll('-', '').slice(0, 3)
+              setProduct((current) => ({ ...current, brandCode: derivedBrandCode }))
+            }}
+            className="input-gaming mt-2 w-full"
+            list="brand-list"
+          />
+          <datalist id="brand-list">
+            <option>ASUS</option>
+            <option>MSI</option>
+            <option>Logitech</option>
+            <option>Corsair</option>
+            <option>Samsung</option>
+          </datalist>
+        </Field>
+        <CategorySelect categories={categories} value={product.categoryId} onChange={(value) => updateProduct('categoryId', value)} />
+        <Field label="Hình ảnh đại diện (Thumbnail)">
+          <div className="mt-2 flex items-center gap-3">
+            <input
+              type="file"
+              accept="image/*"
+              className="text-xs text-text-600 file:btn-outlined file:mr-3 file:cursor-pointer"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) {
+                  const url = URL.createObjectURL(file)
+                  updateProduct('imageUrl', url)
+                }
+              }}
+            />
+            {product.imageUrl && (
+              <img src={product.imageUrl} alt="Thumbnail preview" className="h-10 w-10 rounded border border-surface-400 object-cover" />
+            )}
+          </div>
+        </Field>
+        <Field label="Đơn vị">
+          <input value={product.unit} onChange={(event) => updateProduct('unit', event.target.value)} className="input-gaming mt-2 w-full" />
+        </Field>
+        <Field label="Xuất xứ">
+          <input value={product.origin} onChange={(event) => updateProduct('origin', event.target.value)} className="input-gaming mt-2 w-full" />
+        </Field>
+        <Field label="Bảo hành (tháng)">
+          <input type="number" min="0" value={product.warrantyMonths} onChange={(event) => updateProduct('warrantyMonths', Number(event.target.value))} className="input-gaming mt-2 w-full" />
+        </Field>
+        <Field label="Khối lượng (gram)">
+          <input type="number" min="0" value={product.weightGrams} onChange={(event) => updateProduct('weightGrams', Number(event.target.value))} className="input-gaming mt-2 w-full" />
+        </Field>
+        <Field label="Trạng thái (Khởi tạo mặc định Draft)">
+          <select value="DRAFT" disabled className="input-gaming mt-2 w-full cursor-not-allowed bg-surface-200 opacity-70" title="Trạng thái Active chỉ được kích hoạt ở bước 4 (Kiểm tra)">
+            <option value="DRAFT">Draft (Bản nháp)</option>
+          </select>
+        </Field>
+        <Field label="Kích thước D × R × C (mm)">
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            {(['lengthMm', 'widthMm', 'heightMm'] as const).map((key) => <input key={key} aria-label={key} type="number" min="0" value={product.dimensions[key]} onChange={(event) => updateProduct('dimensions', { ...product.dimensions, [key]: Number(event.target.value) })} className="input-gaming w-full" />)}
+          </div>
+        </Field>
+        <Field label="Mô tả vận hành" wide>
+          <textarea value={product.shortDescription} onChange={(event) => updateProduct('shortDescription', event.target.value)} rows={4} className="input-gaming mt-2 w-full" />
+        </Field>
+      </div>}
       {step === 1 && <div className="grid gap-6 xl:grid-cols-[1fr_0.8fr]"><div><div className="mb-4 flex items-center justify-between"><h2 className="font-heading text-lg font-semibold">Thông số key/value</h2><button type="button" className="btn-outlined" onClick={() => setSpecifications((current) => [...current, { key: '', value: '' }])}><Plus className="h-4 w-4" /> Thêm dòng</button></div><datalist id="spec-suggestions">{specificationSuggestions.map((item) => <option key={item}>{item}</option>)}</datalist><div className="space-y-3">{specifications.map((spec, index) => <div key={index} className="grid gap-2 rounded-sm border border-surface-400 p-3 sm:grid-cols-[1fr_1.5fr_auto]"><input aria-label={`Tên thông số ${index + 1}`} list="spec-suggestions" value={spec.key} onChange={(event) => { setSpecifications((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, key: event.target.value } : item)); setIsDirty(true) }} className="input-gaming" placeholder="CPU, GPU…" /><input aria-label={`Giá trị thông số ${index + 1}`} value={spec.value} onChange={(event) => { setSpecifications((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, value: event.target.value } : item)); setIsDirty(true) }} className="input-gaming" placeholder="Giá trị" /><div className="flex"><IconButton label="Lên" onClick={() => setSpecifications((current) => moveItem(current, index, -1))}><MoveUp /></IconButton><IconButton label="Xuống" onClick={() => setSpecifications((current) => moveItem(current, index, 1))}><MoveDown /></IconButton><IconButton label="Xóa" onClick={() => setSpecifications((current) => current.filter((_, itemIndex) => itemIndex !== index))}><Minus /></IconButton></div></div>)}</div></div><div><h2 className="mb-4 font-heading text-lg font-semibold">Preview</h2><dl className="divide-y divide-surface-400 rounded-md border border-surface-400">{cleanSpecifications.map((spec) => <div key={spec.key} className="grid grid-cols-2 gap-3 p-3 text-sm"><dt className="font-semibold">{spec.key}</dt><dd>{spec.value}</dd></div>)}{!cleanSpecifications.length && <p className="p-6 text-center text-sm text-text-600">Chưa có thông số.</p>}</dl></div></div>}
       {step === 2 && <VariantMatrixEditor brandCode={product.brandCode} modelCode={product.modelCode} variants={effectiveVariants} existingSkus={variants.filter((variant) => variant.productId !== productId).map((variant) => variant.sku)} onAudit={(action, sku) => logSkuAudit(action, sku)} onChange={(next) => { setVariantDrafts(next); setIsDirty(true) }} />}
       {step === 3 && <div className="grid gap-6 lg:grid-cols-2"><Summary title="Thông tin sản phẩm" rows={[['Tên', product.name], ['Mã sản phẩm', product.productCode], ['Model', product.modelCode], ['Thương hiệu', product.brand], ['Danh mục', categoryBreadcrumb], ['Trạng thái', product.status], ['Bảo hành', `${product.warrantyMonths} tháng`]]} /><Summary title="Cấu hình / SKU" rows={effectiveVariants.map((variant) => [variant.sku, variant.serialTracking ? 'Theo serial' : 'Theo số lượng'])} /><Summary title="Thông số chung" rows={cleanSpecifications.map((spec) => [spec.key, spec.value])} /><div className="rounded-md border border-warning-200 bg-warning-50 p-4 text-sm"><strong>Kiểm tra trước khi lưu</strong><p className="mt-2 text-text-600">Sản phẩm cần danh mục hợp lệ, thông số không trùng và tối thiểu một SKU.</p></div></div>}
