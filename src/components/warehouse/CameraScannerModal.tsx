@@ -263,7 +263,7 @@ export function CameraScannerModal({
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-semibold text-text-300 flex items-center gap-1">
                   <Zap className="h-3.5 w-3.5 text-warning-400" />
-                  Mô phỏng quét nhanh mã có trong kho:
+                  Mã serial gợi ý trong kho (bấm để điền):
                 </span>
                 <span className="text-[11px] text-text-400">{availableSerials.length} mã khả dụng</span>
               </div>
@@ -272,10 +272,11 @@ export function CameraScannerModal({
                   <button
                     key={serial}
                     type="button"
-                    onClick={() => handleTriggerScan(serial)}
-                    className="rounded bg-surface-700 border border-surface-600 px-2 py-1 font-mono text-xs text-white hover:bg-brand-600 hover:border-brand-500 transition-colors"
+                    onClick={() => setManualInput(serial)}
+                    className="rounded bg-surface-700 border border-surface-600 px-2.5 py-1 font-mono text-xs text-white hover:bg-brand-600 hover:border-brand-500 active:scale-95 transition-all cursor-pointer"
+                    title={`Bấm để điền mã ${serial} vào ô nhập`}
                   >
-                    + {serial}
+                    {serial}
                   </button>
                 ))}
               </div>

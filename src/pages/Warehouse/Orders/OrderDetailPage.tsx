@@ -315,17 +315,20 @@ export function OrderDetailPage() {
                                 </button>
                               </div>
                               {isPreparing && item.assignedSerialIds.length < item.quantity && availableSerialsForItem.length > 0 && (
-                                <div className="flex flex-wrap items-center gap-1 pt-0.5">
-                                  <span className="text-[11px] font-medium text-text-500">Mã kho có sẵn:</span>
-                                  {availableSerialsForItem.slice(0, 4).map((s) => (
+                                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                                  <span className="text-[11px] font-medium text-text-500">Mã kho gợi ý (bấm để điền):</span>
+                                  {availableSerialsForItem.slice(0, 5).map((s) => (
                                     <button
                                       key={s.id}
                                       type="button"
-                                      onClick={() => handleScanSerial(item.id, item.variantId, s.value)}
-                                      className="rounded bg-brand-50 border border-brand-200 px-1.5 py-0.5 font-mono text-[11px] text-brand-700 hover:bg-brand-100 hover:border-brand-300 transition-colors"
-                                      title={`Bấm để chọn nhanh serial ${s.value}`}
+                                      onClick={() => {
+                                        setSerialInputs((prev) => ({ ...prev, [item.id]: s.value }))
+                                        setSerialErrors((prev) => ({ ...prev, [item.id]: '' }))
+                                      }}
+                                      className="inline-flex items-center gap-1 rounded bg-brand-50 border border-brand-200 px-2 py-0.5 font-mono text-[11px] font-medium text-brand-700 hover:bg-brand-100 hover:border-brand-400 active:scale-95 transition-all cursor-pointer"
+                                      title={`Bấm để tự động điền mã "${s.value}" vào ô quét`}
                                     >
-                                      +{s.value}
+                                      <span>{s.value}</span>
                                     </button>
                                   ))}
                                 </div>
