@@ -1,58 +1,416 @@
-import { AlertTriangle, ArrowLeft, CheckCircle2, MapPin, PackageCheck, ScanLine, Truck } from 'lucide-react'
+import { AlertTriangle, ArrowLeft, CheckCircle2, Copy, PackageCheck, Printer, Tag, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
 import { DataState } from '@/components/warehouse/DataState'
 import { ProgressStepper } from '@/components/warehouse/ProgressStepper'
-import { SerialSelectorDialog } from '@/components/warehouse/SerialSelectorDialog'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
 import { WarehousePageHeader } from '@/components/warehouse/WarehousePageHeader'
 import { ROUTES, warehouseInventoryDetailPath, warehouseProductDetailPath } from '@/constants/routes'
 import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
-import { formatCurrency } from '@/utils/formatCurrency'
 import { formatDate } from '@/utils/formatDate'
 import { getAvailableStock } from '@/utils/inventory'
-import { getOrderProgressIndex, orderStateLabels, validateParcel } from '@/utils/warehouseOrder'
+import { getOrderProgressIndex, orderStateLabels } from '@/utils/warehouseOrder'
 
-const PICKUP_ADDRESS = '123 Lý Thường Kiệt, Quận 10, TP.HCM'
+const progressSteps = ['Tiếp nhận', 'Chuẩn bị & Đóng gói', 'Chờ Đơn Vị Vận Chuyển Lấy', 'Hoàn tất']
 
 export function OrderDetailPage() {
   const { orderId = '' } = useParams()
   const store = useWarehouseStore(useShallow(warehouseSelectors.orders))
   const order = store.orders.find((item) => item.id === orderId)
-  const [selectedSerialIds, setSelectedSerialIds] = useState<string[]>([])
-  const [serialSelectorOpen, setSerialSelectorOpen] = useState(false)
-  const [packingStep, setPackingStep] = useState(0)
-  const [simulateFailure, setSimulateFailure] = useState(false)
-  const [parcel, setParcel] = useState({ weightGrams: order?.parcel?.weightGrams ?? 0, lengthCm: order?.parcel?.lengthCm ?? 0, widthCm: order?.parcel?.widthCm ?? 0, heightCm: order?.parcel?.heightCm ?? 0, pickupAddress: PICKUP_ADDRESS })
-  const [packingIssues, setPackingIssues] = useState<string[]>([])
-  const requiresSerial = useMemo(() => order?.items.some((item) => store.variants.find((variant) => variant.id === item.variantId)?.serialTracking) ?? false, [order?.items, store.variants])
+  const [serialInputs, setSerialInputs] = useState<Record<string, string>>({})
+  const [serialErrors, setSerialErrors] = useState<Record<string, string>>({})
+  const [copied, setCopied] = useState(false)
+
   if (!order) return <DataState type="empty" title="Không tìm thấy đơn hàng" description="Mã đơn không tồn tại hoặc đã thay đổi." />
-  const progressSteps = requiresSerial ? ['Tiếp nhận', 'Soạn hàng', 'Gán serial', 'Đóng gói', 'Chờ GHTK', 'Hoàn tất'] : ['Tiếp nhận', 'Soạn hàng', 'Đóng gói', 'Chờ GHTK', 'Hoàn tất']
-  const total = order.items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0)
-  const allPicked = order.items.every((item) => item.pickedQuantity === item.quantity)
-  const submitSerials = (serialIds: string[]) => { setSelectedSerialIds(serialIds); store.assignOrderSerials(order.id, serialIds); setSerialSelectorOpen(false) }
-  const validateAndAdvancePacking = () => { const nextIssues = validateParcel(parcel); setPackingIssues(nextIssues); if (nextIssues.length === 0) setPackingStep(1) }
-  const createShipment = () => { store.packOrder(order.id, simulateFailure, parcel); setPackingStep(2) }
 
-  return <div className="space-y-6"><Link to={ROUTES.warehouseOrders} className="inline-flex items-center gap-2 text-sm font-semibold text-text-600"><ArrowLeft className="h-4 w-4" /> Danh sách đơn hàng</Link><WarehousePageHeader eyebrow="Fulfillment detail" title={order.id} description={`${order.customerName} · ${formatDate(order.createdAt)}`} actions={<StatusBadge label={orderStateLabels[order.state]} tone={order.state === 'ISSUE' ? 'error' : order.state === 'COMPLETED' ? 'success' : order.state === 'WAITING_GHTK_PICKUP' ? 'info' : 'warning'} />} />
-    <section className="rounded-md border border-surface-400 bg-white p-5"><ProgressStepper steps={progressSteps} currentStep={getOrderProgressIndex(order, requiresSerial)} />{order.state === 'ISSUE' && <div className="mt-4 flex items-start gap-3 rounded-sm border border-error-200 bg-error-50 p-4 text-sm text-error-700"><AlertTriangle className="h-5 w-5 shrink-0" /><div><strong>Sự cố tại bước {orderStateLabels[order.issue?.resumeState ?? 'WAITING_ACCEPTANCE']}</strong><p className="mt-1">{order.issue?.message}</p></div></div>}</section>
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]"><div className="space-y-6">
-      <section className="rounded-md border border-surface-400 bg-white p-5"><h2 className="font-heading text-lg font-semibold">A. Thông tin đơn hàng</h2><dl className="mt-4 grid gap-4 text-sm md:grid-cols-3"><div><dt className="text-text-600">Mã đơn</dt><dd className="mt-1 font-semibold">{order.id}</dd></div><div><dt className="text-text-600">Thanh toán</dt><dd className="mt-1 font-semibold">{order.paymentMethod}</dd></div><div><dt className="text-text-600">Phụ trách</dt><dd className="mt-1 font-semibold">{order.assignee ?? 'Chưa có người nhận'}</dd></div></dl></section>
-      <section className="rounded-md border border-surface-400 bg-white p-5"><h2 className="font-heading text-lg font-semibold">B. Giữ hàng</h2><p className="mt-3 text-sm text-text-600">Hệ thống đã giữ số lượng cần thiết tại <strong className="text-text-900">Kho GearGo — Quận 10, TP.HCM</strong>. Available hiển thị theo tồn kho hiện tại sau reservation.</p></section>
-      <section className="rounded-md border border-surface-400 bg-white p-5"><h2 className="font-heading text-lg font-semibold">C. Khách hàng & giao nhận</h2><div className="mt-4 flex items-start gap-3 text-sm"><MapPin className="h-5 w-5 shrink-0 text-brand-500" /><div><strong>{order.customerName} · {order.phone}</strong><p className="mt-1 text-text-600">{order.address}</p><p className="mt-2">Ghi chú: {order.note || '—'}</p></div></div></section>
-      <section className="overflow-hidden rounded-md border border-surface-400 bg-white"><h2 className="p-5 font-heading text-lg font-semibold">D. Sản phẩm, SKU & serial</h2><div className="overflow-x-auto"><table className="w-full min-w-[980px] text-left text-sm"><thead className="bg-surface-200 text-xs uppercase text-text-600"><tr><th className="p-4">Sản phẩm</th><th className="p-4">SKU / biến thể</th><th className="p-4">Yêu cầu</th><th className="p-4">Available</th><th className="p-4">Đã soạn</th><th className="p-4">Serial</th><th className="p-4">Liên kết</th></tr></thead><tbody className="divide-y divide-surface-400">{order.items.map((item) => { const variant = store.variants.find((candidate) => candidate.id === item.variantId); const product = store.products.find((candidate) => candidate.id === variant?.productId); const stock = store.inventory.find((candidate) => candidate.variantId === item.variantId); return <tr key={item.id}><td className="p-4 font-semibold">{product?.name}</td><td className="p-4"><p className="font-mono font-semibold">{variant?.sku}</p><p className="mt-1 text-xs text-text-600">{variant?.optionValues.map((value) => `${value.option}: ${value.value}`).join(' · ')}</p></td><td className="p-4">{item.quantity}</td><td className="p-4">{getAvailableStock(stock?.onHand ?? 0, stock?.reserved ?? 0)}</td><td className="p-4">{item.pickedQuantity}/{item.quantity}</td><td className="p-4">{variant?.serialTracking ? `${item.assignedSerialIds.length}/${item.quantity}` : '—'}</td><td className="p-4">{product && <div className="flex flex-col gap-1"><Link className="text-brand-500 hover:underline" to={warehouseProductDetailPath(product.id)}>Sản phẩm</Link><Link className="text-brand-500 hover:underline" to={`${warehouseInventoryDetailPath(product.id)}?sku=${variant?.id}#serials`}>Tồn kho SKU</Link>{item.assignedSerialIds.map((serialId) => { const serial = store.serials.find((candidate) => candidate.id === serialId); return serial ? <Link key={serial.id} className="font-mono text-xs text-brand-500 hover:underline" to={`${warehouseInventoryDetailPath(product.id)}?sku=${variant?.id}#serials`}>{serial.value}</Link> : null })}</div>}</td></tr> })}</tbody></table></div></section>
+  const isPreparing = order.state === 'PICKING' || order.state === 'WAITING_SERIAL' || order.state === 'READY_TO_PACK'
+  const isAwaitingPickup = order.state === 'WAITING_GHTK_PICKUP'
 
-      <section className="rounded-md border border-surface-400 bg-white p-5"><h2 className="font-heading text-lg font-semibold">E. Timeline</h2>{order.timeline.length === 0 ? <p className="mt-3 text-sm text-text-600">Chưa có sự kiện xử lý.</p> : <ol className="mt-4 space-y-4">{[...order.timeline].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)).map((event) => <li key={event.id} className="border-l-2 border-brand-500 pl-4"><strong className="text-sm">{event.label}</strong><p className="mt-1 text-xs text-text-600">{event.actor} · {formatDate(event.occurredAt)}</p></li>)}</ol>}</section>
-    </div><aside className="h-fit space-y-4 xl:sticky xl:top-24"><section className="rounded-md border border-surface-400 bg-white p-5"><h2 className="font-heading font-semibold">Tóm tắt đơn</h2><dl className="mt-4 space-y-3 text-sm"><div className="flex justify-between"><dt>SKU</dt><dd className="font-semibold">{order.items.length}</dd></div><div className="flex justify-between"><dt>Số lượng</dt><dd className="font-semibold">{order.items.reduce((sum, item) => sum + item.quantity, 0)}</dd></div><div className="flex justify-between border-t border-surface-400 pt-3"><dt>Tổng tiền</dt><dd className="font-semibold text-brand-500">{formatCurrency(total)}</dd></div></dl></section>
-      <section className="rounded-md border border-surface-400 bg-white p-5"><h2 className="font-heading font-semibold">Thao tác hiện tại</h2>
-        {order.state === 'WAITING_ACCEPTANCE' && <button type="button" className="btn-primary mt-4 w-full" onClick={() => store.acceptOrder(order.id)}><PackageCheck className="h-4 w-4" /> Bắt đầu soạn hàng</button>}
-        {order.state === 'PICKING' && <div className="mt-4 space-y-3">{order.items.map((item) => { const variant = store.variants.find((candidate) => candidate.id === item.variantId); return <label key={item.id} className="flex items-center gap-3 rounded-sm border border-surface-400 p-3 text-sm"><input type="checkbox" checked={item.pickedQuantity === item.quantity} onChange={(event) => store.setPickedQuantity(order.id, item.id, event.target.checked ? item.quantity : 0)} /><span><strong className="font-mono">{variant?.sku}</strong><span className="block text-xs text-text-600">Cần soạn {item.quantity}</span></span></label>})}<button type="button" className="btn-primary w-full" disabled={!allPicked} onClick={() => store.completePicking(order.id)}>Hoàn tất soạn hàng</button></div>}
-        {order.state === 'WAITING_SERIAL' && <div className="mt-4 rounded-sm border border-info-200 bg-info-50 p-4"><ScanLine className="h-5 w-5 text-info-700" /><p className="mt-3 text-sm font-semibold">Chọn đúng serial cho từng SKU</p><p className="mt-1 text-xs text-text-600">Danh sách riêng chỉ hiển thị serial đang khả dụng và giới hạn đúng số lượng đơn hàng.</p><button type="button" className="btn-primary mt-4 w-full" onClick={() => setSerialSelectorOpen(true)}>Mở danh sách serial</button></div>}
-        {(order.state === 'READY_TO_PACK' || (order.state === 'ISSUE' && order.issue?.resumeState === 'READY_TO_PACK')) && <div className="mt-4 space-y-4"><ProgressStepper steps={['Đo kiện', 'Kiểm tra', 'Tạo vận đơn']} currentStep={packingStep} />{packingStep === 0 && <div className="grid grid-cols-2 gap-3">{([['Khối lượng (g)', 'weightGrams'], ['Dài (cm)', 'lengthCm'], ['Rộng (cm)', 'widthCm'], ['Cao (cm)', 'heightCm']] as const).map(([label, key]) => <label key={key} className="text-xs font-semibold">{label}<input type="number" min="1" value={parcel[key]} onChange={(event) => setParcel((current) => ({ ...current, [key]: Number(event.target.value) }))} className="input-gaming mt-1 w-full" /></label>)}{packingIssues.length > 0 && <ul className="col-span-2 list-disc pl-5 text-xs text-error-700">{packingIssues.map((issue) => <li key={issue}>{issue}</li>)}</ul>}<button type="button" className="btn-primary col-span-2" onClick={validateAndAdvancePacking}>Kiểm tra kiện</button></div>}{packingStep === 1 && <div className="space-y-3 text-sm"><p><MapPin className="mr-2 inline h-4 w-4" />Điểm lấy: {PICKUP_ADDRESS}</p><p>{parcel.weightGrams} g · {parcel.lengthCm} × {parcel.widthCm} × {parcel.heightCm} cm</p><label className="flex items-center gap-2 rounded-sm bg-surface-200 p-3"><input type="checkbox" checked={simulateFailure} onChange={(event) => setSimulateFailure(event.target.checked)} /> Mô phỏng GHTK từ chối</label><button type="button" className="btn-primary w-full" onClick={createShipment}><Truck className="h-4 w-4" /> Tạo vận đơn GHTK</button></div>}{packingStep === 2 && <div className="space-y-3"><p className="text-sm">{simulateFailure ? 'Tạo vận đơn thất bại. Có thể sửa thông tin và thử lại.' : 'Đã tạo vận đơn và chuyển sang chờ GHTK lấy.'}</p>{simulateFailure && <button type="button" className="btn-primary w-full" onClick={() => { setSimulateFailure(false); setPackingStep(0) }}>Sửa kiện và thử lại</button>}</div>}</div>}
-        {order.state === 'WAITING_GHTK_PICKUP' && <div className="mt-4 space-y-3 text-sm"><p><Truck className="mr-2 inline h-4 w-4" />Mã GHTK: <strong>{order.parcel?.trackingCode}</strong></p><p>Điểm lấy: {order.parcel?.pickupAddress ?? PICKUP_ADDRESS}</p><button type="button" className="btn-primary w-full" onClick={() => store.completeOrder(order.id)}>Xác nhận GHTK đã lấy</button></div>}
-        {order.state === 'COMPLETED' && <p className="mt-4 flex items-center gap-2 text-sm font-semibold text-success-500"><CheckCircle2 className="h-5 w-5" /> Kho đã bàn giao kiện cho GHTK.</p>}
-      </section></aside></div>
-    <SerialSelectorDialog isOpen={serialSelectorOpen} initialSelectedIds={selectedSerialIds} serials={store.serials} variants={store.variants} requirements={order.items.filter((item) => store.variants.find((variant) => variant.id === item.variantId)?.serialTracking).map((item) => ({ variantId: item.variantId, quantity: item.quantity }))} onCancel={() => setSerialSelectorOpen(false)} onConfirm={submitSerials} />
-  </div>
+  // Validation to see if all quantities are picked and all required serials scanned
+  const canFinalizePack = useMemo(() => {
+    return order.items.every((item) => {
+      const variant = store.variants.find((v) => v.id === item.variantId)
+      const picked = item.pickedQuantity === item.quantity
+      if (!variant?.serialTracking) return picked
+      return picked && item.assignedSerialIds.length === item.quantity
+    })
+  }, [order.items, store.variants])
+
+  const handleScanSerial = (itemId: string, variantId: string) => {
+    const rawVal = (serialInputs[itemId] ?? '').trim().toUpperCase()
+    if (!rawVal) return
+
+    setSerialErrors((prev) => ({ ...prev, [itemId]: '' }))
+
+    // Find if serial exists in available pool
+    const matchingSerial = store.serials.find(
+      (s) => s.variantId === variantId && s.value.trim().toUpperCase() === rawVal && (s.status === 'AVAILABLE' || s.status === 'RESERVED')
+    )
+
+    if (!matchingSerial) {
+      setSerialErrors((prev) => ({ ...prev, [itemId]: `Mã serial "${rawVal}" không tồn tại hoặc không khả dụng.` }))
+      return
+    }
+
+    const currentItem = order.items.find((i) => i.id === itemId)
+    if (!currentItem) return
+
+    if (currentItem.assignedSerialIds.includes(matchingSerial.id)) {
+      setSerialErrors((prev) => ({ ...prev, [itemId]: `Serial "${rawVal}" đã được quét cho dòng này.` }))
+      return
+    }
+
+    if (currentItem.assignedSerialIds.length >= currentItem.quantity) {
+      setSerialErrors((prev) => ({ ...prev, [itemId]: `Đã quét đủ số lượng serial (${currentItem.quantity}/${currentItem.quantity}).` }))
+      return
+    }
+
+    // Assign serial
+    const nextSerials = [...currentItem.assignedSerialIds, matchingSerial.id]
+    store.assignOrderSerials(order.id, nextSerials)
+    setSerialInputs((prev) => ({ ...prev, [itemId]: '' }))
+  }
+
+  const handleRemoveSerial = (itemId: string, serialId: string) => {
+    const currentItem = order.items.find((i) => i.id === itemId)
+    if (!currentItem) return
+    const nextSerials = currentItem.assignedSerialIds.filter((id) => id !== serialId)
+    store.assignOrderSerials(order.id, nextSerials)
+  }
+
+  const handleExecutePacking = () => {
+    // Complete picking
+    store.completePicking(order.id)
+    // Create GHTK shipment and transition to WAITING_GHTK_PICKUP
+    store.packOrder(order.id, false, {
+      weightGrams: 1000,
+      lengthCm: 25,
+      widthCm: 20,
+      heightCm: 15,
+      pickupAddress: 'Kho NexGear — TP.HCM',
+    })
+  }
+
+  const handlePrintShippingLabel = () => {
+    const printWindow = window.open('', '_blank', 'width=600,height=400')
+    if (!printWindow) return
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Phiếu Giao Hàng - ${order.parcel?.trackingCode ?? order.id}</title>
+          <style>
+            body { font-family: sans-serif; padding: 20px; text-align: center; }
+            .box { border: 2px dashed #333; padding: 20px; margin: 0 auto; max-width: 450px; }
+            .code { font-family: monospace; font-size: 24px; font-weight: bold; letter-spacing: 2px; margin: 15px 0; }
+            .barcode { font-size: 36px; font-weight: 900; letter-spacing: 6px; font-family: monospace; background: #eee; padding: 10px; }
+          </style>
+        </head>
+        <body>
+          <div class="box">
+            <h2>NEX-GEAR FULFILLMENT LABEL</h2>
+            <p>Mã đơn hàng: <strong>${order.id}</strong></p>
+            <div class="barcode">||| | |||| ||| |||| | |||</div>
+            <div class="code">${order.parcel?.trackingCode ?? 'GHTK-EXPRESS'}</div>
+            <p>Người nhận: ${order.customerName}</p>
+            <p>Địa chỉ: ${order.address}</p>
+          </div>
+          <script>window.print();</script>
+        </body>
+      </html>
+    `)
+    printWindow.document.close()
+  }
+
+  return (
+    <div className="space-y-6">
+      <Link to={ROUTES.warehouseOrders} className="inline-flex items-center gap-2 text-sm font-semibold text-text-600">
+        <ArrowLeft className="h-4 w-4" /> Danh sách đơn hàng
+      </Link>
+      <WarehousePageHeader
+        eyebrow="Xử lý đơn hàng kho"
+        title={order.id}
+        description={`Ngày tạo: ${formatDate(order.createdAt)}`}
+        actions={<StatusBadge label={orderStateLabels[order.state]} tone={order.state === 'ISSUE' ? 'error' : order.state === 'COMPLETED' ? 'success' : order.state === 'WAITING_GHTK_PICKUP' ? 'info' : 'warning'} />}
+      />
+
+      <section className="rounded-md border border-surface-400 bg-white p-5">
+        <ProgressStepper steps={progressSteps} currentStep={getOrderProgressIndex(order)} />
+        {order.state === 'ISSUE' && (
+          <div className="mt-4 flex items-start gap-3 rounded-sm border border-error-200 bg-error-50 p-4 text-sm text-error-700">
+            <AlertTriangle className="h-5 w-5 shrink-0" />
+            <div>
+              <strong>Sự cố: {order.issue?.title}</strong>
+              <p className="mt-1">{order.issue?.message}</p>
+            </div>
+          </div>
+        )}
+      </section>
+
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="space-y-6">
+          {/* Section A: Only ID, Status, Assignee */}
+          <section className="rounded-md border border-surface-400 bg-white p-5">
+            <h2 className="font-heading text-lg font-semibold">A. Thông tin đơn hàng</h2>
+            <dl className="mt-4 grid gap-4 text-sm md:grid-cols-3">
+              <div>
+                <dt className="text-text-600">Mã đơn hàng</dt>
+                <dd className="mt-1 font-semibold">{order.id}</dd>
+              </div>
+              <div>
+                <dt className="text-text-600">Trạng thái xử lý</dt>
+                <dd className="mt-1 font-semibold">{orderStateLabels[order.state]}</dd>
+              </div>
+              <div>
+                <dt className="text-text-600">Người phụ trách</dt>
+                <dd className="mt-1 font-semibold">{order.assignee ?? 'Chưa tiếp nhận'}</dd>
+              </div>
+            </dl>
+          </section>
+
+          {/* Section D: Products, Thumbnails, Storage Location, Inline Serial Scan */}
+          <section className="overflow-hidden rounded-md border border-surface-400 bg-white">
+            <div className="flex items-center justify-between p-5">
+              <h2 className="font-heading text-lg font-semibold">B. Sản phẩm, Vị trí kho & Quét mã Serial</h2>
+              <span className="text-xs text-text-600">{order.items.length} mặt hàng</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[980px] text-left text-sm">
+                <thead className="bg-surface-200 text-xs uppercase text-text-600">
+                  <tr>
+                    <th className="p-4 w-16">Ảnh</th>
+                    <th className="p-4">Sản phẩm & SKU</th>
+                    <th className="p-4">Vị trí lưu kho</th>
+                    <th className="p-4">Yêu cầu</th>
+                    <th className="p-4">Đã nhặt</th>
+                    <th className="p-4">Quét mã vạch / Serial</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-surface-400">
+                  {order.items.map((item) => {
+                    const variant = store.variants.find((c) => c.id === item.variantId)
+                    const product = store.products.find((c) => c.id === variant?.productId)
+                    const stock = store.inventory.find((c) => c.variantId === item.variantId)
+                    const isSerialTracked = Boolean(variant?.serialTracking)
+                    const inputVal = serialInputs[item.id] ?? ''
+                    const errorVal = serialErrors[item.id] ?? ''
+
+                    return (
+                      <tr key={item.id}>
+                        <td className="p-4">
+                          <div className="h-12 w-12 rounded border border-surface-300 bg-surface-100 flex items-center justify-center overflow-hidden">
+                            {product?.imageUrl ? (
+                              <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover" />
+                            ) : (
+                              <Tag className="h-5 w-5 text-text-400" />
+                            )}
+                          </div>
+                        </td>
+                        <td className="p-4">
+                          <p className="font-semibold">{product?.name}</p>
+                          <p className="font-mono text-xs font-semibold text-text-700">{variant?.sku}</p>
+                          <p className="mt-1 text-xs text-text-600">{variant?.optionValues.map((v) => `${v.option}: ${v.value}`).join(' · ')}</p>
+                        </td>
+                        <td className="p-4">
+                          <span className="inline-flex items-center rounded bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-800 border border-amber-200">
+                            {variant?.storageLocation ?? 'Kệ A - Tầng 1'}
+                          </span>
+                        </td>
+                        <td className="p-4 font-semibold">{item.quantity}</td>
+                        <td className="p-4">
+                          {order.state === 'WAITING_ACCEPTANCE' ? (
+                            <span className="text-text-600">{item.pickedQuantity}/{item.quantity}</span>
+                          ) : (
+                            <label className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                checked={item.pickedQuantity === item.quantity}
+                                onChange={(e) => store.setPickedQuantity(order.id, item.id, e.target.checked ? item.quantity : 0)}
+                                className="h-4 w-4 accent-brand-500"
+                              />
+                              <span className="font-semibold">{item.pickedQuantity === item.quantity ? 'Đã lấy đủ' : 'Chưa lấy'}</span>
+                            </label>
+                          )}
+                        </td>
+                        <td className="p-4 min-w-[280px]">
+                          {isSerialTracked ? (
+                            <div className="space-y-2">
+                              <div className="flex gap-2">
+                                <input
+                                  type="text"
+                                  placeholder="Quét mã vạch / serial..."
+                                  value={inputVal}
+                                  onChange={(e) => setSerialInputs((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                      e.preventDefault()
+                                      handleScanSerial(item.id, item.variantId)
+                                    }
+                                  }}
+                                  disabled={item.assignedSerialIds.length >= item.quantity || !isPreparing}
+                                  className="input-gaming text-xs py-1.5 px-2 flex-1 font-mono disabled:opacity-50"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => handleScanSerial(item.id, item.variantId)}
+                                  disabled={item.assignedSerialIds.length >= item.quantity || !inputVal.trim() || !isPreparing}
+                                  className="btn-outlined text-xs py-1.5 px-3 disabled:opacity-40"
+                                >
+                                  Quét
+                                </button>
+                              </div>
+                              {errorVal && <p className="text-xs text-error-700">{errorVal}</p>}
+                              <div className="flex flex-wrap gap-1.5">
+                                {item.assignedSerialIds.map((sId) => {
+                                  const s = store.serials.find((x) => x.id === sId)
+                                  return (
+                                    <span key={sId} className="inline-flex items-center gap-1 rounded bg-surface-200 px-2 py-0.5 font-mono text-xs text-text-900 border border-surface-400">
+                                      {s?.value ?? sId}
+                                      {isPreparing && (
+                                        <button
+                                          type="button"
+                                          className="text-text-400 hover:text-error-700"
+                                          onClick={() => handleRemoveSerial(item.id, sId)}
+                                        >
+                                          <X className="h-3 w-3" />
+                                        </button>
+                                      )}
+                                    </span>
+                                  )
+                                })}
+                                {item.assignedSerialIds.length < item.quantity && (
+                                  <span className="text-[11px] text-amber-700 italic">
+                                    Cần {item.quantity - item.assignedSerialIds.length} serial nữa
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          ) : (
+                            <span className="text-xs text-text-600">Hàng không quản lý serial</span>
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        {/* Right Sidebar: Summary & Big Red Packing CTA */}
+        <aside className="h-fit space-y-4 xl:sticky xl:top-24">
+          <section className="rounded-md border border-surface-400 bg-white p-5">
+            <h2 className="font-heading font-semibold">Tóm tắt đơn hàng</h2>
+            <dl className="mt-4 space-y-3 text-sm">
+              <div className="flex justify-between">
+                <dt className="text-text-600">Số lượng SKU</dt>
+                <dd className="font-semibold">{order.items.length}</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-text-600">Tổng sản phẩm</dt>
+                <dd className="font-semibold">{order.items.reduce((sum, item) => sum + item.quantity, 0)} chiếc</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section className="rounded-md border border-surface-400 bg-white p-5">
+            <h2 className="font-heading font-semibold">Thao tác kho</h2>
+
+            {order.state === 'WAITING_ACCEPTANCE' && (
+              <button
+                type="button"
+                className="btn-primary mt-4 w-full"
+                onClick={() => store.acceptOrder(order.id)}
+              >
+                <PackageCheck className="h-4 w-4" /> Bắt đầu chuẩn bị hàng
+              </button>
+            )}
+
+            {isPreparing && (
+              <div className="mt-4 space-y-4">
+                <div className="rounded bg-surface-100 p-3 text-xs text-text-600 space-y-1">
+                  <p>✓ Đã nhặt đủ hàng trong kho</p>
+                  <p>✓ Đã quét đủ serial từng dòng</p>
+                  <p>Hệ thống tự động đồng bộ API đơn vị vận chuyển.</p>
+                </div>
+                <button
+                  type="button"
+                  disabled={!canFinalizePack}
+                  onClick={handleExecutePacking}
+                  className="w-full rounded-md bg-brand-500 py-3 px-4 font-heading font-bold text-white shadow hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
+                >
+                  Đóng gói & Tạo Vận Đơn
+                </button>
+                {!canFinalizePack && (
+                  <p className="text-center text-xs text-amber-700">
+                    Vui lòng tích đủ số lượng nhặt và quét đủ mã serial để tạo vận đơn.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {isAwaitingPickup && (
+              <div className="mt-4 space-y-4">
+                <div className="rounded-md border border-info-200 bg-info-50 p-4">
+                  <p className="text-xs text-info-700 font-semibold uppercase">Mã vận đơn đối tác</p>
+                  <div className="mt-1 flex items-center justify-between">
+                    <span className="font-mono text-lg font-bold text-text-900">
+                      {order.parcel?.trackingCode ?? `GHN-${order.id.replace(/\D/g, '').slice(-8)}`}
+                    </span>
+                    <button
+                      type="button"
+                      className="text-xs font-semibold text-brand-500 hover:underline inline-flex items-center gap-1"
+                      onClick={() => {
+                        const code = order.parcel?.trackingCode ?? `GHN-${order.id.replace(/\D/g, '').slice(-8)}`
+                        navigator.clipboard.writeText(code)
+                        setCopied(true)
+                        setTimeout(() => setCopied(false), 2000)
+                      }}
+                    >
+                      <Copy className="h-3 w-3" /> {copied ? 'Đã copy' : 'Copy'}
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="btn-outlined w-full flex items-center justify-center gap-2 border-brand-500 text-brand-500 font-semibold"
+                  onClick={handlePrintShippingLabel}
+                >
+                  <Printer className="h-4 w-4" /> In Phiếu Giao Hàng
+                </button>
+
+                <button
+                  type="button"
+                  className="btn-primary w-full"
+                  onClick={() => store.completeOrder(order.id)}
+                >
+                  Xác nhận Shipper đã lấy hàng
+                </button>
+              </div>
+            )}
+
+            {order.state === 'COMPLETED' && (
+              <div className="mt-4 space-y-3">
+                <p className="flex items-center gap-2 text-sm font-semibold text-success-500">
+                  <CheckCircle2 className="h-5 w-5" /> Đã bàn giao kiện cho vận chuyển.
+                </p>
+                {order.parcel?.trackingCode && (
+                  <p className="font-mono text-xs text-text-600">Vận đơn: {order.parcel.trackingCode}</p>
+                )}
+                <button
+                  type="button"
+                  className="btn-outlined w-full flex items-center justify-center gap-2"
+                  onClick={handlePrintShippingLabel}
+                >
+                  <Printer className="h-4 w-4" /> In lại phiếu
+                </button>
+              </div>
+            )}
+          </section>
+        </aside>
+      </div>
+    </div>
+  )
 }

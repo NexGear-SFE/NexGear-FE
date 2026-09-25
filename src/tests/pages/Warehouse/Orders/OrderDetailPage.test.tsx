@@ -9,17 +9,30 @@ import { useWarehouseStore } from '@/stores/warehouseStore'
 afterEach(() => useWarehouseStore.setState({ orders: initialOrders, inventory: initialInventory, serials: initialSerials }))
 
 describe('OrderDetailPage', () => {
-  it('walks from acceptance through complete picking and shows the conditional serial step', async () => {
+  it('walks from acceptance through inline serial scan and packing creation', async () => {
     const user = userEvent.setup()
     render(<MemoryRouter initialEntries={['/admin/warehouse/orders/%23GG-20260831-0182']}><Routes><Route path="/admin/warehouse/orders/:orderId" element={<OrderDetailPage />} /></Routes></MemoryRouter>)
     expect(screen.getByText('Tiếp nhận')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Bắt đầu soạn hàng' }))
-    await user.click(screen.getByRole('checkbox', { name: /ASU-G16-I9-4080/i }))
-    await user.click(screen.getByRole('button', { name: 'Hoàn tất soạn hàng' }))
-    expect(screen.getByText('Chờ gán serial')).toBeInTheDocument()
-    expect(screen.getByText('Gán serial')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Mở danh sách serial' }))
-    expect(screen.getByRole('dialog', { name: 'Chọn serial xuất kho' })).toBeInTheDocument()
-    expect(screen.getByRole('listbox', { name: /serial của ASU-G16-I9-4080/i })).toBeInTheDocument()
+    expect(screen.getByText('Chuẩn bị & Đóng gói')).toBeInTheDocument()
+
+    // Accept order
+    await user.click(screen.getByRole('button', { name: /bắt đầu chuẩn bị hàng/i }))
+
+    // Pick item
+    const pickCheckbox = screen.getByRole('checkbox')
+    await user.click(pickCheckbox)
+
+    // Scan available serial
+    const scanInput = screen.getByPlaceholderText(/quét mã vạch \/ serial/i)
+    await user.type(scanInput, 'ROG16-4080-0002')
+    await user.click(screen.getByRole('button', { name: 'Quét' }))
+
+    // Now packing button should be enabled
+    const packButton = screen.getByRole('button', { name: /đóng gói & tạo vận đơn/i })
+    expect(packButton).toBeEnabled()
+    await user.click(packButton)
+
+    // Verify transition to awaiting pickup
+    expect(await screen.findByRole('button', { name: /in phiếu giao hàng/i })).toBeInTheDocument()
   })
 })
