@@ -163,52 +163,68 @@ export function ProductDetailPage() {
       <ConfirmDialog isOpen={true} title={`Danh sách Serial: ${viewingVariant.sku}`} description={viewingSerialsList.length > 0 ? viewingSerialsList.map((s) => `${s.value} (${s.status})`).join('\n') : 'Chưa có serial nào trong hệ thống.'} confirmLabel="Đóng" cancelLabel="" onCancel={() => setViewingSerialsVariantId(null)} onConfirm={() => setViewingSerialsVariantId(null)} />
     )}
     {viewingAuditEntry && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true">
-        <div className="w-full max-w-lg rounded-md border border-surface-400 bg-white p-6 shadow-xl animate-in fade-in">
-          <div className="flex items-center justify-between border-b border-surface-400 pb-3">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 sm:p-6" role="dialog" aria-modal="true">
+        <div className="w-full max-w-3xl rounded-md border border-surface-400 bg-white p-6 sm:p-7 shadow-2xl animate-in fade-in zoom-in-95">
+          <div className="flex items-start justify-between border-b border-surface-400 pb-4">
             <div>
-              <h3 className="font-heading text-lg font-semibold">{viewingAuditEntry.action}</h3>
-              <p className="text-xs text-text-600 font-mono mt-0.5">
-                {viewingAuditEntry.sku !== '—' ? viewingAuditEntry.sku : product.name} · {viewingAuditEntry.actor} · {formatDateTime(viewingAuditEntry.occurredAt)}
-              </p>
+              <div className="flex items-center gap-2.5">
+                <h3 className="font-heading text-xl font-bold text-text-900">{viewingAuditEntry.action}</h3>
+                {viewingAuditEntry.sku && viewingAuditEntry.sku !== '—' && (
+                  <span className="rounded bg-brand-50 px-2.5 py-0.5 font-mono text-xs font-semibold text-brand-600 border border-brand-200">
+                    {viewingAuditEntry.sku}
+                  </span>
+                )}
+              </div>
+              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-600">
+                <span>Người thực hiện: <strong className="text-text-900">{viewingAuditEntry.actor}</strong></span>
+                <span>•</span>
+                <span>Thời gian: <strong className="text-text-900 font-mono">{formatDateTime(viewingAuditEntry.occurredAt)}</strong></span>
+              </div>
             </div>
-            <button type="button" aria-label="Đóng" onClick={() => setViewingAuditEntry(null)} className="rounded p-1 text-text-600 hover:bg-surface-200">
+            <button type="button" aria-label="Đóng" onClick={() => setViewingAuditEntry(null)} className="rounded-sm p-1.5 text-text-600 hover:bg-surface-200 transition-colors">
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          <div className="mt-4 space-y-3">
-            {viewingAuditEntry.detail && <p className="text-sm font-medium text-text-900">{viewingAuditEntry.detail}</p>}
+          <div className="mt-5 space-y-4">
+            {viewingAuditEntry.detail && (
+              <div className="rounded-sm border border-surface-300 bg-surface-100 p-3.5 text-sm text-text-800">
+                <strong>Mô tả sự kiện:</strong> {viewingAuditEntry.detail}
+              </div>
+            )}
             {viewingAuditEntry.diff && viewingAuditEntry.diff.length > 0 ? (
-              <div className="overflow-hidden rounded border border-surface-400">
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-surface-200 text-xs font-semibold uppercase text-text-600">
-                    <tr>
-                      <th className="p-2.5">Trường thông tin</th>
-                      <th className="p-2.5 text-error-700">Trước (Before)</th>
-                      <th className="p-2.5 text-success-700">Sau (After)</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-surface-400 font-mono text-xs">
-                    {viewingAuditEntry.diff.map((item, idx) => (
-                      <tr key={idx} className="hover:bg-surface-50">
-                        <td className="p-2.5 font-sans font-medium text-text-900">{item.field}</td>
-                        <td className="p-2.5 text-error-700 bg-error-50/40 line-through">{item.before}</td>
-                        <td className="p-2.5 text-success-700 bg-success-50/40 font-semibold">{item.after}</td>
+              <div>
+                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-text-600">Đối chiếu thay đổi (Before / After)</h4>
+                <div className="overflow-hidden rounded-md border border-surface-400 shadow-sm">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-surface-200 text-xs font-semibold uppercase text-text-600 border-b border-surface-400">
+                      <tr>
+                        <th className="p-3.5 w-1/3">Trường thông tin</th>
+                        <th className="p-3.5 w-1/3 text-error-700 bg-error-50/30">Trước (Before)</th>
+                        <th className="p-3.5 w-1/3 text-success-700 bg-success-50/30">Sau (After)</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-surface-400 text-sm">
+                      {viewingAuditEntry.diff.map((item, idx) => (
+                        <tr key={idx} className="hover:bg-surface-50 transition-colors">
+                          <td className="p-3.5 font-medium text-text-900">{item.field}</td>
+                          <td className="p-3.5 font-mono text-xs text-error-700 bg-error-50/40 line-through">{item.before}</td>
+                          <td className="p-3.5 font-mono text-xs text-success-700 bg-success-50/40 font-bold">{item.after}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             ) : (
-              <div className="rounded border border-surface-300 bg-surface-100 p-4 text-xs text-text-600">
-                Sự kiện này chỉ ghi nhận trạng thái, không có trường thay đổi đối chiếu.
+              <div className="rounded-md border border-surface-300 bg-surface-100 p-4 text-center text-sm text-text-600">
+                Sự kiện này chỉ ghi nhận trạng thái hệ thống, không phát sinh trường thay đổi đối chiếu.
               </div>
             )}
           </div>
 
-          <div className="mt-6 flex justify-end">
-            <button type="button" className="btn-primary" onClick={() => setViewingAuditEntry(null)}>
+          <div className="mt-6 flex justify-end border-t border-surface-400 pt-4">
+            <button type="button" className="btn-primary min-w-[100px]" onClick={() => setViewingAuditEntry(null)}>
               Đóng
             </button>
           </div>
