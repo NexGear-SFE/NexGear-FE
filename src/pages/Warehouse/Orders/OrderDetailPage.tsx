@@ -1,7 +1,8 @@
-import { AlertTriangle, ArrowLeft, CheckCircle2, Copy, PackageCheck, Printer, Tag, X } from 'lucide-react'
+import { AlertTriangle, ArrowLeft, Camera, CheckCircle2, Copy, PackageCheck, Printer, Tag, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
+import { CameraScannerModal } from '@/components/warehouse/CameraScannerModal'
 import { DataState } from '@/components/warehouse/DataState'
 import { ProgressStepper } from '@/components/warehouse/ProgressStepper'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
@@ -20,6 +21,12 @@ export function OrderDetailPage() {
   const [serialInputs, setSerialInputs] = useState<Record<string, string>>({})
   const [serialErrors, setSerialErrors] = useState<Record<string, string>>({})
   const [copied, setCopied] = useState(false)
+  const [cameraScanningItem, setCameraScanningItem] = useState<{
+    itemId: string
+    variantId: string
+    productName: string
+    sku: string
+  } | null>(null)
 
   // Validation to see if all quantities are picked and all required serials scanned
   const canFinalizePack = useMemo(() => {
@@ -37,9 +44,9 @@ export function OrderDetailPage() {
   const isPreparing = order.state === 'PICKING' || order.state === 'WAITING_SERIAL' || order.state === 'READY_TO_PACK'
   const isAwaitingPickup = order.state === 'WAITING_GHTK_PICKUP'
 
-  const handleScanSerial = (itemId: string, variantId: string) => {
-    const rawVal = (serialInputs[itemId] ?? '').trim().toUpperCase()
-    if (!rawVal) return
+  const handleScanSerial = (itemId: string, variantId: string, customVal?: string): boolean => {
+    const rawVal = (customVal !== undefined ? customVal : (serialInputs[itemId] ?? '')).trim().toUpperCase()
+    if (!rawVal) return false
 
     setSerialErrors((prev) => ({ ...prev, [itemId]: '' }))
 
@@ -50,33 +57,36 @@ export function OrderDetailPage() {
 
     if (!matchingSerial) {
       setSerialErrors((prev) => ({ ...prev, [itemId]: `Mã serial "${rawVal}" không tồn tại hoặc không khả dụng.` }))
-      return
+      return false
     }
 
     const currentItem = order.items.find((i) => i.id === itemId)
-    if (!currentItem) return
+    if (!currentItem) return false
 
     if (currentItem.assignedSerialIds.includes(matchingSerial.id)) {
       setSerialErrors((prev) => ({ ...prev, [itemId]: `Serial "${rawVal}" đã được quét cho dòng này.` }))
-      return
+      return false
     }
 
     if (currentItem.assignedSerialIds.length >= currentItem.quantity) {
       setSerialErrors((prev) => ({ ...prev, [itemId]: `Đã quét đủ số lượng serial (${currentItem.quantity}/${currentItem.quantity}).` }))
-      return
+      return false
     }
 
-    // Assign serial
-    const nextSerials = [...currentItem.assignedSerialIds, matchingSerial.id]
-    store.assignOrderSerials(order.id, nextSerials)
+    // Collect all serials across all items in order, appending new serial to this item
+    const allAssigned = order.items.flatMap((item) =>
+      item.id === itemId ? [...item.assignedSerialIds, matchingSerial.id] : item.assignedSerialIds
+    )
+    store.assignOrderSerials(order.id, allAssigned)
     setSerialInputs((prev) => ({ ...prev, [itemId]: '' }))
+    return true
   }
 
   const handleRemoveSerial = (itemId: string, serialId: string) => {
-    const currentItem = order.items.find((i) => i.id === itemId)
-    if (!currentItem) return
-    const nextSerials = currentItem.assignedSerialIds.filter((id) => id !== serialId)
-    store.assignOrderSerials(order.id, nextSerials)
+    const allAssigned = order.items.flatMap((item) =>
+      item.id === itemId ? item.assignedSerialIds.filter((id) => id !== serialId) : item.assignedSerialIds
+    )
+    store.assignOrderSerials(order.id, allAssigned)
   }
 
   const handleExecutePacking = () => {
@@ -193,6 +203,9 @@ export function OrderDetailPage() {
                     const isSerialTracked = Boolean(variant?.serialTracking)
                     const inputVal = serialInputs[item.id] ?? ''
                     const errorVal = serialErrors[item.id] ?? ''
+                    const availableSerialsForItem = store.serials.filter(
+                      (s) => s.variantId === item.variantId && (s.status === 'AVAILABLE' || s.status === 'RESERVED') && !item.assignedSerialIds.includes(s.id)
+                    )
 
                     return (
                       <tr key={item.id}>
@@ -253,11 +266,44 @@ export function OrderDetailPage() {
                                   type="button"
                                   onClick={() => handleScanSerial(item.id, item.variantId)}
                                   disabled={item.assignedSerialIds.length >= item.quantity || !inputVal.trim() || !isPreparing}
-                                  className="btn-outlined text-xs py-1.5 px-3 disabled:opacity-40"
+                                  className="btn-outlined text-xs py-1.5 px-2.5 disabled:opacity-40"
                                 >
                                   Quét
                                 </button>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setCameraScanningItem({
+                                      itemId: item.id,
+                                      variantId: item.variantId,
+                                      productName: product?.name ?? 'Sản phẩm',
+                                      sku: variant?.sku ?? '',
+                                    })
+                                  }
+                                  disabled={item.assignedSerialIds.length >= item.quantity || !isPreparing}
+                                  className="btn-outlined text-xs py-1.5 px-2 flex items-center gap-1 text-brand-600 border-brand-300 hover:bg-brand-50 disabled:opacity-40"
+                                  title="Quét bằng camera điện thoại/laptop"
+                                >
+                                  <Camera className="h-3.5 w-3.5" />
+                                  <span className="hidden sm:inline">Camera</span>
+                                </button>
                               </div>
+                              {isPreparing && item.assignedSerialIds.length < item.quantity && availableSerialsForItem.length > 0 && (
+                                <div className="flex flex-wrap items-center gap-1 pt-0.5">
+                                  <span className="text-[11px] font-medium text-text-500">Mã kho có sẵn:</span>
+                                  {availableSerialsForItem.slice(0, 4).map((s) => (
+                                    <button
+                                      key={s.id}
+                                      type="button"
+                                      onClick={() => handleScanSerial(item.id, item.variantId, s.value)}
+                                      className="rounded bg-brand-50 border border-brand-200 px-1.5 py-0.5 font-mono text-[11px] text-brand-700 hover:bg-brand-100 hover:border-brand-300 transition-colors"
+                                      title={`Bấm để chọn nhanh serial ${s.value}`}
+                                    >
+                                      +{s.value}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
                               {errorVal && <p className="text-xs text-error-700">{errorVal}</p>}
                               <div className="flex flex-wrap gap-1.5">
                                 {item.assignedSerialIds.map((sId) => {
@@ -410,6 +456,27 @@ export function OrderDetailPage() {
           </section>
         </aside>
       </div>
+
+      {cameraScanningItem && (
+        <CameraScannerModal
+          isOpen={true}
+          onClose={() => setCameraScanningItem(null)}
+          title={`Quét Serial: ${cameraScanningItem.sku}`}
+          subtitle={cameraScanningItem.productName}
+          availableSerials={store.serials
+            .filter((s) => s.variantId === cameraScanningItem.variantId && (s.status === 'AVAILABLE' || s.status === 'RESERVED'))
+            .map((s) => s.value)}
+          onScan={(scannedVal) => {
+            const success = handleScanSerial(cameraScanningItem.itemId, cameraScanningItem.variantId, scannedVal)
+            if (success) {
+              const updatedItem = order.items.find((i) => i.id === cameraScanningItem.itemId)
+              if (updatedItem && updatedItem.assignedSerialIds.length + 1 >= updatedItem.quantity) {
+                setTimeout(() => setCameraScanningItem(null), 1200)
+              }
+            }
+          }}
+        />
+      )}
     </div>
   )
 }
