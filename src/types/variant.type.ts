@@ -36,5 +36,6 @@ export interface SkuAuditEntry {
   sku: string
   variantId?: string
   actor: string
+  detail?: string
   occurredAt: string
 }
