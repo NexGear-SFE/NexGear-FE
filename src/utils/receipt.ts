@@ -17,7 +17,6 @@ export function parseSerials(value: string): string[] {
 export function getReceiptValidationIssues(receipt: StockReceipt, variants: ProductVariant[], inventorySerials: ProductSerial[]): string[] {
   const issues: string[] = []
   if (!receipt.supplier.trim()) issues.push('Chọn nhà cung cấp.')
-  if (!receipt.warehouseName.trim()) issues.push('Chọn kho nhận.')
   if (!receipt.receiptDate) issues.push('Chọn ngày nhập.')
   if (!receipt.invoiceCode.trim()) issues.push('Nhập mã hóa đơn hoặc chứng từ.')
   if (receipt.lines.length === 0) issues.push('Thêm ít nhất một SKU.')

@@ -6,6 +6,7 @@ export interface ReceiptLine {
   quantity: number
   unitCost: number
   serials: string[]
+  putawayLocation?: string
 }
 
 export interface StockReceipt {
@@ -15,7 +16,8 @@ export interface StockReceipt {
   invoiceCode: string
   notes: string
   creator: string
-  warehouseName: string
+  warehouseName?: string
+  evidenceUrls?: string[]
   status: ReceiptStatus
   lines: ReceiptLine[]
   createdAt: string
