@@ -33,9 +33,26 @@ export function OrderDetailPage() {
     if (!order) return false
     return order.items.every((item) => {
       const variant = store.variants.find((v) => v.id === item.variantId)
-      const picked = item.pickedQuantity === item.quantity
-      if (!variant?.serialTracking) return picked
-      return picked && item.assignedSerialIds.length === item.quantity
+      if (variant?.serialTracking) {
+        return item.assignedSerialIds.length === item.quantity
+      }
+      return item.pickedQuantity === item.quantity
+    })
+  }, [order, store.variants])
+
+  const allPicked = useMemo(() => {
+    if (!order) return false
+    return order.items.every((i) => {
+      const v = store.variants.find((x) => x.id === i.variantId)
+      return i.pickedQuantity === i.quantity || (Boolean(v?.serialTracking) && i.assignedSerialIds.length === i.quantity)
+    })
+  }, [order, store.variants])
+
+  const allSerialsScanned = useMemo(() => {
+    if (!order) return false
+    return order.items.every((i) => {
+      const v = store.variants.find((x) => x.id === i.variantId)
+      return !v?.serialTracking || i.assignedSerialIds.length === i.quantity
     })
   }, [order, store.variants])
 
@@ -78,15 +95,20 @@ export function OrderDetailPage() {
       item.id === itemId ? [...item.assignedSerialIds, matchingSerial.id] : item.assignedSerialIds
     )
     store.assignOrderSerials(order.id, allAssigned)
+    store.setPickedQuantity(order.id, itemId, Math.min(currentItem.quantity, currentItem.assignedSerialIds.length + 1))
     setSerialInputs((prev) => ({ ...prev, [itemId]: '' }))
     return true
   }
 
   const handleRemoveSerial = (itemId: string, serialId: string) => {
+    const currentItem = order.items.find((i) => i.id === itemId)
     const allAssigned = order.items.flatMap((item) =>
       item.id === itemId ? item.assignedSerialIds.filter((id) => id !== serialId) : item.assignedSerialIds
     )
     store.assignOrderSerials(order.id, allAssigned)
+    if (currentItem) {
+      store.setPickedQuantity(order.id, itemId, Math.max(0, currentItem.assignedSerialIds.length - 1))
+    }
   }
 
   const handleExecutePacking = () => {
@@ -190,10 +212,10 @@ export function OrderDetailPage() {
                   <tr>
                     <th className="p-4 w-16">Ảnh</th>
                     <th className="p-4">Sản phẩm & SKU</th>
-                    <th className="p-4">Vị trí lưu kho</th>
-                    <th className="p-4">Yêu cầu</th>
-                    <th className="p-4">Đã nhặt</th>
-                    <th className="p-4">Quét mã vạch / Serial</th>
+                    <th className="p-4 whitespace-nowrap min-w-[130px]">Vị trí lưu kho</th>
+                    <th className="p-4 whitespace-nowrap min-w-[80px]">Yêu cầu</th>
+                    <th className="p-4 whitespace-nowrap min-w-[130px]">Đã nhặt</th>
+                    <th className="p-4 min-w-[340px]">Quét mã vạch / Serial</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-400">
@@ -229,25 +251,29 @@ export function OrderDetailPage() {
                           </span>
                         </td>
                         <td className="p-4 font-semibold">{item.quantity}</td>
-                        <td className="p-4">
+                        <td className="p-4 whitespace-nowrap">
                           {order.state === 'WAITING_ACCEPTANCE' ? (
                             <span className="text-text-600">{item.pickedQuantity}/{item.quantity}</span>
                           ) : (
-                            <label className="flex items-center gap-2">
+                            <label className="flex items-center gap-2 cursor-pointer select-none">
                               <input
                                 type="checkbox"
-                                checked={item.pickedQuantity === item.quantity}
+                                checked={item.pickedQuantity === item.quantity || (isSerialTracked && item.assignedSerialIds.length === item.quantity)}
                                 onChange={(e) => store.setPickedQuantity(order.id, item.id, e.target.checked ? item.quantity : 0)}
-                                className="h-4 w-4 accent-brand-500"
+                                className="h-4 w-4 accent-brand-500 rounded"
                               />
-                              <span className="font-semibold">{item.pickedQuantity === item.quantity ? 'Đã lấy đủ' : 'Chưa lấy'}</span>
+                              <span className="font-semibold text-xs whitespace-nowrap">
+                                {item.pickedQuantity === item.quantity || (isSerialTracked && item.assignedSerialIds.length === item.quantity)
+                                  ? 'Đã lấy đủ'
+                                  : 'Chưa lấy'}
+                              </span>
                             </label>
                           )}
                         </td>
                         <td className="p-4 min-w-[280px]">
                           {isSerialTracked ? (
                             <div className="space-y-2">
-                              <div className="flex gap-2">
+                              <div className="flex items-center gap-2">
                                 <input
                                   type="text"
                                   placeholder="Quét mã vạch / serial..."
@@ -266,7 +292,7 @@ export function OrderDetailPage() {
                                   type="button"
                                   onClick={() => handleScanSerial(item.id, item.variantId)}
                                   disabled={item.assignedSerialIds.length >= item.quantity || !inputVal.trim() || !isPreparing}
-                                  className="btn-outlined text-xs py-1.5 px-2.5 disabled:opacity-40"
+                                  className="btn-outlined text-xs py-1.5 px-2.5 shrink-0 disabled:opacity-40"
                                 >
                                   Quét
                                 </button>
@@ -281,11 +307,11 @@ export function OrderDetailPage() {
                                     })
                                   }
                                   disabled={item.assignedSerialIds.length >= item.quantity || !isPreparing}
-                                  className="btn-outlined text-xs py-1.5 px-2 flex items-center gap-1 text-brand-600 border-brand-300 hover:bg-brand-50 disabled:opacity-40"
+                                  className="btn-outlined text-xs py-1.5 px-2.5 shrink-0 flex items-center gap-1.5 text-brand-600 border-brand-300 hover:bg-brand-50 disabled:opacity-40"
                                   title="Quét bằng camera điện thoại/laptop"
                                 >
-                                  <Camera className="h-3.5 w-3.5" />
-                                  <span className="hidden sm:inline">Camera</span>
+                                  <Camera className="h-3.5 w-3.5 shrink-0" />
+                                  <span className="whitespace-nowrap">Camera</span>
                                 </button>
                               </div>
                               {isPreparing && item.assignedSerialIds.length < item.quantity && availableSerialsForItem.length > 0 && (
@@ -374,10 +400,18 @@ export function OrderDetailPage() {
 
             {isPreparing && (
               <div className="mt-4 space-y-4">
-                <div className="rounded bg-surface-100 p-3 text-xs text-text-600 space-y-1">
-                  <p>✓ Đã nhặt đủ hàng trong kho</p>
-                  <p>✓ Đã quét đủ serial từng dòng</p>
-                  <p>Hệ thống tự động đồng bộ API đơn vị vận chuyển.</p>
+                <div className="rounded border border-surface-300 bg-surface-100 p-3 text-xs space-y-2">
+                  <p className={allPicked ? 'text-success-700 font-medium flex items-center gap-1.5' : 'text-amber-700 font-medium flex items-center gap-1.5'}>
+                    {allPicked ? <CheckCircle2 className="h-4 w-4 text-success-600 shrink-0" /> : <span className="h-2 w-2 rounded-full bg-amber-500 inline-block shrink-0" />}
+                    {allPicked ? 'Đã nhặt đủ hàng trong kho' : 'Chưa nhặt đủ số lượng'}
+                  </p>
+                  <p className={allSerialsScanned ? 'text-success-700 font-medium flex items-center gap-1.5' : 'text-amber-700 font-medium flex items-center gap-1.5'}>
+                    {allSerialsScanned ? <CheckCircle2 className="h-4 w-4 text-success-600 shrink-0" /> : <span className="h-2 w-2 rounded-full bg-amber-500 inline-block shrink-0" />}
+                    {allSerialsScanned ? 'Đã quét đủ mã serial từng dòng' : 'Chưa quét đủ mã serial'}
+                  </p>
+                  <p className="text-text-500 pt-1 border-t border-surface-200">
+                    Bấm nút bên dưới để đóng gói và tự động đồng bộ vận đơn sang GHTK.
+                  </p>
                 </div>
                 <button
                   type="button"
@@ -389,7 +423,7 @@ export function OrderDetailPage() {
                 </button>
                 {!canFinalizePack && (
                   <p className="text-center text-xs text-amber-700">
-                    Vui lòng tích đủ số lượng nhặt và quét đủ mã serial để tạo vận đơn.
+                    Vui lòng hoàn tất nhặt hàng và quét đủ serial để kích hoạt đóng gói.
                   </p>
                 )}
               </div>

@@ -260,10 +260,15 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
             state: nextState,
             assignedAt: timestamp(),
             assignedBy: 'Nguyễn Bảo',
-            items: candidate.items.map((item) => ({
-              ...item,
-              assignedSerialIds: selected.filter((serial) => serial.variantId === item.variantId).map((serial) => serial.id),
-            })),
+            items: candidate.items.map((item) => {
+              const assigned = selected.filter((serial) => serial.variantId === item.variantId).map((serial) => serial.id)
+              const isTracked = state.variants.find((v) => v.id === item.variantId)?.serialTracking
+              return {
+                ...item,
+                assignedSerialIds: assigned,
+                pickedQuantity: isTracked && assigned.length > 0 ? assigned.length : item.pickedQuantity,
+              }
+            }),
           }, 'Đã gán serial')
         : candidate),
       serials: state.serials.map((serial) => uniqueIds.has(serial.id) ? { ...serial, status: 'RESERVED' } : serial),
