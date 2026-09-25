@@ -48,7 +48,8 @@ export function VariantMatrixEditor({ brandCode, existingSkus = [], modelCode, o
   const [selection, setSelection] = useState<Record<string, string>>({})
   const [message, setMessage] = useState('')
   const [pendingDelete, setPendingDelete] = useState<PendingDelete>(null)
-  const serialTracking = variants[0]?.serialTracking ?? false
+  const [preferredTracking, setPreferredTracking] = useState<boolean>(() => variants[0]?.serialTracking ?? false)
+  const serialTracking = variants.length > 0 ? Boolean(variants[0]?.serialTracking) : preferredTracking
   const lockedVariants = variants.filter((variant) => variant.skuLocked)
   const duplicateSkus = findDuplicateSkus(variants.map((variant) => variant.sku), existingSkus)
   const optionNames = options.map((option) => option.name.trim().toLocaleLowerCase('vi'))
@@ -61,6 +62,7 @@ export function VariantMatrixEditor({ brandCode, existingSkus = [], modelCode, o
   }
 
   function updateTracking(nextValue: boolean) {
+    setPreferredTracking(nextValue)
     onChange(variants.map((variant) => variant.skuLocked ? variant : { ...variant, serialTracking: nextValue }))
   }
 
@@ -69,6 +71,7 @@ export function VariantMatrixEditor({ brandCode, existingSkus = [], modelCode, o
     setHasConfigurations(nextValue)
     setMessage('')
     if (nextValue) {
+      setPreferredTracking(serialTracking)
       setOptions((current) => current.length ? current : [{ name: '', code: '', values: [{ value: '', code: '' }] }])
       onChange([])
       return
@@ -108,7 +111,11 @@ export function VariantMatrixEditor({ brandCode, existingSkus = [], modelCode, o
 
   function confirmDelete() {
     if (!pendingDelete) return
-    onChange(variants.filter((_, index) => index !== pendingDelete.index))
+    const remaining = variants.filter((_, index) => index !== pendingDelete.index)
+    if (remaining.length === 0) {
+      setPreferredTracking(serialTracking)
+    }
+    onChange(remaining)
     setPendingDelete(null)
   }
 

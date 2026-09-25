@@ -64,4 +64,20 @@ describe('VariantMatrixEditor', () => {
     expect(screen.getByRole('radio', { name: /tự ghép từng cấu hình/i })).toBeDisabled()
     expect(screen.getByLabelText('SKU 1')).toBeDisabled()
   })
+
+  it('allows toggling serial tracking in multi-configuration mode before variants are added', async () => {
+    const user = userEvent.setup()
+    render(<Harness />)
+    await user.click(screen.getByRole('radio', { name: /tự ghép từng cấu hình/i }))
+    const serialRadio = screen.getByRole('radio', { name: /theo từng serial/i })
+    expect(serialRadio).not.toBeChecked()
+    await user.click(serialRadio)
+    expect(serialRadio).toBeChecked()
+
+    await user.type(screen.getByLabelText('Tên thuộc tính 1'), 'CPU')
+    await user.type(screen.getByLabelText('Giá trị 1-1'), 'i9')
+    await user.selectOptions(screen.getByLabelText('Chọn CPU'), 'I9')
+    await user.click(screen.getByRole('button', { name: /thêm cấu hình/i }))
+    expect(screen.getByText('Theo serial')).toBeInTheDocument()
+  })
 })
