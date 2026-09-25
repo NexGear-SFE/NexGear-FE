@@ -42,8 +42,8 @@ export const initialVariants: ProductVariant[] = [
 ]
 
 export const initialInventory: VariantInventory[] = [
-  { variantId: 'V001', onHand: 3, reserved: 1 }, { variantId: 'V002', onHand: 2, reserved: 0 },
-  { variantId: 'V003', onHand: 1, reserved: 0 }, { variantId: 'V004', onHand: 12, reserved: 0 },
+  { variantId: 'V001', onHand: 10, reserved: 1 }, { variantId: 'V002', onHand: 2, reserved: 0 },
+  { variantId: 'V003', onHand: 0, reserved: 0 }, { variantId: 'V004', onHand: 12, reserved: 0 },
   { variantId: 'V005', onHand: 9, reserved: 0 }, { variantId: 'V006', onHand: 5, reserved: 0 },
   { variantId: 'V007', onHand: 0, reserved: 0 }, { variantId: 'V008', onHand: 4, reserved: 0 },
   { variantId: 'V009', onHand: 2, reserved: 0 },
@@ -57,6 +57,15 @@ export const initialSerials: ProductSerial[] = [
   { id: 'S005', variantId: 'V002', value: 'ROG16-4070-0002', receiptId: 'PN-20260815-002', status: 'AVAILABLE', receivedAt: '2026-08-15T09:00:00.000Z' },
   { id: 'S006', variantId: 'V001', value: 'ROG16-4080-SOLD1', receiptId: 'PN-20260815-002', status: 'SOLD', receivedAt: '2026-08-15T09:00:00.000Z' },
   { id: 'S007', variantId: 'V001', value: 'ROG16-4080-SOLD2', receiptId: 'PN-20260815-002', status: 'SOLD', receivedAt: '2026-08-15T09:00:00.000Z' },
+  { id: 'S008', variantId: 'V001', value: 'ROG16-4080-0004', receiptId: 'PN-20260815-002', status: 'AVAILABLE', receivedAt: '2026-08-15T09:00:00.000Z' },
+  { id: 'S009', variantId: 'V001', value: 'ROG16-4080-0005', receiptId: 'PN-20260815-002', status: 'AVAILABLE', receivedAt: '2026-08-15T09:00:00.000Z' },
+  { id: 'S010', variantId: 'V001', value: 'ROG16-4080-0006', receiptId: 'PN-20260815-002', status: 'AVAILABLE', receivedAt: '2026-08-15T09:00:00.000Z' },
+  { id: 'S011', variantId: 'V001', value: 'ROG16-4080-0007', receiptId: 'PN-20260815-002', status: 'AVAILABLE', receivedAt: '2026-08-15T09:00:00.000Z' },
+  { id: 'S012', variantId: 'V001', value: 'ROG16-4080-0008', receiptId: 'PN-20260815-002', status: 'AVAILABLE', receivedAt: '2026-08-15T09:00:00.000Z' },
+  { id: 'S013', variantId: 'V001', value: 'ROG16-4080-0009', receiptId: 'PN-20260815-002', status: 'AVAILABLE', receivedAt: '2026-08-15T09:00:00.000Z' },
+  { id: 'S014', variantId: 'V001', value: 'ROG16-4080-0010', receiptId: 'PN-20260815-002', status: 'AVAILABLE', receivedAt: '2026-08-15T09:00:00.000Z' },
+  { id: 'S015', variantId: 'V001', value: 'ROG16-4080-0011', receiptId: 'PN-20260815-002', status: 'AVAILABLE', receivedAt: '2026-08-15T09:00:00.000Z' },
+  { id: 'S016', variantId: 'V001', value: 'ROG16-4080-SOLD3', receiptId: 'PN-20260815-002', status: 'SOLD', receivedAt: '2026-08-15T09:00:00.000Z' },
 ]
 
 export const initialMovements: InventoryMovement[] = [
