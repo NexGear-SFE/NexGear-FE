@@ -26,6 +26,7 @@ export interface ProductVariant {
   reorderLevel: number
   status: VariantStatus
   skuLocked: boolean
+  storageLocation?: string
   createdAt: string
   updatedAt: string
 }

@@ -43,7 +43,6 @@ export function ReceiptWizardPage() {
   const editingVariant = store.variants.find((variant) => variant.id === editingLine?.variantId)
   const viewingVariant = store.variants.find((variant) => variant.id === viewingLine?.variantId)
   const editingProduct = store.products.find((product) => product.id === editingVariant?.productId)
-  const viewingProduct = store.products.find((product) => product.id === viewingVariant?.productId)
   const totalQuantity = lines.reduce((sum, line) => sum + (Number.isFinite(line.quantity) ? line.quantity : 0), 0)
   const receipt = useMemo<StockReceipt>(() => ({ id: currentId || 'UNSAVED', supplier, receiptDate, invoiceCode, notes, creator: existing?.creator ?? 'Nguyễn Bảo', evidenceUrls, status: 'DRAFT', lines, createdAt: existing?.createdAt ?? new Date().toISOString(), updatedAt: new Date().toISOString() }), [currentId, evidenceUrls, existing?.createdAt, existing?.creator, invoiceCode, lines, notes, receiptDate, supplier])
   const stepCompletion = [

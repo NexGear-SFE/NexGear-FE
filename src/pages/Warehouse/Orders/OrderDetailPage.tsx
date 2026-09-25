@@ -6,10 +6,9 @@ import { DataState } from '@/components/warehouse/DataState'
 import { ProgressStepper } from '@/components/warehouse/ProgressStepper'
 import { StatusBadge } from '@/components/warehouse/StatusBadge'
 import { WarehousePageHeader } from '@/components/warehouse/WarehousePageHeader'
-import { ROUTES, warehouseInventoryDetailPath, warehouseProductDetailPath } from '@/constants/routes'
+import { ROUTES } from '@/constants/routes'
 import { useWarehouseStore, warehouseSelectors } from '@/stores/warehouseStore'
 import { formatDate } from '@/utils/formatDate'
-import { getAvailableStock } from '@/utils/inventory'
 import { getOrderProgressIndex, orderStateLabels } from '@/utils/warehouseOrder'
 
 const progressSteps = ['Tiếp nhận', 'Chuẩn bị & Đóng gói', 'Chờ Đơn Vị Vận Chuyển Lấy', 'Hoàn tất']
@@ -22,20 +21,21 @@ export function OrderDetailPage() {
   const [serialErrors, setSerialErrors] = useState<Record<string, string>>({})
   const [copied, setCopied] = useState(false)
 
-  if (!order) return <DataState type="empty" title="Không tìm thấy đơn hàng" description="Mã đơn không tồn tại hoặc đã thay đổi." />
-
-  const isPreparing = order.state === 'PICKING' || order.state === 'WAITING_SERIAL' || order.state === 'READY_TO_PACK'
-  const isAwaitingPickup = order.state === 'WAITING_GHTK_PICKUP'
-
   // Validation to see if all quantities are picked and all required serials scanned
   const canFinalizePack = useMemo(() => {
+    if (!order) return false
     return order.items.every((item) => {
       const variant = store.variants.find((v) => v.id === item.variantId)
       const picked = item.pickedQuantity === item.quantity
       if (!variant?.serialTracking) return picked
       return picked && item.assignedSerialIds.length === item.quantity
     })
-  }, [order.items, store.variants])
+  }, [order, store.variants])
+
+  if (!order) return <DataState type="empty" title="Không tìm thấy đơn hàng" description="Mã đơn không tồn tại hoặc đã thay đổi." />
+
+  const isPreparing = order.state === 'PICKING' || order.state === 'WAITING_SERIAL' || order.state === 'READY_TO_PACK'
+  const isAwaitingPickup = order.state === 'WAITING_GHTK_PICKUP'
 
   const handleScanSerial = (itemId: string, variantId: string) => {
     const rawVal = (serialInputs[itemId] ?? '').trim().toUpperCase()
@@ -190,7 +190,6 @@ export function OrderDetailPage() {
                   {order.items.map((item) => {
                     const variant = store.variants.find((c) => c.id === item.variantId)
                     const product = store.products.find((c) => c.id === variant?.productId)
-                    const stock = store.inventory.find((c) => c.variantId === item.variantId)
                     const isSerialTracked = Boolean(variant?.serialTracking)
                     const inputVal = serialInputs[item.id] ?? ''
                     const errorVal = serialErrors[item.id] ?? ''
