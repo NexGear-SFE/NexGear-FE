@@ -2,11 +2,23 @@ import { packingSchema } from '@/schemas/warehouseOrder.schema'
 import type { WarehouseOrder, WarehouseOrderState } from '@/types/warehouseOrder.type'
 
 export const orderStateLabels: Record<WarehouseOrderState, string> = {
-  WAITING_ACCEPTANCE: 'Chờ tiếp nhận', PICKING: 'Đang soạn hàng', WAITING_SERIAL: 'Chờ gán serial', READY_TO_PACK: 'Sẵn sàng đóng gói', WAITING_GHTK_PICKUP: 'Chờ Đơn Vị Vận Chuyển Lấy', ISSUE: 'Có sự cố', COMPLETED: 'Đã hoàn tất',
+  WAITING_ACCEPTANCE: 'Chờ tiếp nhận',
+  PICKING: 'Chuẩn bị & Đóng gói',
+  WAITING_SERIAL: 'Chuẩn bị & Đóng gói',
+  READY_TO_PACK: 'Chuẩn bị & Đóng gói',
+  WAITING_GHTK_PICKUP: 'Chờ Đơn Vị Vận Chuyển Lấy',
+  ISSUE: 'Có sự cố',
+  COMPLETED: 'Hoàn tất',
 }
 
 export const orderActionLabels: Record<WarehouseOrderState, string> = {
-  WAITING_ACCEPTANCE: 'Bắt đầu soạn hàng', PICKING: 'Tiếp tục soạn', WAITING_SERIAL: 'Gán serial', READY_TO_PACK: 'Đóng gói', WAITING_GHTK_PICKUP: 'Theo dõi lấy hàng', ISSUE: 'Xử lý sự cố', COMPLETED: 'Xem chi tiết',
+  WAITING_ACCEPTANCE: 'Tiếp nhận đơn',
+  PICKING: 'Chuẩn bị & Đóng gói',
+  WAITING_SERIAL: 'Chuẩn bị & Đóng gói',
+  READY_TO_PACK: 'Chuẩn bị & Đóng gói',
+  WAITING_GHTK_PICKUP: 'Xem vận đơn',
+  ISSUE: 'Xử lý sự cố',
+  COMPLETED: 'Xem chi tiết',
 }
 
 const priorities: Record<WarehouseOrderState, number> = { ISSUE: 0, WAITING_ACCEPTANCE: 1, PICKING: 2, WAITING_SERIAL: 3, READY_TO_PACK: 4, WAITING_GHTK_PICKUP: 5, COMPLETED: 6 }
