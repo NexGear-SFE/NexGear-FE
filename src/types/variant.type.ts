@@ -31,12 +31,19 @@ export interface ProductVariant {
   updatedAt: string
 }
 
+export interface AuditDiffItem {
+  field: string
+  before: string
+  after: string
+}
+
 export interface SkuAuditEntry {
   id: string
-  action: 'CREATE' | 'MANUAL_OVERRIDE' | 'REGENERATE' | 'DEACTIVATE'
+  action: 'CREATE' | 'MANUAL_OVERRIDE' | 'REGENERATE' | 'DEACTIVATE' | string
   sku: string
   variantId?: string
   actor: string
   detail?: string
+  diff?: AuditDiffItem[]
   occurredAt: string
 }

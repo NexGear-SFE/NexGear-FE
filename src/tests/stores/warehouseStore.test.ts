@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { initialCategories, initialInventory, initialMovements, initialOrders, initialProducts, initialReceipts, initialSerials, initialVariants } from '@/constants/warehouseMockData'
+import { initialCategories, initialInventory, initialMovements, initialOrders, initialProducts, initialReceipts, initialSerials, initialSkuAudit, initialVariants } from '@/constants/warehouseMockData'
 import { useWarehouseStore } from '@/stores/warehouseStore'
 import { buildCategoryBreadcrumb } from '@/utils/buildCategoryTree'
 
-afterEach(() => useWarehouseStore.setState({ categories: initialCategories, products: initialProducts, variants: initialVariants, inventory: initialInventory, movements: initialMovements, orders: initialOrders, receipts: initialReceipts, serials: initialSerials, skuAudit: [] }))
+afterEach(() => useWarehouseStore.setState({ categories: initialCategories, products: initialProducts, variants: initialVariants, inventory: initialInventory, movements: initialMovements, orders: initialOrders, receipts: initialReceipts, serials: initialSerials, skuAudit: initialSkuAudit }))
 
 describe('warehouse category store', () => {
   it('deactivates a referenced category without deleting it or its relation', () => {

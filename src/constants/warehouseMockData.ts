@@ -2,7 +2,7 @@ import type { Category } from '@/types/category.type'
 import type { InventoryMovement, ProductSerial, VariantInventory } from '@/types/inventory.type'
 import type { Product } from '@/types/product.type'
 import type { StockReceipt } from '@/types/receipt.type'
-import type { ProductVariant } from '@/types/variant.type'
+import type { ProductVariant, SkuAuditEntry } from '@/types/variant.type'
 import type { WarehouseOrder } from '@/types/warehouseOrder.type'
 
 const now = '2026-09-09T09:00:00.000Z'
@@ -89,4 +89,34 @@ export const initialOrders: WarehouseOrder[] = [
   { id: '#GG-20260828-0173', customerName: 'Lý Thị Mỹ Hạnh', phone: '0933 777 888', address: '16 Nguyễn Trãi, Quận 5, TP. Hồ Chí Minh', paymentMethod: 'COD', state: 'COMPLETED', assignee: 'Lê Thu', items: [{ id: 'OI006', variantId: 'V006', quantity: 1, unitPrice: 3590000, pickedQuantity: 1, assignedSerialIds: [] }], note: '', timeline: [], createdAt: '2026-08-28T08:00:00.000Z', reservationApplied: true, inventoryCommitted: true },
   { id: '#GG-20260825-0170', customerName: 'Khách hàng lịch sử 170', phone: '0900 000 170', address: 'TP. Hồ Chí Minh', paymentMethod: 'VNPAY', state: 'COMPLETED', assignee: 'Nguyễn Bảo', items: [{ id: 'OI007', variantId: 'V001', quantity: 1, unitPrice: 45990000, pickedQuantity: 1, assignedSerialIds: ['S006'] }], note: '', timeline: [{ id: 'T170', label: 'GHTK đã lấy hàng', occurredAt: '2026-08-25T12:00:00.000Z', actor: 'Nguyễn Bảo' }], createdAt: '2026-08-25T10:00:00.000Z', reservationApplied: true, inventoryCommitted: true },
   { id: '#GG-20260829-0174', customerName: 'Khách hàng lịch sử 174', phone: '0900 000 174', address: 'TP. Hồ Chí Minh', paymentMethod: 'COD', state: 'COMPLETED', assignee: 'Nguyễn Bảo', items: [{ id: 'OI008', variantId: 'V001', quantity: 1, unitPrice: 45990000, pickedQuantity: 1, assignedSerialIds: ['S007'] }], note: '', timeline: [{ id: 'T174', label: 'GHTK đã lấy hàng', occurredAt: '2026-08-29T14:00:00.000Z', actor: 'Nguyễn Bảo' }], createdAt: '2026-08-29T12:00:00.000Z', reservationApplied: true, inventoryCommitted: true },
+]
+
+export const initialSkuAudit: SkuAuditEntry[] = [
+  {
+    id: 'AUD-001',
+    action: 'Cập nhật cấu hình SKU',
+    sku: 'ASU-G16-I9-4080',
+    variantId: 'V001',
+    actor: 'Nguyễn Bảo (WS-002)',
+    detail: 'Điều chỉnh cấu hình quản lý serial và ngưỡng tồn kho',
+    diff: [
+      { field: 'Quản lý tồn kho', before: 'Theo số lượng', after: 'Theo từng serial' },
+      { field: 'Ngưỡng báo hết', before: '1', after: '3' },
+      { field: 'Vị trí cất hàng', before: 'Chưa gán', after: 'Kệ A - Tầng 2' },
+    ],
+    occurredAt: '2026-09-15T14:30:00.000Z',
+  },
+  {
+    id: 'AUD-002',
+    action: 'Đổi trạng thái SKU',
+    sku: 'ASU-G16-I7-4070',
+    variantId: 'V002',
+    actor: 'Trần Minh (WS-005)',
+    detail: 'Kích hoạt biến thể mở bán chính thức',
+    diff: [
+      { field: 'Trạng thái', before: 'DRAFT', after: 'ACTIVE' },
+      { field: 'Giá niêm yết', before: '39.990.000 đ', after: '42.990.000 đ' },
+    ],
+    occurredAt: '2026-09-12T10:15:00.000Z',
+  },
 ]

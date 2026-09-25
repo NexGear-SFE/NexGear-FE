@@ -7,6 +7,7 @@ import {
   initialProducts,
   initialReceipts,
   initialSerials,
+  initialSkuAudit,
   initialVariants,
 } from '@/constants/warehouseMockData'
 import type { Category } from '@/types/category.type'
@@ -72,7 +73,7 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
   categories: initialCategories,
   products: initialProducts,
   variants: initialVariants,
-  skuAudit: [],
+  skuAudit: initialSkuAudit,
   inventory: initialInventory,
   serials: initialSerials,
   movements: initialMovements,

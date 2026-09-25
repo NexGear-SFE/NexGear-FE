@@ -1,4 +1,4 @@
-import { ArrowLeft, Boxes, ClipboardList, Edit3, PackageOpen, ShieldCheck, Tags } from 'lucide-react'
+import { ArrowLeft, Boxes, ClipboardList, Edit3, PackageOpen, ShieldCheck, Tags, X } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
@@ -90,28 +90,130 @@ export function ProductDetailPage() {
           <strong className={movement.quantityDelta > 0 ? 'text-success-500' : 'text-error-700'}>{movement.quantityDelta > 0 ? '+' : ''}{movement.quantityDelta}</strong>
         </article>
       })}{!productMovements.length && <p className="text-sm text-text-600">Chưa có biến động kho.</p>}</div>}
-      {tab === 'Audit log' && <div className="overflow-x-auto"><table className="w-full min-w-[700px] text-left text-sm"><thead className="bg-surface-200 text-xs uppercase text-text-600"><tr><th className="p-3">Thời gian</th><th className="p-3">Người thực hiện</th><th className="p-3">Hành động</th><th className="p-3">SKU</th><th className="p-3">Chi tiết thay đổi</th></tr></thead><tbody className="divide-y divide-surface-400">
-        <tr className="border-b border-surface-400"><td className="p-3 font-mono text-xs">{formatDateTime(product.createdAt)}</td><td className="p-3 font-medium">Hệ thống</td><td className="p-3 font-semibold">Tạo product master</td><td className="p-3 text-xs text-text-600">—</td><td className="p-3 text-xs">Khởi tạo dữ liệu ban đầu</td></tr>
-        <tr className="border-b border-surface-400"><td className="p-3 font-mono text-xs">{formatDateTime(product.updatedAt)}</td><td className="p-3 font-medium">Nguyễn Bảo</td><td className="p-3 font-semibold">Cập nhật gần nhất</td><td className="p-3 text-xs text-text-600">—</td><td className="p-3 text-xs">Lưu thay đổi master data</td></tr>
-        {productAudit.map((entry) => <tr key={entry.id} className="border-b border-surface-400">
-          <td className="p-3 font-mono text-xs">{formatDateTime(entry.occurredAt)}</td>
-          <td className="p-3 font-medium">{entry.actor}</td>
-          <td className="p-3 font-semibold">{entry.action}</td>
-          <td className="p-3 font-mono text-xs">{entry.sku}</td>
-          <td className="p-3 text-xs">
-            {entry.detail ? (
-              <button type="button" className="text-brand-500 hover:underline" onClick={() => setViewingAuditEntry(entry)}>Xem chi tiết</button>
-            ) : <span className="text-text-600">Ghi nhận sự kiện SKU</span>}
-          </td>
-        </tr>)}
-      </tbody></table></div>}
+      {tab === 'Audit log' && (() => {
+        const masterAuditEntry = {
+          id: 'AUD-MASTER',
+          action: 'Cập nhật master data',
+          sku: '—',
+          actor: 'Nguyễn Bảo (WS-002)',
+          occurredAt: product.updatedAt,
+          detail: 'Cập nhật tên model 2024, thông số hiển thị và thời gian bảo hành',
+          diff: [
+            { field: 'Tên sản phẩm', before: 'ASUS ROG Strix G16', after: product.name },
+            { field: 'Thời hạn bảo hành', before: '12 tháng', after: `${product.warrantyMonths} tháng` },
+            { field: 'Khối lượng máy', before: '2.400 gram', after: `${product.weightGrams} gram` },
+          ],
+        }
+        return (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[700px] text-left text-sm">
+              <thead className="bg-surface-200 text-xs uppercase text-text-600">
+                <tr>
+                  <th className="p-3">Thời gian</th>
+                  <th className="p-3">Người thực hiện</th>
+                  <th className="p-3">Hành động</th>
+                  <th className="p-3">SKU</th>
+                  <th className="p-3">Chi tiết thay đổi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-surface-400">
+                <tr className="border-b border-surface-400">
+                  <td className="p-3 font-mono text-xs">{formatDateTime(product.createdAt)}</td>
+                  <td className="p-3 font-medium">Hệ thống</td>
+                  <td className="p-3 font-semibold">Tạo product master</td>
+                  <td className="p-3 text-xs text-text-600">—</td>
+                  <td className="p-3 text-xs text-text-600">Khởi tạo dữ liệu ban đầu</td>
+                </tr>
+                <tr className="border-b border-surface-400">
+                  <td className="p-3 font-mono text-xs">{formatDateTime(product.updatedAt)}</td>
+                  <td className="p-3 font-medium">Nguyễn Bảo</td>
+                  <td className="p-3 font-semibold">Cập nhật gần nhất</td>
+                  <td className="p-3 text-xs text-text-600">—</td>
+                  <td className="p-3 text-xs">
+                    <button type="button" className="font-semibold text-brand-500 hover:underline" onClick={() => setViewingAuditEntry(masterAuditEntry)}>
+                      Xem chi tiết
+                    </button>
+                  </td>
+                </tr>
+                {productAudit.map((entry) => (
+                  <tr key={entry.id} className="border-b border-surface-400">
+                    <td className="p-3 font-mono text-xs">{formatDateTime(entry.occurredAt)}</td>
+                    <td className="p-3 font-medium">{entry.actor}</td>
+                    <td className="p-3 font-semibold">{entry.action}</td>
+                    <td className="p-3 font-mono text-xs">{entry.sku}</td>
+                    <td className="p-3 text-xs">
+                      {entry.detail ? (
+                        <button type="button" className="font-semibold text-brand-500 hover:underline" onClick={() => setViewingAuditEntry(entry)}>
+                          Xem chi tiết
+                        </button>
+                      ) : (
+                        <span className="text-text-600">Ghi nhận sự kiện SKU</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
+      })()}
     </div></section>
 
     {viewingVariant && (
       <ConfirmDialog isOpen={true} title={`Danh sách Serial: ${viewingVariant.sku}`} description={viewingSerialsList.length > 0 ? viewingSerialsList.map((s) => `${s.value} (${s.status})`).join('\n') : 'Chưa có serial nào trong hệ thống.'} confirmLabel="Đóng" cancelLabel="" onCancel={() => setViewingSerialsVariantId(null)} onConfirm={() => setViewingSerialsVariantId(null)} />
     )}
     {viewingAuditEntry && (
-      <ConfirmDialog isOpen={true} title={`Chi tiết Audit: ${viewingAuditEntry.action}`} description={viewingAuditEntry.detail || 'Không có chi tiết bổ sung.'} confirmLabel="Đóng" cancelLabel="" onCancel={() => setViewingAuditEntry(null)} onConfirm={() => setViewingAuditEntry(null)} />
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true">
+        <div className="w-full max-w-lg rounded-md border border-surface-400 bg-white p-6 shadow-xl animate-in fade-in">
+          <div className="flex items-center justify-between border-b border-surface-400 pb-3">
+            <div>
+              <h3 className="font-heading text-lg font-semibold">{viewingAuditEntry.action}</h3>
+              <p className="text-xs text-text-600 font-mono mt-0.5">
+                {viewingAuditEntry.sku !== '—' ? viewingAuditEntry.sku : product.name} · {viewingAuditEntry.actor} · {formatDateTime(viewingAuditEntry.occurredAt)}
+              </p>
+            </div>
+            <button type="button" aria-label="Đóng" onClick={() => setViewingAuditEntry(null)} className="rounded p-1 text-text-600 hover:bg-surface-200">
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          <div className="mt-4 space-y-3">
+            {viewingAuditEntry.detail && <p className="text-sm font-medium text-text-900">{viewingAuditEntry.detail}</p>}
+            {viewingAuditEntry.diff && viewingAuditEntry.diff.length > 0 ? (
+              <div className="overflow-hidden rounded border border-surface-400">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-surface-200 text-xs font-semibold uppercase text-text-600">
+                    <tr>
+                      <th className="p-2.5">Trường thông tin</th>
+                      <th className="p-2.5 text-error-700">Trước (Before)</th>
+                      <th className="p-2.5 text-success-700">Sau (After)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-surface-400 font-mono text-xs">
+                    {viewingAuditEntry.diff.map((item, idx) => (
+                      <tr key={idx} className="hover:bg-surface-50">
+                        <td className="p-2.5 font-sans font-medium text-text-900">{item.field}</td>
+                        <td className="p-2.5 text-error-700 bg-error-50/40 line-through">{item.before}</td>
+                        <td className="p-2.5 text-success-700 bg-success-50/40 font-semibold">{item.after}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="rounded border border-surface-300 bg-surface-100 p-4 text-xs text-text-600">
+                Sự kiện này chỉ ghi nhận trạng thái, không có trường thay đổi đối chiếu.
+              </div>
+            )}
+          </div>
+
+          <div className="mt-6 flex justify-end">
+            <button type="button" className="btn-primary" onClick={() => setViewingAuditEntry(null)}>
+              Đóng
+            </button>
+          </div>
+        </div>
+      </div>
     )}
   </div>
 }
