@@ -1,4 +1,4 @@
-import { AlertTriangle, ArrowLeft, Camera, CheckCircle2, Copy, PackageCheck, Printer, Tag, X } from 'lucide-react'
+import { AlertTriangle, ArrowLeft, Camera, CheckCircle2, Copy, PackageCheck, Printer, RotateCcw, Tag, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useShallow } from 'zustand/react/shallow'
@@ -21,6 +21,9 @@ export function OrderDetailPage() {
   const [serialInputs, setSerialInputs] = useState<Record<string, string>>({})
   const [serialErrors, setSerialErrors] = useState<Record<string, string>>({})
   const [copied, setCopied] = useState(false)
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
+  const [reportTitle, setReportTitle] = useState('Hàng bị móp méo / vỡ tem niêm phong')
+  const [reportMessage, setReportMessage] = useState('')
   const [cameraScanningItem, setCameraScanningItem] = useState<{
     itemId: string
     variantId: string
@@ -429,6 +432,70 @@ export function OrderDetailPage() {
                     Vui lòng hoàn tất nhặt hàng và quét đủ serial để kích hoạt đóng gói.
                   </p>
                 )}
+                <button
+                  type="button"
+                  onClick={() => setIsReportModalOpen(true)}
+                  className="w-full text-center text-xs font-semibold text-text-500 hover:text-error-600 transition-colors pt-1 flex items-center justify-center gap-1.5"
+                >
+                  <AlertTriangle className="h-3.5 w-3.5" /> Báo cáo sự cố phát sinh
+                </button>
+              </div>
+            )}
+
+            {order.state === 'ISSUE' && (
+              <div className="mt-4 space-y-4">
+                <div className="rounded border border-error-200 bg-error-50 p-3.5 text-xs text-error-800 space-y-2">
+                  <div className="flex items-center gap-1.5 font-bold text-error-700">
+                    <AlertTriangle className="h-4 w-4 shrink-0" />
+                    <span>Đơn hàng đang có sự cố</span>
+                  </div>
+                  <p className="text-text-700">
+                    <strong>{order.issue?.title}:</strong> {order.issue?.message}
+                  </p>
+                  {order.issue?.code && (
+                    <p className="font-mono text-[11px] text-text-500">Mã lỗi: {order.issue.code}</p>
+                  )}
+                </div>
+
+                {order.issue?.code === 'GHTK_REJECTED' ? (
+                  <div className="space-y-2.5">
+                    <p className="text-xs text-text-600">
+                      GHTK đã từ chối tạo vận đơn do thông tin kiện hàng chưa chuẩn. Bro có thể thử lại ngay:
+                    </p>
+                    <button
+                      type="button"
+                      className="btn-primary w-full shadow-md py-2.5 text-sm font-bold flex items-center justify-center gap-2"
+                      onClick={() => {
+                        store.packOrder(order.id, false, order.parcel ?? {
+                          weightGrams: 1000,
+                          lengthCm: 25,
+                          widthCm: 20,
+                          heightCm: 15,
+                          pickupAddress: 'Kho NexGear — TP.HCM',
+                        })
+                      }}
+                    >
+                      <RotateCcw className="h-4 w-4" /> Thử lại tạo vận đơn GHTK
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-outlined w-full text-xs py-2"
+                      onClick={() => store.resolveOrderIssue(order.id)}
+                    >
+                      Quay lại bước soạn hàng
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-2.5">
+                    <button
+                      type="button"
+                      className="btn-primary w-full shadow-md py-2.5 text-sm font-bold flex items-center justify-center gap-2"
+                      onClick={() => store.resolveOrderIssue(order.id)}
+                    >
+                      <CheckCircle2 className="h-4 w-4" /> Đã khắc phục & Tiếp tục đơn
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
@@ -513,6 +580,78 @@ export function OrderDetailPage() {
             }
           }}
         />
+      )}
+
+      {/* Report Issue Modal */}
+      {isReportModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" role="dialog" aria-modal="true">
+          <div className="w-full max-w-md rounded-lg border border-surface-400 bg-white p-6 shadow-xl animate-in fade-in space-y-4">
+            <div className="flex items-center justify-between border-b border-surface-200 pb-3">
+              <h3 className="font-heading text-base font-bold text-error-700 flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5" /> Báo cáo sự cố đơn hàng
+              </h3>
+              <button
+                type="button"
+                onClick={() => setIsReportModalOpen(false)}
+                className="rounded p-1 text-text-400 hover:text-text-700"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-semibold text-text-700 mb-1">Loại sự cố / Lý do</label>
+                <select
+                  value={reportTitle}
+                  onChange={(e) => setReportTitle(e.target.value)}
+                  className="input-gaming text-xs py-2 px-3 w-full"
+                >
+                  <option value="Hàng bị móp méo / vỡ tem niêm phong">Hàng bị móp méo / vỡ tem niêm phong</option>
+                  <option value="Không tìm thấy hàng / thiếu tồn kho trên kệ">Không tìm thấy hàng / thiếu tồn kho trên kệ</option>
+                  <option value="Tem mã vạch / serial bị mờ không quét được">Tem mã vạch / serial bị mờ không quét được</option>
+                  <option value="Sai thông số kỹ thuật sản phẩm so với đơn">Sai thông số kỹ thuật sản phẩm so với đơn</option>
+                  <option value="Khách hàng yêu cầu tạm giữ / đổi địa chỉ">Khách hàng yêu cầu tạm giữ / đổi địa chỉ</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-text-700 mb-1">Mô tả chi tiết sự cố</label>
+                <textarea
+                  rows={3}
+                  value={reportMessage}
+                  onChange={(e) => setReportMessage(e.target.value)}
+                  placeholder="Nhập ghi chú chi tiết về tình trạng hàng hoặc vị trí kệ gặp lỗi..."
+                  className="input-gaming text-xs py-2 px-3 w-full"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 border-t border-surface-200 pt-3">
+              <button
+                type="button"
+                onClick={() => setIsReportModalOpen(false)}
+                className="btn-outlined text-xs py-2 px-3"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  store.reportOrderIssue(order.id, {
+                    title: reportTitle,
+                    message: reportMessage.trim() || 'Nhân viên kho ghi nhận sự cố trong lúc chuẩn bị hàng.',
+                    code: 'WAREHOUSE_INCIDENT',
+                  })
+                  setIsReportModalOpen(false)
+                }}
+                className="rounded bg-error-600 px-4 py-2 text-xs font-bold text-white hover:bg-error-700 transition-colors"
+              >
+                Xác nhận báo sự cố
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

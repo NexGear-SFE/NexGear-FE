@@ -52,6 +52,8 @@ export interface WarehouseState {
   adjustInventory: (variantId: string, quantityDelta: number, reference: string) => boolean
   packOrder: (orderId: string, shouldFail?: boolean, parcel?: WarehouseOrder['parcel']) => void
   completeOrder: (orderId: string) => void
+  reportOrderIssue: (orderId: string, issue: { title: string; message: string; code?: string }) => void
+  resolveOrderIssue: (orderId: string) => void
 }
 
 function timestamp(): string {
@@ -347,6 +349,37 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
       movements: [...state.movements, ...order.items.map((item) => ({ id: crypto.randomUUID(), variantId: item.variantId, reason: 'ORDER_FULFILLED' as const, quantityDelta: -item.quantity, reference: order.id, occurredAt: timestamp() }))],
     }
   }),
+
+  reportOrderIssue: (orderId, issue) => set((state) => ({
+    orders: state.orders.map((order) => {
+      if (order.id !== orderId) return order
+      const resumeState = (order.state === 'ISSUE' ? (order.issue?.resumeState ?? 'PICKING') : order.state) as Exclude<WarehouseOrderState, 'ISSUE'>
+      return addTimeline({
+        ...order,
+        state: 'ISSUE',
+        issue: {
+          code: issue.code ?? 'MANUAL_REPORT',
+          title: issue.title,
+          message: issue.message,
+          occurredAt: timestamp(),
+          resumeState,
+          retryable: true,
+        },
+      }, `Báo cáo sự cố: ${issue.title}`)
+    }),
+  })),
+
+  resolveOrderIssue: (orderId) => set((state) => ({
+    orders: state.orders.map((order) => {
+      if (order.id !== orderId || order.state !== 'ISSUE') return order
+      const nextState = order.issue?.resumeState ?? 'PICKING'
+      return addTimeline({
+        ...order,
+        state: nextState,
+        issue: undefined,
+      }, 'Đã khắc phục sự cố, tiếp tục xử lý')
+    }),
+  })),
 }))
 
 export const warehouseSelectors = {
@@ -401,6 +434,8 @@ export const warehouseSelectors = {
     assignOrderSerials: state.assignOrderSerials,
     packOrder: state.packOrder,
     completeOrder: state.completeOrder,
+    reportOrderIssue: state.reportOrderIssue,
+    resolveOrderIssue: state.resolveOrderIssue,
   }),
   dashboard: (state: WarehouseState) => ({
     categories: state.categories,
